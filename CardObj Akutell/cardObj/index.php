@@ -525,6 +525,7 @@
             this.htmlCardObjList = [];
             this.listAnzeige = [];
             this.carousel = `carousel${this.id}`;
+            this.htmlUmgebungsBody = `umgebungsBody${this.id}`
             this.ladeUmgebung();
             Umgebung.umgebungsIdList.push(this);
         }
