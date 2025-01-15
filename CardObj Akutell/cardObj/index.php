@@ -12,7 +12,7 @@
 <!-- Bootstrap Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-<!-- jQuery, Momenhgt.js, Bootstrap JS, and Date Range Picker JS -->
+<!-- jQuery, Momenhgt.js, Bootsmtrap JS, and Date Range Picker JS -->
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -52,7 +52,7 @@
         <button id="deleteBtnForCards" type="button" class="btn btn-danger d-none">delete</button>
     </div>
     <div class="container d-flex">
-        <div id="row" class="col-4 p-2"><!-- bild Obj --></div>
+        <div id="rowForCards" class="col-4 p-2"><!-- bild Obj --></div>
         <div id="rowForCarou" class="img-thumbnail w-75 m-3">
         </div>
     </div>
@@ -512,7 +512,7 @@
             }
         }
     }
-    rowForCards = document.getElementById("row");
+    rowForCards = document.getElementById("rowForCards");
     carousel = document.getElementById("rowForCarou");
     class Umgebung {
         static id = 0;
