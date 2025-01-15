@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Dashboard</title>
+    <style>
+        * {
+            font-family: Roboto;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .parent {
+            position: relative;
+            width: 1903px;
+            margin: 0 auto;
+        }
+
+        .parent img {
+            vertical-align: middle;
+            height: 54px;
+        }
+
+        .parent .text {
+            position: absolute;
+            /* bottom: 0; */
+            top: 0;
+            color: #ffffff;
+            width: 96%;
+            font-size: 45px;
+            margin-left: -8px;
+        }
+
+        .marquee {
+            max-width: 100vw;
+            /* iOS braucht das */
+            white-space: nowrap;
+            overflow: hidden;
+            /* hier evtl. noch font-size, color usw. */
+        }
+
+        .marquee span {
+            display: inline-block;
+            padding-left: 105%;
+            /* die zusätzlichen 5% erzeugen einen verzögerten Start und vermeiden so ein Ruckeln auf langsamen Seiten */
+            animation: marquee 10s linear infinite;
+        }
+
+        /* Make it move */
+        @keyframes marquee {
+            0% {
+                transform: translate3d(0, 0, 0);
+            }
+
+            100% {
+                transform: translate3d(-100%, 0, 0);
+            }
+        }
+
+        .center-block {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .list-group-item.active,
+        .list-group-item.active:focus,
+        .list-group-item.active:hover {
+            z-index: 2;
+            color: white !important;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+
+        .list-group-item-index {}
+    </style>
+
+    <script>
+        //var server_ip = 'http://10.1.6.3/';
+        var server_ip = 'http://localhost:3000/';
+
+        //Template vom angedrückten Element auf der Hauptseite
+        var activetemplate = '-1';
+        //Index vom angedrückten Element auf der Hauptseite
+        var activelistboxitemIndex = '-1';
+        //ID vom angedrückten Element auf der Hauptseite
+        var activelistboxitemID = '-1';
+        //Path vom angedrückten Element auf der Hauptseite
+        var activelistboxitempath = '';
+        //Object vom angedrückten Element auf der Hauptseite
+        let activelistboxitemObject;
+
+        var pics_counter = 0;
+        var pics_liste = [];
+        var pics_liste_objekt = [];
+
+        //Seite => Bearbeiten, angeklicktes ELement ID
+        let activeBearbeitenID = '';
+        let activeBearbeitenPics = '';
+        let activeBearbeitenPicsBackup = '';
+
+        function giveClassListGroupRightSideItem(element) {
+            element.addEventListener('mouseenter', function (params) {
+                element.classList.add('active');
+                element.style.color = "#FFFFFF";
+            });
+
+            element.addEventListener('mouseleave', function (params) {
+                element.classList.remove('active');
+                element.style.color = "#337ab7";
+            });
+        }
+
+        function giveMouseClickListGroupRightSideItem(element, func) {
+            element.addEventListener('click', func);
+        }
+
+        window.onload = function () {
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            timer();
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function timer() {
+            var currentdate = new Date();
+
+            var stunden = currentdate.getHours() < 10 ? '0' + currentdate.getHours() : currentdate.getHours();
+            var minuten = currentdate.getMinutes() < 10 ? '0' + currentdate.getMinutes() : currentdate.getMinutes();
+            var sekunden = currentdate.getSeconds() < 10 ? '0' + currentdate.getSeconds() : currentdate.getSeconds();
+
+            var tag = currentdate.getDate() < 10 ? '0' + currentdate.getDate() : currentdate.getDate();
+            var monat = (currentdate.getMonth() + 1) < 10 ? '0' + (currentdate.getMonth() + 1) : currentdate.getMonth() + 1;
+
+            var datetime = tag + "."
+                + monat + "."
+                + currentdate.getFullYear() + " / "
+                + stunden + ":"
+                + minuten + ":"
+                + sekunden;
+            document.getElementById('zeit').innerHTML = datetime;
+            await sleep(1000);
+            timer();
+        }
+
+        function splitOnce(s, on) {
+            [first, ...rest] = s.split(on)
+            return [first, rest.length > 0 ? rest.join(on) : null]
+        }
+
+        async function login(element) {
+            var username = document.getElementById('username').value;
+            var password = document.getElementById('password').value;
+
+            if (username != "" && password != "") {
+                var result = await doFetch("login.php?username=" + username + "&password=" + password);
+                if(result != 'false') { 
+                    //LOGIN!
+                    location.href = server_ip + '/dashboard/index.php';
+                }
+
+            } else {
+                alert("Fehler beim Anmelden");
+            }
+
+        }
+
+        async function doFetch(link) {
+            fetchPromise = await fetch(link);
+            result = await fetchPromise.text();
+            if (result == "") return false;
+            return result;
+        }
+    </script>
+</head>
+
+<body>
+    <div id="header" style="background-color: white;display: flex;height: 150px;">
+        <div style="display: flex;">
+            <img src="../images/bild.png" alt="bild" style="margin-right: 60px;margin-left: 40px;margin-bottom: 2px;">
+            <img src="../images/logo.png" alt="logo" style="padding-bottom: 25px;">
+        </div>
+    </div>
+
+    <div class="parent">
+        <img src="../images/oben.png" alt="oben" style="width:100%;">
+      
+        <div class="text" style="display: flex;">
+            <div style="margin-left: 80px;margin-right: 40%;margin-top: -7px;"> Infoterminal Dashboard</div>
+            <div id="zeit" style="margin-top: -7px;">30.01.2023 / 15:49:49</div>
+        </div>
+        
+    </div>
+    
+    <div id="content" style="height: 786px;width: 1903px;">
+        <div style="padding: 20px;width: 100%;height: 786px;">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-3" style="height: 745px;">
+                    </div>
+                    <div class="col-md-7" style="height: 745px;" id="anzeige">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="page-header">
+                                                <h1 style="text-align: center;">
+                                                    Anmelden <small>am Infoterminal</small>
+                                                </h1>
+                                                <input type="text" class="form-control" placeholder="Benutzername"
+                                                    id="username">
+                                                <input type="password" class="form-control" placeholder="Passwort"
+                                                    id="password">
+                                                <button type="button" class="btn btn-primary btn-block btn-md"
+                                                    onclick="login(this)">
+                                                    Anmelden
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2" style="height: 745px;" id="einstellungen">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+</body>
+
+</html>

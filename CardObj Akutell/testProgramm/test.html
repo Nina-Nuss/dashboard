@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carousel Testumgebung</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .carousel-item {
+            height: 300px;
+            background-color: #777;
+            color: white;
+            text-align: center;
+            line-height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-3">
+        <label for="umgebungSelect">Wählen Sie eine Umgebung:</label>
+        <select id="umgebungSelect" class="form-control">
+            <option value="0">Umgebung 1</option>
+            <option value="1">Umgebung 2</option>
+        </select>
+    </div>
+
+    <div id="carousel0" class="carousel-inner"></div>
+    <div id="carousel1" class="carousel-inner"></div>
+    <!-- Fügen Sie weitere Carousel-Container hinzu, falls erforderlich -->
+
+    <script src="carouselLogic.js"></script>
+    <script>
+        // Beispiel-Daten für die Testumgebung
+        class Umgebung {
+            static umgebungsIdList = [];
+
+            constructor(id) {
+                this.id = id;
+                this.listAnzeige = [];
+                this.cardObjList = [];
+                Umgebung.umgebungsIdList.push(this);
+            }
+
+            addCardObjToAnzeige(list, obj) {
+                if (!list.some(e => e.id == obj.id)) {
+                    list.push(obj);
+                }
+            }
+
+            removeObjFromList(list, obj) {
+                let index = list.findIndex(e => e.id == obj.id);
+                if (index != -1) {
+                    list.splice(index, 1);
+                }
+            }
+        }
+
+        // Beispiel-Umgebungen und Card-Objekte erstellen
+        const umgebung1 = new Umgebung(0);
+        umgebung1.listAnzeige.push({ id: 1, imagePath: 'https://via.placeholder.com/800x300', selectedTime: 5000 });
+        umgebung1.listAnzeige.push({ id: 2, imagePath: 'https://via.placeholder.com/800x300/ff0000', selectedTime: 5000 });
+
+        const umgebung2 = new Umgebung(1);
+        umgebung2.listAnzeige.push({ id: 3, imagePath: 'https://via.placeholder.com/800x300/00ff00', selectedTime: 5000 });
+        umgebung2.listAnzeige.push({ id: 4, imagePath: 'https://via.placeholder.com/800x300/0000ff', selectedTime: 5000 });
+
+        // Funktionen zum Laden der Umgebung und Starten des Carousels
+        function ladenUmgebung() {
+            console.log('Umgebung geladen');
+        }
+
+        function checkUmgebungList() {
+            console.log('Umgebungsliste überprüft');
+        }
+
+        // Funktion zum Aktualisieren der ausgewählten Umgebung
+        function updateSelectedUmgebung() {
+            const selectedId = document.getElementById('umgebungSelect').value;
+            const umgebung = Umgebung.umgebungsIdList.find(u => u.id == selectedId);
+            if (umgebung) {
+                console.log(`Ausgewählte Umgebung: ${umgebung.id}`);
+                // Hier können Sie zusätzliche Logik hinzufügen, um die ausgewählte Umgebung hervorzuheben
+            }
+        }
+
+        // Event-Listener für die Umgebungsauswahl
+        document.getElementById('umgebungSelect').addEventListener('change', updateSelectedUmgebung);
+
+        // Starten Sie die Carousels
+        window.onload = function () {
+            ladenUmgebung();
+            checkUmgebungList();
+            startCarousels();
+            startCarouselLoop(); // Carousel starten
+        }
+    </script>
+</body>
+</html>
