@@ -30,8 +30,8 @@
 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="convertDateTime.js"></script>
-<script href="styles.scss"></script>
-<script src="carouselLogic.js" async></script>
+<link rel="stylesheet" href="styles.css">
+<script src="umgebung.js"></script>
 
 
 </head>
@@ -53,359 +53,34 @@
     </div>
     <div class="container d-flex">
         <div id="rowForCards" class="col-4 p-2"><!-- bild Obj --></div>
-        <div id="rowForCarou" class="img-thumbnail w-75 m-3">
+        <div id="rowForCarousels" class="img-thumbnail w-75 m-3">
         </div>
     </div>
 </body>
 
-<style>
-    .daterangepicker ltr show-calendar opensright {
-        right: 100px;
-        left: auto;
-    }
 
-    .modalBtn {
-        width: 70%;
-        height: auto;
-        padding: 0px;
-    }
-
-    #showDateInCard {
-        padding: 0;
-        width: 100%;
-        border: #000;
-        text-align: center;
-    }
-
-    .hourselect {
-        border-radius: 5px;
-    }
-
-    .minuteselect {
-        border-radius: 5px;
-    }
-
-    select option {
-        background-color: #ffffff;
-        color: #333;
-        font-size: 12px;
-        line-height: 0.5;
-        top: 100%;
-    }
-
-    select {
-        position: relative;
-    }
-
-    select::after {
-        content: '';
-        position: absolute;
-        top: 100%;
-        /* Dropdown unterhalb erzwingen */
-    }
-
-    #zeitManagment {
-        display: block;
-    }
-
-    .modalBtn {
-        border-radius: 5px;
-    }
-
-    .file-input-button {
-        height: 20px;
-        width: 130px;
-        border: none;
-        text-align: center;
-        line-height: 1000px;
-        cursor: pointer;
-        background-color: #f8f9fa;
-        outline: none;
-        overflow: hidden;
-        /* Add more styles as needed */
-    }
-
-    .card {
-        padding-left: 0%;
-        padding-right: 0%;
-    }
-
-    .image-picker {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-
-    .image-preview {
-        width: 100%;
-        height: 100px;
-        display: flex;
-        border-radius: 5px 5px 0px 0px;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        background-color: #f0f0f0;
-        cursor: pointer;
-    }
-
-    .image-preview img {
-        max-height: max-content;
-        max-width: max-content;
-    }
-
-    /* Versteckt das Datei-Input-Feld */
-    .imageInput {
-        display: none;
-
-    }
-
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        /* Overlay background */
-    }
-
-    /* Modal content */
-    .modal-content {
-        position: relative;
-        margin: auto;
-        padding: 20px;
-        background-color: white;
-        width: 50%;
-        max-width: 250px;
-        border-radius: 5px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.0);
-        text-align: center;
-    }
-
-    /* Close button styling */
-    .close {
-        position: absolute;
-        top: 10px;
-        right: 15px;
-        font-size: 24px;
-        font-weight: bold;
-        cursor: pointer;
-        color: #aaa;
-    }
-
-    .close:hover {
-        color: #000;
-    }
-
-    .removePicBtn {
-        position: absolute;
-
-        left: 134px;
-        width: 25px;
-        height: 25px;
-        background-color: white;
-        border-radius: 0px 3px 0px 3px;
-        opacity: 0.5;
-        z-index: 1;
-        cursor: pointer;
-    }
-
-    .removePicBtn:hover {
-        background-color: red;
-        opacity: 1;
-    }
-
-    [id^="timerSelect"] {
-        display: block;
-    }
-
-    [id^="infoBtn"] {
-        display: none;
-    }
-
-    [id^="closeBtn"] {
-        display: none;
-        margin-left: -0.3px;
-    }
-
-    [id^="imagePreview"] {
-        display: inline-block;
-        overflow: hidden;
-    }
-
-    [id^="imagePreview"] img {
-        width: 300px;
-        /* Ursprungsgröße */
-        height: auto;
-        transition: transform 0.3s ease;
-        /* Animation beim Hover */
-    }
-
-    .form-check {
-
-        padding-left: 0rem !important;
-
-    }
-
-    [id^="imagePreview"] img:hover {
-        transform: scale(1.2);
-        /* Vergrößert das Bild auf 120% */
-    }
-
-    /* Hide the default button value text */
-    .material-symbols-outlined {
-        vertical-align: middle;
-        font-variation-settings:
-            'FILL' 1,
-            'wght' 300,
-            'GRAD' 0,
-            'opsz' 20
-    }
-
-    .upload-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: auto;
-        max-width: auto;
-        height: 7rem;
-        border-radius: 3px 3px 0px 0px;
-        background-color: ghostwhite;
-        color: gray;
-        font-size: 18px;
-        text-align: center;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .upload-container img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 5;
-        /* Start hidden */
-    }
-
-    .picInCard img:hover {
-        transform: scale(1.2);
-        border-radius: 5px;
-        /* Vergrößert das Bild auf 120% */
-    }
-
-    .upload-container input[type="file"] {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-        cursor: pointer;
-    }
-
-    /* Versteckt den Submit-Button */
-    .hidden-submit {
-        display: none;
-    }
-
-    .btn-container {
-        display: inline-block;
-        position: relative;
-    }
-
-    .btn-select {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        margin-top: 10px;
-        display: none;
-    }
-
-    .minuteselect {
-        max-height: 300px;
-        /* Setzt eine maximale Höhe für das Dropdown-Menü */
-        overflow-y: auto;
-        /* Ermöglicht Scrollen bei Bedarf */
-        transform-origin: top !important;
-        /* Setzt den Ursprung der Transformation nach oben */
-        transform: translateY(0)
-    }
-
-    .hourselect {
-        max-height: 300px;
-        /* Setzt eine maximale Höhe für das Dropdown-Menü */
-        overflow-y: auto;
-        /* Ermöglicht Scrollen bei Bedarf */
-        transform-origin: top !important;
-        /* Setzt den Ursprung der Transformation nach oben */
-        transform: translateY(0)
-    }
-
-    .form-select {
-        -webkit-appearance: none;
-        /* Standard-Pfeil-Symbol ausblenden */
-        -moz-appearance: none;
-        /* Standard-Pfeil-Symbol ausblenden */
-        appearance: none;
-        /* Standard-Pfeil-Symbol ausblenden */
-        background: url('');
-        /* Entferne das Hintergrundbild, falls vorhanden */
-        padding-right: 1.5rem;
-        /* Abstand zum Rand hinzufügen, um Platz für benutzerdefinierte Symbole zu schaffen */
-        position: relative;
-    }
-
-    /* Container für relativen Bezug */
-    .select-container {
-        position: relative;
-    }
-
-    .form-range {
-        appearance: none;
-        width: 95%;
-        height: 0px;
-        background: #e9ecef;
-        border-radius: 5px;
-        outline: none;
-        transition: background 0.3s;
-        background: linear-gradient(to right, blue 0%, blue var(--range-fill), white var(--range-fill), white 100%);
-    }
-
-    .form-range::-webkit-slider-thumb {
-        appearance: none;
-        width: 10px;
-        height: 10px;
-
-        /* Farbe des Schiebereglers */
-        border-radius: 50%;
-        /* Runde Form des Buttons */
-        cursor: pointer;
-        border: none;
-        position: relative;
-        top: 100%;
-        transform: translateY(-50%);
-        /* Zentrierung */
-    }
-
-    .btn.dropdown-toggle::after {
-        display: none;
-    }
-
-    .carousel-item {
-        height: 500px;
-    }
-
-    .imagesCarousel {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-    }
-</style>
 <script>
     let cancelUplaod = false
     var zeitEingegeben = false
     let pushDelete = false
+
+
+    window.onload = function() {
+       
+   
+        const umgebung1 = new Umgebung();
+        const umgebung2 = new Umgebung();
+     
+        var selectedUmgebung = umgebung1;
+        ladenUmgebung()
+       
+
+        const testCard = new CardObj(umgebung1);
+        const testCard2 = new CardObj(umgebung1);
+
+        const testCard3 = new CardObj(umgebung2);
+        const testCard4 = new CardObj(umgebung2);
+    }
 
     class CardObj {
         static idCounter = 0;
@@ -512,70 +187,61 @@
             }
         }
     }
-    rowForCards = document.getElementById("rowForCards");
-    carousel = document.getElementById("rowForCarou");
-    class Umgebung {
-        static id = 0;
-        static umgebungsIdList = [];
-        constructor() {
-            this.id = Umgebung.id++;
-            this.cardObjList = [];
-            this.tempListForDeleteCards = [];
-            this.ipList = [];
-            this.htmlCardObjList = [];
-            this.listAnzeige = [];
-            this.carousel = `carousel${this.id}`;
-            this.htmlUmgebungsBody = `umgebungsBody${this.id}`
-            this.ladeUmgebung();
-            Umgebung.umgebungsIdList.push(this);
-        }
-        addCardObjs(cardObj) {
-            this.cardObjList.push(cardObj);
-        }
-        addCardObjToAnzeige(cardObj) {
-            if (!this.listAnzeige.some(e => e.id == cardObj.id)) {
-                this.listAnzeige.push(cardObj);
-            }
-        }
-        showCardObjList() {
-            this.cardObjList.forEach(cardObj => {
-                console.log(cardObj);
-            }); // Implementieren Sie die Logik, um die Umgebung anzuzeigen
-        }
-        removeObjFromList(list, obj) {
-            var index = list.findIndex(item => item.id === obj.id);
-            if (index > -1) {
-                list.splice(index, 1);
-            }
-        }
-        ladeUmgebung() {
-            rowForCards.innerHTML += `
-                <div id="${this.htmlUmgebungsBody}"></div>  
-            `
-            carousel.innerHTML += `
-                <div class="carousel-inner" id="${this.carousel}"></div>
-            `
-        }
-        static findObj(id) {
-            for (let umgebung of Umgebung.umgebungsIdList) {
-                const cardObj = umgebung.cardObjList.find(obj => obj.id == id.charAt(id.length - 1));
-                if (cardObj) {
-                    return cardObj;
-                }
-            }
-            return null;
-        }
-        
-    }
-    const umgebung1 = new Umgebung();
-    const umgebung2 = new Umgebung();
-    var selectedUmgebung = umgebung1;
 
-    const testCard = new CardObj(umgebung1);
-    const testCard2 = new CardObj(umgebung1);
-   
-    const testCard3 = new CardObj(umgebung2);
-    const testCard4 = new CardObj(umgebung2);
+    // class Umgebung {
+    //     static id = 0;
+    //     static umgebungsIdList = [];
+    //     constructor() {
+    //         this.id = Umgebung.id++;
+    //         this.cardObjList = [];
+    //         this.tempListForDeleteCards = [];
+    //         this.ipList = [];
+    //         this.htmlCardObjList = [];
+    //         this.listAnzeige = [];
+    //         this.carousel = `carousel${this.id}`;
+    //         this.htmlUmgebungsBody = `umgebungsBody${this.id}`
+    //         this.ladeUmgebung();
+    //         Umgebung.umgebungsIdList.push(this);
+    //     }
+    //     addCardObjs(cardObj) {
+    //         this.cardObjList.push(cardObj);
+    //     }
+    //     addCardObjToAnzeige(cardObj) {
+    //         if (!this.listAnzeige.some(e => e.id == cardObj.id)) {
+    //             this.listAnzeige.push(cardObj);
+    //         }
+    //     }
+    //     showCardObjList() {
+    //         this.cardObjList.forEach(cardObj => {
+    //             console.log(cardObj);
+    //         }); // Implementieren Sie die Logik, um die Umgebung anzuzeigen
+    //     }
+    //     removeObjFromList(list, obj) {
+    //         var index = list.findIndex(item => item.id === obj.id);
+    //         if (index > -1) {
+    //             list.splice(index, 1);
+    //         }
+    //     }
+    //     ladeUmgebung() {
+    //         rowForCards.innerHTML += `
+    //             <div id="${this.htmlUmgebungsBody}"></div>  
+    //         `
+    //         carousel.innerHTML += `
+    //             <div class="carousel-inner" id="${this.carousel}"></div>
+    //         `
+    //     }
+    //     static findObj(id) {
+    //         for (let umgebung of Umgebung.umgebungsIdList) {
+    //             const cardObj = umgebung.cardObjList.find(obj => obj.id == id.charAt(id.length - 1));
+    //             if (cardObj) {
+    //                 return cardObj;
+    //             }
+    //         }
+    //         return null;
+    //     }
+
+    // }
+
 
     function lengthListUmgebung() {
         var length = Umgebung.umgebungsIdList.length
@@ -612,28 +278,28 @@
         Umgebung.umgebungsIdList.forEach(umgebung => {
             selectUmgebung.innerHTML += `<option value="${umgebung.id}">${umgebung.id}</option>`;
         });
-       
+
     };
 
 
     selectUmgebung.addEventListener("change", function() {
-            const selectedOption = selectUmgebung.value;
-            if (selectedOption !== "Wähle Umgebung aus") {
-                selectedUmgebung = sucheUmgebung(selectedOption);
-                plusBtn.disabled = false;
-                updateAnzeigeCounter()
-                checkBoxShow();
-                console.log("wächsle umgebung");
-                console.log(selectedUmgebung);
-                // Entfernen der Option "Wähle Object aus"
-                const defaultOption = selectUmgebung.querySelector('option[selected]');
-                if (defaultOption) {
-                    defaultOption.remove();
-                }
-                zeigeUmgebungAn()
+        const selectedOption = selectUmgebung.value;
+        if (selectedOption !== "Wähle Umgebung aus") {
+            selectedUmgebung = sucheUmgebung(selectedOption);
+            plusBtn.disabled = false;
+            updateAnzeigeCounter()
+            checkBoxShow();
+            console.log("wächsle umgebung");
+            console.log(selectedUmgebung);
+            // Entfernen der Option "Wähle Object aus"
+            const defaultOption = selectUmgebung.querySelector('option[selected]');
+            if (defaultOption) {
+                defaultOption.remove();
             }
+            zeigeUmgebungAn()
+        }
 
-        })
+    })
 
 
     function cardSwitch(idBtn) {

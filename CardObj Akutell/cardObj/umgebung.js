@@ -40,28 +40,28 @@ class Umgebung {
         this.htmlCardObjList = [];
         this.listAnzeige = [];
         this.carousel = `carousel${this.id}`;
-        this.bodyForCards = `bodyForCards${this.id}`;
+        this.htmlUmgebungsBody = `bodyForCards${this.id}`;
         this.ladeUmgebung();
         Umgebung.umgebungsIdList.push(this);
     }
 
-    addCardObjs(cardObj) {
+    static addCardObjs(cardObj) {
         this.cardObjList.push(cardObj);
     }
 
-    addCardObjToAnzeige(cardObj) {
+    static addCardObjToAnzeige(cardObj) {
         if (!this.listAnzeige.some(e => e.id == cardObj.id)) {
             this.listAnzeige.push(cardObj);
         }
     }
 
-    showCardObjList() {
+    static showCardObjList() {
         this.cardObjList.forEach(cardObj => {
             console.log(cardObj);
         });
     }
 
-    removeObjFromList(list, obj) {
+    static removeObjFromList(list, obj) {
         var index = list.findIndex(item => item.id === obj.id);
         if (index > -1) {
             list.splice(index, 1);
@@ -69,15 +69,16 @@ class Umgebung {
     }
 
     ladeUmgebung() {
+        
         rowForCards.innerHTML += `
-            <div id="${this.bodyForCards}"></div>  
+            <div id="${this.htmlUmgebungsBody}"></div>  
         `
         carousels.innerHTML += `
             <div class="carousel-inner" id="${this.carousel}"></div>
         `
     }
 
-    addObjToList(list, obj) {
+    static addObjToList(list, obj) {
         if (!list.some(e => e.id == obj.id)) {
             list.push(obj);
             console.log(`Object with id ${obj.id} added to list.`);
@@ -126,7 +127,7 @@ class Umgebung {
         console.log(umgebungsObj);
         var carouselInner = document.querySelector(`#carousel${umgebungsObj.id}`);
         console.log(carouselInner);
-
+        carouselInner.innerHTML = '';
         if (carouselInner) {
             umgebungsObj.listAnzeige.forEach((obj, index) => {
                 const isActive = index === 0 ? 'active' : '';
