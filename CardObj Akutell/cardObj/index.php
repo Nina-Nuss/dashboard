@@ -279,7 +279,6 @@
 
     };
 
-
     selectUmgebung.addEventListener("change", function() {
         const selectedOption = selectUmgebung.value;
         if (selectedOption !== "Wähle Umgebung aus") {

@@ -9,18 +9,6 @@ function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function checkUmgebung(umgebung) {
-    if (umgebung.cardObjList.length == 0) {
-        return;
-    }
-    for (let obj of umgebung.cardObjList) {
-        if (obj.aktiv == true && obj.imageSet == true) {
-            umgebung.addCardObjToAnzeige(obj);
-        } else {
-            umgebung.removeObjFromList(umgebung.listAnzeige, obj);
-        }
-    }
-}
 
 // Wait for DOM to be loaded
 document.addEventListener('DOMContentLoaded', function () {
@@ -44,30 +32,25 @@ class Umgebung {
         this.ladeUmgebung();
         Umgebung.umgebungsIdList.push(this);
     }
-
     addCardObjs(cardObj) {
         this.cardObjList.push(cardObj);
     }
-
     addCardObjToAnzeige(cardObj) {
         if (!this.listAnzeige.some(e => e.id == cardObj.id)) {
             this.listAnzeige.push(cardObj);
         }
     }
-
     static showCardObjList() {
         this.cardObjList.forEach(cardObj => {
             console.log(cardObj);
         });
     }
-
     removeObjFromList(list, obj) {
         var index = list.findIndex(item => item.id === obj.id);
         if (index > -1) {
             list.splice(index, 1);
         }
     }
-
     ladeUmgebung() {
         rowForCards.innerHTML += `
             <div id="${this.htmlUmgebungsBody}"></div>  
@@ -76,14 +59,12 @@ class Umgebung {
             <div class="carousel-inner" id="${this.carousel}"></div>
         `
     }
-
     static addObjToList(list, obj) {
         if (!list.some(e => e.id == obj.id)) {
             list.push(obj);
             console.log(`Object with id ${obj.id} added to list.`);
         }
     }
-
     static findObj(id) {
         for (let umgebung of Umgebung.umgebungsIdList) {
             const cardObj = umgebung.cardObjList.find(obj => obj.id == id.charAt(id.length - 1));
@@ -108,6 +89,10 @@ class Umgebung {
         let i = 0
         if (umgebungsObj != null) {
             var carouselInner = document.querySelector(`#${umgebungsObj.carousel}`);
+            if (!carouselInner) {
+                console.warn(`Carousel with ID #${umgebungsObj.carousel} not found`);
+                return;
+            }
         } else {
             return;
         }
@@ -120,12 +105,11 @@ class Umgebung {
             await wait(1000);
             return;
         }
-
-        carouselItems[i].classList.add('active');
-        const interval = parseInt(carouselItems[i]?.dataset.interval) || 3000;
-        await wait(interval);
-        i = (i + 1) % carouselItems.length;
-        carouselItems = null;
+        // carouselItems[i].classList.add('active');
+        // const interval = parseInt(carouselItems[i]?.dataset.interval) || 3000;
+        // await wait(interval);
+        // i = (i + 1) % carouselItems.length;
+        // carouselItems = null;
     }
 
     static async repeatUpdateCarousel(umgebungsObj) {
@@ -160,10 +144,10 @@ class Umgebung {
             await Promise.all(promisesUpdate); // Warten Sie, bis alle Carousels parallel aktualisiert wurden
             await wait(3000); // Warten Sie 300ms bevor die nächste Runde startet
             console.log("jetzt kommt startCarouselLoop");
-            //const promisesLoop = umgebungen.map(umgebungObj => Umgebung.startCarouselLoop(umgebungObj));
-            // await Promise.all(promisesLoop); // Warten Sie, bis alle Carousels parallel aktualisiert wurden
-            // await wait(3000); // Warten Sie 300ms bevor die nächste Runde startet
-            // console.log('Alle Carousels wurden aktualisiert...');
+            const promisesLoop = umgebungen.map(umgebungObj => Umgebung.startCarouselLoop(umgebungObj));
+            await Promise.all(promisesLoop); // Warten Sie, bis alle Carousels parallel aktualisiert wurden
+            await wait(3000); // Warten Sie 300ms bevor die nächste Runde startet
+            console.log('Alle Carousels wurden aktualisiert...');
         }
     }
     static async checkUmgebungList() {
@@ -173,6 +157,18 @@ class Umgebung {
                 await checkUmgebung(umgebung);
                 await wait(2000);
             }
+        }
+    }
+}
+async function checkUmgebung(umgebung) {
+    if (umgebung.cardObjList.length == 0) {
+        return;
+    }
+    for (let obj of umgebung.cardObjList) {
+        if (obj.aktiv == true && obj.imageSet == true) {
+            umgebung.addCardObjToAnzeige(obj);
+        } else {
+            umgebung.removeObjFromList(umgebung.listAnzeige, obj);
         }
     }
 }
