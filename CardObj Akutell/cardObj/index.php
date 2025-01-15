@@ -12,7 +12,7 @@
 <!-- Bootstrap Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-<!-- jQuery, Moment.js, Bootstrap JS, and Date Range Picker JS -->
+<!-- jQuery, Momenhgt.js, Bootstrap JS, and Date Range Picker JS -->
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
