@@ -66,20 +66,18 @@
 
 
     window.onload = function() {
-       
-   
         const umgebung1 = new Umgebung();
         const umgebung2 = new Umgebung();
-     
-        var selectedUmgebung = umgebung1;
-        ladenUmgebung()
-       
+        const umgebung3 = new Umgebung();
 
+        var selectedUmgebung = umgebung1;
         const testCard = new CardObj(umgebung1);
         const testCard2 = new CardObj(umgebung1);
-
         const testCard3 = new CardObj(umgebung2);
         const testCard4 = new CardObj(umgebung2);
+        ladenUmgebung()
+        Umgebung.checkUmgebungList()
+        Umgebung.startCarousels()
     }
 
     class CardObj {
@@ -329,10 +327,10 @@
     });
 
     function zeigeUmgebungAn() {
-        document.querySelectorAll('[id^="umgebungsBody"]').forEach(item => {
-            let lastIndexUmgebung = item.id.replace('umgebungsBody', '');
+        document.querySelectorAll('[id^="bodyForCards"]').forEach(item => {
+            let lastIndexUmgebung = item.id.replace('bodyForCards', '');
             if (lastIndexUmgebung == selectedUmgebung.id) {
-                console.log(lastIndexUmgebung);
+                
                 document.getElementById(item.id).style.display = "block";
             } else {
                 document.getElementById(item.id).style.display = "none";
