@@ -1,4 +1,3 @@
-console.log("test");
 
 let rowForCards;
 let carousels;
@@ -84,70 +83,64 @@ class Umgebung {
             console.log('Carousel geleert...');
         }
     }
-    static async startCarouselLoop(umgebungsObj) {
-        console.log(umgebungsObj);
-        let i = 0
-        if (umgebungsObj != null) {
-            var carouselInner = document.querySelector(`#${umgebungsObj.carousel}`);
-            if (!carouselInner) {
-                console.warn(`Carousel with ID #${umgebungsObj.carousel} not found`);
-                return;
-            }
-        } else {
-            return;
-        }
-        console.log(carouselInner);
-        const carouselItems = carouselInner.querySelectorAll('.carousel-item');
-        carouselItems.forEach(item => item.classList.remove('active'));
-
-        if (carouselInner.length === 0) {
-            console.warn('Keine Carousel-Elemente gefunden. Warten auf Aktualisierung...');
-            await wait(1000);
-            return;
-        }
-        // carouselItems[i].classList.add('active');
-        // const interval = parseInt(carouselItems[i]?.dataset.interval) || 3000;
-        // await wait(interval);
-        // i = (i + 1) % carouselItems.length;
-        // carouselItems = null;
+    async moveToNextPic(cardObj) {
+        await wait(cardObj.selectedTime);
+        this.ci = (this.ci + 1) % this.listAnzeige.length;
     }
 
     static async repeatUpdateCarousel(umgebungsObj) {
-        console.log(umgebungsObj);
         var carouselInner = document.querySelector(`#${umgebungsObj.carousel}`);
-        console.log(carouselInner);
         carouselInner.innerHTML = '';
         if (carouselInner && umgebungsObj.listAnzeige.length > 0) {
-            umgebungsObj.listAnzeige.forEach((obj, index) => {
-                const isActive = index === 0 ? 'active' : '';
+            umgebungsObj.listAnzeige.forEach((cardObj, index) => {
                 carouselInner.innerHTML += `
-                    <div class="carousel-item ${isActive}" data-interval="${obj.selectedTime}">
-                        <img src="${obj.imagePath}" class="imagesCarousel d-block w-100" alt="Bild ${index + 1}">
+                    <div class="d-none" id="${cardObj.shownInCarousel}">
+                        <img src="${cardObj.imagePath}" class="w-100" alt="aktuelles Bild: ${index + 1}">
                     </div>
                 `;
-
             });
-            console.log(umgebungsObj.listAnzeige);
         }
         if (updateInterval) {
-            updateInterval = 20000
+            updateInterval = 5000
         }
         await wait(updateInterval);
-        console.log(umgebungsObj.listAnzeige);
-        console.log('Carousel wird aktualisiert...');
+        console.log(`Carousel von Umgebung ${umgebungsObj.id} wird aktualisiert...`);
+        await Umgebung.startCarouselLoop(umgebungsObj);
+
+    }
+    static async startCarouselLoop(umgebungsObj) {
+        if (umgebungsObj.listAnzeige.length == 0) {
+            return;
+        }
+        console.log(umgebungsObj);
+        let curentIndex = umgebungsObj.ci;
+        //wenn der letzte index der listAnzeige erreicht mit curentIndex erreicht ist, 
+        //dann wird die while schleife abgebrochen 
+        while (umgebungsObj.listAnzeige.length != 0 && curentIndex < umgebungsObj.listAnzeige.length && umgebungsObj != null) {
+            curentIndex = (curentIndex + 1) % umgebungsObj.listAnzeige.length;
+            const element = umgebungsObj.listAnzeige[curentIndex];
+            console.log(element.selectedTime);
+            if(element.selectedTime == "") {
+                element.selectedTime = 3000
+            }
+            try {
+                const inner = document.getElementById(element.shownInCarousel);
+                inner.classList.remove("d-none");
+                await wait(element.selectedTime); 
+                inner.classList.add("d-none");
+            } catch (error) {
+                console.log(error);
+                return
+            }
+        }
     }
 
     static async startCarousels() {
-        const umgebungen = Umgebung.umgebungsIdList;
         while (true) {
+            const umgebungen = Umgebung.umgebungsIdList;
             const promisesUpdate = umgebungen.map(umgebungObj => Umgebung.repeatUpdateCarousel(umgebungObj));
-            await Promise.all(promisesUpdate); // Warten Sie, bis alle Carousels parallel aktualisiert wurden
-            await wait(3000); // Warten Sie 300ms bevor die nächste Runde startet
-            console.log("jetzt kommt startCarouselLoop");
-            const promisesLoop = umgebungen.map(umgebungObj => Umgebung.startCarouselLoop(umgebungObj));
-            await Promise.all(promisesLoop); // Warten Sie, bis alle Carousels parallel aktualisiert wurden
-            await wait(3000); // Warten Sie 300ms bevor die nächste Runde startet
-            console.log('Alle Carousels wurden aktualisiert...');
+            await Promise.all(promisesUpdate);
+            await wait(3000);
         }
     }
     static async checkUmgebungList() {

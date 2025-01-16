@@ -101,6 +101,7 @@
             this.alwaysOnBtn = `alwaysOnBtn${this.id}`
             this.selectedTime = ""
             this.infoCard = `showDateInCard${this.id}`
+            this.shownInCarousel = `showInCarousel${this.id}`; 
             this.isTimeSet = false
             this.imagePath = ""
             this.imageSet = true
