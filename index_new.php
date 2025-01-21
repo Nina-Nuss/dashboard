@@ -30,7 +30,7 @@
 </head>
 
 <body>
-    <?php include 'header/header.html'; ?> 
+    <?php include 'header/header.php'; ?> 
 
     <div id="content">
         <div class="container-fluid">

@@ -1,11 +1,11 @@
 <div id="header" style="background-color: white;display: flex;height: 15vh; padding-left: 0vh">
     <div style="display: flex;">
-        <img src="images\bild.png" alt="bild"
+        <img src="../images/bild.png" alt="bild"
             style="margin-right: 60px;  margin-left: 5vh; margin-bottom: 2px; border-radius: 2vh;">
-        <img src="images\logo.png" alt="logo" style="padding-bottom: 25px; ">
+        <img src="../images/logo.png" alt="logo" style="padding-bottom: 25px;">
     </div>
-
-
+    <link rel="stylesheet" href="../css/index_new.css">
+    
 </div>
 
 <style>
@@ -28,7 +28,8 @@
         font-size: 4.5rem;
         color: #ffffff;
     }
-    .div{
+
+    .div {
         text-align: center;
     }
 </style>
@@ -37,9 +38,9 @@
     <div class="para_inhalt col-md-10 d-flex text justify-content-between px-5">
         <div class="clock"> Infoterminal Dashboard</div>
         <div class="clock">
-            <h1 id="time"></h1>
-            <h1>/</h1>
-            <h1 id="date"></h1>
+            <div id="time"></div>
+            <div>/</div>
+            <div id="date"></div>
         </div>
 
     </div>
