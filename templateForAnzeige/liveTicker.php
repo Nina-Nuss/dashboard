@@ -37,6 +37,7 @@
                 transform: translateX(-100%);
             }
         }
+       
     </style>
 </head>
 
@@ -44,7 +45,7 @@
 <body>
     <div class="parallelogram">
         <div class="para_inhalt text d-flex justify-content-between align-items-center px-5 gap-2">
-            <div class="me-5 pr-3">Tagesschau</div>
+            <div class="me-5 pr-3">Tagesschau.de</div>
             <div>
                 <div id="ticker">
                     <span>Lade Nachrichten...</span>

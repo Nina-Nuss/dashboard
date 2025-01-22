@@ -19,11 +19,13 @@
     }
 
     .imageContainer {
-        object-fit: contain;
+        width: 1200px;      /* Feste Breite */
+        height: 570px;     /* Feste Höhe */
+        object-fit: contain; /* Behält Seitenverhältnis bei */
         display: block;
         margin: 0 auto;
-        width: auto;
-        min-width: 50%;
+        border: 1px solid #ddd; 
+
     }
 
     .content {
@@ -53,82 +55,17 @@
 </style>
 
 <body>
-    <header>
+    <header class="pl-3">
         <?php include '..\header\header.php'; ?>
     </header>
-    <article class="p-1">
-        <div class="d-flex flex-column justify-content-center align-items-center">
-            <h2 class="clock text-center mb-3">fgdggsfdgsfdgfdsgs</h2>
-            <div class="d-flex gap-4 w-100 justify-content-center">
-                <img src="../images/Download.jpg" alt="logo" class="imageContainer rounded">
-
+    <article class="content">
+        <div class="d-flex row h-100 flex-column justify-content-center align-items-center">            
+            <div class="d-flex col-auto gap-4 w-100 justify-content-center align-items-center">
+                <img src="../images/1.jpg" alt="logo" class="imageContainer rounded">
             </div>
-            <h4 class="clock text-center mt-3">sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDG
-                sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDG
-                sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDG
-                sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDG
-                sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDG
-                sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDG
-                sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDG
-                sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDG
-                sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDG
-                sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDG
-                sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDG
-                sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDG
-                sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDG
-                sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDG
-                sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDG
-                sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDG
-                sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDG
-                sgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDGsgsdfgsfdgdssdfgsfdgHGJHG
-                FDGDGDFGDGFDGDFGFDG
-                FDGDGDFGDGFDGDFGFDG
-                FDGDGDFGDGFDGDFGFDG
-            </h4>
         </div>
     </article>
-    <footer>
+    <footer  class="pr-3">
         <?php include 'liveTicker.php'; ?>
     </footer>
 </body>
