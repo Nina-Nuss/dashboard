@@ -430,6 +430,7 @@
             var closeBtn = document.getElementById("closeBtn" + aktuellesObj.id)
             var selectedValue = $(select).val();
             var selectedValue = ""
+        
             select.selectedIndex = -1;
             aktuellesObj.isTimeSet = false
             aktuellesObj.startDateTime = ``;

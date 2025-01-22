@@ -8,7 +8,6 @@ function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-
 // Wait for DOM to be loaded
 document.addEventListener('DOMContentLoaded', function () {
     rowForCards = document.getElementById("rowForCards");
@@ -113,12 +112,13 @@ class Umgebung {
             return;
         }
         console.log(umgebungsObj);
-        let curentIndex = umgebungsObj.ci;
+        let i = umgebungsObj.ci;
         //wenn der letzte index der listAnzeige erreicht mit curentIndex erreicht ist, 
         //dann wird die while schleife abgebrochen 
-        while (umgebungsObj.listAnzeige.length != 0 && curentIndex < umgebungsObj.listAnzeige.length && umgebungsObj != null) {
-            curentIndex = (curentIndex + 1) % umgebungsObj.listAnzeige.length;
-            const element = umgebungsObj.listAnzeige[curentIndex];
+        while (umgebungsObj.listAnzeige.length != 0 && i < umgebungsObj.listAnzeige.length && umgebungsObj != null) {
+           
+            i = (i + 1) % umgebungsObj.listAnzeige.length;
+            const element = umgebungsObj.listAnzeige[i];
             console.log(element.selectedTime);
             if(element.selectedTime == "") {
                 element.selectedTime = 3000
