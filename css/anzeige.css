@@ -1,0 +1,35 @@
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    position: fixed;
+    overflow: hidden; /* Verhindert Scrolling */  
+}
+
+.imageContainer {
+    width: 1200px;      /* Feste Breite */
+    height: 570px;     /* Feste Höhe */
+    object-fit: contain; /* Behält Seitenverhältnis bei */
+    display: block;
+    margin: 0 auto;
+    border: 1px solid #ddd; 
+
+}
+
+.content {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+
+}
+
+header {
+    width: 100%;
+}
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: white;
+    padding: 10px 0;
+}

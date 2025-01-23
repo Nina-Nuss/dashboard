@@ -17,6 +17,9 @@ class anzeigebereich {
         this.von = von;
         // console.log(`${this.id} ${this.titel} ${this.ipAdresse}`);
         anzeigebereich.list.push(this);
+        console.log("Liste: " + anzeigebereich.list);
+        console.log("Liste: " + anzeigebereich.list);
+        
     }
 
     static temp_remove = []
@@ -121,6 +124,14 @@ class anzeigebereich {
         anzeigebereichv.innerHTML = ""
         anzeigebereicht.innerHTML = ""
         console.log("Update: " + this.list)
+        for(let i = 0; i < this.list.length; i++){
+            var ele = this.list[i]
+            console.log(ele);
+            
+
+        }
+       
+            
         // selectFromDatabase("beispielPOST.php")
         for (let i = 0; i < this.list.length; i++) {
             const element = this.list[i];
@@ -156,8 +167,9 @@ function select() {
     fetch("select.php").then(async (response) => {
         var responseText = await response.text();
         cutAndCreate(responseText)
-        console.log("Auswahl: "+ anzeigebereich.list);
         anzeigebereich.update()
+
+        
     });
 }
 function cutAndCreate(responseText) {

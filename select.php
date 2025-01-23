@@ -1,39 +1,36 @@
 <?php
-include ("connectionA.php");
+include ("connectionMy.php");
 
 $sql = "SELECT * FROM daten";
 
-$result = sqlsrv_query($conn, $sql);
+$result = mysqli_query($conn, $sql);
 
-if ($result === false) {
-  
-    die(print_r(sqlsrv_errors(), true));
-    
+if (!$result) {
+    die("Abfragefehler: " . mysqli_error($conn));
 }
+
 $unsereTabelle = [];
-while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-    // echo $row['ID'] . ", " . $row['Name'] . "<br />";
-    // array_push($list, $row);
-    if(isset($row['ip']) && $row['ip'] !== null && isset($row['titel']) 
-            && $row['titel'] !== null && isset($row['von'])    
-            && $row['von'] !== null && isset($row['bis'])
-            && $row['bis'] !== null && isset($row['beschreibung']) 
-            && $row['beschreibung'] !== null && isset($row['id']) 
-            && $row['id'] !== null){
-            array_push($unsereTabelle, array( 
-                $row["ip"],
-                $row["titel"],
-                $row["von"],
-                $row["bis"],
-                $row["beschreibung"],
-                $row["id"]
-             
-            ));
+while ($row = mysqli_fetch_assoc($result)) {
+    if(isset($row['ip']) && $row['ip'] !== null && 
+       isset($row['titel']) && $row['titel'] !== null && 
+       isset($row['von']) && $row['von'] !== null && 
+       isset($row['bis']) && $row['bis'] !== null && 
+       isset($row['beschreibung']) && $row['beschreibung'] !== null && 
+       isset($row['id']) && $row['id'] !== null) {
+        
+        array_push($unsereTabelle, array(
+            $row["ip"],
+            $row["titel"],
+            $row["von"],
+            $row["bis"],
+            $row["beschreibung"],
+            $row["id"]
+        ));
     }
+  
 }
+echo json_encode($unsereTabelle);
 
-
+mysqli_free_result($result);
 $jsonList = json_encode($unsereTabelle);
-
-echo $jsonList;
-// echo "</br>";
+?>

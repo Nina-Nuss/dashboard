@@ -135,7 +135,7 @@ body {
     margin-left: 3vh;
     z-index: -1;
     overflow: hidden;
-
+    align-items: center;
 
 }
 
@@ -179,6 +179,20 @@ label {
     height: 70%;
     scroll-behavior: smooth;
 
+}
+
+.clock {
+    text-align: center;
+}
+
+.clock h1 {
+    margin: 0;
+    color: #333;
+}
+
+.clock p {
+    margin: 10px 0 0;
+    color: #666;
 }
 
 .displayIp {
