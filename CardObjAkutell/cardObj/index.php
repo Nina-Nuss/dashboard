@@ -66,9 +66,10 @@
 
 
     window.onload = function() {
-        const umgebung1 = new Umgebung();
-        const umgebung2 = new Umgebung();
-        const umgebung3 = new Umgebung();
+        const umgebung1 = new Umgebung("1.1.1.1", "Begegnungshaus");
+        const umgebung2 = new Umgebung("2.2.2.2", "Aula");
+        const umgebung3 = new Umgebung("3.3.3.3", "Empfang");
+        
 
         var selectedUmgebung = umgebung1;
         const testCard = new CardObj(umgebung1);
@@ -101,7 +102,7 @@
             this.alwaysOnBtn = `alwaysOnBtn${this.id}`
             this.selectedTime = ""
             this.infoCard = `showDateInCard${this.id}`
-            this.shownInCarousel = `showInCarousel${this.id}`; 
+            this.shownInCarousel = `showInCarousel${this.id}`;
             this.isTimeSet = false
             this.imagePath = ""
             this.imageSet = true
@@ -330,7 +331,7 @@
         document.querySelectorAll('[id^="bodyForCards"]').forEach(item => {
             let lastIndexUmgebung = item.id.replace('bodyForCards', '');
             if (lastIndexUmgebung == selectedUmgebung.id) {
-                
+
                 document.getElementById(item.id).style.display = "block";
             } else {
                 document.getElementById(item.id).style.display = "none";
@@ -430,6 +431,7 @@
             var closeBtn = document.getElementById("closeBtn" + aktuellesObj.id)
             var selectedValue = $(select).val();
             var selectedValue = ""
+
             select.selectedIndex = -1;
             aktuellesObj.isTimeSet = false
             aktuellesObj.startDateTime = ``;

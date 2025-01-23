@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../css/anzeige.css">
+    <script src="../"></script>
 </head>
 <style>
     @media (min-width: 1920px) {
@@ -20,6 +21,7 @@
 </style>
 
 <body>
+ 
     <header class="pl-3">
         <?php include '..\header\header.php'; ?>
     </header>
@@ -31,8 +33,14 @@
         </div>
     </article>
     <footer  class="pr-3">
-        <?php include 'liveTicker.php'; ?>
+        <?php include '..\liveTicker\liveTicker.php'; ?>
     </footer>
 </body>
+<script>
+   console.log(Umgebung.ipList);
+   
+    
+</script>
+
 
 </html>

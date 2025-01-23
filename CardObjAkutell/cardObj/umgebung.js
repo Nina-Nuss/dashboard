@@ -17,17 +17,20 @@ document.addEventListener('DOMContentLoaded', function () {
 class Umgebung {
     static id = 0;
     static umgebungsIdList = [];
-    constructor() {
+    static ipList = [];
+    constructor(ipAdresse, titel) {
         this.id = Umgebung.id++;
+        this.ipAdresse = ipAdresse;
+        this.titel = titel
         this.ci = 0
         this.cardObjList = [];
         this.tempListForDeleteCards = [];
-        this.ipList = [];
         this.htmlCardObjList = [];
         this.listAnzeige = [];
         this.carousel = `carousel${this.id}`;
         this.htmlUmgebungsBody = `bodyForCards${this.id}`;
         this.ladeUmgebung();
+        Umgebung.ipList.push(this.ipAdresse);
         Umgebung.umgebungsIdList.push(this);
     }
     addCardObjs(cardObj) {
@@ -89,7 +92,7 @@ class Umgebung {
 
     static async repeatUpdateCarousel(umgebungsObj) {
         var carouselInner = document.querySelector(`#${umgebungsObj.carousel}`);
-        console.log(carouselInner);
+        carouselInner.innerHTML = '';
         if (carouselInner && umgebungsObj.listAnzeige.length > 0) {
             umgebungsObj.listAnzeige.forEach((cardObj, index) => {
                 carouselInner.innerHTML += `
@@ -99,7 +102,7 @@ class Umgebung {
                 `;
             });
         }
-        if (updateInterval) {
+        if (updateInterval == 5000) {
             updateInterval = 5000
         }
         await wait(updateInterval);
@@ -116,19 +119,16 @@ class Umgebung {
         //wenn der letzte index der listAnzeige erreicht mit curentIndex erreicht ist, 
         //dann wird die while schleife abgebrochen 
         while (umgebungsObj.listAnzeige.length != 0 && i < umgebungsObj.listAnzeige.length && umgebungsObj != null) {
-
             i = (i + 1) % umgebungsObj.listAnzeige.length;
             const element = umgebungsObj.listAnzeige[i];
-            console.log(element);
-     
-            if (element.selectedTime == "") {
+            console.log(element.selectedTime);
+            if(element.selectedTime == "") {
                 element.selectedTime = 3000
             }
             try {
-                inner = ""
-                var inner = document.getElementById(element.shownInCarousel);
+                const inner = document.getElementById(element.shownInCarousel);
                 inner.classList.remove("d-none");
-                await wait(element.selectedTime);
+                await wait(element.selectedTime); 
                 inner.classList.add("d-none");
             } catch (error) {
                 console.log(error);
@@ -140,11 +140,7 @@ class Umgebung {
     static async startCarousels() {
         while (true) {
             const umgebungen = Umgebung.umgebungsIdList;
-            const promisesUpdate = umgebungen.map(umgebungObj => {
-                console.log(umgebungObj.id)
-                return Umgebung.repeatUpdateCarousel(umgebungObj)
-            }
-            );
+            const promisesUpdate = umgebungen.map(umgebungObj => Umgebung.repeatUpdateCarousel(umgebungObj));
             await Promise.all(promisesUpdate);
             await wait(3000);
         }

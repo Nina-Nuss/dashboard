@@ -28,14 +28,15 @@
     <script src="datetime picker\Datetimepicker-main\style.css"></script>
 
 </head>
-
 <body >
+
+<body>
+
     <?php include 'header/header.php'; ?> 
 
     <div id="content">
         <div class="container-fluid">
             <div class="row ">
-
                 <div class="bearbeiten col-md-2 text-center ">
                     <p style="font-size: 3vh; font-weight: bold; margin-bottom: 1vh;">Bearbeiten</p>
                     <div id="dokumente">
