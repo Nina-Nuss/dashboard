@@ -1,37 +1,35 @@
 
-let rowForCards;
-let carousels;
-let updateInterval = 5000;
-
-// Global functions
-function wait(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-// Wait for DOM to be loaded
-document.addEventListener('DOMContentLoaded', function () {
-    rowForCards = document.getElementById("rowForCards");
-    carousels = document.getElementById("rowForCarousels");
-});
-
+// Umgebung = Schema
 class Umgebung {
     static id = 0;
     static umgebungsIdList = [];
     static ipList = [];
+    static nameList = [];
     constructor(ipAdresse, titel) {
         this.id = Umgebung.id++;
+       
+        //HTMLOBJEKTE-------------------------
+        this.carousel = `carousel${this.id}`;
+        this.htmlUmgebungsBody = `bodyForCards${this.id}`;
+        //-------------------------------------
+
+        //AB hier kommt alles in die Datenbank rein:
         this.ipAdresse = ipAdresse;
         this.titel = titel
-        this.ci = 0
+        //-------------------------------------
+
+        
+        //Listen-------------------------------
         this.cardObjList = [];
         this.tempListForDeleteCards = [];
         this.htmlCardObjList = [];
         this.listAnzeige = [];
-        this.carousel = `carousel${this.id}`;
-        this.htmlUmgebungsBody = `bodyForCards${this.id}`;
+        //-------------------------------------
+
         this.ladeUmgebung();
         Umgebung.ipList.push(this.ipAdresse);
         Umgebung.umgebungsIdList.push(this);
+
     }
     addCardObjs(cardObj) {
         this.cardObjList.push(cardObj);
@@ -41,6 +39,14 @@ class Umgebung {
             this.listAnzeige.push(cardObj);
         }
     }
+
+    createCardObj(){
+        this.cardObjList.forEach(cardObj => {
+            var cardObj = new CardObj(this);
+            console.log(cardObj);
+        });
+    }
+
     static showCardObjList() {
         this.cardObjList.forEach(cardObj => {
             console.log(cardObj);
@@ -122,13 +128,13 @@ class Umgebung {
             i = (i + 1) % umgebungsObj.listAnzeige.length;
             const element = umgebungsObj.listAnzeige[i];
             console.log(element.selectedTime);
-            if(element.selectedTime == "") {
+            if (element.selectedTime == "") {
                 element.selectedTime = 3000
             }
             try {
                 const inner = document.getElementById(element.shownInCarousel);
                 inner.classList.remove("d-none");
-                await wait(element.selectedTime); 
+                await wait(element.selectedTime);
                 inner.classList.add("d-none");
             } catch (error) {
                 console.log(error);
@@ -137,14 +143,14 @@ class Umgebung {
         }
     }
 
-    static async startCarousels() {
-        while (true) {
-            const umgebungen = Umgebung.umgebungsIdList;
-            const promisesUpdate = umgebungen.map(umgebungObj => Umgebung.repeatUpdateCarousel(umgebungObj));
-            await Promise.all(promisesUpdate);
-            await wait(3000);
-        }
+    static async startCarousels(selectedUmgebung) {
+        console.log(selectedUmgebung);
+
+        await wait(3000);
     }
+
+    
+
     static async checkUmgebungList() {
         while (true) {
             for (let i = 0; i < Umgebung.umgebungsIdList.length; i++) {
@@ -167,3 +173,44 @@ async function checkUmgebung(umgebung) {
         }
     }
 }
+
+let rowForCards;
+let carousels;
+let updateInterval = 5000;
+
+
+async function sendListToServer(list, umgebung) {
+    try {
+        
+        const response = await fetch(umgebung, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(list)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        console.log('Erfolg:', result);
+    } catch (error) {
+        console.error('Fehler beim Senden:', error);
+    }
+}
+
+// Global functions
+function wait(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Wait for DOM to be loaded
+document.addEventListener('DOMContentLoaded', function () {
+    rowForCards = document.getElementById("rowForCards");
+    carousels = document.getElementById("rowForCarousels");
+});
+
+
+

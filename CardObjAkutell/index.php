@@ -32,6 +32,7 @@
 <script src="convertDateTime.js"></script>
 <link rel="stylesheet" href="styles.css">
 <script src="umgebung.js"></script>
+<script src="cardObj.js"></script>
 
 
 </head>
@@ -50,6 +51,7 @@
         <div id="counter">0</div>
         <button id="minusBtn" type="button" class="btn btn-light">Select</button>
         <button id="deleteBtnForCards" type="button" class="btn btn-danger d-none">delete</button>
+        <button id="saveBtn" type="button" class="btn bg-success d-block">save</button>
     </div>
     <div class="container d-flex">
         <div id="rowForCards" class="col-4 p-2"><!-- bild Obj --></div>
@@ -57,199 +59,59 @@
         </div>
     </div>
 </body>
-
-
 <script>
     let cancelUplaod = false
     var zeitEingegeben = false
     let pushDelete = false
-
+    let umgebungsList = []
 
     window.onload = function() {
+
         const umgebung1 = new Umgebung("1.1.1.1", "Begegnungshaus");
         const umgebung2 = new Umgebung("2.2.2.2", "Aula");
         const umgebung3 = new Umgebung("3.3.3.3", "Empfang");
-        
+        umgebungsList = [umgebung1, umgebung2, umgebung3]
+        try {
+            umgebungsList.forEach(umgebung => {
+                umgebung.createCardObj();
+            });
+        } catch (error) {
+            console.error('Fehler beim Erstellen der CardObjs:', error);
+        }
 
         var selectedUmgebung = umgebung1;
-        const testCard = new CardObj(umgebung1);
-        const testCard2 = new CardObj(umgebung1);
-        const testCard3 = new CardObj(umgebung2);
-        const testCard4 = new CardObj(umgebung2);
+        holeUmgebung() 
+
         ladenUmgebung()
         Umgebung.checkUmgebungList()
-        Umgebung.startCarousels()
     }
-
-    class CardObj {
-        static idCounter = 0;
-        constructor(umgebung) {
-            this.id = CardObj.idCounter++;
-            this.deleteBtn = `deleteBtn${this.id}`
-            this.imagePreviewId = `imagePreview${this.id}`;
-            this.imageInputId = `imageInput${this.id}`;
-            this.modalImageId = `modalImageID${this.id}`;
-            this.checkAktiv = `activCheck${this.id}`;
-            this.timePlanCheckboxId = `timeCheck${this.id}`;
-            this.openModalButtonId = `openModal${this.id}`;
-            this.modalId = `myModal${this.id}`;
-            this.dateRangeInputId = `daterange${this.id}`;
-            this.dateRangeContainerId = `selected-daterange${this.id}`;
-            this.modalCloseButtonId = `closeModal${this.id}`;
-            this.daterangeIconId = `daterange-icon${this.id}`;
-            this.infoBtn = `infoBtn${this.id}`;
-            this.timerSelectRange = `timerSelect${this.id}`
-            this.alwaysOnBtn = `alwaysOnBtn${this.id}`
-            this.selectedTime = ""
-            this.infoCard = `showDateInCard${this.id}`
-            this.shownInCarousel = `showInCarousel${this.id}`;
-            this.isTimeSet = false
-            this.imagePath = ""
-            this.imageSet = true
-            this.startDateTime = ""
-            this.endDateTime = ""
-            this.closeBtn = `closeBtn${this.id}`
-            this.sumbitBtnID = `submit${this.id}`;
-            this.formID = `formID${this.id}`
-            this.aktiv = true
-            this.htmlKonstruktObjBody(umgebung)
-            umgebung.addCardObjs(this)
-        }
-        htmlKonstruktObjBody(umgebung) {
-            var htmlUmgebungsBody = document.getElementById(umgebung.htmlUmgebungsBody);
-            htmlUmgebungsBody.innerHTML += `
-            <div id="${this.id}" class="card m-1" style="width: 10rem;" >
-                <div class="position-absolute form-check-d d-none">
-                    <input class="form-check-input" type="checkbox" value="" id="${this.deleteBtn}">
-                </div>
-            <span class="material-symbols-outlined removePicBtn z-3" id="${this.closeBtn}" onclick="deletePicture('${this.imagePreviewId}', '${this.modalImageId}')" >close</span>
-            <div class="picture pt-0">
-                <form action="test.php" method="post" enctype="multipart/form-data" id="${this.formID}">
-                    <label class="upload-container">
-                        <div class="z-1" id="${this.imagePreviewId}">Bild auswählen oder hierher ziehen</div>  
-                        <input 
-                            type="file" 
-                            name="file" 
-                            id="${this.imageInputId}"
-                            accept="image/*" 
-                            required 
-                            onclick="setupImagePicker('${this.imagePreviewId}', '${this.modalImageId}', '${this.imageInputId}', '${this.formID}')"
-                        >      
-                    </label>
-                    <!-- Der versteckte Submit-Button -->
-                    <input type="submit" name="submit" value="Hochladen" class="hidden-submit z-3">
-                </form>
-            </div>
-            <div class="d-flex justify-content-center">
-                <!-- rangeslider -->  
-                <input type="range" class="form-range z-3" min="3" max="9" id="${this.timerSelectRange}" disabled>
-                <!-- rangeslider -->
-            </div>  
-            <div class="card-body d-flex align-items-center justify-content-between p-2 gap-2">
-                <button id="${this.openModalButtonId}" class="btn btn-light btn-sm modalBtn" data-toggle="modal" disabled>
-                    <span class="material-symbols-outlined">date_range</span>
-                </button>
-               
-                <div class="btn-group dropend" >
-                    <button id="${this.infoBtn}" type="button" class="btn btn-light dropdown-toggle p-0" data-bs-toggle="dropdown" aria-expanded="false">
-                        <span class="material-symbols-outlined">info</span>
-                    </button>
-                    <ul class="dropdown-menu p-2">
-                        <label class="p-0 d-flex justify-content-center align-items-center " id="${this.infoCard}"></label>
-                    </ul>      
-                </div>  
-                <div class="form-check form-switch align-self-end "  id="${this.alwaysOnBtn}">
-                    <input  class="form-check-input pl-3" type="checkbox" role="switch" onclick="cardSwitch('${this.alwaysOnBtn}')" id="flexSwitchCheckDefault" checked>
-                </div>
-            </div>
-        <!-- Modal structure -->
-        <div id="${this.modalId}" class="modal">
-            <div id="${this.dateRangeContainerId}" class="mt-2 text-muted"></div>
-            <div class="modal-content">           
-                <span id="${this.modalCloseButtonId}" class="close">&times;</span>
-                <div id="${this.modalImageId}"></div>
-                <div class="container mt-3" id="zeitManagment${this.id}" style="display: block;">
-                    <div class="input-group">
-                        <span class="input-group-text" id="${this.daterangeIconId}">
-                            <i class="bi bi-calendar3"></i>
-                            <input type="text" id="${this.dateRangeInputId}"  class="file-input-button" readonly>
-                        </span>
-                    </div>
-                </div>         
-            </div>
-        </div>
-        `;
-        }
-        removeHtmlElement() {
-            const element = document.getElementById(this.id);
-            if (element) {
-                element.remove();
-            }
-        }
-    }
-
-    // class Umgebung {
-    //     static id = 0;
-    //     static umgebungsIdList = [];
-    //     constructor() {
-    //         this.id = Umgebung.id++;
-    //         this.cardObjList = [];
-    //         this.tempListForDeleteCards = [];
-    //         this.ipList = [];
-    //         this.htmlCardObjList = [];
-    //         this.listAnzeige = [];
-    //         this.carousel = `carousel${this.id}`;
-    //         this.htmlUmgebungsBody = `umgebungsBody${this.id}`
-    //         this.ladeUmgebung();
-    //         Umgebung.umgebungsIdList.push(this);
-    //     }
-    //     addCardObjs(cardObj) {
-    //         this.cardObjList.push(cardObj);
-    //     }
-    //     addCardObjToAnzeige(cardObj) {
-    //         if (!this.listAnzeige.some(e => e.id == cardObj.id)) {
-    //             this.listAnzeige.push(cardObj);
-    //         }
-    //     }
-    //     showCardObjList() {
-    //         this.cardObjList.forEach(cardObj => {
-    //             console.log(cardObj);
-    //         }); // Implementieren Sie die Logik, um die Umgebung anzuzeigen
-    //     }
-    //     removeObjFromList(list, obj) {
-    //         var index = list.findIndex(item => item.id === obj.id);
-    //         if (index > -1) {
-    //             list.splice(index, 1);
-    //         }
-    //     }
-    //     ladeUmgebung() {
-    //         rowForCards.innerHTML += `
-    //             <div id="${this.htmlUmgebungsBody}"></div>  
-    //         `
-    //         carousel.innerHTML += `
-    //             <div class="carousel-inner" id="${this.carousel}"></div>
-    //         `
-    //     }
-    //     static findObj(id) {
-    //         for (let umgebung of Umgebung.umgebungsIdList) {
-    //             const cardObj = umgebung.cardObjList.find(obj => obj.id == id.charAt(id.length - 1));
-    //             if (cardObj) {
-    //                 return cardObj;
-    //             }
-    //         }
-    //         return null;
-    //     }
-
-    // }
-
+    function holeUmgebung() {
+        const result = fetch("selectUmgebung", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then((response) => {
+            return response.json();
+        }).then((data) => {
+            console.log(data);
+            return data
+        }).catch((error) => {
+            console.error("Fehler beim Laden der Umgebung:", error);
+        });
+        
+        
+    }   
 
     function lengthListUmgebung() {
         var length = Umgebung.umgebungsIdList.length
         return length
     }
 
-    function lengthListCardObj(selectedUmgebung) {
-        var length = selectedUmgebung.cardObjList.length
+    function lengthListCardObj(umgebung) {
+        var length = umgebung.cardObjList.length
+        console.log(length);
+        
         return length
     }
 
@@ -276,7 +138,7 @@
         selectUmgebung.innerHTML = ``;
         selectUmgebung.innerHTML = `<option selected>Wähle Umgebung aus</option>`;
         Umgebung.umgebungsIdList.forEach(umgebung => {
-            selectUmgebung.innerHTML += `<option value="${umgebung.id}">${umgebung.id}</option>`;
+            selectUmgebung.innerHTML += `<option value="${umgebung.id}">${umgebung.titel}</option>`;
         });
 
     };
@@ -287,7 +149,6 @@
             selectedUmgebung = sucheUmgebung(selectedOption);
             plusBtn.disabled = false;
             updateAnzeigeCounter()
-            checkBoxShow();
             console.log("wächsle umgebung");
             console.log(selectedUmgebung);
             // Entfernen der Option "Wähle Object aus"
@@ -296,10 +157,11 @@
                 defaultOption.remove();
             }
             zeigeUmgebungAn()
+            Umgebung.startCarousels(selectedUmgebung)
+
         }
 
     })
-
 
     function cardSwitch(idBtn) {
         const cardId = idBtn.replace('alwaysOnBtn', '');
@@ -317,8 +179,25 @@
         }
     }
 
+
+    document.getElementById("saveBtn").addEventListener("click", function() {
+        try {
+            if (selectedUmgebung) {}
+        } catch (error) {
+            alert("Wähle ein Object aus")
+            return
+        }
+        alert("Daten werden gespeichert")
+        
+        selectedUmgebung.cardObjList.forEach(cardObj => {
+            insertDatabase(cardObj)
+        });
+    });
+
     function updateAnzeigeCounter() {
         var currentlength = lengthListCardObj(selectedUmgebung);
+        console.log(currentlength);
+        
         counter.innerHTML = currentlength;
     }
     minusBtn.addEventListener("click", function() {
@@ -350,6 +229,8 @@
 
     function checkBoxShow() {
         var formCheckboxes = document.querySelectorAll('.form-check-d');
+        console.log("bin da");
+        
         // Iteriere über alle Elemente und ändere ihre Klassen
         formCheckboxes.forEach(formCheckbox => {
             // Entferne die Klasse "d-none", falls vorhanden
@@ -407,8 +288,18 @@
             body: formData,
         })
         var path = await response.text()
+
         ob.imagePath = path
-        console.log(ob.imagePath);
+
+    }
+    async function insertDatabase() {
+        const cardObj = new FormData();
+        const response2 = await fetch('sendToDatabase.php', {
+            method: 'POST',
+            body: cardObj
+        })
+        var result = await response2.text()
+        console.log(result);
     }
 
     function sucheUmgebung(UmgebungsID) {
@@ -431,7 +322,6 @@
             var closeBtn = document.getElementById("closeBtn" + aktuellesObj.id)
             var selectedValue = $(select).val();
             var selectedValue = ""
-
             select.selectedIndex = -1;
             aktuellesObj.isTimeSet = false
             aktuellesObj.startDateTime = ``;
@@ -504,7 +394,10 @@
                 var alwaysOnBtn = 'alwaysOnBtn' + lastChar
                 var inputbtn = document.getElementById(alwaysOnBtn)
                 inputbtn.disabled = false
+                console.log(formID, aktuellesObj);
+
                 getImagePath(formID, aktuellesObj)
+
                 this.value = '';
             })
         }

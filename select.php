@@ -33,4 +33,5 @@ echo json_encode($unsereTabelle);
 
 mysqli_free_result($result);
 $jsonList = json_encode($unsereTabelle);
+
 ?>

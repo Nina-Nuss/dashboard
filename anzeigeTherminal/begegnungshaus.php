@@ -36,11 +36,5 @@
         <?php include '..\liveTicker\liveTicker.php'; ?>
     </footer>
 </body>
-<script>
-   console.log(Umgebung.ipList);
-   
-    
-</script>
-
 
 </html>
