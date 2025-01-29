@@ -1,6 +1,6 @@
 class CardObj {
     static idCounter = 0;
-    constructor(titel, ipAdresse, isTimeSet = false, imagePath, imageSet = false, startDateTime, endDateTime, aktiv = true) {
+    constructor(titel, ipAdresse, isTimeSet, imagePath, imageSet, startDateTime, endDateTime, aktiv, umgebung) {
         this.id = CardObj.idCounter++;
         //AB hier kommt alles in die Datenbank rein:
         this.zugeordnet = titel
@@ -40,7 +40,7 @@ class CardObj {
 
 
         // this.htmlKonstruktObjBody(umgebung)
-        // umgebung.addCardObjs(this)
+        umgebung.addCardObjs(this)
     }
     htmlKonstruktObjBody(umgebung) {
         var htmlUmgebungsBody = document.getElementById(umgebung.htmlUmgebungsBody);

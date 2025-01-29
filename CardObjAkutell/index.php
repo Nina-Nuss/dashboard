@@ -11,10 +11,7 @@
 <link href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" rel="stylesheet">
 <!-- Bootstrap Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
 <!-- jQuery, Momenhgt.js, Bootsmtrap JS, and Date Range Picker JS -->
-
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/min/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -66,7 +63,7 @@
     let json;
 
     window.onload = function() {
-        holeUmgebung().then(data => {     
+        holeUmgebung().then(data => {
             data.forEach(umgebung => {
                 var umgebung = new Umgebung(umgebung[0], umgebung[1]);
             })
@@ -76,16 +73,15 @@
         holeCardObj().then(data => {
             console.log(data);
             data.forEach(cardObj => {
-                var cardObj = new CardObj(cardObj[0], cardObj[1], cardObj[2], cardObj[3], cardObj[4], cardObj[5], cardObj[6], cardObj[7]);
+                Umgebung.umgebungsListe.forEach(umgebung => {
+                    if (umgebung.titel == cardObj[0]) {
+                        var cardObj = new CardObj(cardObj[0], cardObj[1], cardObj[2], cardObj[3], cardObj[4], cardObj[5], cardObj[6], cardObj[7], umgebung.titel);
+                    }
+                })
+                console.log(Umgebung.umgebungsListe);
             })
         })
-        
-        Umgebung.umgebungsListe.forEach(element => {
-            element.forEach(cardObj => {
-                console.log(cardObj);
-            }); 
-        });
-    };
+    }
     async function holeUmgebung() {
         try {
             const response = await fetch("database/selectUmgebung.php", { // .php Extension hinzugefügt
