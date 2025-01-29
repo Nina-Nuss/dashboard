@@ -71,11 +71,21 @@
             ladenUmgebung();
         })
         holeCardObj().then(data => {
-            console.log(data);
             data.forEach(cardObj => {
+                var obj = {
+                    titel: cardObj[0],
+                    imagePath: cardObj[1],
+                    selectedTime: cardObj[2],
+                    isTimeSet: cardObj[3],
+                    imageSet: cardObj[4],
+                    aktiv: cardObj[5],
+                    startDateTime: cardObj[6],
+                    endDateTime: cardObj[7]
+                }
                 Umgebung.umgebungsListe.forEach(umgebung => {
-                    if (umgebung.titel == cardObj[0]) {
-                        var cardObj = new CardObj(cardObj[0], cardObj[1], cardObj[2], cardObj[3], cardObj[4], cardObj[5], cardObj[6], cardObj[7], umgebung.titel);
+                    
+                    if (umgebung.titel == titelVonCard) {
+                        var cardObj = new CardObj(obj.titel, obj.imagePath, obj.selectedTime, obj.isTimeSet, obj.imageSet, obj.aktiv, obj.startDateTime, obj.endDateTime);
                     }
                 })
                 console.log(Umgebung.umgebungsListe);
