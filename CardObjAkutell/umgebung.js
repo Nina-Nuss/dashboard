@@ -2,7 +2,7 @@
 // Umgebung = Schema
 class Umgebung {
     static id = 0;
-    static umgebungsIdList = [];
+    static umgebungsListe = [];
     static ipList = [];
     static nameList = [];
     constructor(ipAdresse, titel) {
@@ -28,7 +28,7 @@ class Umgebung {
 
         this.ladeUmgebung();
         Umgebung.ipList.push(this.ipAdresse);
-        Umgebung.umgebungsIdList.push(this);
+        Umgebung.umgebungsListe.push(this);
 
     }
     addCardObjs(cardObj) {
@@ -39,10 +39,9 @@ class Umgebung {
             this.listAnzeige.push(cardObj);
         }
     }
-
-    createCardObj(){
-        this.cardObjList.forEach(cardObj => {
-            var cardObj = new CardObj(this);
+    static createCardObj(umgebung){
+        Umgebung.cardObjList.forEach(cardObj => {
+            var cardObj = new CardObj(umgebung);
             console.log(cardObj);
         });
     }
@@ -73,7 +72,7 @@ class Umgebung {
         }
     }
     static findObj(id) {
-        for (let umgebung of Umgebung.umgebungsIdList) {
+        for (let umgebung of Umgebung.umgebungsListe) {
             const cardObj = umgebung.cardObjList.find(obj => obj.id == id.charAt(id.length - 1));
             if (cardObj) {
                 return cardObj;
@@ -148,13 +147,10 @@ class Umgebung {
 
         await wait(3000);
     }
-
-    
-
     static async checkUmgebungList() {
         while (true) {
-            for (let i = 0; i < Umgebung.umgebungsIdList.length; i++) {
-                const umgebung = Umgebung.umgebungsIdList[i]
+            for (let i = 0; i < Umgebung.umgebungsListe.length; i++) {
+                const umgebung = Umgebung.umgebungsListe[i]
                 await checkUmgebung(umgebung);
                 await wait(2000);
             }

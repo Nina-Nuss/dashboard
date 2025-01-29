@@ -63,45 +63,69 @@
     let cancelUplaod = false
     var zeitEingegeben = false
     let pushDelete = false
-    let umgebungsList = []
+    let json;
 
     window.onload = function() {
-
-        const umgebung1 = new Umgebung("1.1.1.1", "Begegnungshaus");
-        const umgebung2 = new Umgebung("2.2.2.2", "Aula");
-        const umgebung3 = new Umgebung("3.3.3.3", "Empfang");
-        umgebungsList = [umgebung1, umgebung2, umgebung3]
+        holeUmgebung().then(data => {     
+            data.forEach(umgebung => {
+                var umgebung = new Umgebung(umgebung[0], umgebung[1]);
+            })
+        }).then(() => {
+            ladenUmgebung();
+        })
+        holeCardObj().then(data => {
+            console.log(data);
+            data.forEach(cardObj => {
+                var cardObj = new CardObj(cardObj[0], cardObj[1], cardObj[2], cardObj[3], cardObj[4], cardObj[5], cardObj[6], cardObj[7]);
+            })
+        })
+        
+        Umgebung.umgebungsListe.forEach(element => {
+            element.forEach(cardObj => {
+                console.log(cardObj);
+            }); 
+        });
+    };
+    async function holeUmgebung() {
         try {
-            umgebungsList.forEach(umgebung => {
-                umgebung.createCardObj();
+            const response = await fetch("database/selectUmgebung.php", { // .php Extension hinzugefügt
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json"
+                }
             });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const jsObject = await response.json();
+            return jsObject;
+
         } catch (error) {
-            console.error('Fehler beim Erstellen der CardObjs:', error);
+            console.error("Fehler beim Laden der Umgebung:", error);
+            return null;
         }
-
-        var selectedUmgebung = umgebung1;
-        holeUmgebung() 
-
-        ladenUmgebung()
-        Umgebung.checkUmgebungList()
     }
-    function holeUmgebung() {
-        const result = fetch("selectUmgebung", {
+    async function holeCardObj() {
+        const result = await fetch("database/selectCardObj.php", { // .php Extension hinzugefügt
             method: "GET",
             headers: {
-                "Content-Type": "application/json",
-            },
-        }).then((response) => {
-            return response.json();
-        }).then((data) => {
-            console.log(data);
-            return data
-        }).catch((error) => {
-            console.error("Fehler beim Laden der Umgebung:", error);
+                "Content-Type": "application/json"
+            }
         });
-        
-        
-    }   
+        var cardobjlist = await result.json()
+        return cardobjlist
+    }
+
+    function ladenUmgebung() {
+        selectUmgebung.innerHTML = ``;
+        selectUmgebung.innerHTML = `<option selected>Wähle Umgebung aus</option>`;
+        console.log(Umgebung.umgebungsListe);
+        console.log(JSON.parse(JSON.stringify(Umgebung.umgebungsListe))); // Tiefe Kopie loggen
+        Umgebung.umgebungsListe.forEach(umgebung => {
+            selectUmgebung.innerHTML += `<option value="${umgebung.id}">${umgebung.titel}</option>`;
+        });
+    };
 
     function lengthListUmgebung() {
         var length = Umgebung.umgebungsIdList.length
@@ -111,7 +135,6 @@
     function lengthListCardObj(umgebung) {
         var length = umgebung.cardObjList.length
         console.log(length);
-        
         return length
     }
 
@@ -134,15 +157,6 @@
     const selectUmgebung = document.getElementById("selectUmgebung");
     const deleteBtnForCards = document.getElementById("deleteBtnForCards");
 
-    function ladenUmgebung() {
-        selectUmgebung.innerHTML = ``;
-        selectUmgebung.innerHTML = `<option selected>Wähle Umgebung aus</option>`;
-        Umgebung.umgebungsIdList.forEach(umgebung => {
-            selectUmgebung.innerHTML += `<option value="${umgebung.id}">${umgebung.titel}</option>`;
-        });
-
-    };
-
     selectUmgebung.addEventListener("change", function() {
         const selectedOption = selectUmgebung.value;
         if (selectedOption !== "Wähle Umgebung aus") {
@@ -158,9 +172,7 @@
             }
             zeigeUmgebungAn()
             Umgebung.startCarousels(selectedUmgebung)
-
         }
-
     })
 
     function cardSwitch(idBtn) {
@@ -178,8 +190,6 @@
             selectedUmgebung.removeObjFromList(selectedUmgebung.listAnzeige, cardObj)
         }
     }
-
-
     document.getElementById("saveBtn").addEventListener("click", function() {
         try {
             if (selectedUmgebung) {}
@@ -188,7 +198,7 @@
             return
         }
         alert("Daten werden gespeichert")
-        
+
         selectedUmgebung.cardObjList.forEach(cardObj => {
             insertDatabase(cardObj)
         });
@@ -197,7 +207,7 @@
     function updateAnzeigeCounter() {
         var currentlength = lengthListCardObj(selectedUmgebung);
         console.log(currentlength);
-        
+
         counter.innerHTML = currentlength;
     }
     minusBtn.addEventListener("click", function() {
@@ -230,7 +240,7 @@
     function checkBoxShow() {
         var formCheckboxes = document.querySelectorAll('.form-check-d');
         console.log("bin da");
-        
+
         // Iteriere über alle Elemente und ändere ihre Klassen
         formCheckboxes.forEach(formCheckbox => {
             // Entferne die Klasse "d-none", falls vorhanden
@@ -303,7 +313,7 @@
     }
 
     function sucheUmgebung(UmgebungsID) {
-        let umgebung = Umgebung.umgebungsIdList.find(umgebung => umgebung.id == UmgebungsID);
+        let umgebung = Umgebung.umgebungsListe.find(umgebung => umgebung.id == UmgebungsID);
         return umgebung
     }
 

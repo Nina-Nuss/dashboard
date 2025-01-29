@@ -2,7 +2,7 @@
 
 include ("connection.php");
 
-$sql = "SELECT * FROM umgebungen";
+$sql = "SELECT * FROM card_objekte";
 
 $result = mysqli_query($conn, $sql);
 
@@ -12,19 +12,21 @@ if (!$result) {
 
 $unsereTabelle = [];
 while ($row = mysqli_fetch_assoc($result)) {
-    if(isset($row['ipAdresse']) && $row['ipAdresse'] !== null && 
-       isset($row['titel']) && $row['titel'] !== null) {
-        
+    if(isset($row['id']) && $row['id'] !== null) {
         array_push($unsereTabelle, array(
-            $row["ipAdresse"],
-            $row["titel"]
+            $row["titel"],
+            $row["imagePath"],
+            $row["selectedTime"],
+            $row["isTimeSet"],
+            $row["imageSet"],
+            $row["aktiv"],
+            $row["startDateTime"],
+            $row["endDateTime"]
         ));
     }
-  
 }
-
-
 mysqli_free_result($result);
+
 $jsonList = json_encode($unsereTabelle);
 
 echo $jsonList;
