@@ -121,7 +121,6 @@
             updateObj()  
         })
     }
-
     function updateObj() {
         console.log(321123123123123);
         for (let i = 0; i < Umgebung.umgebungsListe.length; i++) {
@@ -131,6 +130,7 @@
                 console.log(element)
             }
         }
+        
         // const listeUmgebung = await selectObj("database/selectUmgebung.php").then(async (data) =>{
         //     if()
 

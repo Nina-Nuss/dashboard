@@ -178,7 +178,6 @@ let updateInterval = 5000;
 
 async function sendListToServer(list, umgebung) {
     try {
-        
         const response = await fetch(umgebung, {
             method: 'POST',
             headers: {
