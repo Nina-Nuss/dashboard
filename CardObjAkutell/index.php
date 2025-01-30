@@ -65,14 +65,15 @@
     var cardAnzeige = document.getElementById("rowForCards")
 
     window.onload = function() {
-        holeUmgebung().then(data => {
+        const resultUmgebung = selectObj("database/selectUmgebung.php").then(async (data) => {
             data.forEach(umgebung => {
-                var umgebung = new Umgebung(umgebung[0], umgebung[1]);
+                var umgebungObj = new Umgebung(umgebung[1], umgebung[0]);
             })
         }).then(() => {
             ladenUmgebung();
         })
-        holeCardObj().then(data => {
+       
+        const resultCardObj = selectObj("database/selectCardObj.php").then(async (data) => {
             data.forEach(cardObj => {
                 switch (cardObj[3]) {
                     case "true":
@@ -116,62 +117,66 @@
                         initializeDateRangePicker()
                     }
                 })
-                console.log(Umgebung.umgebungsListe);
             })
-
+            updateObj()  
         })
-        updateObj()
-    }
-    async function updateObj() {
-        const listeUmgebung = await holeUmgebung()
-        const listeCardObj = await holeCardObj()
-
-        console.log(listeUmgebung);
-        console.log(listeCardObj);
-        Umgebung.umgebungsListe.forEach(e => {
-            var prepare = "?ip=" + e.ipAdresse +
-                "&titel=" + e.zugeordnet +
-                "&isTimeSet=" + e.isTimeSet +
-                "&imagePath=" + e.imagePath +
-                "&imageSet=" + e.imageSet +
-                "&startDateTime=" + e.startDateTime +
-                "&endDateTime=" + e.endDateTime +
-                "&aktiv=" + e.aktiv;
-
-            listUpdate.push(prepare)
-        });
-        var result = await fetch("insert.php" + prepare);
     }
 
-    async function holeUmgebung() {
+    function updateObj() {
+        console.log(321123123123123);
+        for (let i = 0; i < Umgebung.umgebungsListe.length; i++) {
+            const element = Umgebung.umgebungsListe[i];
+            for (let j = 0; j < element.cardObjList.length; j++) {
+                const element = Umgebung.umgebungsListe[i];
+                console.log(element)
+            }
+        }
+        // const listeUmgebung = await selectObj("database/selectUmgebung.php").then(async (data) =>{
+        //     if()
+
+        //     data.forEach(umgebung => {
+        //         var umgebung = new Umgebung(umgebung[1], umgebung[0]);
+        //     })
+
+        // })
+
+        // const listeCardObj = await selectObj("database/selectCardObj.php")
+
+        // console.log(listeUmgebung);
+        // console.log(listeCardObj);
+
+
+        // Umgebung.umgebungsListe.forEach(e => {
+        //     var prepare = "?ip=" + e.ipAdresse +
+        //         "&titel=" + e.zugeordnet +
+        //         "&isTimeSet=" + e.isTimeSet +
+        //         "&imagePath=" + e.imagePath +
+        //         "&imageSet=" + e.imageSet +
+        //         "&startDateTime=" + e.startDateTime +
+        //         "&endDateTime=" + e.endDateTime +
+        //         "&aktiv=" + e.aktiv;
+
+        //     listUpdate.push(prepare)
+        // });
+        // var result = await fetch("insert.php" + prepare);
+    }
+
+    async function selectObj(select) {
         try {
-            const response = await fetch("database/selectUmgebung.php", { // .php Extension hinzugefügt
+            const response = await fetch(select, { // .php Extension hinzugefügt
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json"
                 }
             });
-
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            const jsObject = await response.json();
-            return jsObject;
-
+            return response.json();
         } catch (error) {
             console.error("Fehler beim Laden der Umgebung:", error);
             return null;
         }
-    }
-    async function holeCardObj() {
-        const result = await fetch("database/selectCardObj.php", { // .php Extension hinzugefügt
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        var cardobjlist = await result.json()
-        return cardobjlist
     }
 
     function ladenUmgebung() {
