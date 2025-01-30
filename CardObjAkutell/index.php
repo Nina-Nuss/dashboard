@@ -82,9 +82,8 @@
                     startDateTime: cardObj[6],
                     endDateTime: cardObj[7]
                 }
-                Umgebung.umgebungsListe.forEach(umgebung => {
-                    
-                    if (umgebung.titel == titelVonCard) {
+                Umgebung.umgebungsListe.forEach(umgebung => {  
+                    if (umgebung.titel == obj.titel) {
                         var cardObj = new CardObj(obj.titel, obj.imagePath, obj.selectedTime, obj.isTimeSet, obj.imageSet, obj.aktiv, obj.startDateTime, obj.endDateTime);
                     }
                 })
