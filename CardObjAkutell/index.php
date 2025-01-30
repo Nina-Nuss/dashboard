@@ -62,6 +62,8 @@
     let pushDelete = false
     let json;
 
+    var cardAnzeige = document.getElementById("rowForCards")
+
     window.onload = function() {
         holeUmgebung().then(data => {
             data.forEach(umgebung => {
@@ -72,25 +74,75 @@
         })
         holeCardObj().then(data => {
             data.forEach(cardObj => {
+                switch (cardObj[3]) {
+                    case "true":
+                        cardObj[3] = true;
+                    case "false":
+                        cardObj[3] = false;
+                    default:
+                        cardObj[3] = false;
+                }
+                switch (cardObj[4]) {
+                    case "true":
+                        cardObj[4] = true;
+                    case "false":
+                        cardObj[4] = false;
+                    default:
+                        cardObj[4] = false;
+                }
+                switch (cardObj[5]) {
+                    case "true":
+                        cardObj[5] = true;
+                    case "false":
+                        cardObj[5] = false;
+                    default:
+                        cardObj[5] = false;
+                }
                 var obj = {
                     titel: cardObj[0],
                     imagePath: cardObj[1],
                     selectedTime: cardObj[2],
-                    isTimeSet: cardObj[3],
-                    imageSet: cardObj[4],
-                    aktiv: cardObj[5],
+                    isTimeSet: cardObj[3], //True or false
+                    imageSet: cardObj[4], //True or false
+                    aktiv: cardObj[5], //True or false
                     startDateTime: cardObj[6],
                     endDateTime: cardObj[7]
                 }
-                Umgebung.umgebungsListe.forEach(umgebung => {  
+
+                Umgebung.umgebungsListe.forEach(umgebung => {
                     if (umgebung.titel == obj.titel) {
-                        var cardObj = new CardObj(obj.titel, obj.imagePath, obj.selectedTime, obj.isTimeSet, obj.imageSet, obj.aktiv, obj.startDateTime, obj.endDateTime);
+                        var cardObj = new CardObj(umgebung, obj.titel, obj.imagePath, obj.selectedTime, obj.isTimeSet, obj.imageSet, obj.aktiv, obj.startDateTime, obj.endDateTime);
+                        //initializeDateRangePicker() muss immer nach aufruf eines CardObjektes aufgerufen werden
+                        initializeDateRangePicker()
                     }
                 })
                 console.log(Umgebung.umgebungsListe);
             })
+
         })
+        updateObj()
     }
+    async function updateObj() {
+        const listeUmgebung = await holeUmgebung()
+        const listeCardObj = await holeCardObj()
+
+        console.log(listeUmgebung);
+        console.log(listeCardObj);
+        Umgebung.umgebungsListe.forEach(e => {
+            var prepare = "?ip=" + e.ipAdresse +
+                "&titel=" + e.zugeordnet +
+                "&isTimeSet=" + e.isTimeSet +
+                "&imagePath=" + e.imagePath +
+                "&imageSet=" + e.imageSet +
+                "&startDateTime=" + e.startDateTime +
+                "&endDateTime=" + e.endDateTime +
+                "&aktiv=" + e.aktiv;
+
+            listUpdate.push(prepare)
+        });
+        var result = await fetch("insert.php" + prepare);
+    }
+
     async function holeUmgebung() {
         try {
             const response = await fetch("database/selectUmgebung.php", { // .php Extension hinzugefügt
@@ -124,9 +176,9 @@
 
     function ladenUmgebung() {
         selectUmgebung.innerHTML = ``;
-        selectUmgebung.innerHTML = `<option selected>Wähle Umgebung aus</option>`;
+        selectUmgebung.innerHTML = `<option selected>Wähle Umgebung aus oder erstelle ein CardObj und füge es zur einer Umgebung hinzu</option>`;
+        cardAnzeige.style.display = "none";
         console.log(Umgebung.umgebungsListe);
-        console.log(JSON.parse(JSON.stringify(Umgebung.umgebungsListe))); // Tiefe Kopie loggen
         Umgebung.umgebungsListe.forEach(umgebung => {
             selectUmgebung.innerHTML += `<option value="${umgebung.id}">${umgebung.titel}</option>`;
         });
@@ -150,31 +202,32 @@
     plusBtn.addEventListener("click", function() {
         let currentCounter = parseInt(counter.innerHTML);
         if (currentCounter < 5) {
-            if (selectedUmgebung != "") {
-                const newCardObj = new CardObj(selectedUmgebung);
+            if (selectedUmgebung != "undefined") {
+                const newCardObj = new CardObj(selectedUmgebung, "", "", "", false, false, false, "", "");
                 initializeDateRangePicker()
+                console.log(newCardObj);
                 counter.innerHTML = currentCounter + 1;
             }
         } else {
             return
         }
     });
-    const selectUmgebung = document.getElementById("selectUmgebung");
+    var selectUmgebung = document.getElementById("selectUmgebung");
     const deleteBtnForCards = document.getElementById("deleteBtnForCards");
 
+    const ersteAuswahl = selectUmgebung.querySelector('option');
+
     selectUmgebung.addEventListener("change", function() {
-        const selectedOption = selectUmgebung.value;
-        if (selectedOption !== "Wähle Umgebung aus") {
-            selectedUmgebung = sucheUmgebung(selectedOption);
+        cardAnzeige.style.display = "block";
+        var currendselect = selectUmgebung.querySelectorAll('option');
+        if (selectUmgebung.selectedIndex != 0) {
+            selectedUmgebung = sucheUmgebung(selectUmgebung.value);
+            console.log(selectedUmgebung);
             plusBtn.disabled = false;
             updateAnzeigeCounter()
             console.log("wächsle umgebung");
             console.log(selectedUmgebung);
-            // Entfernen der Option "Wähle Object aus"
-            const defaultOption = selectUmgebung.querySelector('option[selected]');
-            if (defaultOption) {
-                defaultOption.remove();
-            }
+            // Entfernen der Option "Wähle Object aus
             zeigeUmgebungAn()
             Umgebung.startCarousels(selectedUmgebung)
         }
@@ -225,7 +278,6 @@
         document.querySelectorAll('[id^="bodyForCards"]').forEach(item => {
             let lastIndexUmgebung = item.id.replace('bodyForCards', '');
             if (lastIndexUmgebung == selectedUmgebung.id) {
-
                 document.getElementById(item.id).style.display = "block";
             } else {
                 document.getElementById(item.id).style.display = "none";
@@ -270,6 +322,7 @@
             deleteBtn.addEventListener('change', function() {
                 const cardId = this.id.replace('deleteBtn', '');
                 const cardObj = Umgebung.findObj(cardId);
+
                 if (this.checked) {
                     selectedUmgebung.tempListForDeleteCards.push(cardObj);
                     console.log("checkInn");
@@ -303,9 +356,7 @@
             body: formData,
         })
         var path = await response.text()
-
         ob.imagePath = path
-
     }
     async function insertDatabase() {
         const cardObj = new FormData();
@@ -359,14 +410,18 @@
         var modalImage = document.getElementById(modalImageId); // Modal for image preview
         var imageInput = document.getElementById(inputId); // File input
         var imagePreview = document.getElementById(previewId); // Image preview container
+
+
         // Find object and set initial state if required
         var aktuellesObj = Umgebung.findObj(inputId);
+
         if (aktuellesObj.imagePath == "") {
             imageInput.addEventListener('change', function(event) {
                 const file = event.target.files[0];
                 if (!file) {
                     return;
                 }
+
                 const fileType = file.type;
                 // Validate file type (image or video)
                 const image = fileType.startsWith('image/')
@@ -410,15 +465,15 @@
                 var inputbtn = document.getElementById(alwaysOnBtn)
                 inputbtn.disabled = false
                 console.log(formID, aktuellesObj);
-
                 getImagePath(formID, aktuellesObj)
-
                 this.value = '';
             })
         }
     }
     //jQuerry Zone:
     function initializeDateRangePicker() {
+        console.log(23423423423424234234234);
+
         $(document).on('click', 'button[id^="openModal"]', function() {
             const buttonId = $(this).attr('id'); //"openModal1"
             const modalId = buttonId.replace('openModal', 'myModal'); // e.g., "myModal1"
@@ -542,8 +597,6 @@
             console.log(34534535234532452345);
             let alwaysOnBtn = '#alwaysOnBtn' + lastChar;
             $(alwaysOnBtn).css("display", "none");
-
-            selectedUmgebung.addCardObjToAnzeige(obj)
         });
 
         // Clear input field and display when cancel is clicked

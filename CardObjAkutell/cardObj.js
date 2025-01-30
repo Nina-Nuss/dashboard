@@ -1,17 +1,20 @@
 class CardObj {
     static idCounter = 0;
-    constructor(titel, ipAdresse, isTimeSet, imagePath, imageSet, startDateTime, endDateTime, aktiv, umgebung) {
+    constructor(umgebung, titel, ipAdresse, isTimeSet, imagePath, imageSet, startDateTime, endDateTime, aktiv) {
         this.id = CardObj.idCounter++;
+        this.update = false;
+
         //AB hier kommt alles in die Datenbank rein:
         this.zugeordnet = titel
         this.ipAdresse = ipAdresse
-        this.isTimeSet = isTimeSet
-        this.imagePath = imagePath
-        this.imageSet = imageSet
+        this.isTimeSet = isTimeSet //true or false
+        this.imagePath = imagePath 
+        this.imageSet = imageSet  //true or false
         this.startDateTime = startDateTime
         this.endDateTime = endDateTime
-        this.aktiv = aktiv
+        this.aktiv = aktiv //true or false
         //-------------------------------------
+
 
         //HTMLOBJEKTE-------------------------
         this.deleteBtn = `deleteBtn${this.id}`
@@ -37,9 +40,8 @@ class CardObj {
         this.formID = `formID${this.id}`
         //-------------------------------------
 
-
-
-        // this.htmlKonstruktObjBody(umgebung)
+        
+        this.htmlKonstruktObjBody(umgebung)
         umgebung.addCardObjs(this)
     }
     htmlKonstruktObjBody(umgebung) {

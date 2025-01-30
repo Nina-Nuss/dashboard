@@ -75,6 +75,7 @@ class Umgebung {
         for (let umgebung of Umgebung.umgebungsListe) {
             const cardObj = umgebung.cardObjList.find(obj => obj.id == id.charAt(id.length - 1));
             if (cardObj) {
+                cardObj.update = true;
                 return cardObj;
             }
         }
