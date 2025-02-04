@@ -1,25 +1,23 @@
 <?php
 include("connection.php");
 
-$ip = $_GET["ip"];
-$titel = $_GET["titel"];
-$von = $_GET["von"];
-$bis = $_GET["bis"];
-$beschreibung = $_GET["beschreibung"];
-$isTimeSet = $_GET["isTimeSet"];
-$imagePath = $_GET["imagePath"];
-$imageSet = $_GET["imageSet"];
-$startDateTime = $_GET["startDateTime"];
-$endDateTime = $_GET["endDateTime"];
-$aktiv = $_GET["aktiv"];
+// Daten aus der Anfrage abrufen
+$titel = $_POST["titel"];
+$imagePath = $_POST["imagePath"];
+$isTimeSet = $_POST["isTimeSet"];
+$selectedTime = $_POST["selectedTime"];
+$imageSet = $_POST["imageSet"];
+$startDateTime = $_POST["startDateTime"];
+$endDateTime = $_POST["endDateTime"];
+$aktiv = $_POST["aktiv"];
 
 // SQL-Abfrage mit Prepared Statement
-$sql = "INSERT INTO daten (ip, titel, von, bis, beschreibung, isTimeSet, imagePath, imageSet, startDateTime, endDateTime, aktiv) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$sql = "INSERT INTO card_objekte (titel, imagePath, selectedTime, isTimeSet, imageSet, aktiv, startDateTime, endDateTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 $stmt = mysqli_prepare($conn, $sql);
 
 if ($stmt) {
     // Parameter binden
-    mysqli_stmt_bind_param($stmt, "sssssssssss", $ip, $titel, $von, $bis, $beschreibung, $isTimeSet, $imagePath, $imageSet, $startDateTime, $endDateTime, $aktiv);
+    mysqli_stmt_bind_param($stmt, "ssssssss", $titel, $imagePath, $selectedTime, $isTimeSet, $imageSet, $aktiv, $startDateTime, $endDateTime);
     
     // Statement ausführen
     if (mysqli_stmt_execute($stmt)) {
@@ -27,7 +25,6 @@ if ($stmt) {
     } else {
         echo "Fehler beim Einfügen: " . mysqli_stmt_error($stmt);
     }
-    
     // Statement schließen
     mysqli_stmt_close($stmt);
 } else {

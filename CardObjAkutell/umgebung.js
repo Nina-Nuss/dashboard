@@ -1,7 +1,7 @@
 
 // Umgebung = Schema
 class Umgebung {
-    static id = 0;
+    static id = 1;
     static umgebungsListe = [];
     static ipList = [];
     static nameList = [];

@@ -72,7 +72,7 @@
         }).then(() => {
             ladenUmgebung();
         })
-       
+
         const resultCardObj = selectObj("database/selectCardObj.php").then(async (data) => {
             data.forEach(cardObj => {
                 switch (cardObj[3]) {
@@ -118,47 +118,30 @@
                     }
                 })
             })
-            updateObj()  
+            updateObj()
         })
     }
-    function updateObj() {
+    async function updateObj() {
         console.log(321123123123123);
         for (let i = 0; i < Umgebung.umgebungsListe.length; i++) {
-            const element = Umgebung.umgebungsListe[i];
-            for (let j = 0; j < element.cardObjList.length; j++) {
-                const element = Umgebung.umgebungsListe[i];
-                console.log(element)
-            }
+            const UmgebnungsObjList = Umgebung.umgebungsListe[i];
+            UmgebnungsObj.cardObjList.forEach(cardObj => {
+                updateDataBase(cardObj)
+            });
+
         }
-        
-        // const listeUmgebung = await selectObj("database/selectUmgebung.php").then(async (data) =>{
-        //     if()
-
-        //     data.forEach(umgebung => {
-        //         var umgebung = new Umgebung(umgebung[1], umgebung[0]);
-        //     })
-
-        // })
-
-        // const listeCardObj = await selectObj("database/selectCardObj.php")
-
-        // console.log(listeUmgebung);
-        // console.log(listeCardObj);
-
-
-        // Umgebung.umgebungsListe.forEach(e => {
-        //     var prepare = "?ip=" + e.ipAdresse +
-        //         "&titel=" + e.zugeordnet +
-        //         "&isTimeSet=" + e.isTimeSet +
-        //         "&imagePath=" + e.imagePath +
-        //         "&imageSet=" + e.imageSet +
-        //         "&startDateTime=" + e.startDateTime +
-        //         "&endDateTime=" + e.endDateTime +
-        //         "&aktiv=" + e.aktiv;
-
-        //     listUpdate.push(prepare)
-        // });
-        // var result = await fetch("insert.php" + prepare);
+    }
+    async function updateDataBase(cardObj) {
+        var prepare =
+            "?ip=" + cardObj.ipAdresse +
+            "&titel=" + cardObj.zugeordnet +
+            "&isTimeSet=" + cardObj.isTimeSet +
+            "&imagePath=" + cardObj.imagePath +
+            "&imageSet=" + cardObj.imageSet +
+            "&startDateTime=" + cardObj.startDateTime +
+            "&endDateTime=" + cardObj.endDateTime +
+            "&aktiv=" + cardObj.aktiv;
+        var result = await fetch("update.php" + prepare);
     }
 
     async function selectObj(select) {

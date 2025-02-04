@@ -51,9 +51,7 @@ class anzeigebereich {
             this.temp_remove = this.eleListe
             this.eleListe = []
         }
-        console.log(this.temp_remove);
-     
-        
+        console.log(this.temp_remove);   
     };
 
     static delete_checkbox() {
