@@ -1,5 +1,5 @@
 class CardObj {
-    static idCounter = 0;
+    static idCounter = 1;
     constructor(umgebung, titel, ipAdresse, isTimeSet, imagePath, imageSet, startDateTime, endDateTime, aktiv) {
         this.id = CardObj.idCounter++;
         this.update = false;

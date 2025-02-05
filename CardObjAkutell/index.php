@@ -125,14 +125,13 @@
         console.log(321123123123123);
         for (let i = 0; i < Umgebung.umgebungsListe.length; i++) {
             const UmgebnungsObjList = Umgebung.umgebungsListe[i];
-            UmgebnungsObj.cardObjList.forEach(cardObj => {
+            UmgebnungsObjList.cardObjList.forEach(cardObj => {
                 updateDataBase(cardObj)
             });
-
         }
     }
     async function updateDataBase(cardObj) {
-        var prepare =
+        var prepare =  "?id=" + cardObj.id +
             "?ip=" + cardObj.ipAdresse +
             "&titel=" + cardObj.zugeordnet +
             "&isTimeSet=" + cardObj.isTimeSet +
@@ -141,7 +140,10 @@
             "&startDateTime=" + cardObj.startDateTime +
             "&endDateTime=" + cardObj.endDateTime +
             "&aktiv=" + cardObj.aktiv;
-        var result = await fetch("update.php" + prepare);
+        
+        console.log(prepare);
+        var result = await fetch("database/update.php" + prepare);
+        console.log(await result.text());
     }
 
     async function selectObj(select) {
@@ -182,6 +184,7 @@
         console.log(length);
         return length
     }
+ 
 
     const plusBtn = document.getElementById("plusBtn");
     const minusBtn = document.getElementById("minusBtn");
@@ -348,7 +351,7 @@
     }
     async function insertDatabase() {
         const cardObj = new FormData();
-        const response2 = await fetch('sendToDatabase.php', {
+        const response2 = await fetch('insert.php', {
             method: 'POST',
             body: cardObj
         })
