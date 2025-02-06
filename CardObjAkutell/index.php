@@ -72,67 +72,84 @@
         }).then(() => {
             ladenUmgebung();
         })
-
         const resultCardObj = selectObj("database/selectCardObj.php").then(async (data) => {
-            data.forEach(cardObj => {
-                switch (cardObj[3]) {
-                    case "true":
-                        cardObj[3] = true;
-                    case "false":
-                        cardObj[3] = false;
-                    default:
-                        cardObj[3] = false;
-                }
-                switch (cardObj[4]) {
-                    case "true":
-                        cardObj[4] = true;
-                    case "false":
-                        cardObj[4] = false;
-                    default:
-                        cardObj[4] = false;
-                }
-                switch (cardObj[5]) {
-                    case "true":
-                        cardObj[5] = true;
-                    case "false":
-                        cardObj[5] = false;
-                    default:
-                        cardObj[5] = false;
-                }
-                var obj = {
-                    titel: cardObj[0],
-                    imagePath: cardObj[1],
-                    selectedTime: cardObj[2],
-                    isTimeSet: cardObj[3], //True or false
-                    imageSet: cardObj[4], //True or false
-                    aktiv: cardObj[5], //True or false
-                    startDateTime: cardObj[6],
-                    endDateTime: cardObj[7]
-                }
-
+            objList = convertCardObjForDataBase(data)
+            objList.forEach(obj => {
                 Umgebung.umgebungsListe.forEach(umgebung => {
                     if (umgebung.titel == obj.titel) {
                         var cardObj = new CardObj(umgebung, obj.titel, obj.imagePath, obj.selectedTime, obj.isTimeSet, obj.imageSet, obj.aktiv, obj.startDateTime, obj.endDateTime);
+
                         //initializeDateRangePicker() muss immer nach aufruf eines CardObjektes aufgerufen werden
                         initializeDateRangePicker()
                     }
                 })
-            })
-            updateObj()
+            });
         })
     }
-    async function updateObj() {
-        console.log(321123123123123);
-        for (let i = 0; i < Umgebung.umgebungsListe.length; i++) {
-            const UmgebnungsObjList = Umgebung.umgebungsListe[i];
-            UmgebnungsObjList.cardObjList.forEach(cardObj => {
-                updateDataBase(cardObj)
-            });
-        }
+
+    function convertCardObjForDataBase(liste) {
+        objListe = []
+        liste.forEach(cardObj => {
+            switch (cardObj[3]) {
+                case "true":
+                    cardObj[3] = true;
+                case "false":
+                    cardObj[3] = false;
+                default:
+                    cardObj[3] = false;
+            }
+            switch (cardObj[4]) {
+                case "true":
+                    cardObj[4] = true;
+                case "false":
+                    cardObj[4] = false;
+                default:
+                    cardObj[4] = false;
+            }
+            switch (cardObj[5]) {
+                case "true":
+                    cardObj[5] = true;
+                case "false":
+                    cardObj[5] = false;
+                default:
+                    cardObj[5] = false;
+            }
+            var obj = {
+                titel: cardObj[0],
+                imagePath: cardObj[1],
+                selectedTime: cardObj[2],
+                isTimeSet: cardObj[3], //True or false
+                imageSet: cardObj[4], //True or false
+                aktiv: cardObj[5], //True or false
+                startDateTime: cardObj[6],
+                endDateTime: cardObj[7]
+            }
+            objListe.push(obj)
+        });
+        return objListe
     }
     async function updateDataBase(cardObj) {
-        var prepare =  "?id=" + cardObj.id +
-            "?ip=" + cardObj.ipAdresse +
+        // Erstellen eines FormData-Objekts
+        const formData = new FormData();
+        formData.append("id", cardObj.id);
+        formData.append("titel", cardObj.zugeordnet);
+        formData.append("isTimeSet", cardObj.isTimeSet);
+        formData.append("imagePath", cardObj.imagePath);
+        formData.append("imageSet", cardObj.imageSet);
+        formData.append("startDateTime", cardObj.startDateTime);
+        formData.append("endDateTime", cardObj.endDateTime);
+        formData.append("aktiv", cardObj.aktiv);
+        console.log(formData);
+        // Senden der POST-Anfrage
+        var result = await fetch("database/update.php", {
+            method: "POST",
+            body: formData
+        });
+        console.log(await result.text());
+    }
+
+    function prepareCardObj(cardObj) {
+        var prepare =
             "&titel=" + cardObj.zugeordnet +
             "&isTimeSet=" + cardObj.isTimeSet +
             "&imagePath=" + cardObj.imagePath +
@@ -140,12 +157,8 @@
             "&startDateTime=" + cardObj.startDateTime +
             "&endDateTime=" + cardObj.endDateTime +
             "&aktiv=" + cardObj.aktiv;
-        
-        console.log(prepare);
-        var result = await fetch("database/update.php" + prepare);
-        console.log(await result.text());
+        return prepare
     }
-
     async function selectObj(select) {
         try {
             const response = await fetch(select, { // .php Extension hinzugefügt
@@ -184,8 +197,6 @@
         console.log(length);
         return length
     }
- 
-
     const plusBtn = document.getElementById("plusBtn");
     const minusBtn = document.getElementById("minusBtn");
     let counter = document.getElementById("counter");
@@ -194,9 +205,12 @@
         let currentCounter = parseInt(counter.innerHTML);
         if (currentCounter < 5) {
             if (selectedUmgebung != "undefined") {
-                const newCardObj = new CardObj(selectedUmgebung, "", "", "", false, false, false, "", "");
-                initializeDateRangePicker()
+                console.log(selectedUmgebung);
+                console.log(selectedUmgebung.titel);
+                const newCardObj = new CardObj(selectedUmgebung, selectedUmgebung.titel, "", "false", "", "false", "false", "false", "", "");
                 console.log(newCardObj);
+                insertDatabase(newCardObj)
+                initializeDateRangePicker()
                 counter.innerHTML = currentCounter + 1;
             }
         } else {
@@ -247,16 +261,14 @@
             return
         }
         alert("Daten werden gespeichert")
-
         selectedUmgebung.cardObjList.forEach(cardObj => {
-            insertDatabase(cardObj)
+            updateDataBase(cardObj)
         });
     });
 
     function updateAnzeigeCounter() {
         var currentlength = lengthListCardObj(selectedUmgebung);
         console.log(currentlength);
-
         counter.innerHTML = currentlength;
     }
     minusBtn.addEventListener("click", function() {
@@ -349,13 +361,31 @@
         var path = await response.text()
         ob.imagePath = path
     }
-    async function insertDatabase() {
-        const cardObj = new FormData();
-        const response2 = await fetch('insert.php', {
-            method: 'POST',
-            body: cardObj
-        })
-        var result = await response2.text()
+
+    async function insertDatabase(cardObj) {
+        // Erstellen eines JSON-Objekts
+        const jsonData = {
+            titel: cardObj.zugeordnet,
+            isTimeSet: cardObj.isTimeSet,
+            imagePath: cardObj.imagePath,
+            imageSet: cardObj.imageSet,
+            startDateTime: cardObj.startDateTime,
+            endDateTime: cardObj.endDateTime,
+            aktiv: cardObj.aktiv
+        };
+
+        console.log(JSON.stringify(jsonData));
+
+        // Senden der POST-Anfrage mit JSON-Daten
+        const response = await fetch("database/insert.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(jsonData)
+        });
+
+        const result = await response.text();
         console.log(result);
     }
 

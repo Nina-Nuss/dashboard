@@ -1,6 +1,28 @@
 <?php
 include("connection.php");
 
+$postData = file_get_contents("php://input");
+$data = json_decode($postData, true);
+
+echo $_POST;
+
+
+
+foreach ($_POST as $key => $val) {
+    //Der erhaltene POST ist kein ARRAY sondern nur TEXT
+    if (is_array(value: $key)) {
+        foreach ($y as $thing) {
+            echo $thing;
+        }
+    } else {
+        echo "key:" . $key;
+        echo "VAL:" . $val;
+        $use = json_decode($key);
+    }
+}
+
+
+
 // Daten aus der Anfrage abrufen
 $titel = $_POST["titel"];
 $imagePath = $_POST["imagePath"];

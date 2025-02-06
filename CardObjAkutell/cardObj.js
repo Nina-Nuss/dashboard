@@ -3,7 +3,7 @@ class CardObj {
     constructor(umgebung, titel, ipAdresse, isTimeSet, imagePath, imageSet, startDateTime, endDateTime, aktiv) {
         this.id = CardObj.idCounter++;
         this.update = false;
-
+ 
         //AB hier kommt alles in die Datenbank rein:
         this.zugeordnet = titel
         this.ipAdresse = ipAdresse
