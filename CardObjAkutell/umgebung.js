@@ -71,9 +71,14 @@ class Umgebung {
             console.log(`Object with id ${obj.id} added to list.`);
         }
     }
-    static findObj(id) {
+   
+    static findObj(id) {  
         for (let umgebung of Umgebung.umgebungsListe) {
-            const cardObj = umgebung.cardObjList.find(obj => obj.id == id.charAt(id.length - 1));
+            var number = extractNumberFromString(id)
+            console.log(number);
+            const cardObj = umgebung.cardObjList.find(obj => obj.id == number);
+            console.log(cardObj);
+            console.log(umgebung.cardObjList);
             if (cardObj) {
                 cardObj.update = true;
                 return cardObj;
@@ -200,6 +205,11 @@ async function sendListToServer(list, umgebung) {
 // Global functions
 function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function extractNumberFromString(str) {
+    const match = str.match(/\d+$/);
+    return match ? match[0] : null;
 }
 
 // Wait for DOM to be loaded

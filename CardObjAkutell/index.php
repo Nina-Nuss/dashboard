@@ -65,6 +65,7 @@
     var cardAnzeige = document.getElementById("rowForCards")
 
     window.onload = function() {
+        executeDeleteNull();
         const resultUmgebung = selectObj("database/selectUmgebung.php").then(async (data) => {
             data.forEach(umgebung => {
                 var umgebungObj = new Umgebung(umgebung[1], umgebung[0]);
@@ -77,8 +78,7 @@
             objList.forEach(obj => {
                 Umgebung.umgebungsListe.forEach(umgebung => {
                     if (umgebung.titel == obj.titel) {
-                        var cardObj = new CardObj(umgebung, obj.titel, obj.imagePath, obj.selectedTime, obj.isTimeSet, obj.imageSet, obj.aktiv, obj.startDateTime, obj.endDateTime);
-
+                        var cardObj = new CardObj(umgebung, obj.titel, obj.imagePath, obj.selectedTime, obj.isTimeSet, obj.imageSet, obj.aktiv, obj.startDateTime, obj.endDateTime, obj.id);
                         //initializeDateRangePicker() muss immer nach aufruf eines CardObjektes aufgerufen werden
                         initializeDateRangePicker()
                     }
@@ -90,63 +90,88 @@
     function convertCardObjForDataBase(liste) {
         objListe = []
         liste.forEach(cardObj => {
-            switch (cardObj[3]) {
-                case "true":
-                    cardObj[3] = true;
-                case "false":
-                    cardObj[3] = false;
-                default:
-                    cardObj[3] = false;
+            if (cardObj == "true") {
+                cardObj = true
             }
-            switch (cardObj[4]) {
-                case "true":
-                    cardObj[4] = true;
-                case "false":
-                    cardObj[4] = false;
-                default:
-                    cardObj[4] = false;
+            if (cardObj == "false") {
+                cardObj = false
             }
-            switch (cardObj[5]) {
-                case "true":
-                    cardObj[5] = true;
-                case "false":
-                    cardObj[5] = false;
-                default:
-                    cardObj[5] = false;
-            }
+        });
+        liste.forEach(cardObj => {
             var obj = {
-                titel: cardObj[0],
-                imagePath: cardObj[1],
-                selectedTime: cardObj[2],
-                isTimeSet: cardObj[3], //True or false
-                imageSet: cardObj[4], //True or false
-                aktiv: cardObj[5], //True or false
-                startDateTime: cardObj[6],
-                endDateTime: cardObj[7]
-            }
+                id: cardObj[0],
+                titel: cardObj[1],
+                imagePath: cardObj[2],
+                selectedTime: cardObj[3],
+                isTimeSet: cardObj[4], //True or false
+                imageSet: cardObj[5], //True or false
+                aktiv: cardObj[6], //True or false
+                startDateTime: cardObj[7],
+                endDateTime: cardObj[8]
+            };
             objListe.push(obj)
         });
         return objListe
     }
     async function updateDataBase(cardObj) {
-        // Erstellen eines FormData-Objekts
-        const formData = new FormData();
-        formData.append("id", cardObj.id);
-        formData.append("titel", cardObj.zugeordnet);
-        formData.append("isTimeSet", cardObj.isTimeSet);
-        formData.append("imagePath", cardObj.imagePath);
-        formData.append("imageSet", cardObj.imageSet);
-        formData.append("startDateTime", cardObj.startDateTime);
-        formData.append("endDateTime", cardObj.endDateTime);
-        formData.append("aktiv", cardObj.aktiv);
-        console.log(formData);
-        // Senden der POST-Anfrage
-        var result = await fetch("database/update.php", {
-            method: "POST",
-            body: formData
-        });
-        console.log(await result.text());
+        async function updateDataBase(cardObj) {
+            // Erstellen eines FormData-Objekts
+            const formData = new FormData();
+            formData.append("id", cardObj.id);
+            formData.append("titel", cardObj.zugeordnet);
+            formData.append("isTimeSet", cardObj.isTimeSet);
+            formData.append("imagePath", cardObj.imagePath);
+            formData.append("imageSet", cardObj.imageSet);
+            formData.append("startDateTime", cardObj.startDateTime);
+            formData.append("endDateTime", cardObj.endDateTime);
+            formData.append("aktiv", cardObj.aktiv);
+            console.log(formData);
+            // Senden der POST-Anfrage
+            var result = await fetch("database/update.php", {
+                method: "POST",
+                body: formData
+            });
+            console.log(await result.text());
+        }
     }
+    async function executeDeleteNull() {
+        try {
+            const response = await fetch("database/deleteNull.php", {
+                method: "GET"
+            });
+
+            if (!response.ok) {
+                throw new Error(`Fehler beim Ausführen der Anfrage: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            console.log("Erfolgreich ausgeführt:", data);
+        } catch (error) {
+            console.error("Fehler:", error);
+        }
+    }
+
+    async function deleteCardObj(cardObjId) {
+        try {
+            const response = await fetch("database/deleteCardObj.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id: cardObjId
+                })
+            });
+            if (!response.ok) {
+                throw new Error(`Fehler beim Löschen: ${response.statusText}`);
+            }
+            const result = await response.text();
+            console.log(result);
+        } catch (error) {
+            console.error("Fehler:", error);
+        }
+    }
+    // Aufruf der Funktion
 
     function prepareCardObj(cardObj) {
         var prepare =
@@ -260,9 +285,14 @@
             alert("Wähle ein Object aus")
             return
         }
+
         alert("Daten werden gespeichert")
         selectedUmgebung.cardObjList.forEach(cardObj => {
             updateDataBase(cardObj)
+        });
+
+        selectUmgebung.tempListForDeleteCards.forEach(cardObj => {
+            deleteCardObj(cardObj.id)
         });
     });
 
@@ -300,7 +330,6 @@
     function checkBoxShow() {
         var formCheckboxes = document.querySelectorAll('.form-check-d');
         console.log("bin da");
-
         // Iteriere über alle Elemente und ändere ihre Klassen
         formCheckboxes.forEach(formCheckbox => {
             // Entferne die Klasse "d-none", falls vorhanden
@@ -324,6 +353,7 @@
         deleteBtns.forEach(deleteBtn => {
             deleteBtn.addEventListener('change', function() {
                 const cardId = this.id.replace('deleteBtn', '');
+                console.log(cardId);
                 const cardObj = Umgebung.findObj(cardId);
 
                 if (this.checked) {
@@ -350,6 +380,7 @@
         selectedUmgebung.tempListForDeleteCards = [];
         checkBoxShow();
         updateAnzeigeCounter()
+
     });
     async function getImagePath(formID, ob) {
         const form = document.getElementById(formID);
@@ -371,7 +402,8 @@
             imageSet: cardObj.imageSet,
             startDateTime: cardObj.startDateTime,
             endDateTime: cardObj.endDateTime,
-            aktiv: cardObj.aktiv
+            aktiv: cardObj.aktiv,
+            selectedTime: cardObj.selectedTime // Hinzufügen des fehlenden Schlüssels
         };
 
         console.log(JSON.stringify(jsonData));
@@ -385,8 +417,12 @@
             body: JSON.stringify(jsonData)
         });
 
-        const result = await response.text();
-        console.log(result);
+        if (!response.ok) {
+            console.error("Fehler beim Einfügen:", response.statusText);
+        } else {
+            const result = await response.text();
+            console.log(result);
+        }
     }
 
     function sucheUmgebung(UmgebungsID) {
@@ -442,7 +478,6 @@
                 if (!file) {
                     return;
                 }
-
                 const fileType = file.type;
                 // Validate file type (image or video)
                 const image = fileType.startsWith('image/')

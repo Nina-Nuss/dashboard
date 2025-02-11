@@ -1,15 +1,17 @@
 <?php
 include("connection.php");
 
+$data = json_decode(file_get_contents('php://input'), true);
+
 // Daten aus der Anfrage abrufen
-$titel = $_POST["titel"];
-$isTimeSet = $_POST["isTimeSet"];
-$imagePath = $_POST["imagePath"];
-$imageSet = $_POST["imageSet"];
-$startDateTime = $_POST["startDateTime"];
-$endDateTime = $_POST["endDateTime"];
-$aktiv = $_POST["aktiv"];
-$id = $_POST["id"];
+$titel = $data["titel"];
+$isTimeSet = $data["isTimeSet"];
+$imagePath = $data["imagePath"];
+$imageSet = $data["imageSet"];
+$startDateTime = $data["startDateTime"];
+$endDateTime = $data["endDateTime"];
+$aktiv = $data["aktiv"];
+$id = $data["id"];
 
 // SQL-Abfrage mit Prepared Statement
 $sql = "UPDATE card_objekte SET titel = ?, isTimeSet = ?, imagePath = ?, imageSet = ?, startDateTime = ?, endDateTime = ?, aktiv = ? WHERE id = ?";
