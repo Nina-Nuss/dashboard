@@ -1,17 +1,17 @@
 class CardObj {
     static idCounter = 1;
-    constructor(umgebung, titel, ipAdresse, isTimeSet, imagePath, imageSet, startDateTime, endDateTime, aktiv, id) {
+    constructor(umgebung, titel, isTimeSet, imagePath, imageSet, startDateTime, endDateTime, aktiv, id) {
+
         this.id = id;
         this.update = false;
  
         //AB hier kommt alles in die Datenbank rein:
-        this.zugeordnet = titel
-        this.ipAdresse = ipAdresse
+        this.zugeordnet = titel // Der Name des Aufenhaltsortes
         this.isTimeSet = isTimeSet //true or false
-        this.imagePath = imagePath 
+        this.imagePath = imagePath //Der Pfad zum Bild
         this.imageSet = imageSet  //true or false
-        this.startDateTime = startDateTime
-        this.endDateTime = endDateTime
+        this.startDateTime = startDateTime //Der kalender, der den startdatum enthält
+        this.endDateTime = endDateTime //Der kalender, der die enddatum enthält
         this.aktiv = aktiv //true or false
         //-------------------------------------
         //HTMLOBJEKTE-------------------------

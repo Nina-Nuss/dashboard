@@ -78,8 +78,7 @@
             objList.forEach(obj => {
                 Umgebung.umgebungsListe.forEach(umgebung => {
                     if (umgebung.titel == obj.titel) {
-                        var cardObj = new CardObj(umgebung, obj.titel, obj.imagePath, obj.selectedTime, obj.isTimeSet, obj.imageSet, obj.aktiv, obj.startDateTime, obj.endDateTime, obj.id);
-                        //initializeDateRangePicker() muss immer nach aufruf eines CardObjektes aufgerufen werden
+                        var cardObj = new CardObj(umgebung, obj.titel, obj.isTimeSet, obj.imagePath, obj.imageSet, obj.startDateTime, obj.endDateTime, obj.aktiv, obj.id);
                         initializeDateRangePicker()
                     }
                 })
@@ -109,30 +108,33 @@
                 startDateTime: cardObj[7],
                 endDateTime: cardObj[8]
             };
+            console.log(obj);
+            
             objListe.push(obj)
         });
+
         return objListe
     }
     async function updateDataBase(cardObj) {
-        async function updateDataBase(cardObj) {
-            // Erstellen eines FormData-Objekts
-            const formData = new FormData();
-            formData.append("id", cardObj.id);
-            formData.append("titel", cardObj.zugeordnet);
-            formData.append("isTimeSet", cardObj.isTimeSet);
-            formData.append("imagePath", cardObj.imagePath);
-            formData.append("imageSet", cardObj.imageSet);
-            formData.append("startDateTime", cardObj.startDateTime);
-            formData.append("endDateTime", cardObj.endDateTime);
-            formData.append("aktiv", cardObj.aktiv);
-            console.log(formData);
-            // Senden der POST-Anfrage
-            var result = await fetch("database/update.php", {
-                method: "POST",
-                body: formData
-            });
-            console.log(await result.text());
-        }
+
+        // Erstellen eines FormData-Objekts
+        const formData = new FormData();
+        formData.append("id", cardObj.id);
+        formData.append("titel", cardObj.zugeordnet);
+        formData.append("isTimeSet", cardObj.isTimeSet);
+        formData.append("imagePath", cardObj.imagePath);
+        formData.append("imageSet", cardObj.imageSet);
+        formData.append("startDateTime", cardObj.startDateTime);
+        formData.append("endDateTime", cardObj.endDateTime);
+        formData.append("aktiv", cardObj.aktiv);
+        console.log(formData);
+        // Senden der POST-Anfrage
+        var result = await fetch("database/update.php", {
+            method: "POST",
+            body: formData
+        });
+        console.log(await result.text());
+
     }
     async function executeDeleteNull() {
         try {
@@ -232,7 +234,7 @@
             if (selectedUmgebung != "undefined") {
                 console.log(selectedUmgebung);
                 console.log(selectedUmgebung.titel);
-                const newCardObj = new CardObj(selectedUmgebung, selectedUmgebung.titel, "", "false", "", "false", "false", "false", "", "");
+                const newCardObj = new CardObj(selectedUmgebung, selectedUmgebung.titel, "false", "", "false", "", "", "false", "");
                 console.log(newCardObj);
                 insertDatabase(newCardObj)
                 initializeDateRangePicker()
@@ -407,7 +409,7 @@
         };
 
         console.log(JSON.stringify(jsonData));
-
+  
         // Senden der POST-Anfrage mit JSON-Daten
         const response = await fetch("database/insert.php", {
             method: "POST",
@@ -417,6 +419,8 @@
             body: JSON.stringify(jsonData)
         });
 
+     
+        
         if (!response.ok) {
             console.error("Fehler beim Einfügen:", response.statusText);
         } else {

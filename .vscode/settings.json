@@ -17,5 +17,6 @@
             "username": "root",
             "askForPassword": true
         }
-    ]
+    ],
+    "bitoAI.codeCompletion.enableAutoCompletion": false
 }
