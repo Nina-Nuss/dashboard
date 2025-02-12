@@ -42,14 +42,18 @@
         <button id="deleteBtnForCardsU" type="button" class="btn btn-danger d-none">-</button>
     </div>
      -->
+ 
     <select id="selectUmgebung" class="form-select" aria-label="Default select example"></select>
+   
     <div class="d-flex">
+       
         <button id="plusBtn" type="button" class="btn btn-primary">Create</button>
         <div id="counter">0</div>
         <button id="minusBtn" type="button" class="btn btn-light">Select</button>
         <button id="deleteBtnForCards" type="button" class="btn btn-danger d-none">delete</button>
-        <button id="saveBtn" type="button" class="btn bg-success d-block">save</button>
+        <button id="saveBtn" type="button" class="btn btn-success d-block">save</button>
     </div>
+    <h2 id="titelUmgebung"></h2>
     <div class="container d-flex">
         <div id="rowForCards" class="col-4 p-2"><!-- bild Obj --></div>
         <div id="rowForCarousels" class="img-thumbnail w-75 m-3">
@@ -109,7 +113,7 @@
                 endDateTime: cardObj[8]
             };
             console.log(obj);
-            
+
             objListe.push(obj)
         });
 
@@ -204,10 +208,9 @@
         }
     }
 
-    function ladenUmgebung() {
+    function ladenUmgebung() {    
         selectUmgebung.innerHTML = ``;
-        selectUmgebung.innerHTML = `<option selected>Wähle Umgebung aus oder erstelle ein CardObj und füge es zur einer Umgebung hinzu</option>`;
-        cardAnzeige.style.display = "none";
+        selectUmgebung.innerHTML = `<option selected>Alle Umgebungen</option>`;
         console.log(Umgebung.umgebungsListe);
         Umgebung.umgebungsListe.forEach(umgebung => {
             selectUmgebung.innerHTML += `<option value="${umgebung.id}">${umgebung.titel}</option>`;
@@ -246,19 +249,18 @@
     });
     var selectUmgebung = document.getElementById("selectUmgebung");
     const deleteBtnForCards = document.getElementById("deleteBtnForCards");
-
+    const UmgebungsTitel = document.getElementById("titelUmgebung")
     const ersteAuswahl = selectUmgebung.querySelector('option');
 
     selectUmgebung.addEventListener("change", function() {
-        cardAnzeige.style.display = "block";
-        var currendselect = selectUmgebung.querySelectorAll('option');
+       
         if (selectUmgebung.selectedIndex != 0) {
             selectedUmgebung = sucheUmgebung(selectUmgebung.value);
             console.log(selectedUmgebung);
             plusBtn.disabled = false;
             updateAnzeigeCounter()
             console.log("wächsle umgebung");
-            console.log(selectedUmgebung);
+            UmgebungsTitel.innerHTML = selectedUmgebung.titel;
             // Entfernen der Option "Wähle Object aus
             zeigeUmgebungAn()
             Umgebung.startCarousels(selectedUmgebung)
@@ -303,7 +305,10 @@
         console.log(currentlength);
         counter.innerHTML = currentlength;
     }
+
     minusBtn.addEventListener("click", function() {
+        console.log("minus");
+
         if (selectedUmgebung != "") {
             checkBoxShow();
         }
@@ -357,13 +362,18 @@
                 const cardId = this.id.replace('deleteBtn', '');
                 console.log(cardId);
                 const cardObj = Umgebung.findObj(cardId);
-
+                const element = document.getElementById(cardObj.id);
                 if (this.checked) {
                     selectedUmgebung.tempListForDeleteCards.push(cardObj);
                     console.log("checkInn");
+                    console.log(cardObj.id);
+                   
+                    element.style.boxShadow = "5px 5px 10px rgba(0, 0, 0, 0.5)";
+
                 } else {
                     selectedUmgebung.removeObjFromList(selectedUmgebung.tempListForDeleteCards, cardObj);
                     console.log("checkout");
+                    element.style.boxShadow = "none";
                 }
             });
         });
@@ -409,7 +419,7 @@
         };
 
         console.log(JSON.stringify(jsonData));
-  
+
         // Senden der POST-Anfrage mit JSON-Daten
         const response = await fetch("database/insert.php", {
             method: "POST",
@@ -419,8 +429,8 @@
             body: JSON.stringify(jsonData)
         });
 
-     
-        
+
+
         if (!response.ok) {
             console.error("Fehler beim Einfügen:", response.statusText);
         } else {

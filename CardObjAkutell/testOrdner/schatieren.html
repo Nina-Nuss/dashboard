@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* Optional: Zusätzliche CSS-Stile für das Objekt */
+        #cardObj {
+            background-color: lightblue;
+            color: red;
+            border: 2px solid black;
+            filter: drop-shadow(20px 20px 50px rgba(0, 0, 0, 0.5));
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div id="cardObj">
+            <h1>CardObj</h1>
+        </div>
+    </div>
+</body>
+<script>
+    // JavaScript zum Schattieren des Objekts
+    const element = document.getElementById('cardObj');
+    element.style.backgroundColor = "lightblue";
+    element.style.color = "red";
+    element.style.border = "2px solid black";
+    element.style.filter = "drop-shadow(5px 5px 10px rgba(0, 0, 0, 0.5))";
+</script>
+</html>
