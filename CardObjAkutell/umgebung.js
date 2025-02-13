@@ -3,33 +3,29 @@
 class Umgebung {
     static id = 1;
     static umgebungsListe = [];
+    static allCardList = [];
     static ipList = [];
     static nameList = [];
     constructor(ipAdresse, titel) {
         this.id = Umgebung.id++;
-       
         //HTMLOBJEKTE-------------------------
         this.carousel = `carousel${this.id}`;
         this.htmlUmgebungsBody = `bodyForCards${this.id}`;
         //-------------------------------------
-
         //AB hier kommt alles in die Datenbank rein:
         this.ipAdresse = ipAdresse;
         this.titel = titel
         //-------------------------------------
-
-        
         //Listen-------------------------------
         this.cardObjList = [];
         this.tempListForDeleteCards = [];
         this.htmlCardObjList = [];
         this.listAnzeige = [];
         //-------------------------------------
-
         this.ladeUmgebung();
         Umgebung.ipList.push(this.ipAdresse);
+        Umgebung.allCardList.push(this.cardObjList);
         Umgebung.umgebungsListe.push(this);
-
     }
     addCardObjs(cardObj) {
         this.cardObjList.push(cardObj);
@@ -39,7 +35,7 @@ class Umgebung {
             this.listAnzeige.push(cardObj);
         }
     }
-    static createCardObj(umgebung){
+    static createCardObj(umgebung) {
         Umgebung.cardObjList.forEach(cardObj => {
             var cardObj = new CardObj(umgebung);
             console.log(cardObj);
@@ -65,14 +61,22 @@ class Umgebung {
             <div class="carousel-inner" id="${this.carousel}"></div>
         `
     }
+
+    static loadAllCardObj() {
+        Umgebung.allCardList.forEach(cardList => {
+            cardList.forEach(cardObj => {
+                cardObj.htmlUmgebungsBody(cardObj.umgebung);
+
+            });
+        });
+    }
     static addObjToList(list, obj) {
         if (!list.some(e => e.id == obj.id)) {
             list.push(obj);
             console.log(`Object with id ${obj.id} added to list.`);
         }
     }
-   
-    static findObj(id) {  
+    static findObj(id) {
         for (let umgebung of Umgebung.umgebungsListe) {
             var number = extractNumberFromString(id)
             console.log(number);
@@ -86,6 +90,18 @@ class Umgebung {
         }
         return null;
     }
+    
+   
+   
+   
+   
+   
+   
+    //ab hier geht es zur Carousel Logik weiter  
+    
+    
+    
+
     static async carouselLeeren() {
         while (true) {
             await wait(30000);
@@ -96,6 +112,10 @@ class Umgebung {
             console.log('Carousel geleert...');
         }
     }
+    
+    
+    
+    
     async moveToNextPic(cardObj) {
         await wait(cardObj.selectedTime);
         this.ci = (this.ci + 1) % this.listAnzeige.length;
@@ -190,11 +210,11 @@ async function sendListToServer(list, umgebung) {
             },
             body: JSON.stringify(list)
         });
-        
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const result = await response.json();
         console.log('Erfolg:', result);
     } catch (error) {

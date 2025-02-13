@@ -42,11 +42,10 @@
         <button id="deleteBtnForCardsU" type="button" class="btn btn-danger d-none">-</button>
     </div>
      -->
- 
     <select id="selectUmgebung" class="form-select" aria-label="Default select example"></select>
-   
+
     <div class="d-flex">
-       
+
         <button id="plusBtn" type="button" class="btn btn-primary">Create</button>
         <div id="counter">0</div>
         <button id="minusBtn" type="button" class="btn btn-light">Select</button>
@@ -67,16 +66,21 @@
     let json;
 
     var cardAnzeige = document.getElementById("rowForCards")
-
     window.onload = function() {
         executeDeleteNull();
         const resultUmgebung = selectObj("database/selectUmgebung.php").then(async (data) => {
+            var HauptUmgebungsObj = new Umgebung(0, "Alle Schemas");
+            var selectedUmgebung = HauptUmgebungsObj;
             data.forEach(umgebung => {
                 var umgebungObj = new Umgebung(umgebung[1], umgebung[0]);
             })
         }).then(() => {
             ladenUmgebung();
+            createCardObj();
         })
+    }
+
+    function createCardObj() {
         const resultCardObj = selectObj("database/selectCardObj.php").then(async (data) => {
             objList = convertCardObjForDataBase(data)
             objList.forEach(obj => {
@@ -120,25 +124,14 @@
         return objListe
     }
     async function updateDataBase(cardObj) {
-
         // Erstellen eines FormData-Objekts
-        const formData = new FormData();
-        formData.append("id", cardObj.id);
-        formData.append("titel", cardObj.zugeordnet);
-        formData.append("isTimeSet", cardObj.isTimeSet);
-        formData.append("imagePath", cardObj.imagePath);
-        formData.append("imageSet", cardObj.imageSet);
-        formData.append("startDateTime", cardObj.startDateTime);
-        formData.append("endDateTime", cardObj.endDateTime);
-        formData.append("aktiv", cardObj.aktiv);
-        console.log(formData);
+        const jsObj = JavaScriptCardObj(cardObj)
         // Senden der POST-Anfrage
         var result = await fetch("database/update.php", {
             method: "POST",
-            body: formData
+            body: JSON.stringify(jsObj)
         });
         console.log(await result.text());
-
     }
     async function executeDeleteNull() {
         try {
@@ -190,6 +183,21 @@
             "&aktiv=" + cardObj.aktiv;
         return prepare
     }
+
+    function JavaScriptCardObj(cardObj){
+        const jsonData = {
+            titel: cardObj.zugeordnet,
+            isTimeSet: cardObj.isTimeSet,
+            imagePath: cardObj.imagePath,
+            imageSet: cardObj.imageSet,
+            startDateTime: cardObj.startDateTime,
+            endDateTime: cardObj.endDateTime,
+            aktiv: cardObj.aktiv,
+            selectedTime: cardObj.selectedTime // Hinzufügen des fehlenden Schlüssels
+        };
+        return jsonData
+    }
+
     async function selectObj(select) {
         try {
             const response = await fetch(select, { // .php Extension hinzugefügt
@@ -208,25 +216,15 @@
         }
     }
 
-    function ladenUmgebung() {    
+    function ladenUmgebung() {
         selectUmgebung.innerHTML = ``;
-        selectUmgebung.innerHTML = `<option selected>Alle Umgebungen</option>`;
+        // selectUmgebung.innerHTML = `<option selected>Alle Umgebungen</option>`;
         console.log(Umgebung.umgebungsListe);
         Umgebung.umgebungsListe.forEach(umgebung => {
             selectUmgebung.innerHTML += `<option value="${umgebung.id}">${umgebung.titel}</option>`;
         });
     };
 
-    function lengthListUmgebung() {
-        var length = Umgebung.umgebungsIdList.length
-        return length
-    }
-
-    function lengthListCardObj(umgebung) {
-        var length = umgebung.cardObjList.length
-        console.log(length);
-        return length
-    }
     const plusBtn = document.getElementById("plusBtn");
     const minusBtn = document.getElementById("minusBtn");
     let counter = document.getElementById("counter");
@@ -237,7 +235,7 @@
             if (selectedUmgebung != "undefined") {
                 console.log(selectedUmgebung);
                 console.log(selectedUmgebung.titel);
-                const newCardObj = new CardObj(selectedUmgebung, selectedUmgebung.titel, "false", "", "false", "", "", "false", "");
+                const newCardObj = new CardObj(selectedUmgebung, selectedUmgebung.titel, "false", "", "false", "", "", "true", "");
                 console.log(newCardObj);
                 insertDatabase(newCardObj)
                 initializeDateRangePicker()
@@ -252,18 +250,20 @@
     const UmgebungsTitel = document.getElementById("titelUmgebung")
     const ersteAuswahl = selectUmgebung.querySelector('option');
 
+   
     selectUmgebung.addEventListener("change", function() {
        
-        if (selectUmgebung.selectedIndex != 0) {
-            selectedUmgebung = sucheUmgebung(selectUmgebung.value);
-            console.log(selectedUmgebung);
-            plusBtn.disabled = false;
-            updateAnzeigeCounter()
-            console.log("wächsle umgebung");
-            UmgebungsTitel.innerHTML = selectedUmgebung.titel;
-            // Entfernen der Option "Wähle Object aus
+        selectedUmgebung = sucheUmgebung(selectUmgebung.value);
+        console.log(selectedUmgebung);
+        plusBtn.disabled = false;
+        updateAnzeigeCounter()
+        console.log("wächsle umgebung");
+        UmgebungsTitel.innerHTML = selectedUmgebung.titel;
+
+        if(selectedUmgebung.id == 1){
+            showAllUmgebungen()
+        }else{
             zeigeUmgebungAn()
-            Umgebung.startCarousels(selectedUmgebung)
         }
     })
 
@@ -271,6 +271,11 @@
         const cardId = idBtn.replace('alwaysOnBtn', '');
         const cardObj = Umgebung.findObj(cardId);
         const calenderBtn = document.querySelector(`#${cardObj.openModalButtonId}`);
+
+        console.log(cardObj.aktiv);
+        
+        console.log(typeof cardObj.aktiv);
+        
         if (cardObj.aktiv == false && cardObj.imageSet == true) {
             cardObj.aktiv = true;
             selectedUmgebung.addCardObjToAnzeige(cardObj)
@@ -283,20 +288,12 @@
         }
     }
     document.getElementById("saveBtn").addEventListener("click", function() {
-        try {
-            if (selectedUmgebung) {}
-        } catch (error) {
-            alert("Wähle ein Object aus")
-            return
-        }
+        console.log(selectedUmgebung);
+
 
         alert("Daten werden gespeichert")
         selectedUmgebung.cardObjList.forEach(cardObj => {
             updateDataBase(cardObj)
-        });
-
-        selectUmgebung.tempListForDeleteCards.forEach(cardObj => {
-            deleteCardObj(cardObj.id)
         });
     });
 
@@ -317,20 +314,28 @@
     function zeigeUmgebungAn() {
         document.querySelectorAll('[id^="bodyForCards"]').forEach(item => {
             let lastIndexUmgebung = item.id.replace('bodyForCards', '');
+            console.log(lastIndexUmgebung);
             if (lastIndexUmgebung == selectedUmgebung.id) {
                 document.getElementById(item.id).style.display = "block";
-            } else {
+            } 
+            else {
                 document.getElementById(item.id).style.display = "none";
             }
         });
-        document.querySelectorAll('[id^="carousel"]').forEach(item => {
-            let lastIndexUmgebung = item.id.replace('carousel', '');
-            if (lastIndexUmgebung == selectedUmgebung.id) {
-                console.log(lastIndexUmgebung);
-                document.getElementById(item.id).style.display = "block";
-            } else {
-                document.getElementById(item.id).style.display = "none";
-            }
+        // document.querySelectorAll('[id^="carousel"]').forEach(item => {
+        //     let lastIndexUmgebung = item.id.replace('carousel', '');
+        //     if (lastIndexUmgebung == selectedUmgebung.id) {
+        //         console.log(lastIndexUmgebung);
+        //         document.getElementById(item.id).style.display = "block";
+        //     } else {
+        //         document.getElementById(item.id).style.display = "none";
+        //     }
+        // });
+    }
+
+    function showAllUmgebungen() {
+        document.querySelectorAll('[id^="bodyForCards"]').forEach(item => {
+            document.getElementById(item.id).style.display = "block";
         });
     }
 
@@ -367,9 +372,7 @@
                     selectedUmgebung.tempListForDeleteCards.push(cardObj);
                     console.log("checkInn");
                     console.log(cardObj.id);
-                   
                     element.style.boxShadow = "5px 5px 10px rgba(0, 0, 0, 0.5)";
-
                 } else {
                     selectedUmgebung.removeObjFromList(selectedUmgebung.tempListForDeleteCards, cardObj);
                     console.log("checkout");
@@ -387,8 +390,9 @@
             cardObj.removeHtmlElement();
             selectedUmgebung.removeObjFromList(selectedUmgebung.cardObjList, cardObj);
             selectedUmgebung.removeObjFromList(selectedUmgebung.listAnzeige, cardObj);
-
+            deleteCardObj(cardObj.id)
         });
+        
         selectedUmgebung.tempListForDeleteCards = [];
         checkBoxShow();
         updateAnzeigeCounter()
@@ -441,37 +445,18 @@
         return umgebung
     }
 
-    function deletePicture(imagePreview, modalImage) {
-        var modalImage = document.getElementById(modalImage).id; // Modal for image preview
-        var imagePreview = document.getElementById(imagePreview);
-        var aktuellesObj = Umgebung.findObj(modalImage);
-        console.log(aktuellesObj);
-        if (aktuellesObj.imageSet == true) {
-            modalImage.innerHTML = ``;
-            imagePreview.innerHTML = `Bild auswählen oder hierher ziehen`;
-            aktuellesObj.imagePath = ``;
-            aktuellesObj.imageSet = false
-            var select = document.getElementById("timerSelect" + aktuellesObj.id)
-            var infoBtn = document.getElementById("infoBtn" + aktuellesObj.id)
-            var closeBtn = document.getElementById("closeBtn" + aktuellesObj.id)
-            var selectedValue = $(select).val();
-            var selectedValue = ""
-            select.selectedIndex = -1;
-            aktuellesObj.isTimeSet = false
-            aktuellesObj.startDateTime = ``;
-            aktuellesObj.endDateTime = ``;
-            aktuellesObj.selectedTime = selectedValue
-            selectedUmgebung.removeObjFromList(selectedUmgebung.listAnzeige, aktuellesObj)
-            select.disabled = true
-            $('#timerSelect' + aktuellesObj.id).val(3)
-            infoBtn.style.display = "none"
-            closeBtn.style.display = "none"
-            let alwaysOnBtn = '#alwaysOnBtn' + aktuellesObj.id
-            $(alwaysOnBtn).css("display", "block");
-            alwaysOnBtn.disabled = true
-        }
-        return
+    function lengthListUmgebung() {
+        var length = Umgebung.umgebungsIdList.length
+        return length
     }
+
+    function lengthListCardObj(umgebung) {
+        var length = umgebung.cardObjList.length
+        return length
+    }
+
+
+    //Ab hie geht es mit dem CardObj ansich weiter 
 
     function setupImagePicker(previewId, modalImageId, inputId, formID) {
         var lastFileName = null
@@ -528,14 +513,51 @@
                 $('#timerSelect' + lastChar).val(3)
                 $('#timerSelect' + lastChar).prop('disabled', false);
                 aktuellesObj.imageSet = true;
+                
                 var alwaysOnBtn = 'alwaysOnBtn' + lastChar
+
                 var inputbtn = document.getElementById(alwaysOnBtn)
+                console.log(inputbtn);
+                
                 inputbtn.disabled = false
                 console.log(formID, aktuellesObj);
                 getImagePath(formID, aktuellesObj)
                 this.value = '';
             })
         }
+    }
+
+
+    function deletePicture(imagePreview, modalImage) {
+        var modalImage = document.getElementById(modalImage).id; // Modal for image preview
+        var imagePreview = document.getElementById(imagePreview);
+        var aktuellesObj = Umgebung.findObj(modalImage);
+        console.log(aktuellesObj);
+        if (aktuellesObj.imageSet == true) {
+            modalImage.innerHTML = ``;
+            imagePreview.innerHTML = `Bild auswählen oder hierher ziehen`;
+            aktuellesObj.imagePath = ``;
+            aktuellesObj.imageSet = false
+            var select = document.getElementById("timerSelect" + aktuellesObj.id)
+            var infoBtn = document.getElementById("infoBtn" + aktuellesObj.id)
+            var closeBtn = document.getElementById("closeBtn" + aktuellesObj.id)
+            var selectedValue = $(select).val();
+            var selectedValue = ""
+            select.selectedIndex = -1;
+            aktuellesObj.isTimeSet = false
+            aktuellesObj.startDateTime = ``;
+            aktuellesObj.endDateTime = ``;
+            aktuellesObj.selectedTime = selectedValue
+            selectedUmgebung.removeObjFromList(selectedUmgebung.listAnzeige, aktuellesObj)
+            select.disabled = true
+            $('#timerSelect' + aktuellesObj.id).val(3)
+            infoBtn.style.display = "none"
+            closeBtn.style.display = "none"
+            let alwaysOnBtn = '#alwaysOnBtn' + aktuellesObj.id
+            $(alwaysOnBtn).css("display", "block");
+            alwaysOnBtn.disabled = true
+        }
+        return
     }
     //jQuerry Zone:
     function initializeDateRangePicker() {
@@ -575,7 +597,8 @@
             console.log(eIDtimer);
             if (aktuellesObj.imageSet == true) {
                 var eIDtimer = $(this).attr('id');
-                console.log('Die ID des Elements ist: ' + eIDtimer);sugarsugarsugar
+                console.log('Die ID des Elements ist: ' + eIDtimer);
+                sugarsugarsugar
                 let lastIndex = eIDtimer.replace('infoBtn', '');
                 // Erstelle den ID-Selektor für das zugehörige Select-Element
                 let timerselect = '#timerSelect' + lastIndex;

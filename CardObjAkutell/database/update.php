@@ -11,7 +11,7 @@ $imageSet = $data["imageSet"];
 $startDateTime = $data["startDateTime"];
 $endDateTime = $data["endDateTime"];
 $aktiv = $data["aktiv"];
-$id = $data["id"];
+
 
 // SQL-Abfrage mit Prepared Statement
 $sql = "UPDATE card_objekte SET titel = ?, isTimeSet = ?, imagePath = ?, imageSet = ?, startDateTime = ?, endDateTime = ?, aktiv = ? WHERE id = ?";

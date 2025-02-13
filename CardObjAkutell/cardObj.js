@@ -14,6 +14,7 @@ class CardObj {
         this.endDateTime = endDateTime //Der kalender, der die enddatum enthält
         this.aktiv = aktiv //true or false
         //-------------------------------------
+    
         //HTMLOBJEKTE-------------------------
         this.deleteBtn = `deleteBtn${this.id}`
         this.imagePreviewId = `imagePreview${this.id}`;
@@ -36,7 +37,8 @@ class CardObj {
         this.closeBtn = `closeBtn${this.id}`
         this.sumbitBtnID = `submit${this.id}`;
         this.formID = `formID${this.id}`
-        //-------------------------------------     
+        //-------------------------------------    
+
         this.htmlKonstruktObjBody(umgebung)
         umgebung.addCardObjs(this)
     }
