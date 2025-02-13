@@ -428,9 +428,6 @@
             },
             body: JSON.stringify(jsonData)
         });
-
-
-
         if (!response.ok) {
             console.error("Fehler beim Einfügen:", response.statusText);
         } else {
