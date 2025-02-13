@@ -540,7 +540,6 @@
     //jQuerry Zone:
     function initializeDateRangePicker() {
         console.log(23423423423424234234234);
-
         $(document).on('click', 'button[id^="openModal"]', function() {
             const buttonId = $(this).attr('id'); //"openModal1"
             const modalId = buttonId.replace('openModal', 'myModal'); // e.g., "myModal1"
@@ -576,7 +575,7 @@
             console.log(eIDtimer);
             if (aktuellesObj.imageSet == true) {
                 var eIDtimer = $(this).attr('id');
-                console.log('Die ID des Elements ist: ' + eIDtimer);
+                console.log('Die ID des Elements ist: ' + eIDtimer);sugarsugarsugar
                 let lastIndex = eIDtimer.replace('infoBtn', '');
                 // Erstelle den ID-Selektor für das zugehörige Select-Element
                 let timerselect = '#timerSelect' + lastIndex;
