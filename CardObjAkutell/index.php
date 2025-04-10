@@ -30,8 +30,6 @@
 <link rel="stylesheet" href="styles.css">
 <script src="umgebung.js"></script>
 <script src="cardObj.js"></script>
-
-
 </head>
 
 <body>
@@ -45,7 +43,6 @@
     <select id="selectUmgebung" class="form-select" aria-label="Default select example"></select>
 
     <div class="d-flex">
-
         <button id="plusBtn" type="button" class="btn btn-primary">Create</button>
         <div id="counter">0</div>
         <button id="minusBtn" type="button" class="btn btn-light">Select</button>
@@ -184,7 +181,7 @@
         return prepare
     }
 
-    function JavaScriptCardObj(cardObj){
+    function JavaScriptCardObj(cardObj) {
         const jsonData = {
             titel: cardObj.zugeordnet,
             isTimeSet: cardObj.isTimeSet,
@@ -250,9 +247,9 @@
     const UmgebungsTitel = document.getElementById("titelUmgebung")
     const ersteAuswahl = selectUmgebung.querySelector('option');
 
-   
+
     selectUmgebung.addEventListener("change", function() {
-       
+
         selectedUmgebung = sucheUmgebung(selectUmgebung.value);
         console.log(selectedUmgebung);
         plusBtn.disabled = false;
@@ -260,9 +257,9 @@
         console.log("wächsle umgebung");
         UmgebungsTitel.innerHTML = selectedUmgebung.titel;
 
-        if(selectedUmgebung.id == 1){
+        if (selectedUmgebung.id == 1) {
             showAllUmgebungen()
-        }else{
+        } else {
             zeigeUmgebungAn()
         }
     })
@@ -273,9 +270,9 @@
         const calenderBtn = document.querySelector(`#${cardObj.openModalButtonId}`);
 
         console.log(cardObj.aktiv);
-        
+
         console.log(typeof cardObj.aktiv);
-        
+
         if (cardObj.aktiv == false && cardObj.imageSet == true) {
             cardObj.aktiv = true;
             selectedUmgebung.addCardObjToAnzeige(cardObj)
@@ -317,20 +314,19 @@
             console.log(lastIndexUmgebung);
             if (lastIndexUmgebung == selectedUmgebung.id) {
                 document.getElementById(item.id).style.display = "block";
-            } 
-            else {
+            } else {
                 document.getElementById(item.id).style.display = "none";
             }
         });
-        // document.querySelectorAll('[id^="carousel"]').forEach(item => {
-        //     let lastIndexUmgebung = item.id.replace('carousel', '');
-        //     if (lastIndexUmgebung == selectedUmgebung.id) {
-        //         console.log(lastIndexUmgebung);
-        //         document.getElementById(item.id).style.display = "block";
-        //     } else {
-        //         document.getElementById(item.id).style.display = "none";
-        //     }
-        // });
+        document.querySelectorAll('[id^="carousel"]').forEach(item => {
+            let lastIndexUmgebung = item.id.replace('carousel', '');
+            if (lastIndexUmgebung == selectedUmgebung.id) {
+                console.log(lastIndexUmgebung);
+                document.getElementById(item.id).style.display = "block";
+            } else {
+                document.getElementById(item.id).style.display = "none";
+            }
+        });
     }
 
     function showAllUmgebungen() {
@@ -392,7 +388,7 @@
             selectedUmgebung.removeObjFromList(selectedUmgebung.listAnzeige, cardObj);
             deleteCardObj(cardObj.id)
         });
-        
+
         selectedUmgebung.tempListForDeleteCards = [];
         checkBoxShow();
         updateAnzeigeCounter()
@@ -455,15 +451,12 @@
         return length
     }
 
-
-    //Ab hie geht es mit dem CardObj ansich weiter 
-
+    //Ab hie geht es mit dem CardObj ansich weiter
     function setupImagePicker(previewId, modalImageId, inputId, formID) {
         var lastFileName = null
         var modalImage = document.getElementById(modalImageId); // Modal for image preview
         var imageInput = document.getElementById(inputId); // File input
         var imagePreview = document.getElementById(previewId); // Image preview container
-
 
         // Find object and set initial state if required
         var aktuellesObj = Umgebung.findObj(inputId);
@@ -507,19 +500,27 @@
                 reader.readAsDataURL(file);
                 lastFileName = file.name;
                 let selectedId = $(this).attr('id');
-                let lastChar = selectedId[selectedId.length - 1];
-                let closebtnID = '#closeBtn' + lastChar
-                $(closebtnID).css("display", "block")
-                $('#timerSelect' + lastChar).val(3)
-                $('#timerSelect' + lastChar).prop('disabled', false);
-                aktuellesObj.imageSet = true;
-                
-                var alwaysOnBtn = 'alwaysOnBtn' + lastChar
 
+                let id = extractNumberFromString(selectedId)
+
+
+                let closebtnID = '#closeBtn' + id
+
+
+                $(closebtnID).css("display", "block")
+                let meow = $('#timerSelect' + id).val()
+                console.log(meow);
+                $('#timerSelect' + id).prop('disabled', false);
+
+                let isDisabled = $('#timerSelect' + id).prop('disabled');
+                console.log('Ist das Element disabled?', isDisabled);
+
+                console.log(isDisabled);
+
+                aktuellesObj.imageSet = true;
+                var alwaysOnBtn = 'alwaysOnBtn' + id
                 var inputbtn = document.getElementById(alwaysOnBtn)
-                console.log(inputbtn);
-                
-                inputbtn.disabled = false
+
                 console.log(formID, aktuellesObj);
                 getImagePath(formID, aktuellesObj)
                 this.value = '';
@@ -548,7 +549,9 @@
             aktuellesObj.startDateTime = ``;
             aktuellesObj.endDateTime = ``;
             aktuellesObj.selectedTime = selectedValue
-            selectedUmgebung.removeObjFromList(selectedUmgebung.listAnzeige, aktuellesObj)
+            if (selectedUmgebung != "undefined") {
+                selectedUmgebung.removeObjFromList(selectedUmgebung.cardObjList, aktuellesObj)
+            }
             select.disabled = true
             $('#timerSelect' + aktuellesObj.id).val(3)
             infoBtn.style.display = "none"

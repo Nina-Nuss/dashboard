@@ -9,8 +9,6 @@ class Umgebung {
     constructor(ipAdresse, titel) {
         this.id = Umgebung.id++;
         //HTMLOBJEKTE-------------------------
-        this.carousel = `carousel${this.id}`;
-        this.htmlUmgebungsBody = `bodyForCards${this.id}`;
         //-------------------------------------
         //AB hier kommt alles in die Datenbank rein:
         this.ipAdresse = ipAdresse;
