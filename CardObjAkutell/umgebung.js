@@ -6,8 +6,8 @@ class Umgebung {
     static allCardList = [];
     static ipList = [];
     static nameList = [];
-    constructor(ipAdresse, titel) {
-        this.id = Umgebung.id++;
+    constructor(id, ipAdresse, titel) {
+        this.id = id;
         //HTMLOBJEKTE-------------------------
         //-------------------------------------
         //AB hier kommt alles in die Datenbank rein:
@@ -20,7 +20,9 @@ class Umgebung {
         this.htmlCardObjList = [];
         this.listAnzeige = [];
         //-------------------------------------
-        this.ladeUmgebung();
+        this.htmlUmgebungsBody = `umgebungsBody${this.id}`;
+        this.ladeUmgebung(this.htmlUmgebungsBody);
+       
         Umgebung.ipList.push(this.ipAdresse);
         Umgebung.allCardList.push(this.cardObjList);
         Umgebung.umgebungsListe.push(this);
@@ -51,15 +53,13 @@ class Umgebung {
             list.splice(index, 1);
         }
     }
-    ladeUmgebung() {
+    ladeUmgebung(htmlUmgebungsBody) {
+        rowForCards = document.getElementById("rowForCards");
         rowForCards.innerHTML += `
-            <div id="${this.htmlUmgebungsBody}"></div>  
+            <div id="${htmlUmgebungsBody}"></div>  
         `
-        carousels.innerHTML += `
-            <div class="carousel-inner" id="${this.carousel}"></div>
-        `
+       
     }
-
     static loadAllCardObj() {
         Umgebung.allCardList.forEach(cardList => {
             cardList.forEach(cardObj => {
@@ -78,7 +78,7 @@ class Umgebung {
         for (let umgebung of Umgebung.umgebungsListe) {
             var number = extractNumberFromString(id)
             console.log(number);
-            const cardObj = umgebung.cardObjList.find(obj => obj.id == number);
+            let cardObj = umgebung.cardObjList.find(obj => obj.id == number);
             console.log(cardObj);
             console.log(umgebung.cardObjList);
             if (cardObj) {
@@ -88,18 +88,7 @@ class Umgebung {
         }
         return null;
     }
-    
-   
-   
-   
-   
-   
-   
     //ab hier geht es zur Carousel Logik weiter  
-    
-    
-    
-
     static async carouselLeeren() {
         while (true) {
             await wait(30000);
@@ -110,10 +99,7 @@ class Umgebung {
             console.log('Carousel geleert...');
         }
     }
-    
-    
-    
-    
+
     async moveToNextPic(cardObj) {
         await wait(cardObj.selectedTime);
         this.ci = (this.ci + 1) % this.listAnzeige.length;
@@ -198,7 +184,6 @@ let rowForCards;
 let carousels;
 let updateInterval = 5000;
 
-
 async function sendListToServer(list, umgebung) {
     try {
         const response = await fetch(umgebung, {
@@ -219,22 +204,14 @@ async function sendListToServer(list, umgebung) {
         console.error('Fehler beim Senden:', error);
     }
 }
-
 // Global functions
 function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-
 function extractNumberFromString(str) {
     const match = str.match(/\d+$/);
     return match ? match[0] : null;
 }
-
 // Wait for DOM to be loaded
-document.addEventListener('DOMContentLoaded', function () {
-    rowForCards = document.getElementById("rowForCards");
-    carousels = document.getElementById("rowForCarousels");
-});
-
 
 

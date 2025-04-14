@@ -11,6 +11,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     if(isset($row['ipAdresse']) && $row['ipAdresse'] !== null && 
         isset($row['titel']) && $row['titel'] !== null) {
         array_push($unsereTabelle, array(
+            $row["id"],
             $row["titel"],
             $row["ipAdresse"]  
         ));

@@ -51,8 +51,8 @@
     </div>
     <h2 id="titelUmgebung"></h2>
     <div class="container d-flex">
-        <div id="rowForCards" class="col-4 p-2"><!-- bild Obj --></div>
-        <div id="rowForCarousels" class="img-thumbnail w-75 m-3">
+        <div id="rowForCards" class="col-4 p-2"><!-- bild Obj -->
+
         </div>
     </div>
 </body>
@@ -66,10 +66,11 @@
     window.onload = function() {
         executeDeleteNull();
         const resultUmgebung = selectObj("database/selectUmgebung.php").then(async (data) => {
-            var HauptUmgebungsObj = new Umgebung(0, "Alle Schemas");
+            var HauptUmgebungsObj = new Umgebung(0, 0, "Alle Schemas");
             var selectedUmgebung = HauptUmgebungsObj;
             data.forEach(umgebung => {
-                var umgebungObj = new Umgebung(umgebung[1], umgebung[0]);
+                console.log(umgebung);
+                var umgebungObj = new Umgebung(umgebung[0], umgebung[2], umgebung[1]);
             })
         }).then(() => {
             ladenUmgebung();
@@ -83,6 +84,7 @@
             objList.forEach(obj => {
                 Umgebung.umgebungsListe.forEach(umgebung => {
                     if (umgebung.titel == obj.titel) {
+                  
                         var cardObj = new CardObj(umgebung, obj.titel, obj.isTimeSet, obj.imagePath, obj.imageSet, obj.startDateTime, obj.endDateTime, obj.aktiv, obj.id);
                         initializeDateRangePicker()
                     }
@@ -247,7 +249,7 @@
     const UmgebungsTitel = document.getElementById("titelUmgebung")
     const ersteAuswahl = selectUmgebung.querySelector('option');
 
-
+    
     selectUmgebung.addEventListener("change", function() {
 
         selectedUmgebung = sucheUmgebung(selectUmgebung.value);
@@ -257,7 +259,7 @@
         console.log("wächsle umgebung");
         UmgebungsTitel.innerHTML = selectedUmgebung.titel;
 
-        if (selectedUmgebung.id == 1) {
+        if (selectedUmgebung.id == 0) {
             showAllUmgebungen()
         } else {
             zeigeUmgebungAn()
@@ -268,11 +270,7 @@
         const cardId = idBtn.replace('alwaysOnBtn', '');
         const cardObj = Umgebung.findObj(cardId);
         const calenderBtn = document.querySelector(`#${cardObj.openModalButtonId}`);
-
-        console.log(cardObj.aktiv);
-
-        console.log(typeof cardObj.aktiv);
-
+     
         if (cardObj.aktiv == false && cardObj.imageSet == true) {
             cardObj.aktiv = true;
             selectedUmgebung.addCardObjToAnzeige(cardObj)
@@ -286,8 +284,6 @@
     }
     document.getElementById("saveBtn").addEventListener("click", function() {
         console.log(selectedUmgebung);
-
-
         alert("Daten werden gespeichert")
         selectedUmgebung.cardObjList.forEach(cardObj => {
             updateDataBase(cardObj)
@@ -309,8 +305,8 @@
     });
 
     function zeigeUmgebungAn() {
-        document.querySelectorAll('[id^="bodyForCards"]').forEach(item => {
-            let lastIndexUmgebung = item.id.replace('bodyForCards', '');
+        document.querySelectorAll('[id^="umgebungsBody"]').forEach(item => {
+            let lastIndexUmgebung = item.id.replace('umgebungsBody', '');
             console.log(lastIndexUmgebung);
             if (lastIndexUmgebung == selectedUmgebung.id) {
                 document.getElementById(item.id).style.display = "block";
@@ -330,7 +326,7 @@
     }
 
     function showAllUmgebungen() {
-        document.querySelectorAll('[id^="bodyForCards"]').forEach(item => {
+        document.querySelectorAll('[id^="umgebungsBody"]').forEach(item => {
             document.getElementById(item.id).style.display = "block";
         });
     }
@@ -500,34 +496,24 @@
                 reader.readAsDataURL(file);
                 lastFileName = file.name;
                 let selectedId = $(this).attr('id');
-
                 let id = extractNumberFromString(selectedId)
-
-
                 let closebtnID = '#closeBtn' + id
-
-
                 $(closebtnID).css("display", "block")
                 let meow = $('#timerSelect' + id).val()
                 console.log(meow);
                 $('#timerSelect' + id).prop('disabled', false);
-
                 let isDisabled = $('#timerSelect' + id).prop('disabled');
                 console.log('Ist das Element disabled?', isDisabled);
-
                 console.log(isDisabled);
-
                 aktuellesObj.imageSet = true;
                 var alwaysOnBtn = 'alwaysOnBtn' + id
                 var inputbtn = document.getElementById(alwaysOnBtn)
-
                 console.log(formID, aktuellesObj);
                 getImagePath(formID, aktuellesObj)
                 this.value = '';
             })
         }
     }
-
 
     function deletePicture(imagePreview, modalImage) {
         var modalImage = document.getElementById(modalImage).id; // Modal for image preview
@@ -563,8 +549,7 @@
         return
     }
     //jQuerry Zone:
-    function initializeDateRangePicker() {
-        console.log(23423423423424234234234);
+    function initializeDateRangePicker() {    
         $(document).on('click', 'button[id^="openModal"]', function() {
             const buttonId = $(this).attr('id'); //"openModal1"
             const modalId = buttonId.replace('openModal', 'myModal'); // e.g., "myModal1"

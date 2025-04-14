@@ -44,12 +44,13 @@ class CardObj {
     }
     htmlKonstruktObjBody(umgebung) {
         var htmlUmgebungsBody = document.getElementById(umgebung.htmlUmgebungsBody);
+        console.log(umgebung); 
         htmlUmgebungsBody.innerHTML += `
-        <div id="${this.id}" class="card m-1" style="width: 10rem;" >
+        <div class="card m-1" style="width: 10rem;" >
             <div class="position-absolute form-check-d d-none">
                 <input class="form-check-input" type="checkbox" value="" id="${this.deleteBtn}">
             </div>
-        <span class="material-symbols-outlined removePicBtn z-3" id="${this.closeBtn}" onclick="deletePicture('${this.imagePreviewId}', '${this.modalImageId}')" >close</span>
+            <span class="material-symbols-outlined removePicBtn z-3" id="${this.closeBtn}" onclick="deletePicture('${this.imagePreviewId}', '${this.modalImageId}')" >close</span>
         <div class="picture pt-0">
             <form action="test.php" method="post" enctype="multipart/form-data" id="${this.formID}">
                 <label class="upload-container">
