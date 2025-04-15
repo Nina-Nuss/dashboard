@@ -114,4 +114,144 @@ class CardObj {
             element.remove();
         }
     }
+    initializeDateRangePicker() {
+        $(document).on('click', 'button[id^="openModal"]', function() {
+            const buttonId = $(this).attr('id'); //"openModal1"
+            const modalId = buttonId.replace('openModal', 'myModal'); // e.g., "myModal1"
+            const aktuellesObj = Umgebung.findObj(modalId)
+            console.log(aktuellesObj);
+            console.log(modalId);
+            if (!aktuellesObj.imageSet) {
+                return
+            } else {
+                $(`#${modalId}`).fadeIn(() => {
+                    // Sobald das Modal sichtbar ist, den DateTimePicker fokussieren
+                    const dateRangeId = modalId.replace('myModal', 'daterange');
+                    console.log(dateRangeId);
+                    $(`#${dateRangeId}`).focus(); // Fokus auf das Eingabefeld
+                });
+            }
+        });
+        // Close the modal when the "x" button is clicked
+        $(document).on('click', '.close', function() {
+            $(this).closest('.modal').fadeOut();
+        });
+        // schließt modal wenn außerhalb des modales geklickt wird
+        $(document).on('click', function(event) {
+            const $target = $(event.target);
+            if ($target.hasClass('modal')) { // Check if the clicked element has the "modal" class
+                $target.fadeOut();
+            }
+        });
+        $('button[id^="infoBtn"]').click(function() {
+            // Hole die ID des geklickten Elements
+            var eIDtimer = $(this).attr('id');
+            const aktuellesObj = Umgebung.findObj(eIDtimer)
+            console.log(eIDtimer);
+            if (aktuellesObj.imageSet == true) {
+                var eIDtimer = $(this).attr('id');
+                console.log('Die ID des Elements ist: ' + eIDtimer);
+                sugarsugarsugar
+                let lastIndex = eIDtimer.replace('infoBtn', '');
+                // Erstelle den ID-Selektor für das zugehörige Select-Element
+                let timerselect = '#timerSelect' + lastIndex;
+                console.log('Der Selektor ist: ' + timerselect);
+                // Ändere den Stil des zugehörigen Select-Elements
+                $(timerselect).css("display", "block");
+                $('#' + eIDtimer).css("display", "block");
+            }
+        });
+        $('input[id^="timerSelect"]').on('input', function() {
+            var selectedValue = $(this).val();
+            console.log(selectedValue);
+            selectedValue = selectedValue * 1000
+            let selectedId = $(this).attr('id');
+            let lastChar = selectedId[selectedId.length - 1];
+            var obj = Umgebung.findObj(lastChar)
+            obj.isTimeSet = true
+            obj.selectedTime = selectedValue
+            console.log(obj.selectedTime);
+        });
+        //Ab hier geht es um den DateTimePicker
+        //!!!!  daterangepicker muss nach cardobj geladen werden!!!!!!!
+        let selectedDateRange = '';
+        // Initialize Date Range Picker
+        $('input[id^="daterange"]').daterangepicker({
+            autoUpdateInput: false, // Prevent auto-filling the input
+            timePicker: true,
+            timePicker24Hour: true,
+            locale: {
+                format: 'DD-MM-YYYY HH:mm',
+                cancelLabel: 'Abbrechen',
+                applyLabel: 'Übernehmen',
+            },
+            minDate: new Date(), // Minimum selectable date is today
+            drops: 'down', // Ensure dropdown opens correctly
+            opens: 'center'
+        });
+
+        // Open Date Range Picker when the icon is clicked
+        $(document).on('click', 'span[id^="daterange-icon"]', function() {
+            const iconID = $(this).attr('id');
+            const daterangeID = iconID.replace('daterange-icon', 'daterange');
+            console.log(daterangeID);
+            $('#' + daterangeID).focus(); // Focus on input to trigger the picker  
+        });
+
+        $('input[id^="daterange"]').ready(function() {
+            // Entferne die Klasse von allen Elementen mit der Klasse 'drp-selected'
+            $(".drp-selected").removeClass("drp-selected");
+        });
+
+        // Update input field and display the selected date range when a date is selected
+        $('input[id^="daterange"]').on('apply.daterangepicker', function(ev, picker) {
+            selectedDateRange = picker.startDate.format('DD-MM-YYYY HH:mm') + '  -  ' + picker.endDate.format('DD-MM-YYYY HH:mm');
+            $(this).val(selectedDateRange); // Update input field
+            $('#selected-daterange').text(selectedDateRange); // Display the selected date range below
+            var obj = Umgebung.findObj(this.id);
+            showData(obj, selectedDateRange);
+
+            let date = picker.startDate.format('DD.MM') + '  -  ' + picker.endDate.format('DD.MM');
+            let dateForInfo = picker.startDate.format('DD.MM.YYYY HH:mm') + '  bis  ' + picker.endDate.format('DD.MM.YYYY HH:mm');
+            // Extrahiere den Tag, Monat und Jahr von startDate
+            let startDay = picker.startDate.format('DD'); // Tag des Startdatums
+            let startMonth = picker.startDate.format('MM'); // Monat des Startdatums
+            let startYear = picker.startDate.format('YYYY'); // Jahr des Startdatums
+            let startTime = picker.startDate.format('HH:mm'); // Uhrzeit des Startdatums
+            // Extrahiere den Tag, Monat und Jahr von endDate
+            let endDay = picker.endDate.format('DD'); // Tag des Enddatums
+            let endMonth = picker.endDate.format('MM'); // Monat des Enddatums
+            let endYear = picker.endDate.format('YYYY'); // Jahr des Enddatums
+            let endTime = picker.endDate.format('HH:mm'); // Uhrzeit des Enddatums
+            // Erstelle den Text, der das Datum, Jahr und die Uhrzeit anzeigt
+            let dateText = startDay + '.' + startMonth + '.' + startYear + ' ' + startTime + ' bis ' + endDay + '.' + endMonth + '.' + endYear + ' ' + endTime;
+            $(this).val(date);
+            var todayStart = moment().startOf('day');
+            if (picker.startDate.isSame(todayStart)) {
+                // If today was selected, set the start and end time to the current time
+                var currentTime = moment();
+                picker.setStartDate(currentTime); // Set start time to now
+            }
+            let selectedId = $(this).attr('id');
+            let lastChar = selectedId[selectedId.length - 1];
+            $('#showDateInCard' + lastChar).text(dateText);
+            $('#infoBtn' + lastChar).css("display", "block");
+            console.log(34534535234532452345);
+            let alwaysOnBtn = '#alwaysOnBtn' + lastChar;
+            $(alwaysOnBtn).css("display", "none");
+        });
+
+        // Clear input field and display when cancel is clicked
+        $('input[id^="daterange"]').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val(''); // Clear the input
+            $('#selected-daterange').text(''); // Clear the displayed text
+            selectedDateRange = ''; // Reset the variable
+        });
+
+        // Set today's date on button click
+        $('input[id^="daterange"]').on('show.daterangepicker', function(ev, picker) {
+            let selectedrange = picker.startDate.format('DD.MM') + '  -  ' + picker.endDate.format('DD.MM');
+            $(this).val(selectedrange);
+        });
+    }
 }

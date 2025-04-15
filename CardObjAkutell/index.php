@@ -41,7 +41,6 @@
     </div>
      -->
     <select id="selectUmgebung" class="form-select" aria-label="Default select example"></select>
-
     <div class="d-flex">
         <button id="plusBtn" type="button" class="btn btn-primary">Create</button>
         <div id="counter">0</div>
@@ -72,6 +71,7 @@
                 console.log(umgebung);
                 var umgebungObj = new Umgebung(umgebung[0], umgebung[2], umgebung[1]);
             })
+
         }).then(() => {
             ladenUmgebung();
             createCardObj();
@@ -80,30 +80,28 @@
 
     function createCardObj() {
         const resultCardObj = selectObj("database/selectCardObj.php").then(async (data) => {
-            objList = convertCardObjForDataBase(data)
+            let objList = convertCardObjForDataBase(data)
             objList.forEach(obj => {
                 Umgebung.umgebungsListe.forEach(umgebung => {
                     if (umgebung.titel == obj.titel) {
-                  
                         var cardObj = new CardObj(umgebung, obj.titel, obj.isTimeSet, obj.imagePath, obj.imageSet, obj.startDateTime, obj.endDateTime, obj.aktiv, obj.id);
-                        initializeDateRangePicker()
+                        umgebung.cardCounter = umgebung.cardCounter + 1
+                        cardObj.initializeDateRangePicker()
+                   
                     }
+                   
                 })
+           
             });
         })
+    
     }
 
-    function convertCardObjForDataBase(liste) {
+    
+
+    function convertCardObjForDataBase(cardObjListe) {
         objListe = []
-        liste.forEach(cardObj => {
-            if (cardObj == "true") {
-                cardObj = true
-            }
-            if (cardObj == "false") {
-                cardObj = false
-            }
-        });
-        liste.forEach(cardObj => {
+        cardObjListe.forEach(cardObj => {
             var obj = {
                 id: cardObj[0],
                 titel: cardObj[1],
@@ -115,22 +113,27 @@
                 startDateTime: cardObj[7],
                 endDateTime: cardObj[8]
             };
-            console.log(obj);
+         
 
             objListe.push(obj)
         });
-
         return objListe
     }
     async function updateDataBase(cardObj) {
         // Erstellen eines FormData-Objekts
-        const jsObj = JavaScriptCardObj(cardObj)
-        // Senden der POST-Anfrage
-        var result = await fetch("database/update.php", {
-            method: "POST",
-            body: JSON.stringify(jsObj)
-        });
-        console.log(await result.text());
+        try {
+            console.log("updateDataBase wurde aufgerufen");
+            const jsObj = JavaScriptCardObj(cardObj);
+            console.log(jsObj);
+            var result = await fetch("database/update.php", {
+                method: "POST",
+                body: JSON.stringify(jsObj)
+            });
+            const responseText = await result.text();
+            console.log("Antwort vom Server:", responseText);
+        } catch (error) {
+            console.error("Fehler in updateDataBase:", error);
+        }
     }
     async function executeDeleteNull() {
         try {
@@ -148,7 +151,6 @@
             console.error("Fehler:", error);
         }
     }
-
     async function deleteCardObj(cardObjId) {
         try {
             const response = await fetch("database/deleteCardObj.php", {
@@ -170,7 +172,6 @@
         }
     }
     // Aufruf der Funktion
-
     function prepareCardObj(cardObj) {
         var prepare =
             "&titel=" + cardObj.zugeordnet +
@@ -179,10 +180,12 @@
             "&imageSet=" + cardObj.imageSet +
             "&startDateTime=" + cardObj.startDateTime +
             "&endDateTime=" + cardObj.endDateTime +
-            "&aktiv=" + cardObj.aktiv;
+            "&aktiv=" + cardObj.aktiv + 
+            "&selectedTime=" + cardObj.selectedTime + 
+            "&id=" + cardObj.id;  
+
         return prepare
     }
-
     function JavaScriptCardObj(cardObj) {
         const jsonData = {
             titel: cardObj.zugeordnet,
@@ -192,11 +195,11 @@
             startDateTime: cardObj.startDateTime,
             endDateTime: cardObj.endDateTime,
             aktiv: cardObj.aktiv,
-            selectedTime: cardObj.selectedTime // Hinzufügen des fehlenden Schlüssels
+            selectedTime: cardObj.selectedTime,
+            id: cardObj.id  // Hinzufügen des fehlenden Schlüssels
         };
         return jsonData
     }
-
     async function selectObj(select) {
         try {
             const response = await fetch(select, { // .php Extension hinzugefügt
@@ -214,19 +217,21 @@
             return null;
         }
     }
-
     function ladenUmgebung() {
         selectUmgebung.innerHTML = ``;
         // selectUmgebung.innerHTML = `<option selected>Alle Umgebungen</option>`;
         console.log(Umgebung.umgebungsListe);
         Umgebung.umgebungsListe.forEach(umgebung => {
             selectUmgebung.innerHTML += `<option value="${umgebung.id}">${umgebung.titel}</option>`;
-        });
-    };
 
+        });
+        
+    };
     const plusBtn = document.getElementById("plusBtn");
     const minusBtn = document.getElementById("minusBtn");
     let counter = document.getElementById("counter");
+
+
 
     plusBtn.addEventListener("click", function() {
         let currentCounter = parseInt(counter.innerHTML);
@@ -234,10 +239,10 @@
             if (selectedUmgebung != "undefined") {
                 console.log(selectedUmgebung);
                 console.log(selectedUmgebung.titel);
-                const newCardObj = new CardObj(selectedUmgebung, selectedUmgebung.titel, "false", "", "false", "", "", "true", "");
+                const newCardObj = new CardObj(selectedUmgebung, selectedUmgebung.titel, false, "", true, "", "", true, "");
+                Umgebung.tempListForSaveCards.push(newCardObj);
                 console.log(newCardObj);
-                insertDatabase(newCardObj)
-                initializeDateRangePicker()
+                newCardObj.initializeDateRangePicker()
                 counter.innerHTML = currentCounter + 1;
             }
         } else {
@@ -249,7 +254,6 @@
     const UmgebungsTitel = document.getElementById("titelUmgebung")
     const ersteAuswahl = selectUmgebung.querySelector('option');
 
-    
     selectUmgebung.addEventListener("change", function() {
 
         selectedUmgebung = sucheUmgebung(selectUmgebung.value);
@@ -270,10 +274,11 @@
         const cardId = idBtn.replace('alwaysOnBtn', '');
         const cardObj = Umgebung.findObj(cardId);
         const calenderBtn = document.querySelector(`#${cardObj.openModalButtonId}`);
-     
-        if (cardObj.aktiv == false && cardObj.imageSet == true) {
+
+        if (cardObj.aktiv == false) {
             cardObj.aktiv = true;
-            selectedUmgebung.addCardObjToAnzeige(cardObj)
+            console.log(cardObj.aktiv);
+            // selectedUmgebung.addCardObjToAnzeige(cardObj)
             calenderBtn.disabled = true
         } else {
             cardObj.aktiv = false;
@@ -283,12 +288,29 @@
         }
     }
     document.getElementById("saveBtn").addEventListener("click", function() {
-        console.log(selectedUmgebung);
         alert("Daten werden gespeichert")
-        selectedUmgebung.cardObjList.forEach(cardObj => {
-            updateDataBase(cardObj)
+        saveTempAddDatabase()
+        Umgebung.allCardList.forEach(cardObjlist => {
+            
+            cardObjlist.forEach(cardObj => {
+                
+                console.log(cardObj);
+                if (cardObj.update == true) {
+                    console.log(cardObj.update);
+                    cardObj.update = false
+                    updateDataBase(cardObj)
+                }
+            });
         });
     });
+
+    function saveTempAddDatabase(){
+        Umgebung.tempListForSaveCards.forEach(cardObj => {
+            console.log(cardObj);
+            insertDatabase(cardObj)
+        });
+        Umgebung.tempListForSaveCards = []
+    }
 
     function updateAnzeigeCounter() {
         var currentlength = lengthListCardObj(selectedUmgebung);
@@ -298,7 +320,6 @@
 
     minusBtn.addEventListener("click", function() {
         console.log("minus");
-
         if (selectedUmgebung != "") {
             checkBoxShow();
         }
@@ -364,15 +385,24 @@
                     selectedUmgebung.tempListForDeleteCards.push(cardObj);
                     console.log("checkInn");
                     console.log(cardObj.id);
-                    element.style.boxShadow = "5px 5px 10px rgba(0, 0, 0, 0.5)";
+                  
                 } else {
                     selectedUmgebung.removeObjFromList(selectedUmgebung.tempListForDeleteCards, cardObj);
                     console.log("checkout");
-                    element.style.boxShadow = "none";
+              
                 }
             });
         });
     }
+
+    function saveCardObj(){
+        umgebung.allCardList.forEach(cardObjlist => {
+            cardObjlist.forEach(cardObj => {
+                console.log(cardObj);
+            });
+        });
+    }
+
     deleteBtnForCards.addEventListener('click', function() {
         if (selectedUmgebung.tempListForDeleteCards.length == 0) {
             alert("wähle ein Object aus")
@@ -413,9 +443,7 @@
             aktiv: cardObj.aktiv,
             selectedTime: cardObj.selectedTime // Hinzufügen des fehlenden Schlüssels
         };
-
         console.log(JSON.stringify(jsonData));
-
         // Senden der POST-Anfrage mit JSON-Daten
         const response = await fetch("database/insert.php", {
             method: "POST",
@@ -548,147 +576,8 @@
         }
         return
     }
-    //jQuerry Zone:
-    function initializeDateRangePicker() {    
-        $(document).on('click', 'button[id^="openModal"]', function() {
-            const buttonId = $(this).attr('id'); //"openModal1"
-            const modalId = buttonId.replace('openModal', 'myModal'); // e.g., "myModal1"
-            const aktuellesObj = Umgebung.findObj(modalId)
-            console.log(aktuellesObj);
-            console.log(modalId);
-            if (!aktuellesObj.imageSet) {
-                return
-            } else {
-                $(`#${modalId}`).fadeIn(() => {
-                    // Sobald das Modal sichtbar ist, den DateTimePicker fokussieren
-                    const dateRangeId = modalId.replace('myModal', 'daterange');
-                    console.log(dateRangeId);
-                    $(`#${dateRangeId}`).focus(); // Fokus auf das Eingabefeld
-                });
-            }
-        });
-        // Close the modal when the "x" button is clicked
-        $(document).on('click', '.close', function() {
-            $(this).closest('.modal').fadeOut();
-        });
-        // schließt modal wenn außerhalb des modales geklickt wird
-        $(document).on('click', function(event) {
-            const $target = $(event.target);
-            if ($target.hasClass('modal')) { // Check if the clicked element has the "modal" class
-                $target.fadeOut();
-            }
-        });
-        $('button[id^="infoBtn"]').click(function() {
-            // Hole die ID des geklickten Elements
-            var eIDtimer = $(this).attr('id');
-            const aktuellesObj = Umgebung.findObj(eIDtimer)
-            console.log(eIDtimer);
-            if (aktuellesObj.imageSet == true) {
-                var eIDtimer = $(this).attr('id');
-                console.log('Die ID des Elements ist: ' + eIDtimer);
-                sugarsugarsugar
-                let lastIndex = eIDtimer.replace('infoBtn', '');
-                // Erstelle den ID-Selektor für das zugehörige Select-Element
-                let timerselect = '#timerSelect' + lastIndex;
-                console.log('Der Selektor ist: ' + timerselect);
-                // Ändere den Stil des zugehörigen Select-Elements
-                $(timerselect).css("display", "block");
-                $('#' + eIDtimer).css("display", "block");
-            }
-        });
-        $('input[id^="timerSelect"]').on('input', function() {
-            var selectedValue = $(this).val();
-            console.log(selectedValue);
-            selectedValue = selectedValue * 1000
-            let selectedId = $(this).attr('id');
-            let lastChar = selectedId[selectedId.length - 1];
-            var obj = Umgebung.findObj(lastChar)
-            obj.isTimeSet = true
-            obj.selectedTime = selectedValue
-            console.log(obj.selectedTime);
-        });
-        //Ab hier geht es um den DateTimePicker
-        //!!!!  daterangepicker muss nach cardobj geladen werden!!!!!!!
-        let selectedDateRange = '';
-        // Initialize Date Range Picker
-        $('input[id^="daterange"]').daterangepicker({
-            autoUpdateInput: false, // Prevent auto-filling the input
-            timePicker: true,
-            timePicker24Hour: true,
-            locale: {
-                format: 'DD-MM-YYYY HH:mm',
-                cancelLabel: 'Abbrechen',
-                applyLabel: 'Übernehmen',
-            },
-            minDate: new Date(), // Minimum selectable date is today
-            drops: 'down', // Ensure dropdown opens correctly
-            opens: 'center'
-        });
 
-        // Open Date Range Picker when the icon is clicked
-        $(document).on('click', 'span[id^="daterange-icon"]', function() {
-            const iconID = $(this).attr('id');
-            const daterangeID = iconID.replace('daterange-icon', 'daterange');
-            console.log(daterangeID);
-            $('#' + daterangeID).focus(); // Focus on input to trigger the picker  
-        });
-
-        $('input[id^="daterange"]').ready(function() {
-            // Entferne die Klasse von allen Elementen mit der Klasse 'drp-selected'
-            $(".drp-selected").removeClass("drp-selected");
-        });
-
-        // Update input field and display the selected date range when a date is selected
-        $('input[id^="daterange"]').on('apply.daterangepicker', function(ev, picker) {
-            selectedDateRange = picker.startDate.format('DD-MM-YYYY HH:mm') + '  -  ' + picker.endDate.format('DD-MM-YYYY HH:mm');
-            $(this).val(selectedDateRange); // Update input field
-            $('#selected-daterange').text(selectedDateRange); // Display the selected date range below
-            var obj = Umgebung.findObj(this.id);
-            showData(obj, selectedDateRange);
-
-            let date = picker.startDate.format('DD.MM') + '  -  ' + picker.endDate.format('DD.MM');
-            let dateForInfo = picker.startDate.format('DD.MM.YYYY HH:mm') + '  bis  ' + picker.endDate.format('DD.MM.YYYY HH:mm');
-            // Extrahiere den Tag, Monat und Jahr von startDate
-            let startDay = picker.startDate.format('DD'); // Tag des Startdatums
-            let startMonth = picker.startDate.format('MM'); // Monat des Startdatums
-            let startYear = picker.startDate.format('YYYY'); // Jahr des Startdatums
-            let startTime = picker.startDate.format('HH:mm'); // Uhrzeit des Startdatums
-            // Extrahiere den Tag, Monat und Jahr von endDate
-            let endDay = picker.endDate.format('DD'); // Tag des Enddatums
-            let endMonth = picker.endDate.format('MM'); // Monat des Enddatums
-            let endYear = picker.endDate.format('YYYY'); // Jahr des Enddatums
-            let endTime = picker.endDate.format('HH:mm'); // Uhrzeit des Enddatums
-            // Erstelle den Text, der das Datum, Jahr und die Uhrzeit anzeigt
-            let dateText = startDay + '.' + startMonth + '.' + startYear + ' ' + startTime + ' bis ' + endDay + '.' + endMonth + '.' + endYear + ' ' + endTime;
-            $(this).val(date);
-            var todayStart = moment().startOf('day');
-            if (picker.startDate.isSame(todayStart)) {
-                // If today was selected, set the start and end time to the current time
-                var currentTime = moment();
-                picker.setStartDate(currentTime); // Set start time to now
-            }
-            let selectedId = $(this).attr('id');
-            let lastChar = selectedId[selectedId.length - 1];
-            $('#showDateInCard' + lastChar).text(dateText);
-            $('#infoBtn' + lastChar).css("display", "block");
-            console.log(34534535234532452345);
-            let alwaysOnBtn = '#alwaysOnBtn' + lastChar;
-            $(alwaysOnBtn).css("display", "none");
-        });
-
-        // Clear input field and display when cancel is clicked
-        $('input[id^="daterange"]').on('cancel.daterangepicker', function(ev, picker) {
-            $(this).val(''); // Clear the input
-            $('#selected-daterange').text(''); // Clear the displayed text
-            selectedDateRange = ''; // Reset the variable
-        });
-
-        // Set today's date on button click
-        $('input[id^="daterange"]').on('show.daterangepicker', function(ev, picker) {
-            let selectedrange = picker.startDate.format('DD.MM') + '  -  ' + picker.endDate.format('DD.MM');
-            $(this).val(selectedrange);
-        });
-    }
+  
 </script>
 
 </html>

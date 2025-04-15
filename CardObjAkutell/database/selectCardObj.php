@@ -9,6 +9,8 @@ $result = mysqli_query($conn, $sql);
 if (!$result) {
     die("Abfragefehler: " . mysqli_error($conn));
 }
+
+
 $unsereTabelle = [];
 while ($row = mysqli_fetch_assoc($result)) {
     if(isset($row['id']) && $row['id'] !== null) {

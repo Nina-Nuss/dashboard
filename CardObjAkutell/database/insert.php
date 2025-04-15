@@ -4,6 +4,7 @@ include("connection.php");
 // Abrufen der JSON-Daten aus der Anfrage
 $data = json_decode(file_get_contents('php://input'), associative: true);
 
+echo json_encode($data);
 // Überprüfen, ob die Daten korrekt abgerufen wurden
 if (is_array($data)) {
     $titel = $data["titel"];
@@ -14,6 +15,7 @@ if (is_array($data)) {
     $startDateTime = $data["startDateTime"];
     $endDateTime = $data["endDateTime"];
     $aktiv = $data["aktiv"];
+
     // SQL-Abfrage mit Prepared Statement
     $sql = "INSERT INTO card_objekte (titel, imagePath, selectedTime, isTimeSet, imageSet, aktiv, startDateTime, endDateTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($conn, $sql);

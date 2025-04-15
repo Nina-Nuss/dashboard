@@ -6,8 +6,10 @@ class Umgebung {
     static allCardList = [];
     static ipList = [];
     static nameList = [];
+    static tempListForSaveCards = [];
     constructor(id, ipAdresse, titel) {
         this.id = id;
+        this.cardCounter = 0;
         //HTMLOBJEKTE-------------------------
         //-------------------------------------
         //AB hier kommt alles in die Datenbank rein:
@@ -19,6 +21,7 @@ class Umgebung {
         this.tempListForDeleteCards = [];
         this.htmlCardObjList = [];
         this.listAnzeige = [];
+
         //-------------------------------------
         this.htmlUmgebungsBody = `umgebungsBody${this.id}`;
         this.ladeUmgebung(this.htmlUmgebungsBody);
@@ -77,10 +80,9 @@ class Umgebung {
     static findObj(id) {
         for (let umgebung of Umgebung.umgebungsListe) {
             var number = extractNumberFromString(id)
-            console.log(number);
+
             let cardObj = umgebung.cardObjList.find(obj => obj.id == number);
-            console.log(cardObj);
-            console.log(umgebung.cardObjList);
+      
             if (cardObj) {
                 cardObj.update = true;
                 return cardObj;
