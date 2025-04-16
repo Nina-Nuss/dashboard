@@ -268,24 +268,29 @@
             zeigeUmgebungAn()
         }
     })
-
+  
     function cardSwitch(idBtn) {
         const cardId = idBtn.replace('alwaysOnBtn', '');
         const cardObj = Umgebung.findObj(cardId);
         const calenderBtn = document.querySelector(`#${cardObj.openModalButtonId}`);
-      
-        console.log(cardObj.aktiv);
         
-        if (cardObj.aktiv == false) {
+    
+        
+        if (cardObj.aktiv == false && counter == 0) {
             // selectedUmgebung.addCardObjToAnzeige(cardObj)
             calenderBtn.disabled = false
-            cardObj.aktiv = true
+            counter = counter + 1
+            console.log(counter);
+            
         } else {
-            cardObj.aktiv = false;
-          
+         
+            cardObj.aktiv = true
+            counter = 0
             calenderBtn.disabled = true
             selectedUmgebung.removeObjFromList(selectedUmgebung.listAnzeige, cardObj)
+            console.log(counter);
         }
+
         console.log(cardObj.aktiv);
     }
     document.getElementById("saveBtn").addEventListener("click", function() {
