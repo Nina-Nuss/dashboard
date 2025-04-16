@@ -80,9 +80,7 @@ class Umgebung {
     static findObj(id) {
         for (let umgebung of Umgebung.umgebungsListe) {
             var number = extractNumberFromString(id)
-
             let cardObj = umgebung.cardObjList.find(obj => obj.id == number);
-      
             if (cardObj) {
                 cardObj.update = true;
                 return cardObj;

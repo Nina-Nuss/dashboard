@@ -151,7 +151,7 @@ class CardObj {
             if (aktuellesObj.imageSet == true) {
                 var eIDtimer = $(this).attr('id');
                 console.log('Die ID des Elements ist: ' + eIDtimer);
-                sugarsugarsugar
+              
                 let lastIndex = eIDtimer.replace('infoBtn', '');
                 // Erstelle den ID-Selektor für das zugehörige Select-Element
                 let timerselect = '#timerSelect' + lastIndex;

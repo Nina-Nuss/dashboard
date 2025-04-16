@@ -19,9 +19,9 @@ while ($row = mysqli_fetch_assoc($result)) {
             $row["titel"],
             $row["imagePath"],
             $row["selectedTime"],
-            $row["isTimeSet"],
-            $row["imageSet"],
-            $row["aktiv"],
+            (bool)$row["isTimeSet"], // Cast zu Boolean
+            (bool)$row["imageSet"],  // Cast zu Boolean
+            (bool)$row["aktiv"],   
             $row["startDateTime"],
             $row["endDateTime"]
         ));
@@ -30,6 +30,8 @@ while ($row = mysqli_fetch_assoc($result)) {
 mysqli_free_result($result);
 
 $jsonList = json_encode($unsereTabelle);
+
+
 
 echo $jsonList;
 

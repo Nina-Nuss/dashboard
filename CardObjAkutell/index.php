@@ -79,25 +79,24 @@
     }
 
     function createCardObj() {
-        const resultCardObj = selectObj("database/selectCardObj.php").then(async (data) => {
+        selectObj("database/selectCardObj.php").then(async (data) => {
             let objList = convertCardObjForDataBase(data)
+            console.log(objList)
             objList.forEach(obj => {
                 Umgebung.umgebungsListe.forEach(umgebung => {
                     if (umgebung.titel == obj.titel) {
                         var cardObj = new CardObj(umgebung, obj.titel, obj.isTimeSet, obj.imagePath, obj.imageSet, obj.startDateTime, obj.endDateTime, obj.aktiv, obj.id);
                         umgebung.cardCounter = umgebung.cardCounter + 1
                         cardObj.initializeDateRangePicker()
-                   
                     }
-                   
+                
                 })
-           
             });
         })
+        
+        
     
     }
-
-    
 
     function convertCardObjForDataBase(cardObjListe) {
         objListe = []
@@ -239,7 +238,7 @@
             if (selectedUmgebung != "undefined") {
                 console.log(selectedUmgebung);
                 console.log(selectedUmgebung.titel);
-                const newCardObj = new CardObj(selectedUmgebung, selectedUmgebung.titel, false, "", true, "", "", true, "");
+                const newCardObj = new CardObj(selectedUmgebung, selectedUmgebung.titel, false, "", false, "", "", false, "");
                 Umgebung.tempListForSaveCards.push(newCardObj);
                 console.log(newCardObj);
                 newCardObj.initializeDateRangePicker()
@@ -274,26 +273,26 @@
         const cardId = idBtn.replace('alwaysOnBtn', '');
         const cardObj = Umgebung.findObj(cardId);
         const calenderBtn = document.querySelector(`#${cardObj.openModalButtonId}`);
-
+      
+        console.log(cardObj.aktiv);
+        
         if (cardObj.aktiv == false) {
-            cardObj.aktiv = true;
-            console.log(cardObj.aktiv);
             // selectedUmgebung.addCardObjToAnzeige(cardObj)
-            calenderBtn.disabled = true
+            calenderBtn.disabled = false
+            cardObj.aktiv = true
         } else {
             cardObj.aktiv = false;
-            console.log(cardObj.aktiv);
-            calenderBtn.disabled = false
+          
+            calenderBtn.disabled = true
             selectedUmgebung.removeObjFromList(selectedUmgebung.listAnzeige, cardObj)
         }
+        console.log(cardObj.aktiv);
     }
     document.getElementById("saveBtn").addEventListener("click", function() {
         alert("Daten werden gespeichert")
         saveTempAddDatabase()
         Umgebung.allCardList.forEach(cardObjlist => {
-            
             cardObjlist.forEach(cardObj => {
-                
                 console.log(cardObj);
                 if (cardObj.update == true) {
                     console.log(cardObj.update);

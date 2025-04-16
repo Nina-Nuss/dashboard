@@ -5,6 +5,7 @@ include("connection.php");
 $data = json_decode(file_get_contents('php://input'), associative: true);
 
 echo json_encode($data);
+
 // Überprüfen, ob die Daten korrekt abgerufen wurden
 if (is_array($data)) {
     $titel = $data["titel"];
@@ -16,6 +17,28 @@ if (is_array($data)) {
     $endDateTime = $data["endDateTime"];
     $aktiv = $data["aktiv"];
 
+    echo $isTimeSet;
+    echo $aktiv;
+    echo $isTimeSet;
+
+
+    // if ($aktiv == 1) {
+    //     $aktiv = "true";
+    // } else {
+    //     $aktiv = "false";
+    // }
+    // if ($isTimeSet == 1) {
+    //     $isTimeSet = "true";
+    // } else {
+    //     $isTimeSet = "false";
+    // }
+    // if ($imageSet == 1) {
+    //     $imageSet = "true";
+    // } else {
+    //     $imageSet = "false";
+    // }
+
+ 
     // SQL-Abfrage mit Prepared Statement
     $sql = "INSERT INTO card_objekte (titel, imagePath, selectedTime, isTimeSet, imageSet, aktiv, startDateTime, endDateTime) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($conn, $sql);
