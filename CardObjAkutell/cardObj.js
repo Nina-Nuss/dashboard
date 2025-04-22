@@ -32,6 +32,7 @@ class CardObj {
         this.timerSelectRange = `timerSelect${this.id}`
         this.alwaysOnBtn = `alwaysOnBtn${this.id}`
         this.selectedTime = ""
+        
         this.infoCard = `showDateInCard${this.id}`
         this.shownInCarousel = `showInCarousel${this.id}`;
         this.closeBtn = `closeBtn${this.id}`
@@ -87,7 +88,7 @@ class CardObj {
                 </ul>      
             </div>  
             <div class="form-check form-switch align-self-end "  id="${this.alwaysOnBtn}">
-                <input  class="form-check-input pl-3" type="checkbox" role="switch" onclick="cardSwitch('${this.alwaysOnBtn}')" id="flexSwitchCheckDefault" checked>
+                <input  class="form-check-input pl-3" type="checkbox" role="switch" onclick="cardSwitch('${this.alwaysOnBtn}')" id="flexSwitchCheckDefault'${this.alwaysOnBtn}'" checked>
             </div>
         </div>
     <!-- Modal structure -->

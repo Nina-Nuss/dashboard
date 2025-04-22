@@ -78,6 +78,32 @@
         })
     }
 
+
+    function updateObj(cardObj) {
+        let objSwitch = document.getElementById("alwaysOnBtn" + cardObj.id)
+        let kindObj = objSwitch.children[0]
+        if (cardObj.aktiv == true) {
+            kindObj.checked = true
+        } else {
+            kindObj.checked = false
+            console.log("false")
+            console.log(objSwitch);
+        }
+        let imageContainer = document.getElementById("imagePreview" + cardObj.id)
+        console.log(imageContainer);
+        const imgElement = document.createElement("img");
+        imgElement.classList.add("picInCard")
+        imgElement.style.width = "110%";
+        imgElement.style.borderRadius = "5px";
+        imgElement.style.marginTop = "5px"; 
+        imgElement.src = cardObj.imagePath;
+        imageContainer.appendChild(imgElement);
+
+        // kindObjImage = cardObj.imagePath
+
+     
+    }
+   
     function createCardObj() {
         selectObj("database/selectCardObj.php").then(async (data) => {
             let objList = convertCardObjForDataBase(data)
@@ -88,14 +114,13 @@
                         var cardObj = new CardObj(umgebung, obj.titel, obj.isTimeSet, obj.imagePath, obj.imageSet, obj.startDateTime, obj.endDateTime, obj.aktiv, obj.id);
                         umgebung.cardCounter = umgebung.cardCounter + 1
                         cardObj.initializeDateRangePicker()
+                        updateObj(cardObj)
+
                     }
-                
+
                 })
             });
         })
-        
-        
-    
     }
 
     function convertCardObjForDataBase(cardObjListe) {
@@ -112,7 +137,7 @@
                 startDateTime: cardObj[7],
                 endDateTime: cardObj[8]
             };
-         
+
 
             objListe.push(obj)
         });
@@ -179,12 +204,13 @@
             "&imageSet=" + cardObj.imageSet +
             "&startDateTime=" + cardObj.startDateTime +
             "&endDateTime=" + cardObj.endDateTime +
-            "&aktiv=" + cardObj.aktiv + 
-            "&selectedTime=" + cardObj.selectedTime + 
-            "&id=" + cardObj.id;  
+            "&aktiv=" + cardObj.aktiv +
+            "&selectedTime=" + cardObj.selectedTime +
+            "&id=" + cardObj.id;
 
         return prepare
     }
+
     function JavaScriptCardObj(cardObj) {
         const jsonData = {
             titel: cardObj.zugeordnet,
@@ -195,7 +221,7 @@
             endDateTime: cardObj.endDateTime,
             aktiv: cardObj.aktiv,
             selectedTime: cardObj.selectedTime,
-            id: cardObj.id  // Hinzufügen des fehlenden Schlüssels
+            id: cardObj.id // Hinzufügen des fehlenden Schlüssels
         };
         return jsonData
     }
@@ -216,6 +242,7 @@
             return null;
         }
     }
+
     function ladenUmgebung() {
         selectUmgebung.innerHTML = ``;
         // selectUmgebung.innerHTML = `<option selected>Alle Umgebungen</option>`;
@@ -224,7 +251,7 @@
             selectUmgebung.innerHTML += `<option value="${umgebung.id}">${umgebung.titel}</option>`;
 
         });
-        
+
     };
     const plusBtn = document.getElementById("plusBtn");
     const minusBtn = document.getElementById("minusBtn");
@@ -238,7 +265,7 @@
             if (selectedUmgebung != "undefined") {
                 console.log(selectedUmgebung);
                 console.log(selectedUmgebung.titel);
-                const newCardObj = new CardObj(selectedUmgebung, selectedUmgebung.titel, false, "", false, "", "", false, "");
+                const newCardObj = new CardObj(selectedUmgebung, selectedUmgebung.titel, false, "", false, "", "", true, "");
                 Umgebung.tempListForSaveCards.push(newCardObj);
                 console.log(newCardObj);
                 newCardObj.initializeDateRangePicker()
@@ -268,31 +295,37 @@
             zeigeUmgebungAn()
         }
     })
-  
+
     function cardSwitch(idBtn) {
-        const cardId = idBtn.replace('alwaysOnBtn', '');
-        const cardObj = Umgebung.findObj(cardId);
-        const calenderBtn = document.querySelector(`#${cardObj.openModalButtonId}`);
-        
-    
-        
-        if (cardObj.aktiv == false && counter == 0) {
-            // selectedUmgebung.addCardObjToAnzeige(cardObj)
-            calenderBtn.disabled = false
-            counter = counter + 1
-            console.log(counter);
-            
+        const cardId = idBtn.replace('alwaysOnBtn', ''); // Extrahiere die ID
+        const cardObj = Umgebung.findObj(cardId); // Finde das entsprechende Objekt
+        const calenderBtn = document.querySelector(`#${cardObj.openModalButtonId}`); // Hole den Kalender-Button
+        if (!cardObj) {
+            console.error(`CardObj mit ID ${cardId} nicht gefunden.`);
+            return;
+        }
+        // Umschalten des Aktiv-Status
+        if (cardObj.aktiv === false) {
+            calenderBtn.disabled = false; // Kalender-Button aktivieren
+            cardObj.aktiv = true; // Aktiv setzen
+            cardObj.update = true; // Update-Flag setzen
+            cardId.checked = true;
+            counter += 1; // Counter erhöhen
+            console.log(`CardObj aktiviert. Counter: ${counter}`);
         } else {
-         
-            cardObj.aktiv = true
-            counter = 0
-            calenderBtn.disabled = true
-            selectedUmgebung.removeObjFromList(selectedUmgebung.listAnzeige, cardObj)
-            console.log(counter);
+            cardId.checked = false;
+            cardObj.update = true; // Update-Flag setzen
+            cardObj.aktiv = false; // Deaktivieren
+            counter -= 1; // Counter verringern
+            calenderBtn.disabled = true; // Kalender-Button deaktivieren
+            selectedUmgebung.removeObjFromList(selectedUmgebung.listAnzeige, cardObj); // Aus der Anzeige entfernen
+            console.log(`CardObj deaktiviert. Counter: ${counter}`);
         }
 
-        console.log(cardObj.aktiv);
+        // Debugging: Zeige den aktuellen Status von cardObj.aktiv
+        console.log(`Aktueller Status von cardObj.aktiv: ${cardObj.aktiv}`);
     }
+
     document.getElementById("saveBtn").addEventListener("click", function() {
         alert("Daten werden gespeichert")
         saveTempAddDatabase()
@@ -308,7 +341,7 @@
         });
     });
 
-    function saveTempAddDatabase(){
+    function saveTempAddDatabase() {
         Umgebung.tempListForSaveCards.forEach(cardObj => {
             console.log(cardObj);
             insertDatabase(cardObj)
@@ -389,17 +422,17 @@
                     selectedUmgebung.tempListForDeleteCards.push(cardObj);
                     console.log("checkInn");
                     console.log(cardObj.id);
-                  
+
                 } else {
                     selectedUmgebung.removeObjFromList(selectedUmgebung.tempListForDeleteCards, cardObj);
                     console.log("checkout");
-              
+
                 }
             });
         });
     }
 
-    function saveCardObj(){
+    function saveCardObj() {
         umgebung.allCardList.forEach(cardObjlist => {
             cardObjlist.forEach(cardObj => {
                 console.log(cardObj);
@@ -580,8 +613,6 @@
         }
         return
     }
-
-  
 </script>
 
 </html>
