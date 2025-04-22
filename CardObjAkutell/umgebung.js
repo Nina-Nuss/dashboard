@@ -21,7 +21,7 @@ class Umgebung {
         this.tempListForDeleteCards = [];
         this.htmlCardObjList = [];
         this.listAnzeige = [];
-
+        this.umgebungsBodyList = [];
         //-------------------------------------
         this.htmlUmgebungsBody = `umgebungsBody${this.id}`;
         this.ladeUmgebung(this.htmlUmgebungsBody);
@@ -29,6 +29,8 @@ class Umgebung {
         Umgebung.ipList.push(this.ipAdresse);
         Umgebung.allCardList.push(this.cardObjList);
         Umgebung.umgebungsListe.push(this);
+
+
     }
     addCardObjs(cardObj) {
         this.cardObjList.push(cardObj);

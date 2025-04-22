@@ -15,6 +15,7 @@ class CardObj {
         this.aktiv = aktiv //true or false
         //-------------------------------------
     
+        
         //HTMLOBJEKTE-------------------------
         this.deleteBtn = `deleteBtn${this.id}`
         this.imagePreviewId = `imagePreview${this.id}`;
@@ -32,7 +33,7 @@ class CardObj {
         this.timerSelectRange = `timerSelect${this.id}`
         this.alwaysOnBtn = `alwaysOnBtn${this.id}`
         this.selectedTime = ""
-        
+
         this.infoCard = `showDateInCard${this.id}`
         this.shownInCarousel = `showInCarousel${this.id}`;
         this.closeBtn = `closeBtn${this.id}`

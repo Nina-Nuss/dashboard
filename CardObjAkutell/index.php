@@ -66,12 +66,12 @@
         executeDeleteNull();
         const resultUmgebung = selectObj("database/selectUmgebung.php").then(async (data) => {
             var HauptUmgebungsObj = new Umgebung(0, 0, "Alle Schemas");
-            var selectedUmgebung = HauptUmgebungsObj;
+
             data.forEach(umgebung => {
                 console.log(umgebung);
                 var umgebungObj = new Umgebung(umgebung[0], umgebung[2], umgebung[1]);
             })
-
+            var selectedUmgebung = Umgebung.umgebungsListe[1];
         }).then(() => {
             ladenUmgebung();
             createCardObj();
@@ -91,19 +91,22 @@
         }
         let imageContainer = document.getElementById("imagePreview" + cardObj.id)
         console.log(imageContainer);
+        if (cardObj.imagePath == "") {
+            console.log("imageContainer ist null")
+            return
+        }
         const imgElement = document.createElement("img");
         imgElement.classList.add("picInCard")
         imgElement.style.width = "110%";
-        imgElement.style.borderRadius = "5px";
-        imgElement.style.marginTop = "5px"; 
+
         imgElement.src = cardObj.imagePath;
         imageContainer.appendChild(imgElement);
 
         // kindObjImage = cardObj.imagePath
 
-     
+
     }
-   
+
     function createCardObj() {
         selectObj("database/selectCardObj.php").then(async (data) => {
             let objList = convertCardObjForDataBase(data)
@@ -115,9 +118,7 @@
                         umgebung.cardCounter = umgebung.cardCounter + 1
                         cardObj.initializeDateRangePicker()
                         updateObj(cardObj)
-
                     }
-
                 })
             });
         })
@@ -244,13 +245,11 @@
     }
 
     function ladenUmgebung() {
-        selectUmgebung.innerHTML = ``;
-        // selectUmgebung.innerHTML = `<option selected>Alle Umgebungen</option>`;
-        console.log(Umgebung.umgebungsListe);
         Umgebung.umgebungsListe.forEach(umgebung => {
             selectUmgebung.innerHTML += `<option value="${umgebung.id}">${umgebung.titel}</option>`;
 
         });
+
 
     };
     const plusBtn = document.getElementById("plusBtn");
@@ -266,6 +265,8 @@
                 console.log(selectedUmgebung);
                 console.log(selectedUmgebung.titel);
                 const newCardObj = new CardObj(selectedUmgebung, selectedUmgebung.titel, false, "", false, "", "", true, "");
+                Umgebung.addCardObjs(newCardObj);
+
                 Umgebung.tempListForSaveCards.push(newCardObj);
                 console.log(newCardObj);
                 newCardObj.initializeDateRangePicker()
@@ -281,7 +282,6 @@
     const ersteAuswahl = selectUmgebung.querySelector('option');
 
     selectUmgebung.addEventListener("change", function() {
-
         selectedUmgebung = sucheUmgebung(selectUmgebung.value);
         console.log(selectedUmgebung);
         plusBtn.disabled = false;
@@ -292,7 +292,7 @@
         if (selectedUmgebung.id == 0) {
             showAllUmgebungen()
         } else {
-            zeigeUmgebungAn()
+            zeigeUmgebungAn(selectedUmgebung)
         }
     })
 
@@ -362,25 +362,24 @@
         }
     });
 
-    function zeigeUmgebungAn() {
-        document.querySelectorAll('[id^="umgebungsBody"]').forEach(item => {
-            let lastIndexUmgebung = item.id.replace('umgebungsBody', '');
-            console.log(lastIndexUmgebung);
-            if (lastIndexUmgebung == selectedUmgebung.id) {
-                document.getElementById(item.id).style.display = "block";
+    function zeigeUmgebungAn(selectedUmgebung) {
+        console.log(selectedUmgebung.id);
+        Umgebung.umgebungsListe.forEach(umgebung => {
+            if (umgebung.id == selectedUmgebung.id) {
+                document.getElementById("umgebungsBody" + umgebung.id).style.display = "block";
             } else {
-                document.getElementById(item.id).style.display = "none";
+                document.getElementById("umgebungsBody" + umgebung.id).style.display = "none";
             }
         });
-        document.querySelectorAll('[id^="carousel"]').forEach(item => {
-            let lastIndexUmgebung = item.id.replace('carousel', '');
-            if (lastIndexUmgebung == selectedUmgebung.id) {
-                console.log(lastIndexUmgebung);
-                document.getElementById(item.id).style.display = "block";
-            } else {
-                document.getElementById(item.id).style.display = "none";
-            }
-        });
+        // document.querySelectorAll('[id^="carousel"]').forEach(item => {
+        //     let lastIndexUmgebung = item.id.replace('carousel', '');
+        //     if (lastIndexUmgebung == selectedUmgebung.id) {
+        //         console.log(lastIndexUmgebung);
+        //         document.getElementById(item.id).style.display = "block";
+        //     } else {
+        //         document.getElementById(item.id).style.display = "none";
+        //     }
+        // });
     }
 
     function showAllUmgebungen() {
