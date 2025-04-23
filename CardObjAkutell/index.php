@@ -86,46 +86,15 @@
         }).then(() => {
             ladenUmgebung();
             setUmgebung(Umgebung.umgebungsListe[2]);
-
             disableInput(denied)
             createCardObj();
+            updateAlwaysOnButtons()
+
         })
+       
     }
 
-
-    function updateObj(cardObj) {
-        let objSwitch = document.getElementById("alwaysOnBtn" + cardObj.id)
-        let kindObj = objSwitch.children[0]
-        if (cardObj.aktiv == true) {
-            kindObj.checked = true
-        } else {
-            kindObj.checked = false
-            console.log("false")
-            console.log(objSwitch);
-        }
-        let imageContainer = document.getElementById("imagePreview" + cardObj.id)
-        console.log(imageContainer);
-        if (cardObj.imagePath == "") {
-            console.log("imageContainer ist null")
-            return
-        }
-        const imgElement = document.createElement("img");
-        imgElement.classList.add("picInCard")
-        imgElement.style.width = "110%";
-
-        imgElement.src = cardObj.imagePath;
-        imageContainer.appendChild(imgElement);
-
-        // kindObjImage = cardObj.imagePath
-
-
-    }
-
-    (function() {
-        console.log("Seite wurde geladen!");
-        // Hier kannst du beliebigen Code ausführen
-    })();
-
+   
     function createCardObj() {
         selectObj("database/selectCardObj.php").then(async (data) => {
             let objList = convertCardObjForDataBase(data)
@@ -134,10 +103,6 @@
                 Umgebung.umgebungsListe.forEach(umgebung => {
                     if (umgebung.titel == obj.titel) {
                         var cardObj = new CardObj(umgebung, obj.titel, obj.isTimeSet, obj.imagePath, obj.imageSet, obj.startDateTime, obj.endDateTime, obj.aktiv, obj.id);
-                        selectedUmgebung.addCardObjs(cardObj);
-                        umgebung.cardCounter = umgebung.cardCounter + 1
-                        cardObj.initializeDateRangePicker()
-                        updateObj(cardObj)
                     }
                 })
             });
@@ -271,13 +236,12 @@
 
     };
 
-
-
     function setUmgebung(umgebung) {
         console.log("umgebunng wurde auf: " + umgebung.titel + " gesetzt");
         selectUmgebung.value = umgebung.id;
         selectedUmgebung = umgebung;
         zeigeUmgebungAn(umgebung)
+        updateAnzeigeCounter()
     }
 
     function disableInput(container) {
@@ -295,7 +259,7 @@
     plusBtn.addEventListener("click", function() {
         let currentCounter = parseInt(counter.innerHTML);
         if (currentCounter < 5) {
-            if (selectedUmgebung != "undefined") {
+            if (checkSelectedUmgebung()) {
                 console.log(selectedUmgebung);
                 console.log(selectedUmgebung.titel);
                 var newId = createID()
@@ -304,9 +268,7 @@
                 console.log(selectedUmgebung);
                 Umgebung.tempListForSaveCards.push(newCardObj);
                 console.log(newCardObj);
-                newCardObj.initializeDateRangePicker()
-                selectedUmgebung.cardCounter =  selectedUmgebung.cardCounter + 1
-                counter.innerHTML = currentCounter + 1;
+                updateAnzeigeCounter()
             }
         } else {
             return
@@ -373,6 +335,29 @@
         console.log(`Aktueller Status von cardObj.aktiv: ${cardObj.aktiv}`);
     }
 
+    function updateAlwaysOnButtons() {
+        console.log("updateAlwaysOnButtons wurde aufgerufen");
+        
+        // Hole alle Elemente mit einer ID, die mit "alwaysOnBtn" beginnt
+        const alwaysOnButtons = document.querySelectorAll('[id^="alwaysOnBtn"]');
+        alwaysOnButtons.forEach(button => {
+            // Hole die ID des Buttons
+            const id = button.id.replace('alwaysOnBtn', ''); // Extrahiere die ID
+            const cardObj = Umgebung.findObj(id); // Finde das entsprechende Objekt
+            console.log(`ID: ${id}, cardObj:`, cardObj); // Debugging-Ausgabe
+            
+            
+            if (cardObj && cardObj.aktiv === true) {
+                button.checked = true; // Setze die Checkbox auf true
+                console.log(`Checkbox für alwaysOnBtn${id} wurde aktiviert.`);
+            } else {
+                button.checked = false; // Setze die Checkbox auf false
+                console.log(`Checkbox für alwaysOnBtn${id} wurde deaktiviert.`);
+            }
+        });
+    }
+
+
     document.getElementById("saveBtn").addEventListener("click", function() {
         alert("Daten werden gespeichert")
         saveTempAddDatabase()
@@ -397,17 +382,25 @@
     }
 
     function updateAnzeigeCounter() {
-        var currentlength = lengthListCardObj(selectedUmgebung);
-        console.log(currentlength);
-        counter.innerHTML = currentlength;
+        if (checkSelectedUmgebung()) {
+            var currentlength = selectedUmgebung.lengthListCardObj();
+            console.log("aktuelle länge: " + currentlength);
+            counter.innerHTML = currentlength;
+        }
     }
 
     minusBtn.addEventListener("click", function() {
         console.log("minus");
-        if (selectedUmgebung != "") {
-            checkBoxShow();
-        }
+        checkBoxShow();
     });
+
+    function checkSelectedUmgebung() {
+        if (!selectedUmgebung || selectedUmgebung === "undefined") {
+            console.error("Keine Umgebung ausgewählt!");
+            return false; // Gibt false zurück, um anzuzeigen, dass die Umgebung nicht definiert ist
+        }
+        return true; // Gibt true zurück, wenn `selectedUmgebung` definiert ist
+    }
 
     function zeigeUmgebungAn(selectedUmgebung) {
         console.log(selectedUmgebung.id);
@@ -558,10 +551,6 @@
         return length
     }
 
-    function lengthListCardObj(umgebung) {
-        var length = umgebung.cardObjList.length
-        return length
-    }
 
     //Ab hie geht es mit dem CardObj ansich weiter
     function setupImagePicker(previewId, modalImageId, inputId, formID) {
@@ -651,7 +640,7 @@
             aktuellesObj.startDateTime = ``;
             aktuellesObj.endDateTime = ``;
             aktuellesObj.selectedTime = selectedValue
-            if (selectedUmgebung != "undefined") {
+            if (checkSelectedUmgebung()) {
                 selectedUmgebung.removeObjFromList(selectedUmgebung.cardObjList, aktuellesObj)
             }
             select.disabled = true

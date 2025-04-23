@@ -26,24 +26,17 @@ class Umgebung {
         //-------------------------------------
         this.htmlUmgebungsBody = `umgebungsBody${this.id}`;
         this.ladeUmgebung(this.htmlUmgebungsBody);
-
         Umgebung.ipList.push(this.ipAdresse);
         Umgebung.allCardList.push(this.cardObjList);
         Umgebung.umgebungsListe.push(this);
     }
     addCardObjs(cardObj) {
         this.cardObjList.push(cardObj);
-
     }
     addCardObjToAnzeige(cardObj) {
         if (!this.listAnzeige.some(e => e.id == cardObj.id)) {
             this.listAnzeige.push(cardObj);
         }
-    }
-    static showCardObjList() {
-        this.cardObjList.forEach(cardObj => {
-            console.log(cardObj);
-        });
     }
     removeObjFromList(list, obj) {
         var index = list.findIndex(item => item.id === obj.id);
@@ -57,12 +50,21 @@ class Umgebung {
             <div id="${htmlUmgebungsBody}"></div>  
         `
     }
+    lengthListCardObj() {
+        var length = this.cardObjList.length
+        return length
+    }
     static loadAllCardObj() {
         Umgebung.allCardList.forEach(cardList => {
             cardList.forEach(cardObj => {
                 cardObj.htmlUmgebungsBody(cardObj.umgebung);
 
             });
+        });
+    }
+    static showCardObjList() {
+        this.cardObjList.forEach(cardObj => {
+            console.log(cardObj);
         });
     }
     static addObjToList(list, obj) {
@@ -86,8 +88,6 @@ class Umgebung {
         console.warn(`Objekt mit ID ${id} nicht gefunden.`);
         return null; // Rückgabe von null, wenn kein Objekt gefunden wurde
     }
-
-
     //ab hier geht es zur Carousel Logik weiter  
     static async carouselLeeren() {
         while (true) {
@@ -99,12 +99,10 @@ class Umgebung {
             console.log('Carousel geleert...');
         }
     }
-
     async moveToNextPic(cardObj) {
         await wait(cardObj.selectedTime);
         this.ci = (this.ci + 1) % this.listAnzeige.length;
     }
-
     static async repeatUpdateCarousel(umgebungsObj) {
         var carouselInner = document.querySelector(`#${umgebungsObj.carousel}`);
         carouselInner.innerHTML = '';

@@ -33,24 +33,26 @@ class CardObj {
         this.timerSelectRange = `timerSelect${this.id}`
         this.alwaysOnBtn = `alwaysOnBtn${this.id}`
         this.selectedTime = ""
-
+        this.cardObjekte = `cardObjekt${this.id}`
         this.infoCard = `showDateInCard${this.id}`
         this.shownInCarousel = `showInCarousel${this.id}`;
         this.closeBtn = `closeBtn${this.id}`
         this.sumbitBtnID = `submit${this.id}`;
         this.formID = `formID${this.id}`
         //-------------------------------------    
-    
+      
         this.htmlKonstruktObjBody(umgebung)
+        this.updateObj()
+        this.initializeDateRangePicker()
         umgebung.addCardObjs(this)
+      
         Umgebung.allCardsInOneList.push(this)
 
     }
     htmlKonstruktObjBody(umgebung) {
         var htmlUmgebungsBody = document.getElementById(umgebung.htmlUmgebungsBody);
-      
         htmlUmgebungsBody.innerHTML += `
-        <div id="cardObjekt${this.id}" class="card m-1" style="width: 10rem;" >
+        <div id="${this.cardObjekte}" class="card m-1" style="width: 10rem;" >
             <div class="position-absolute form-check-d d-none">
                 <input class="form-check-input" type="checkbox" value="" id="${this.deleteBtn}">
             </div>
@@ -90,8 +92,8 @@ class CardObj {
                     <label class="p-0 d-flex justify-content-center align-items-center " id="${this.infoCard}"></label>
                 </ul>      
             </div>  
-            <div class="form-check form-switch align-self-end "  id="${this.alwaysOnBtn}">
-                <input  class="form-check-input pl-3" type="checkbox" role="switch" onclick="cardSwitch('${this.alwaysOnBtn}')" id="flexSwitchCheckDefault'${this.alwaysOnBtn}'" checked>
+            <div class="form-check form-switch align-self-end ">
+                <input  class="form-check-input pl-3" type="checkbox" role="switch" onclick="cardSwitch('${this.alwaysOnBtn}')" id="${this.alwaysOnBtn}">
             </div>
         </div>
     <!-- Modal structure -->
@@ -113,10 +115,33 @@ class CardObj {
     `;
     }
     removeHtmlElement() {
-        const element = document.getElementById("cardObjekt" + this.id);
+        const element = document.getElementById(this.cardObjekte);
         if (element) {
             element.remove();
         }
+    }
+    updateObj() {
+        var objSwitch = document.getElementById(this.alwaysOnBtn)
+        if (this.aktiv == true) {
+            objSwitch.checked = true
+            console.log(objSwitch.checked);
+            
+        } else {
+            objSwitch.checked = false
+ 
+            console.log(objSwitch.checked);
+        }
+        let imageContainer = document.getElementById("imagePreview" + this.id)
+  
+        if (this.imagePath == "") {
+            return
+        }
+        const imgElement = document.createElement("img");
+        imgElement.classList.add("picInCard")
+        imgElement.style.width = "110%";
+        imgElement.src = this.imagePath;
+        imageContainer.appendChild(imgElement);
+        // kindObjImage = cardObj.imagePath
     }
     initializeDateRangePicker() {
         $(document).on('click', 'button[id^="openModal"]', function() {
