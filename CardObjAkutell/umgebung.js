@@ -7,6 +7,7 @@ class Umgebung {
     static ipList = [];
     static nameList = [];
     static tempListForSaveCards = [];
+    static allCardsInOneList = [];
     constructor(id, ipAdresse, titel) {
         this.id = id;
         this.cardCounter = 0;
@@ -25,28 +26,20 @@ class Umgebung {
         //-------------------------------------
         this.htmlUmgebungsBody = `umgebungsBody${this.id}`;
         this.ladeUmgebung(this.htmlUmgebungsBody);
-       
+
         Umgebung.ipList.push(this.ipAdresse);
         Umgebung.allCardList.push(this.cardObjList);
         Umgebung.umgebungsListe.push(this);
-
-
     }
     addCardObjs(cardObj) {
         this.cardObjList.push(cardObj);
+
     }
     addCardObjToAnzeige(cardObj) {
         if (!this.listAnzeige.some(e => e.id == cardObj.id)) {
             this.listAnzeige.push(cardObj);
         }
     }
-    static createCardObj(umgebung) {
-        Umgebung.cardObjList.forEach(cardObj => {
-            var cardObj = new CardObj(umgebung);
-            console.log(cardObj);
-        });
-    }
-
     static showCardObjList() {
         this.cardObjList.forEach(cardObj => {
             console.log(cardObj);
@@ -63,7 +56,6 @@ class Umgebung {
         rowForCards.innerHTML += `
             <div id="${htmlUmgebungsBody}"></div>  
         `
-       
     }
     static loadAllCardObj() {
         Umgebung.allCardList.forEach(cardList => {
@@ -80,16 +72,22 @@ class Umgebung {
         }
     }
     static findObj(id) {
-        for (let umgebung of Umgebung.umgebungsListe) {
-            var number = extractNumberFromString(id)
-            let cardObj = umgebung.cardObjList.find(obj => obj.id == number);
-            if (cardObj) {
-                cardObj.update = true;
-                return cardObj;
+        const number = extractNumberFromString(id); // Extrahiere die ID
+        console.log(`ID: ${number}`);
+        
+        for (const cardList of Umgebung.allCardList) {
+            for (const cardObj of cardList) {
+                if (cardObj.id == number) {
+                    cardObj.update = true;
+                    return cardObj; // Rückgabe des gefundenen Objekts
+                }
             }
         }
-        return null;
+        console.warn(`Objekt mit ID ${id} nicht gefunden.`);
+        return null; // Rückgabe von null, wenn kein Objekt gefunden wurde
     }
+
+
     //ab hier geht es zur Carousel Logik weiter  
     static async carouselLeeren() {
         while (true) {

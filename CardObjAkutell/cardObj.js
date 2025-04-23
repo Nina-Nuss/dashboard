@@ -40,15 +40,17 @@ class CardObj {
         this.sumbitBtnID = `submit${this.id}`;
         this.formID = `formID${this.id}`
         //-------------------------------------    
-
+    
         this.htmlKonstruktObjBody(umgebung)
         umgebung.addCardObjs(this)
+        Umgebung.allCardsInOneList.push(this)
+
     }
     htmlKonstruktObjBody(umgebung) {
         var htmlUmgebungsBody = document.getElementById(umgebung.htmlUmgebungsBody);
-        console.log(umgebung); 
+      
         htmlUmgebungsBody.innerHTML += `
-        <div class="card m-1" style="width: 10rem;" >
+        <div id="cardObjekt${this.id}" class="card m-1" style="width: 10rem;" >
             <div class="position-absolute form-check-d d-none">
                 <input class="form-check-input" type="checkbox" value="" id="${this.deleteBtn}">
             </div>
@@ -111,7 +113,7 @@ class CardObj {
     `;
     }
     removeHtmlElement() {
-        const element = document.getElementById(this.id);
+        const element = document.getElementById("cardObjekt" + this.id);
         if (element) {
             element.remove();
         }

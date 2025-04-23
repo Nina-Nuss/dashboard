@@ -49,7 +49,7 @@
         <button id="saveBtn" type="button" class="btn btn-success d-block">save</button>
     </div>
     <h2 id="titelUmgebung"></h2>
-    <div class="container d-flex">
+    <div class="container d-flex" id="umgebungsContainer">
         <div id="rowForCards" class="col-4 p-2"><!-- bild Obj -->
 
         </div>
@@ -61,7 +61,18 @@
     let pushDelete = false
     let json;
 
+    var selectUmgebung = document.getElementById("selectUmgebung");
+    const deleteBtnForCards = document.getElementById("deleteBtnForCards");
+    const UmgebungsTitel = document.getElementById("titelUmgebung")
+    const ersteAuswahl = selectUmgebung.querySelector('option');
+    const denied = document.getElementById("umgebungsContainer");
     var cardAnzeige = document.getElementById("rowForCards")
+    const plusBtn = document.getElementById("plusBtn");
+    const minusBtn = document.getElementById("minusBtn");
+    let counter = document.getElementById("counter");
+
+
+
     window.onload = function() {
         executeDeleteNull();
         const resultUmgebung = selectObj("database/selectUmgebung.php").then(async (data) => {
@@ -74,6 +85,9 @@
             var selectedUmgebung = Umgebung.umgebungsListe[1];
         }).then(() => {
             ladenUmgebung();
+            setUmgebung(Umgebung.umgebungsListe[2]);
+
+            disableInput(denied)
             createCardObj();
         })
     }
@@ -107,6 +121,11 @@
 
     }
 
+    (function() {
+        console.log("Seite wurde geladen!");
+        // Hier kannst du beliebigen Code ausführen
+    })();
+
     function createCardObj() {
         selectObj("database/selectCardObj.php").then(async (data) => {
             let objList = convertCardObjForDataBase(data)
@@ -115,6 +134,7 @@
                 Umgebung.umgebungsListe.forEach(umgebung => {
                     if (umgebung.titel == obj.titel) {
                         var cardObj = new CardObj(umgebung, obj.titel, obj.isTimeSet, obj.imagePath, obj.imageSet, obj.startDateTime, obj.endDateTime, obj.aktiv, obj.id);
+                        selectedUmgebung.addCardObjs(cardObj);
                         umgebung.cardCounter = umgebung.cardCounter + 1
                         cardObj.initializeDateRangePicker()
                         updateObj(cardObj)
@@ -176,7 +196,7 @@
             console.error("Fehler:", error);
         }
     }
-    async function deleteCardObj(cardObjId) {
+    async function deleteCardObjDataBase(cardObjId) {
         try {
             const response = await fetch("database/deleteCardObj.php", {
                 method: "POST",
@@ -247,16 +267,30 @@
     function ladenUmgebung() {
         Umgebung.umgebungsListe.forEach(umgebung => {
             selectUmgebung.innerHTML += `<option value="${umgebung.id}">${umgebung.titel}</option>`;
-
         });
 
-
     };
-    const plusBtn = document.getElementById("plusBtn");
-    const minusBtn = document.getElementById("minusBtn");
-    let counter = document.getElementById("counter");
 
 
+
+    function setUmgebung(umgebung) {
+        console.log("umgebunng wurde auf: " + umgebung.titel + " gesetzt");
+        selectUmgebung.value = umgebung.id;
+        selectedUmgebung = umgebung;
+        zeigeUmgebungAn(umgebung)
+    }
+
+    function disableInput(container) {
+        if (selectUmgebung.value == 0) {
+            console.log("readonly wurde aufgerufen");
+            container.style.pointerEvents = "none"; // Deaktiviert alle Interaktionen
+            container.style.opacity = "0.7"; // Optional: Reduziert die Sichtbarkeit
+        } else {
+            console.log("readonly wurde deaktiviert");
+            container.style.pointerEvents = "auto"; // Aktiviert alle Interaktionen
+            container.style.opacity = "1"; // Optional: Setzt die Sichtbarkeit zurück
+        }
+    }
 
     plusBtn.addEventListener("click", function() {
         let currentCounter = parseInt(counter.innerHTML);
@@ -264,22 +298,33 @@
             if (selectedUmgebung != "undefined") {
                 console.log(selectedUmgebung);
                 console.log(selectedUmgebung.titel);
-                const newCardObj = new CardObj(selectedUmgebung, selectedUmgebung.titel, false, "", false, "", "", true, "");
-                Umgebung.addCardObjs(newCardObj);
-
+                var newId = createID()
+                const newCardObj = new CardObj(selectedUmgebung, selectedUmgebung.titel, false, "", false, "", "", true, newId);
+                selectedUmgebung.addCardObjs(newCardObj);
+                console.log(selectedUmgebung);
                 Umgebung.tempListForSaveCards.push(newCardObj);
                 console.log(newCardObj);
                 newCardObj.initializeDateRangePicker()
+                selectedUmgebung.cardCounter =  selectedUmgebung.cardCounter + 1
                 counter.innerHTML = currentCounter + 1;
             }
         } else {
             return
         }
     });
-    var selectUmgebung = document.getElementById("selectUmgebung");
-    const deleteBtnForCards = document.getElementById("deleteBtnForCards");
-    const UmgebungsTitel = document.getElementById("titelUmgebung")
-    const ersteAuswahl = selectUmgebung.querySelector('option');
+
+    function createID() {
+        const cardObjIDList = Umgebung.allCardsInOneList
+            .map(cardObj => parseInt(cardObj.id)) // Konvertiere alle IDs in Zahlen
+            .filter(id => !isNaN(id)); // Entferne ungültige Werte (NaN)
+        console.log("Gefilterte ID-Liste:", cardObjIDList);
+        if (cardObjIDList.length === 0) {
+            console.error("Die Liste ist leer. Es gibt keine gültigen IDs.");
+            return 1; // Standardwert, falls keine IDs vorhanden sind
+        }
+        const groessteZahl = Math.max(...cardObjIDList);
+        return groessteZahl + 1;
+    }
 
     selectUmgebung.addEventListener("change", function() {
         selectedUmgebung = sucheUmgebung(selectUmgebung.value);
@@ -291,14 +336,18 @@
 
         if (selectedUmgebung.id == 0) {
             showAllUmgebungen()
+            disableInput(denied)
         } else {
             zeigeUmgebungAn(selectedUmgebung)
+            disableInput(denied)
         }
     })
 
     function cardSwitch(idBtn) {
+        console.log(idBtn);
         const cardId = idBtn.replace('alwaysOnBtn', ''); // Extrahiere die ID
         const cardObj = Umgebung.findObj(cardId); // Finde das entsprechende Objekt
+
         const calenderBtn = document.querySelector(`#${cardObj.openModalButtonId}`); // Hole den Kalender-Button
         if (!cardObj) {
             console.error(`CardObj mit ID ${cardId} nicht gefunden.`);
@@ -310,13 +359,11 @@
             cardObj.aktiv = true; // Aktiv setzen
             cardObj.update = true; // Update-Flag setzen
             cardId.checked = true;
-            counter += 1; // Counter erhöhen
             console.log(`CardObj aktiviert. Counter: ${counter}`);
         } else {
             cardId.checked = false;
             cardObj.update = true; // Update-Flag setzen
             cardObj.aktiv = false; // Deaktivieren
-            counter -= 1; // Counter verringern
             calenderBtn.disabled = true; // Kalender-Button deaktivieren
             selectedUmgebung.removeObjFromList(selectedUmgebung.listAnzeige, cardObj); // Aus der Anzeige entfernen
             console.log(`CardObj deaktiviert. Counter: ${counter}`);
@@ -409,6 +456,12 @@
         deleteBtn()
     }
 
+    function updateCounter() {
+        var currentlength = lengthListUmgebung();
+        console.log(currentlength);
+        counter.innerHTML = currentlength;
+    }
+
     function deleteBtn() {
         const deleteBtns = document.querySelectorAll('.form-check-d input[type="checkbox"]');
         deleteBtns.forEach(deleteBtn => {
@@ -425,7 +478,6 @@
                 } else {
                     selectedUmgebung.removeObjFromList(selectedUmgebung.tempListForDeleteCards, cardObj);
                     console.log("checkout");
-
                 }
             });
         });
@@ -448,7 +500,7 @@
             cardObj.removeHtmlElement();
             selectedUmgebung.removeObjFromList(selectedUmgebung.cardObjList, cardObj);
             selectedUmgebung.removeObjFromList(selectedUmgebung.listAnzeige, cardObj);
-            deleteCardObj(cardObj.id)
+            deleteCardObjDataBase(cardObj.id)
         });
 
         selectedUmgebung.tempListForDeleteCards = [];
