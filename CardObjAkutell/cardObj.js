@@ -45,9 +45,7 @@ class CardObj {
         this.updateObj()
         this.initializeDateRangePicker()
         umgebung.addCardObjs(this)
-      
         Umgebung.allCardsInOneList.push(this)
-
     }
     htmlKonstruktObjBody(umgebung) {
         var htmlUmgebungsBody = document.getElementById(umgebung.htmlUmgebungsBody);

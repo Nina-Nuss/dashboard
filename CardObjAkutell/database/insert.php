@@ -1,8 +1,15 @@
 <?php
 include("connection.php");
 
+$file = file_get_contents('php://input');
+
+
+
+
 // Abrufen der JSON-Daten aus der Anfrage
-$data = json_decode(file_get_contents('php://input'), associative: true);
+$data = json_decode($file, associative: true);
+
+
 
 echo json_encode($data);
 

@@ -1,0 +1,38 @@
+[
+  {
+    "id": 0,
+    "cardCounter": 0,
+    "ipAdresse": 0,
+    "titel": "Alle Schemas",
+    "cardObjList": [],
+    "tempListForDeleteCards": [],
+    "htmlCardObjList": [],
+    "listAnzeige": [],
+    "umgebungsBodyList": [],
+    "htmlUmgebungsBody": "umgebungsBody0"
+  },
+  {
+    "id": "1",
+    "cardCounter": 0,
+    "ipAdresse": "1.2.3",
+    "titel": "empfang",
+    "cardObjList": [],
+    "tempListForDeleteCards": [],
+    "htmlCardObjList": [],
+    "listAnzeige": [],
+    "umgebungsBodyList": [],
+    "htmlUmgebungsBody": "umgebungsBody1"
+  },
+  {
+    "id": "2",
+    "cardCounter": 0,
+    "ipAdresse": "4.5.6",
+    "titel": "aula",
+    "cardObjList": [],
+    "tempListForDeleteCards": [],
+    "htmlCardObjList": [],
+    "listAnzeige": [],
+    "umgebungsBodyList": [],
+    "htmlUmgebungsBody": "umgebungsBody2"
+  }
+]

@@ -4,6 +4,9 @@ include("connection.php");
 // Abrufen der JSON-Daten aus der Anfrage
 $data = json_decode(file_get_contents('php://input'), associative: true);
 
+
+
+
 // Überprüfen, ob die Daten korrekt abgerufen wurden
 if (isset($data['id'])) {
     $id = $data['id'];

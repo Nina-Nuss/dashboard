@@ -71,8 +71,6 @@
     const minusBtn = document.getElementById("minusBtn");
     let counter = document.getElementById("counter");
 
-
-
     window.onload = function() {
         executeDeleteNull();
         const resultUmgebung = selectObj("database/selectUmgebung.php").then(async (data) => {
@@ -90,11 +88,93 @@
             createCardObj();
             updateAlwaysOnButtons()
 
+
         })
-       
+        //testbereich
+
+        setTimeout(() => {
+            console.log("Funktion wird nach window.onload ausgeführt");
+            console.log(Umgebung.allCardsInOneList.length);
+            createJsonFile(Umgebung.allCardsInOneList);
+            console.log(Umgebung.allCardList);
+            saveToLocalStorage("Umgebungen", Umgebung.umgebungsListe);
+            const obj = getJsonData("test")
+            obj.forEach(obj => {
+                console.log(obj);
+            });
+
+        }, 1000); // V
+
+    }
+    function createJsonObjForJsonFile() {
+        let jsonObjUmgebung = []
+        let jsonObjCardObj = []
+        Umgebung.allCardsInOneList.forEach(cardObj => {
+            var obj = {
+                id: cardObj.id,
+                titel: cardObj.zugeordnet,
+                imagePath: cardObj.imagePath,
+                selectedTime: cardObj.selectedTime,
+                isTimeSet: cardObj.isTimeSet, //True or false
+                imageSet: cardObj.imageSet, //True or false
+                aktiv: cardObj.aktiv, //True or false
+                startDateTime: cardObj.startDateTime,
+                endDateTime: cardObj.endDateTime
+            };
+            jsonObj.push(obj)
+        });
+
+        Umgebung.umgebungsListe.forEach(umgebung => {
+            var obj = {
+                id: umgebung.id,
+                titel: umgebung.titel,
+                cardObjList: umgebung.cardObjList,
+                listAnzeige: umgebung.listAnzeige
+            };
+            jsonObjUmgebung.push(obj)
+        });
+
+
+        return jsonObj
     }
 
-   
+
+    async function createJsonFile(jsonData) {
+        if (jsonData.length === 0) {
+            console.error("jsonData ist leer!");
+            return;
+        } else {
+            const json = JSON.stringify(jsonData, null, 2);
+            console.log(json);
+            
+        }
+        try {
+            const response = await fetch("json/sendToJson.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: json
+            });
+            const responseData = await response.json();
+            console.log("JSON-Daten gespeichert:", responseData);
+        } catch (error) {
+            console.error("Fehler beim Speichern der JSON-Daten:", error);
+        }
+    }
+    console.log(Umgebung.allCardsInOneList.length);
+
+    function saveToLocalStorage(key, jsonData) {
+        const jsonString = JSON.stringify(jsonData, null, 2); // Formatierung für bessere Lesbarkeit
+        localStorage.setItem(key, jsonString);
+    }
+
+    function getJsonData(key) {
+        const jsonData = localStorage.getItem(key);
+        const obj = JSON.parse(jsonData);
+        return obj
+    }
+
     function createCardObj() {
         selectObj("database/selectCardObj.php").then(async (data) => {
             let objList = convertCardObjForDataBase(data)
@@ -106,6 +186,7 @@
                     }
                 })
             });
+
         })
     }
 
@@ -123,8 +204,6 @@
                 startDateTime: cardObj[7],
                 endDateTime: cardObj[8]
             };
-
-
             objListe.push(obj)
         });
         return objListe
@@ -134,10 +213,11 @@
         try {
             console.log("updateDataBase wurde aufgerufen");
             const jsObj = JavaScriptCardObj(cardObj);
+            const createJsObj = JSON.stringify(jsObj)
             console.log(jsObj);
             var result = await fetch("database/update.php", {
                 method: "POST",
-                body: JSON.stringify(jsObj)
+                body: createJsObj
             });
             const responseText = await result.text();
             console.log("Antwort vom Server:", responseText);
@@ -145,6 +225,10 @@
             console.error("Fehler in updateDataBase:", error);
         }
     }
+
+
+
+
     async function executeDeleteNull() {
         try {
             const response = await fetch("database/deleteNull.php", {
@@ -209,6 +293,7 @@
             selectedTime: cardObj.selectedTime,
             id: cardObj.id // Hinzufügen des fehlenden Schlüssels
         };
+
         return jsonData
     }
     async function selectObj(select) {
@@ -227,6 +312,8 @@
             console.error("Fehler beim Laden der Umgebung:", error);
             return null;
         }
+
+
     }
 
     function ladenUmgebung() {
@@ -280,6 +367,7 @@
             .map(cardObj => parseInt(cardObj.id)) // Konvertiere alle IDs in Zahlen
             .filter(id => !isNaN(id)); // Entferne ungültige Werte (NaN)
         console.log("Gefilterte ID-Liste:", cardObjIDList);
+        console.log(cardObjIDList)
         if (cardObjIDList.length === 0) {
             console.error("Die Liste ist leer. Es gibt keine gültigen IDs.");
             return 1; // Standardwert, falls keine IDs vorhanden sind
@@ -337,7 +425,7 @@
 
     function updateAlwaysOnButtons() {
         console.log("updateAlwaysOnButtons wurde aufgerufen");
-        
+
         // Hole alle Elemente mit einer ID, die mit "alwaysOnBtn" beginnt
         const alwaysOnButtons = document.querySelectorAll('[id^="alwaysOnBtn"]');
         alwaysOnButtons.forEach(button => {
@@ -345,8 +433,8 @@
             const id = button.id.replace('alwaysOnBtn', ''); // Extrahiere die ID
             const cardObj = Umgebung.findObj(id); // Finde das entsprechende Objekt
             console.log(`ID: ${id}, cardObj:`, cardObj); // Debugging-Ausgabe
-            
-            
+
+
             if (cardObj && cardObj.aktiv === true) {
                 button.checked = true; // Setze die Checkbox auf true
                 console.log(`Checkbox für alwaysOnBtn${id} wurde aktiviert.`);
@@ -540,6 +628,7 @@
             console.log(result);
         }
     }
+
 
     function sucheUmgebung(UmgebungsID) {
         let umgebung = Umgebung.umgebungsListe.find(umgebung => umgebung.id == UmgebungsID);
