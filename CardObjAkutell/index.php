@@ -33,13 +33,6 @@
 </head>
 
 <body>
-    <!-- <div class="d-none">
-        <button id="plusBtnU" type="button" class="btn btn-primary">Create</button>
-        <div id="counterU">0</div>
-        <button id="minusBtnU" type="button" class="btn btn-light">Select</button>
-        <button id="deleteBtnForCardsU" type="button" class="btn btn-danger d-none">-</button>
-    </div>
-     -->
     <select id="selectUmgebung" class="form-select" aria-label="Default select example"></select>
     <div class="d-flex">
         <button id="plusBtn" type="button" class="btn btn-primary">Create</button>
@@ -92,20 +85,21 @@
         })
         //testbereich
 
-        setTimeout(() => {
-            console.log("Funktion wird nach window.onload ausgeführt");
-            console.log(Umgebung.allCardsInOneList.length);
-            createJsonFile(Umgebung.allCardsInOneList);
-            console.log(Umgebung.allCardList);
-            saveToLocalStorage("Umgebungen", Umgebung.umgebungsListe);
-            const obj = getJsonData("test")
-            obj.forEach(obj => {
-                console.log(obj);
-            });
+        // setTimeout(() => {
+        //     console.log("Funktion wird nach window.onload ausgeführt");
+        //     console.log(Umgebung.allCardsInOneList.length);
+        //     createJsonFile(Umgebung.allCardsInOneList);
+        //     console.log(Umgebung.allCardList);
+        //     saveToLocalStorage("Umgebungen", Umgebung.umgebungsListe);
+        //     const obj = getJsonData("test")
+        //     obj.forEach(obj => {
+        //         console.log(obj);
+        //     });
 
-        }, 1000); // V
+        // }, 1000); // V
 
     }
+
     function createJsonObjForJsonFile() {
         let jsonObjUmgebung = []
         let jsonObjCardObj = []
@@ -146,7 +140,7 @@
         } else {
             const json = JSON.stringify(jsonData, null, 2);
             console.log(json);
-            
+
         }
         try {
             const response = await fetch("json/sendToJson.php", {
@@ -186,7 +180,6 @@
                     }
                 })
             });
-
         })
     }
 
@@ -225,10 +218,6 @@
             console.error("Fehler in updateDataBase:", error);
         }
     }
-
-
-
-
     async function executeDeleteNull() {
         try {
             const response = await fetch("database/deleteNull.php", {
@@ -397,24 +386,28 @@
         console.log(idBtn);
         const cardId = idBtn.replace('alwaysOnBtn', ''); // Extrahiere die ID
         const cardObj = Umgebung.findObj(cardId); // Finde das entsprechende Objekt
+        const checkbox = document.getElementById(idBtn);
 
-        const calenderBtn = document.querySelector(`#${cardObj.openModalButtonId}`); // Hole den Kalender-Button
+        // Überprüfen, ob das CardObj gefunden wurde
         if (!cardObj) {
             console.error(`CardObj mit ID ${cardId} nicht gefunden.`);
             return;
         }
-        // Umschalten des Aktiv-Status
-        if (cardObj.aktiv === false) {
-            calenderBtn.disabled = false; // Kalender-Button aktivieren
+
+        const calenderBtn = document.querySelector(`#${cardObj.openModalButtonId}`); // Hole den Kalender-Button
+
+        // Umschalten des Aktiv-Status basierend auf dem aktuellen Checkbox-Status
+        if (checkbox.checked) {
+            // Checkbox wurde aktiviert
+            calenderBtn.disabled = true; // Kalender-Button aktivieren
             cardObj.aktiv = true; // Aktiv setzen
             cardObj.update = true; // Update-Flag setzen
-            cardId.checked = true;
             console.log(`CardObj aktiviert. Counter: ${counter}`);
         } else {
-            cardId.checked = false;
+            // Checkbox wurde deaktiviert
             cardObj.update = true; // Update-Flag setzen
             cardObj.aktiv = false; // Deaktivieren
-            calenderBtn.disabled = true; // Kalender-Button deaktivieren
+            calenderBtn.disabled = false; // Kalender-Button deaktivieren
             selectedUmgebung.removeObjFromList(selectedUmgebung.listAnzeige, cardObj); // Aus der Anzeige entfernen
             console.log(`CardObj deaktiviert. Counter: ${counter}`);
         }
@@ -499,15 +492,6 @@
                 document.getElementById("umgebungsBody" + umgebung.id).style.display = "none";
             }
         });
-        // document.querySelectorAll('[id^="carousel"]').forEach(item => {
-        //     let lastIndexUmgebung = item.id.replace('carousel', '');
-        //     if (lastIndexUmgebung == selectedUmgebung.id) {
-        //         console.log(lastIndexUmgebung);
-        //         document.getElementById(item.id).style.display = "block";
-        //     } else {
-        //         document.getElementById(item.id).style.display = "none";
-        //     }
-        // });
     }
 
     function showAllUmgebungen() {
@@ -639,6 +623,24 @@
         var length = Umgebung.umgebungsIdList.length
         return length
     }
+
+    // let changesMade = false;
+    // document.addEventListener("input", function() {
+    //     changesMade = true;
+    // });
+
+    // window.addEventListener("beforeunload", function(event) {
+    //     if (changesMade) {
+    //         const message = "Sind Sie sicher, dass Sie die Seite verlassen möchten? Nicht gespeicherte Änderungen gehen verloren.";
+
+    //         event.preventDefault();
+    //         event.returnValue = message;
+    //         return message;
+    //     }
+    // });
+
+
+
 
 
     //Ab hie geht es mit dem CardObj ansich weiter

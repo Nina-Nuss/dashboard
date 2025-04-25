@@ -4,7 +4,7 @@ class CardObj {
 
         this.id = id;
         this.update = false;
- 
+
         //AB hier kommt alles in die Datenbank rein:
         this.zugeordnet = titel // Der Name des Aufenhaltsortes
         this.isTimeSet = isTimeSet //true or false
@@ -14,8 +14,8 @@ class CardObj {
         this.endDateTime = endDateTime //Der kalender, der die enddatum enthält
         this.aktiv = aktiv //true or false
         //-------------------------------------
-    
-        
+
+
         //HTMLOBJEKTE-------------------------
         this.deleteBtn = `deleteBtn${this.id}`
         this.imagePreviewId = `imagePreview${this.id}`;
@@ -40,10 +40,10 @@ class CardObj {
         this.sumbitBtnID = `submit${this.id}`;
         this.formID = `formID${this.id}`
         //-------------------------------------    
-      
+
         this.htmlKonstruktObjBody(umgebung)
-        this.updateObj()
         this.initializeDateRangePicker()
+        this.updateObj()
         umgebung.addCardObjs(this)
         Umgebung.allCardsInOneList.push(this)
     }
@@ -78,7 +78,7 @@ class CardObj {
             <!-- rangeslider -->
         </div>  
         <div class="card-body d-flex align-items-center justify-content-between p-2 gap-2">
-            <button id="${this.openModalButtonId}" class="btn btn-light btn-sm modalBtn" data-toggle="modal" disabled>
+            <button id="${this.openModalButtonId}" class="btn btn-light btn-sm modalBtn" data-toggle="modal">
                 <span class="material-symbols-outlined">date_range</span>
             </button>
            
@@ -119,30 +119,62 @@ class CardObj {
         }
     }
     updateObj() {
-        var objSwitch = document.getElementById(this.alwaysOnBtn)
-        if (this.aktiv == true) {
-            objSwitch.checked = true
-            console.log(objSwitch.checked);
-            
+        // Checkbox-Status aktualisieren
+        const objSwitch = document.getElementById(this.alwaysOnBtn);
+
+        if (objSwitch) {
+            objSwitch.checked = this.aktiv === true;
+            console.log(`Switch ${this.alwaysOnBtn} wurde auf ${objSwitch.checked ? 'aktiv' : 'inaktiv'} gesetzt`);
+
+            // Kalender-Button aktualisieren
+            const calendarBtn = document.getElementById(this.openModalButtonId);
+            if (calendarBtn) {
+                // Wenn aktiv ist TRUE, wird der Kalender-Button DEAKTIVIERT
+                // Wenn aktiv ist FALSE, wird der Kalender-Button AKTIVIERT
+                calendarBtn.disabled = this.aktiv === true;
+                console.log(`Kalender-Button ${this.openModalButtonId} wurde ${calendarBtn.disabled ? 'deaktiviert' : 'aktiviert'}`);
+            } else {
+                console.warn(`Kalender-Button mit ID ${this.openModalButtonId} nicht gefunden`);
+            }
         } else {
-            objSwitch.checked = false
- 
-            console.log(objSwitch.checked);
+            console.warn(`Element mit ID ${this.alwaysOnBtn} nicht gefunden`);
         }
-        let imageContainer = document.getElementById("imagePreview" + this.id)
-  
-        if (this.imagePath == "") {
-            return
+
+        // Bild aktualisieren, falls vorhanden
+        const imageContainer = document.getElementById("imagePreview" + this.id);
+        if (!imageContainer) {
+            console.warn(`Bild-Container mit ID imagePreview${this.id} nicht gefunden`);
+            return;
         }
-        const imgElement = document.createElement("img");
-        imgElement.classList.add("picInCard")
-        imgElement.style.width = "110%";
-        imgElement.src = this.imagePath;
-        imageContainer.appendChild(imgElement);
-        // kindObjImage = cardObj.imagePath
+
+        // Keine Aktion erforderlich, wenn kein Bildpfad existiert
+        if (!this.imagePath || this.imagePath === "") {
+            return;
+        }
+
+        // Prüfen, ob bereits ein Bild vorhanden ist, um Duplikate zu vermeiden
+        if (imageContainer.querySelector('img')) {
+            // Bild bereits vorhanden, prüfen ob Update nötig
+            const existingImg = imageContainer.querySelector('img');
+            if (existingImg.src !== this.imagePath) {
+                existingImg.src = this.imagePath;
+            }
+        } else {
+            // Neues Bild erstellen und einfügen
+            try {
+                const imgElement = document.createElement("img");
+                imgElement.classList.add("picInCard");
+                imgElement.style.width = "110%";
+                imgElement.src = this.imagePath;
+                imgElement.alt = `Bild für ${this.zugeordnet || 'Karte'}`;
+                imageContainer.appendChild(imgElement);
+            } catch (error) {
+                console.error(`Fehler beim Hinzufügen des Bildes: ${error.message}`);
+            }
+        }
     }
     initializeDateRangePicker() {
-        $(document).on('click', 'button[id^="openModal"]', function() {
+        $(document).on('click', 'button[id^="openModal"]', function () {
             const buttonId = $(this).attr('id'); //"openModal1"
             const modalId = buttonId.replace('openModal', 'myModal'); // e.g., "myModal1"
             const aktuellesObj = Umgebung.findObj(modalId)
@@ -160,17 +192,17 @@ class CardObj {
             }
         });
         // Close the modal when the "x" button is clicked
-        $(document).on('click', '.close', function() {
+        $(document).on('click', '.close', function () {
             $(this).closest('.modal').fadeOut();
         });
         // schließt modal wenn außerhalb des modales geklickt wird
-        $(document).on('click', function(event) {
+        $(document).on('click', function (event) {
             const $target = $(event.target);
             if ($target.hasClass('modal')) { // Check if the clicked element has the "modal" class
                 $target.fadeOut();
             }
         });
-        $('button[id^="infoBtn"]').click(function() {
+        $('button[id^="infoBtn"]').click(function () {
             // Hole die ID des geklickten Elements
             var eIDtimer = $(this).attr('id');
             const aktuellesObj = Umgebung.findObj(eIDtimer)
@@ -178,7 +210,7 @@ class CardObj {
             if (aktuellesObj.imageSet == true) {
                 var eIDtimer = $(this).attr('id');
                 console.log('Die ID des Elements ist: ' + eIDtimer);
-              
+
                 let lastIndex = eIDtimer.replace('infoBtn', '');
                 // Erstelle den ID-Selektor für das zugehörige Select-Element
                 let timerselect = '#timerSelect' + lastIndex;
@@ -188,7 +220,7 @@ class CardObj {
                 $('#' + eIDtimer).css("display", "block");
             }
         });
-        $('input[id^="timerSelect"]').on('input', function() {
+        $('input[id^="timerSelect"]').on('input', function () {
             var selectedValue = $(this).val();
             console.log(selectedValue);
             selectedValue = selectedValue * 1000
@@ -218,20 +250,20 @@ class CardObj {
         });
 
         // Open Date Range Picker when the icon is clicked
-        $(document).on('click', 'span[id^="daterange-icon"]', function() {
+        $(document).on('click', 'span[id^="daterange-icon"]', function () {
             const iconID = $(this).attr('id');
             const daterangeID = iconID.replace('daterange-icon', 'daterange');
             console.log(daterangeID);
             $('#' + daterangeID).focus(); // Focus on input to trigger the picker  
         });
 
-        $('input[id^="daterange"]').ready(function() {
+        $('input[id^="daterange"]').ready(function () {
             // Entferne die Klasse von allen Elementen mit der Klasse 'drp-selected'
             $(".drp-selected").removeClass("drp-selected");
         });
 
         // Update input field and display the selected date range when a date is selected
-        $('input[id^="daterange"]').on('apply.daterangepicker', function(ev, picker) {
+        $('input[id^="daterange"]').on('apply.daterangepicker', function (ev, picker) {
             selectedDateRange = picker.startDate.format('DD-MM-YYYY HH:mm') + '  -  ' + picker.endDate.format('DD-MM-YYYY HH:mm');
             $(this).val(selectedDateRange); // Update input field
             $('#selected-daterange').text(selectedDateRange); // Display the selected date range below
@@ -269,14 +301,14 @@ class CardObj {
         });
 
         // Clear input field and display when cancel is clicked
-        $('input[id^="daterange"]').on('cancel.daterangepicker', function(ev, picker) {
+        $('input[id^="daterange"]').on('cancel.daterangepicker', function (ev, picker) {
             $(this).val(''); // Clear the input
             $('#selected-daterange').text(''); // Clear the displayed text
             selectedDateRange = ''; // Reset the variable
         });
 
         // Set today's date on button click
-        $('input[id^="daterange"]').on('show.daterangepicker', function(ev, picker) {
+        $('input[id^="daterange"]').on('show.daterangepicker', function (ev, picker) {
             let selectedrange = picker.startDate.format('DD.MM') + '  -  ' + picker.endDate.format('DD.MM');
             $(this).val(selectedrange);
         });
