@@ -1,4 +1,4 @@
-document.getElementById('loginForm').addEventListener('submit', function(event) {
+document.getElementById('loginForm').addEventListener('submit', function (event) {
     var username = document.getElementById('username').value;
     var password = document.getElementById('password').value;
 
@@ -9,11 +9,11 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     fetch("login.php").then(async (response) => {
         this.responseText = await response.text();
         var obj = JSON.parse(this.responseText);
-    
+
         obj.forEach(o => {
             anzeigebereichv.innerHTML += o + `<br>`
         });
-    
+
     });
 
 });

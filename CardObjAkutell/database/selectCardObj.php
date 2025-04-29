@@ -13,32 +13,34 @@ if (!$result) {
 $path = "../uploads";
 $absolutePath = realpath($path);
 
+
+
 if (!$absolutePath || !is_dir($absolutePath)) {
     die("Der Ordner 'uploads' existiert nicht.");
 }
 
 // Dateien im Ordner auslesen
-$dateien = array_diff(scandir($absolutePath), ['.', '..']); // Entfernt '.' und '..'
+// $dateien = array_diff(scandir($absolutePath), ['.', '..']); // Entfernt '.' und '..'
+
 
 // Tabelle für die Ergebnisse
 $unsereTabelle = [];
 
 while ($row = mysqli_fetch_assoc($result)) {
     if (isset($row['id']) && $row['id'] !== null) {
-        // Überprüfen, ob die Datei existiert
-        $fileExists = in_array($row["imagePath"], $dateien);
-
+        // Überprüfen, ob die Datei existiert       
+        echo $row["imagePath"] . "<br>";
         // Daten in das Array einfügen
         array_push($unsereTabelle, array(
-            "id" => $row["id"],
-            "titel" => $row["titel"],
-            "imagePath" => $fileExists ? $path . "/" . $row["imagePath"] : null, // Pfad setzen oder null
-            "selectedTime" => $row["selectedTime"],
-            "isTimeSet" => (bool)$row["isTimeSet"], // Cast zu Boolean
-            "imageSet" => (bool)$row["imageSet"],  // Cast zu Boolean
-            "aktiv" => (bool)$row["aktiv"],   
-            "startDateTime" => $row["startDateTime"],
-            "endDateTime" => $row["endDateTime"],
+            $row["id"],
+            $row["titel"],
+            $row["imagePath"], // Pfad setzen oder null
+            $row["selectedTime"],
+            (bool)$row["isTimeSet"], // Cast zu Boolean
+            (bool)$row["imageSet"],  // Cast zu Boolean
+            (bool)$row["aktiv"],   
+            $row["startDateTime"],
+            $row["endDateTime"],
         ));
     }
 }

@@ -42,8 +42,10 @@ class CardObj {
         //-------------------------------------    
 
         this.htmlKonstruktObjBody(umgebung)
-        this.initializeDateRangePicker()
-        this.updateObj()
+        setTimeout(() => {
+            this.updateObj();
+            this.initializeDateRangePicker()
+        }, 100);
         umgebung.addCardObjs(this)
         Umgebung.allCardsInOneList.push(this)
     }
@@ -121,27 +123,24 @@ class CardObj {
     updateObj() {
         // Checkbox-Status aktualisieren
         const objSwitch = document.getElementById(this.alwaysOnBtn);
-
-        if (objSwitch) {
-            objSwitch.checked = this.aktiv === true;
-            console.log(`Switch ${this.alwaysOnBtn} wurde auf ${objSwitch.checked ? 'aktiv' : 'inaktiv'} gesetzt`);
-
-            // Kalender-Button aktualisieren
-            const calendarBtn = document.getElementById(this.openModalButtonId);
-            if (calendarBtn) {
-                // Wenn aktiv ist TRUE, wird der Kalender-Button DEAKTIVIERT
-                // Wenn aktiv ist FALSE, wird der Kalender-Button AKTIVIERT
-                calendarBtn.disabled = this.aktiv === true;
-                console.log(`Kalender-Button ${this.openModalButtonId} wurde ${calendarBtn.disabled ? 'deaktiviert' : 'aktiviert'}`);
-            } else {
-                console.warn(`Kalender-Button mit ID ${this.openModalButtonId} nicht gefunden`);
-            }
-        } else {
-            console.warn(`Element mit ID ${this.alwaysOnBtn} nicht gefunden`);
+        const calendarBtn = document.getElementById(this.openModalButtonId);
+        console.log("edfsfdsfdsfdsfsdf");   
+        objSwitch.checked = this.aktiv;
+   
+        console.log(this);
+        
+        // Kalender-Button aktualisieren
+        console.log("kalenderbtn: " + calendarBtn.disabled);
+        console.log("switch: " +  objSwitch.checked);
+        
+        if(this.imageSet == true){
+            calendarBtn.disabled = false;
+        }else{
+            calendarBtn.disabled = true;
         }
 
-        // Bild aktualisieren, falls vorhanden
-        const imageContainer = document.getElementById("imagePreview" + this.id);
+    
+        const imageContainer = document.getElementById(this.imagePreviewId);
         if (!imageContainer) {
             console.warn(`Bild-Container mit ID imagePreview${this.id} nicht gefunden`);
             return;
@@ -151,8 +150,6 @@ class CardObj {
         if (!this.imagePath || this.imagePath === "") {
             return;
         }
-
-        // Prüfen, ob bereits ein Bild vorhanden ist, um Duplikate zu vermeiden
         if (imageContainer.querySelector('img')) {
             // Bild bereits vorhanden, prüfen ob Update nötig
             const existingImg = imageContainer.querySelector('img');

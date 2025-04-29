@@ -172,8 +172,9 @@
     function createCardObj() {
         selectObj("database/selectCardObj.php").then(async (data) => {
             let objList = convertCardObjForDataBase(data)
-            console.log(objList)
             objList.forEach(obj => {
+                console.log(obj.imagePath);
+                
                 Umgebung.umgebungsListe.forEach(umgebung => {
                     if (umgebung.titel == obj.titel) {
                         var cardObj = new CardObj(umgebung, obj.titel, obj.isTimeSet, obj.imagePath, obj.imageSet, obj.startDateTime, obj.endDateTime, obj.aktiv, obj.id);
@@ -185,6 +186,7 @@
 
     function convertCardObjForDataBase(cardObjListe) {
         objListe = []
+
         cardObjListe.forEach(cardObj => {
             var obj = {
                 id: cardObj[0],
@@ -397,19 +399,25 @@
         const calenderBtn = document.querySelector(`#${cardObj.openModalButtonId}`); // Hole den Kalender-Button
 
         // Umschalten des Aktiv-Status basierend auf dem aktuellen Checkbox-Status
-        if (checkbox.checked) {
+        if (cardObj.imageSet == true) {
             // Checkbox wurde aktiviert
-            calenderBtn.disabled = true; // Kalender-Button aktivieren
-            cardObj.aktiv = true; // Aktiv setzen
+            calenderBtn.disabled = false;
+
             cardObj.update = true; // Update-Flag setzen
             console.log(`CardObj aktiviert. Counter: ${counter}`);
-        } else {
+        }
+
+        if (cardObj.aktiv == true) {
             // Checkbox wurde deaktiviert
             cardObj.update = true; // Update-Flag setzen
             cardObj.aktiv = false; // Deaktivieren
-            calenderBtn.disabled = false; // Kalender-Button deaktivieren
+            console.log("aktiv?: " + cardObj.aktiv);
+            console.log("kalenderBtn: " + calenderBtn);
             selectedUmgebung.removeObjFromList(selectedUmgebung.listAnzeige, cardObj); // Aus der Anzeige entfernen
             console.log(`CardObj deaktiviert. Counter: ${counter}`);
+        } else {
+            cardObj.aktiv = true; // Aktivieren
+            calenderBtn.disabled = true; // Deaktivieren des Kalenders
         }
 
         // Debugging: Zeige den aktuellen Status von cardObj.aktiv
@@ -573,6 +581,9 @@
         updateAnzeigeCounter()
 
     });
+
+
+
     async function getImagePath(formID, ob) {
         const form = document.getElementById(formID);
         const formData = new FormData(form);
@@ -582,6 +593,7 @@
         })
         var path = await response.text()
         ob.imagePath = path
+        return path
     }
 
     async function insertDatabase(cardObj) {
@@ -649,47 +661,32 @@
         var modalImage = document.getElementById(modalImageId); // Modal for image preview
         var imageInput = document.getElementById(inputId); // File input
         var imagePreview = document.getElementById(previewId); // Image preview container
+        const form = document.getElementById(formID);
+        console.log("DSAGFDAGFDGGFDAGDAGDAFG");
 
         // Find object and set initial state if required
         var aktuellesObj = Umgebung.findObj(inputId);
 
-        if (aktuellesObj.imagePath == "") {
+        console.log(aktuellesObj.imagePath);
+
+        if (aktuellesObj.imagePath == null) {
+            console.log("imagePath ist leer");
             imageInput.addEventListener('change', function(event) {
                 const file = event.target.files[0];
-                if (!file) {
-                    return;
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        modalImage.innerHTML = `<img src="${e.target.result}" alt="Bild" class="img-fluid">`;
+                        imagePreview.innerHTML = `<img src="${e.target.result}" alt="Bild" class="img-fluid">`;
+                        aktuellesObj.imagePath = e.target.result; // Set the image path in the object
+                        console.log(aktuellesObj.imagePath);
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    modalImage.innerHTML = ``;
+                    imagePreview.innerHTML = `Bild auswählen oder hierher ziehen`;
                 }
-                const fileType = file.type;
-                // Validate file type (image or video)
-                const image = fileType.startsWith('image/')
-                const video = fileType.startsWith('video/')
-                if (!image && !video) {
-                    alert('Bitte wählen Sie ein unterstütztes Bild- oder Videoformat aus.');
-                    return;
-                }
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    if (image) {
-                        // Image preview
-                        imagePreview.innerHTML =
-                            `<img src="${e.target.result}" class="picInCard" alt="Bildvorschau" style="width: 110%;">`;
-                        modalImage.innerHTML =
-                            `<img src="${e.target.result}" alt="Bildvorschau" style="width: 75%" border-radius: 5px;">`;
-                    } else if (video) {
-                        // Video preview
-                        imagePreview.innerHTML = `
-                        <video autoplay muted loop style="max-width: 100%; border-radius: 5px;">
-                            <source src="${e.target.result}" type="${fileType}">
-                            Ihr Browser unterstützt dieses Videoformat nicht.
-                        </video>`;
-                        modalImage.innerHTML = `
-                        <video autoplay muted loop style="width: 80%; border-radius: 5px;">
-                            <source src="${e.target.result}" type="${fileType}">
-                            Ihr Browser unterstützt dieses Videoformat nicht.
-                        </video>`;
-                    }
-                };
-                reader.readAsDataURL(file);
+
                 lastFileName = file.name;
                 let selectedId = $(this).attr('id');
                 let id = extractNumberFromString(selectedId)
@@ -704,7 +701,6 @@
                 aktuellesObj.imageSet = true;
                 var alwaysOnBtn = 'alwaysOnBtn' + id
                 var inputbtn = document.getElementById(alwaysOnBtn)
-                console.log(formID, aktuellesObj);
                 getImagePath(formID, aktuellesObj)
                 this.value = '';
             })
