@@ -584,8 +584,6 @@
 
     });
 
-
-
     async function getImagePath(formID, ob) {
         const form = document.getElementById(formID);
         const formData = new FormData(form);
@@ -626,8 +624,6 @@
             console.log(result);
         }
     }
-
-
     function sucheUmgebung(UmgebungsID) {
         let umgebung = Umgebung.umgebungsListe.find(umgebung => umgebung.id == UmgebungsID);
         return umgebung
@@ -652,10 +648,6 @@
     //         return message;
     //     }
     // });
-
-
-
-
 
     //Ab hie geht es mit dem CardObj ansich weiter
     function setupImagePicker(previewId, modalImageId, inputId, formID) {

@@ -60,7 +60,7 @@ class CardObj {
         <div class="picture pt-0">
             <form action="test.php" method="post" enctype="multipart/form-data" id="${this.formID}">
                 <label class="upload-container">
-                    <div class="z-1" id="${this.imagePreviewId}">Bild auswählen oder hierher ziehen</div>  
+                    <div id="${this.imagePreviewId}">Bild auswählen oder hierher ziehen</div>  
                     <input 
                         type="file" 
                         name="file" 
@@ -153,6 +153,8 @@ class CardObj {
         const container = document.createElement("div");
         container.id = this.imagePreviewId;
         container.className = "image-container";
+
+        
 
         // Bild-Element erstellen
         const img = document.createElement("img");
