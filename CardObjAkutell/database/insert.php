@@ -8,6 +8,8 @@ $data = json_decode($file, associative: true);
 
 echo json_encode($data);
 
+
+
 // Überprüfen, ob die Daten korrekt abgerufen wurden
 if (is_array($data)) {
     $titel = $data["titel"];

@@ -124,51 +124,56 @@ class CardObj {
         // Checkbox-Status aktualisieren
         const objSwitch = document.getElementById(this.alwaysOnBtn);
         const calendarBtn = document.getElementById(this.openModalButtonId);
-        console.log("edfsfdsfdsfdsfsdf");   
+
+        const imageContainer = document.getElementById(this.imagePreviewId);
+
+        console.log("edfsfdsfdsfdsfsdf");
         objSwitch.checked = this.aktiv;
-   
+
         console.log(this);
-        
+
         // Kalender-Button aktualisieren
         console.log("kalenderbtn: " + calendarBtn.disabled);
-        console.log("switch: " +  objSwitch.checked);
-        
-        if(this.imageSet == true){
+        console.log("switch: " + objSwitch.checked);
+
+        if (this.imageSet == true) {
             calendarBtn.disabled = false;
-        }else{
+        } else {
             calendarBtn.disabled = true;
         }
 
-    
-        const imageContainer = document.getElementById(this.imagePreviewId);
         if (!imageContainer) {
             console.warn(`Bild-Container mit ID imagePreview${this.id} nicht gefunden`);
             return;
         }
-
-        // Keine Aktion erforderlich, wenn kein Bildpfad existiert
         if (!this.imagePath || this.imagePath === "") {
             return;
         }
-        if (imageContainer.querySelector('img')) {
-            // Bild bereits vorhanden, prüfen ob Update nötig
-            const existingImg = imageContainer.querySelector('img');
-            if (existingImg.src !== this.imagePath) {
-                existingImg.src = this.imagePath;
-            }
+
+        const container = document.createElement("div");
+        container.id = this.imagePreviewId;
+        container.className = "image-container";
+
+        // Bild-Element erstellen
+        const img = document.createElement("img");
+        img.src = this.imagePath;
+        img.alt = "Bild";
+        img.className = "img-fluid";
+
+        // Bild dem Container hinzufügen
+        container.appendChild(img);
+
+        const closebtn = document.getElementById(this.closeBtn);
+        closebtn.style.display = "block";
+       
+        // Container in das DOM einfügen (z. B. in ein Element mit der ID "imagePreview")
+   
+        if (imageContainer) {
+            imageContainer.appendChild(container);
         } else {
-            // Neues Bild erstellen und einfügen
-            try {
-                const imgElement = document.createElement("img");
-                imgElement.classList.add("picInCard");
-                imgElement.style.width = "110%";
-                imgElement.src = this.imagePath;
-                imgElement.alt = `Bild für ${this.zugeordnet || 'Karte'}`;
-                imageContainer.appendChild(imgElement);
-            } catch (error) {
-                console.error(`Fehler beim Hinzufügen des Bildes: ${error.message}`);
-            }
+            console.warn("Elternelement mit ID 'imagePreview' nicht gefunden.");
         }
+    
     }
     initializeDateRangePicker() {
         $(document).on('click', 'button[id^="openModal"]', function () {

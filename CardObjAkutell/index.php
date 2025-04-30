@@ -174,7 +174,7 @@
             let objList = convertCardObjForDataBase(data)
             objList.forEach(obj => {
                 console.log(obj.imagePath);
-                
+
                 Umgebung.umgebungsListe.forEach(umgebung => {
                     if (umgebung.titel == obj.titel) {
                         var cardObj = new CardObj(umgebung, obj.titel, obj.isTimeSet, obj.imagePath, obj.imageSet, obj.startDateTime, obj.endDateTime, obj.aktiv, obj.id);
@@ -466,6 +466,8 @@
         Umgebung.tempListForSaveCards.forEach(cardObj => {
             console.log(cardObj);
             insertDatabase(cardObj)
+            console.log(cardObj.imagePath);
+
         });
         Umgebung.tempListForSaveCards = []
     }
@@ -666,11 +668,10 @@
 
         // Find object and set initial state if required
         var aktuellesObj = Umgebung.findObj(inputId);
-
-        console.log(aktuellesObj.imagePath);
-
-        if (aktuellesObj.imagePath == null) {
-            console.log("imagePath ist leer");
+        console.log(aktuellesObj);
+        
+        console.log("imagePath ist leer");
+        if (aktuellesObj.imagePath == "") {
             imageInput.addEventListener('change', function(event) {
                 const file = event.target.files[0];
                 if (file) {
@@ -705,6 +706,16 @@
                 this.value = '';
             })
         }
+
+        // Drag and drop functionality 
+        imagePreview.addEventListener('dragover', function(event) {
+            event.preventDefault();
+            imagePreview.classList.add('drag-over');
+        });
+        imagePreview.addEventListener('dragleave', function(event) {
+            event.preventDefault();
+            imagePreview.classList.remove('drag-over');
+        });
     }
 
     function deletePicture(imagePreview, modalImage) {

@@ -29,7 +29,11 @@ $unsereTabelle = [];
 while ($row = mysqli_fetch_assoc($result)) {
     if (isset($row['id']) && $row['id'] !== null) {
         // Überprüfen, ob die Datei existiert       
-        echo $row["imagePath"] . "<br>";
+        // if($row["imagePath"]){
+        //     $cleanedImagePath = preg_replace('/[^a-zA-Z0-9\/._-]/', '', $row["imagePath"]); // Entfernt unnötige Zeichen
+        //     echo $cleanedImagePath . "<br>";
+        // }
+        
         // Daten in das Array einfügen
         array_push($unsereTabelle, array(
             $row["id"],
