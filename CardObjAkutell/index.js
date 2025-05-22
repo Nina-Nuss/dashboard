@@ -1,39 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<link>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Date Range Picker with Time</title>
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<!-- Date Range Picker CSS -->
-<link href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" rel="stylesheet">
-<!-- Bootstrap Icons -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-<!-- jQuery, Momenhgt.js, Bootsmtrap JS, and Date Range Picker JS -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.29.4/min/moment.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/de.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=close,date_range,info" />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<script src="convertDateTime.js"></script>
-<link rel="stylesheet" href="styles.css">
-<script src="umgebung.js"></script>
-<script src="cardObj.js"></script>
-</head>
-
-<body>
-    <select id="selectUmgebung" class="form-select" aria-label="Default select example"></select>
+/* 
+    <!-- <select id="selectUmgebung" class="form-select" aria-label="Default select example"></select>
     <div class="d-flex">
         <button id="plusBtn" type="button" class="btn btn-primary">Create</button>
         <div id="counter">0</div>
@@ -43,26 +9,32 @@
     </div>
     <h2 id="titelUmgebung"></h2>
     <div class="container d-flex" id="umgebungsContainer">
-        <div id="rowForCards" class="col-4 p-2"><!-- bild Obj -->
+        <div id="rowForCards" class="col-4 p-2">
 
         </div>
-    </div>
-</body>
-<script>
+    </div>  */
+
+
+   // var selectUmgebung = document.getElementById("selectUmgebung");
+    // const deleteBtnForCards = document.getElementById("deleteBtnForCards");
+    // const UmgebungsTitel = document.getElementById("titelUmgebung")
+    // // const ersteAuswahl = selectUmgebung.querySelector('option');
+    // const denied = document.getElementById("umgebungsContainer");
+    // var cardAnzeige = document.getElementById("rowForCards")
+    // const plusBtn = document.getElementById("plusBtn");
+    // const minusBtn = document.getElementById("minusBtn");
+    // let counter = document.getElementById("counter");
+  
+  
+  
+  
+  
     let cancelUplaod = false
     var zeitEingegeben = false
     let pushDelete = false
     let json;
 
-    var selectUmgebung = document.getElementById("selectUmgebung");
-    const deleteBtnForCards = document.getElementById("deleteBtnForCards");
-    const UmgebungsTitel = document.getElementById("titelUmgebung")
-    const ersteAuswahl = selectUmgebung.querySelector('option');
-    const denied = document.getElementById("umgebungsContainer");
-    var cardAnzeige = document.getElementById("rowForCards")
-    const plusBtn = document.getElementById("plusBtn");
-    const minusBtn = document.getElementById("minusBtn");
-    let counter = document.getElementById("counter");
+   
 
     window.onload = function() {
         executeDeleteNull();
@@ -174,10 +146,10 @@
             let objList = convertCardObjForDataBase(data)
             objList.forEach(obj => {
                 console.log(obj.imagePath);
-
                 Umgebung.umgebungsListe.forEach(umgebung => {
                     if (umgebung.titel == obj.titel) {
                         var cardObj = new CardObj(umgebung, obj.titel, obj.isTimeSet, obj.imagePath, obj.imageSet, obj.startDateTime, obj.endDateTime, obj.aktiv, obj.id);
+                        new Beziehungen(umgebung, cardObj)
                     }
                 })
             });
@@ -334,24 +306,30 @@
         }
     }
 
-    plusBtn.addEventListener("click", function() {
-        let currentCounter = parseInt(counter.innerHTML);
-        if (currentCounter < 5) {
-            if (checkSelectedUmgebung()) {
-                console.log(selectedUmgebung);
-                console.log(selectedUmgebung.titel);
-                var newId = createID()
-                const newCardObj = new CardObj(selectedUmgebung, selectedUmgebung.titel, false, "", false, "", "", true, newId);
-                selectedUmgebung.addCardObjs(newCardObj);
-                console.log(selectedUmgebung);
-                Umgebung.tempListForSaveCards.push(newCardObj);
-                console.log(newCardObj);
-                updateAnzeigeCounter()
-            }
-        } else {
-            return
-        }
-    });
+    // plusBtn.addEventListener("click", function() {
+    //     let currentCounter = parseInt(counter.innerHTML);
+    //     if (currentCounter < 5) {
+    //         if (checkSelectedUmgebung()) {
+    //             console.log(selectedUmgebung);
+    //             console.log(selectedUmgebung.titel);
+    //             var newId = createID()
+    //             const newCardObj = new CardObj(selectedUmgebung, selectedUmgebung.titel, false, "", false, "", "", true, newId);
+    //             new Beziehungen(selectedUmgebung, newCardObj);
+    //             selectedUmgebung.addCardObjs(newCardObj);
+    //             console.log(selectedUmgebung);
+    //             Umgebung.tempListForSaveCards.push(newCardObj);
+    //             console.log(newCardObj);
+                
+    //             Beziehungen.beziehungsListe.forEach(beziehung => {
+    //                 console.log(beziehung);
+    //                 console.log("beziehung gefunden");
+    //             });
+    //             updateAnzeigeCounter()
+    //         }
+    //     } else {
+    //         return
+    //     }
+    // });
 
     function createID() {
         const cardObjIDList = Umgebung.allCardsInOneList
@@ -367,22 +345,22 @@
         return groessteZahl + 1;
     }
 
-    selectUmgebung.addEventListener("change", function() {
-        selectedUmgebung = sucheUmgebung(selectUmgebung.value);
-        console.log(selectedUmgebung);
-        plusBtn.disabled = false;
-        updateAnzeigeCounter()
-        console.log("wächsle umgebung");
-        UmgebungsTitel.innerHTML = selectedUmgebung.titel;
+    // selectUmgebung.addEventListener("change", function() {
+    //     selectedUmgebung = sucheUmgebung(selectUmgebung.value);
+    //     console.log(selectedUmgebung);
+    //     plusBtn.disabled = false;
+    //     updateAnzeigeCounter()
+    //     console.log("wächsle umgebung");
+    //     UmgebungsTitel.innerHTML = selectedUmgebung.titel;
 
-        if (selectedUmgebung.id == 0) {
-            showAllUmgebungen()
-            disableInput(denied)
-        } else {
-            zeigeUmgebungAn(selectedUmgebung)
-            disableInput(denied)
-        }
-    })
+    //     if (selectedUmgebung.id == 0) {
+    //         showAllUmgebungen()
+    //         disableInput(denied)
+    //     } else {
+    //         zeigeUmgebungAn(selectedUmgebung)
+    //         disableInput(denied)
+    //     }
+    // })
 
     function cardSwitch(idBtn) {
         console.log(idBtn);
@@ -651,7 +629,6 @@
 
     //Ab hie geht es mit dem CardObj ansich weiter
     function setupImagePicker(previewId, modalImageId, inputId, formID) {
-        var lastFileName = null
         var modalImage = document.getElementById(modalImageId); // Modal for image preview
         var imageInput = document.getElementById(inputId); // File input
         var imagePreview = document.getElementById(previewId); // Image preview container
@@ -671,7 +648,7 @@
                     reader.onload = function(e) {
                         modalImage.innerHTML = `<img src="${e.target.result}" alt="Bild" class="img-fluid">`;
                         imagePreview.innerHTML = `<img src="${e.target.result}" alt="Bild" class="img-fluid">`;
-                        aktuellesObj.imagePath = e.target.result; // Set the image path in the object
+                        aktuellesObj.imagePath = file.name;
                         console.log(aktuellesObj.imagePath);
                     };
                     reader.readAsDataURL(file);
@@ -679,8 +656,6 @@
                     modalImage.innerHTML = ``;
                     imagePreview.innerHTML = `Bild auswählen oder hierher ziehen`;
                 }
-
-                lastFileName = file.name;
                 let selectedId = $(this).attr('id');
                 let id = extractNumberFromString(selectedId)
                 let closebtnID = '#closeBtn' + id
@@ -721,18 +696,18 @@
             aktuellesObj.imagePath = ``;
             aktuellesObj.imageSet = false
             var select = document.getElementById("timerSelect" + aktuellesObj.id)
+            console.log(select);
+            
             var infoBtn = document.getElementById("infoBtn" + aktuellesObj.id)
             var closeBtn = document.getElementById("closeBtn" + aktuellesObj.id)
             var selectedValue = $(select).val();
+            console.log(selectedValue);
             var selectedValue = ""
             select.selectedIndex = -1;
             aktuellesObj.isTimeSet = false
             aktuellesObj.startDateTime = ``;
             aktuellesObj.endDateTime = ``;
             aktuellesObj.selectedTime = selectedValue
-            if (checkSelectedUmgebung()) {
-                selectedUmgebung.removeObjFromList(selectedUmgebung.cardObjList, aktuellesObj)
-            }
             select.disabled = true
             $('#timerSelect' + aktuellesObj.id).val(3)
             infoBtn.style.display = "none"
@@ -743,6 +718,3 @@
         }
         return
     }
-</script>
-
-</html>

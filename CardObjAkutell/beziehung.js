@@ -1,10 +1,10 @@
-class Beziehung {
-    beziehungsListe = [];
+class Beziehungen {
+    static beziehungsListe = [];
 
     constructor(umgebung, cardObjekt) {
         this.aktuelleUmgebung = umgebung;
-        this.cardObjekt = cardObjekt;  
-        beziehungsListe.push(this);
+        this.aktuellesCardObjekt = cardObjekt;  
+        Beziehungen.beziehungsListe.push(this);
     }
 
     setUmgebung(umgebung) {

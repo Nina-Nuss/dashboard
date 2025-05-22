@@ -8,7 +8,7 @@ body {
 
 .imageContainer {
     width: 1200px;      /* Feste Breite */
-    height: 570px;     /* Feste Höhe */
+    height: 620px;     /* Feste Höhe */
     object-fit: contain; /* Behält Seitenverhältnis bei */
     display: block;
     margin: 0 auto;
@@ -20,7 +20,7 @@ body {
     flex: 1 0 auto;
     display: flex;
     flex-direction: column;
-
+    
 }
 
 header {

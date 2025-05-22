@@ -51,6 +51,8 @@ class CardObj {
     }
     htmlKonstruktObjBody(umgebung) {
         var htmlUmgebungsBody = document.getElementById(umgebung.htmlUmgebungsBody);
+
+        
         htmlUmgebungsBody.innerHTML += `
         <div id="${this.cardObjekte}" class="card m-1" style="width: 10rem;" >
             <div class="position-absolute form-check-d d-none">
@@ -113,6 +115,9 @@ class CardObj {
         </div>
     </div>
     `;
+    
+
+
     }
     removeHtmlElement() {
         const element = document.getElementById(this.cardObjekte);
@@ -230,6 +235,7 @@ class CardObj {
             selectedValue = selectedValue * 1000
             let selectedId = $(this).attr('id');
             let lastChar = selectedId[selectedId.length - 1];
+            console.log(lastChar);
             var obj = Umgebung.findObj(lastChar)
             obj.isTimeSet = true
             obj.selectedTime = selectedValue
