@@ -213,3 +213,4 @@ function extractNumberFromString(str) {
 // Wait for DOM to be loaded
 
 
+console.log("Umgebung.js wurde geladen...");

@@ -39,19 +39,19 @@ class CardObj {
         this.closeBtn = `closeBtn${this.id}`
         this.sumbitBtnID = `submit${this.id}`;
         this.formID = `formID${this.id}`
+        this.selected = `select${this.id}`
         //-------------------------------------    
 
         this.htmlKonstruktObjBody(umgebung)
         setTimeout(() => {
             this.updateObj();
-            this.initializeDateRangePicker()
         }, 100);
         umgebung.addCardObjs(this)
         Umgebung.allCardsInOneList.push(this)
     }
     htmlKonstruktObjBody(umgebung) {
         var htmlUmgebungsBody = document.getElementById(umgebung.htmlUmgebungsBody);
-
+        var dateTime = document.getElementById("dateTime");
         
         htmlUmgebungsBody.innerHTML += `
         <div id="${this.cardObjekte}" class="card m-1" style="width: 10rem;" >
@@ -75,13 +75,11 @@ class CardObj {
                 <!-- Der versteckte Submit-Button -->
                 <input type="submit" name="submit" value="Hochladen" class="hidden-submit z-3">
             </form>
-        </div>
-        <div class="d-flex justify-content-center">
-            <!-- rangeslider -->  
-            <input type="range" class="form-range z-3" min="3" max="9" id="${this.timerSelectRange}" disabled>
-            <!-- rangeslider -->
-        </div>  
+        </div> 
         <div class="card-body d-flex align-items-center justify-content-between p-2 gap-2">
+            <div id="${this.selected}" class="select-container">
+                <input type="checkbox" id="checkbox${this.id}" name="checkbox${this.id}">
+            <label for="checkbox${this.id}">Aktiv</label>
             <button id="${this.openModalButtonId}" class="btn btn-light btn-sm modalBtn" data-toggle="modal">
                 <span class="material-symbols-outlined">date_range</span>
             </button>
@@ -115,7 +113,10 @@ class CardObj {
         </div>
     </div>
     `;
+
+
     
+
 
 
     }
@@ -159,29 +160,29 @@ class CardObj {
         container.id = this.imagePreviewId;
         container.className = "image-container";
 
-        
-
         // Bild-Element erstellen
-        const img = document.createElement("img");
-        img.src = this.imagePath;
-        img.alt = "Bild";
-        img.className = "img-fluid";
+        // const img = document.createElement("img");
+        // img.src = this.imagePath;
+        // img.alt = "Bild";
+        // img.className = "img-fluid";
 
-        // Bild dem Container hinzufügen
-        container.appendChild(img);
+        // // Bild dem Container hinzufügen
+        // container.appendChild(img);
 
-        const closebtn = document.getElementById(this.closeBtn);
-        closebtn.style.display = "block";
+        // const closebtn = document.getElementById(this.closeBtn);
+        // closebtn.style.display = "block";
        
-        // Container in das DOM einfügen (z. B. in ein Element mit der ID "imagePreview")
+        // // Container in das DOM einfügen (z. B. in ein Element mit der ID "imagePreview")
    
-        if (imageContainer) {
-            imageContainer.appendChild(container);
-        } else {
-            console.warn("Elternelement mit ID 'imagePreview' nicht gefunden.");
-        }
+        // if (imageContainer) {
+        //     imageContainer.appendChild(container);
+        // } else {
+        //     console.warn("Elternelement mit ID 'imagePreview' nicht gefunden.");
+        // }
     
     }
+
+
     initializeDateRangePicker() {
         $(document).on('click', 'button[id^="openModal"]', function () {
             const buttonId = $(this).attr('id'); //"openModal1"
@@ -324,3 +325,5 @@ class CardObj {
         });
     }
 }
+
+console.log("Umgebung.js wurde geladen...");

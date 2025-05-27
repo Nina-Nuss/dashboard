@@ -17,9 +17,6 @@ class anzeigebereich {
         this.von = von;
         // console.log(`${this.id} ${this.titel} ${this.ipAdresse}`);
         anzeigebereich.list.push(this);
-        console.log("Liste: " + anzeigebereich.list);
-        console.log("Liste: " + anzeigebereich.list);
-        
     }
 
     static temp_remove = []
@@ -100,7 +97,7 @@ class anzeigebereich {
         listeObj.push(ip.value, title.value, beschreibung.value, von.value, bis.value)
         
         var prepare = "?ip=" + ip.value + "&titel=" + title.value + "&beschreibung=" + beschreibung.value + "&von=" + von.value + "&bis=" + bis.value;
-        var result = await fetch("insert.php" + prepare);
+        var result = await fetch("./db/insert.php" + prepare);
        
         listeObj.forEach(listValue => {
             if (listValue == "") {
@@ -119,9 +116,11 @@ class anzeigebereich {
     static update() {
         var anzeigebereichv = document.getElementById("anzeigebereichV")
         const anzeigebereicht = document.getElementById("tabelle")
+        if(anzeigebereichv == null || anzeigebereicht == null){
+            return;
+        }
         anzeigebereichv.innerHTML = ""
         anzeigebereicht.innerHTML = ""
-        console.log("Update: " + this.list)
         for(let i = 0; i < this.list.length; i++){
             var ele = this.list[i]
             console.log(ele);
@@ -153,16 +152,11 @@ class anzeigebereich {
 
 window.onload = function () {
     anzeigebereich.update();
-    var slider = document.getElementById("dokumente");
-    slider.innerHTML += new Itemslider("test").body;
-    slider.innerHTML += new Itemslider("test").body;
-    slider.innerHTML += new Itemslider("test").body;
-    slider.innerHTML += new Itemslider("test").body;
     select()
 }
 function select() {
     getCuttedList = []
-    fetch("select.php").then(async (response) => {
+    fetch("./db/select.php").then(async (response) => {
         var responseText = await response.text();
         cutAndCreate(responseText)
         anzeigebereich.update()
@@ -179,7 +173,7 @@ function cutAndCreate(responseText) {
     }
 }
 function insert() {
-    fetch("insert.php").then(async (response) => {
+    fetch("./db/insert.php").then(async (response) => {
         this.responseText = await response.text();
         var obj = JSON.parse(this.responseText);
         var anzeigebereichv = document.getElementById("anzeigebereichV")
@@ -192,7 +186,7 @@ function insert() {
 }
 async function deletee(idDelete) {
     prepare = "?idDelete=" + idDelete;
-    result = await fetch("delete.php" + prepare)
+    result = await fetch("./db/delete.php" + prepare)
     var meow = await result.text()
     console.log(meow)
 }
