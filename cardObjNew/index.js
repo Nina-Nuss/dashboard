@@ -37,16 +37,16 @@ window.onload = function () {
 
     });
 
-    setTimeout(() => {
-        console.log("Funktion wird nach window.onload ausgeführt");
+    // setTimeout(() => {
+    //     console.log("Funktion wird nach window.onload ausgeführt");
 
-        saveToLocalStorage("Umgebungen", Umgebung.umgebungsListe);
-        const obj = getJsonData("test")
-        obj.forEach(obj => {
-            console.log(obj);
-        });
+    //     saveToLocalStorage("Umgebungen", Umgebung.umgebungsListe);
+    //     const obj = getJsonData("test")
+    //     obj.forEach(obj => {
+    //         console.log(obj);
+    //     });
 
-    }, 1000); // V
+    // }, 1000); // V
 
     plusBtn.addEventListener("click", function () {
         let currentCounter = parseInt(counter.innerHTML);
@@ -166,29 +166,7 @@ function createJsonObjForJsonFile() {
 }
 
 
-async function createJsonFile(jsonData) {
-    if (jsonData.length === 0) {
-        console.error("jsonData ist leer!");
-        return;
-    } else {
-        const json = JSON.stringify(jsonData, null, 2);
-        console.log(json);
 
-    }
-    try {
-        const response = await fetch("json/sendToJson.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: json
-        });
-        const responseData = await response.json();
-        console.log("JSON-Daten gespeichert:", responseData);
-    } catch (error) {
-        console.error("Fehler beim Speichern der JSON-Daten:", error);
-    }
-}
 
 
 function saveToLocalStorage(key, jsonData) {
@@ -292,6 +270,90 @@ async function deleteCardObjDataBase(cardObjId) {
     }
 }
 // Aufruf der Funktion
+
+async function selectObj(select) {
+    try {
+        const response = await fetch(select, { // .php Extension hinzugefügt
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    } catch (error) {
+        console.error("Fehler beim Laden der Umgebung:", error);
+        return null;
+    }
+
+
+}
+
+async function getImagePath(formID, ob) {
+    const form = document.getElementById(formID);
+    const formData = new FormData(form);
+    const response = await fetch('test.php', {
+        method: 'POST',
+        body: formData,
+    })
+    var path = await response.text()
+    ob.imagePath = path
+    return path
+}
+
+async function createJsonFile(jsonData) {
+    if (jsonData.length === 0) {
+        console.error("jsonData ist leer!");
+        return;
+    } else {
+        const json = JSON.stringify(jsonData, null, 2);
+        console.log(json);
+
+    }
+    try {
+        const response = await fetch("json/sendToJson.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: json
+        });
+        const responseData = await response.json();
+        console.log("JSON-Daten gespeichert:", responseData);
+    } catch (error) {
+        console.error("Fehler beim Speichern der JSON-Daten:", error);
+    }
+}
+async function insertDatabase(cardObj) {
+    // Erstellen eines JSON-Objekts
+    const jsonData = {
+        titel: cardObj.zugeordnet,
+        isTimeSet: cardObj.isTimeSet,
+        imagePath: cardObj.imagePath,
+        imageSet: cardObj.imageSet,
+        startDateTime: cardObj.startDateTime,
+        endDateTime: cardObj.endDateTime,
+        aktiv: cardObj.aktiv,
+        selectedTime: cardObj.selectedTime // Hinzufügen des fehlenden Schlüssels
+    };
+    console.log(JSON.stringify(jsonData));
+    // Senden der POST-Anfrage mit JSON-Daten
+    const response = await fetch("cardObjNew/database/insert.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(jsonData)
+    });
+    if (!response.ok) {
+        console.error("Fehler beim Einfügen:", response.statusText);
+    } else {
+        const result = await response.text();
+        console.log(result);
+    }
+}
 function prepareCardObj(cardObj) {
     var prepare =
         "&titel=" + cardObj.zugeordnet +
@@ -321,25 +383,6 @@ function JavaScriptCardObj(cardObj) {
     };
 
     return jsonData
-}
-async function selectObj(select) {
-    try {
-        const response = await fetch(select, { // .php Extension hinzugefügt
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-    } catch (error) {
-        console.error("Fehler beim Laden der Umgebung:", error);
-        return null;
-    }
-
-
 }
 
 function ladenUmgebung() {
@@ -554,46 +597,8 @@ function saveCardObj() {
 
 
 
-async function getImagePath(formID, ob) {
-    const form = document.getElementById(formID);
-    const formData = new FormData(form);
-    const response = await fetch('test.php', {
-        method: 'POST',
-        body: formData,
-    })
-    var path = await response.text()
-    ob.imagePath = path
-    return path
-}
 
-async function insertDatabase(cardObj) {
-    // Erstellen eines JSON-Objekts
-    const jsonData = {
-        titel: cardObj.zugeordnet,
-        isTimeSet: cardObj.isTimeSet,
-        imagePath: cardObj.imagePath,
-        imageSet: cardObj.imageSet,
-        startDateTime: cardObj.startDateTime,
-        endDateTime: cardObj.endDateTime,
-        aktiv: cardObj.aktiv,
-        selectedTime: cardObj.selectedTime // Hinzufügen des fehlenden Schlüssels
-    };
-    console.log(JSON.stringify(jsonData));
-    // Senden der POST-Anfrage mit JSON-Daten
-    const response = await fetch("cardObjNew/database/insert.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(jsonData)
-    });
-    if (!response.ok) {
-        console.error("Fehler beim Einfügen:", response.statusText);
-    } else {
-        const result = await response.text();
-        console.log(result);
-    }
-}
+
 function sucheUmgebung(UmgebungsID) {
     let umgebung = Umgebung.umgebungsListe.find(umgebung => umgebung.id == UmgebungsID);
     return umgebung
