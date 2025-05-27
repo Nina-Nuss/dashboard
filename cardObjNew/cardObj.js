@@ -77,9 +77,11 @@ class CardObj {
             </form>
         </div> 
         <div class="card-body d-flex align-items-center justify-content-between p-2 gap-2">
-            <div id="${this.selected}" class="select-container">
+              <div id="${this.selected}" class="select-container">
                 <input type="checkbox" id="checkbox${this.id}" name="checkbox${this.id}">
-            <label for="checkbox${this.id}">Aktiv</label>
+        
+
+
             <button id="${this.openModalButtonId}" class="btn btn-light btn-sm modalBtn" data-toggle="modal">
                 <span class="material-symbols-outlined">date_range</span>
             </button>
