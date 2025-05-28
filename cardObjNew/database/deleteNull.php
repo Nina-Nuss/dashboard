@@ -1,29 +1,30 @@
 <?php
+
 include("connection.php");
 
 // Löschen von Datensätzen, bei denen der Titel null ist
 $deleteSql = "DELETE FROM card_objekte WHERE titel IS NULL";
-if (!mysqli_query($conn, $deleteSql)) {
-    die("Fehler beim Löschen: " . mysqli_error($conn));
+$deleteStmt = sqlsrv_query($conn, $deleteSql);
+if ($deleteStmt === false) {
+    die("Fehler beim Löschen: " . print_r(sqlsrv_errors(), true));
 }
 
 // Abrufen der verbleibenden Datensätze
 $sql = "SELECT * FROM card_objekte";
-$result = mysqli_query($conn, $sql);
+$result = sqlsrv_query($conn, $sql);
 
-if (!$result) {
-    die("Abfragefehler: " . mysqli_error($conn));
+if ($result === false) {
+    die("Abfragefehler: " . print_r(sqlsrv_errors(), true));
 }
 
 $unsereTabelle = [];
-while ($row = mysqli_fetch_assoc($result)) {
+while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
     if (isset($row['id']) && $row['id'] !== null) {
         array_push($unsereTabelle, array(
             $row["id"],
             $row["titel"],
             $row["imagePath"],
             $row["selectedTime"],
-            $row["isTimeSet"],
             $row["imageSet"],
             $row["aktiv"],
             $row["startDateTime"],
@@ -31,11 +32,11 @@ while ($row = mysqli_fetch_assoc($result)) {
         ));
     }
 }
-mysqli_free_result($result);
+sqlsrv_free_stmt($result);
 
 $jsonList = json_encode($unsereTabelle);
 
 echo $jsonList;
 
-mysqli_close($conn);
+sqlsrv_close($conn);
 ?>

@@ -142,7 +142,7 @@ function createJsonObjForJsonFile() {
             titel: cardObj.zugeordnet,
             imagePath: cardObj.imagePath,
             selectedTime: cardObj.selectedTime,
-            isTimeSet: cardObj.isTimeSet, //True or false
+            checkSelect: cardObj.checkSelect, //True or false
             imageSet: cardObj.imageSet, //True or false
             aktiv: cardObj.aktiv, //True or false
             startDateTime: cardObj.startDateTime,
@@ -166,7 +166,17 @@ function createJsonObjForJsonFile() {
 }
 
 
-
+// Funktion zum Überprüfen, ob eine Checkbox oder switch aktiviert ist
+function checkTrue(check) {
+    var isChecked = document.getElementById(check).checked;
+    if (isChecked) {
+        console.log("Checkbox ist aktiviert");
+        return true;
+    } else {
+        console.log("Checkbox ist deaktiviert");
+        return false;
+    }
+}
 
 
 function saveToLocalStorage(key, jsonData) {
@@ -187,7 +197,7 @@ function createCardObj() {
             console.log(obj.imagePath);
             Umgebung.umgebungsListe.forEach(umgebung => {
                 if (umgebung.titel == obj.titel) {
-                    var cardObj = new CardObj(umgebung, obj.titel, obj.isTimeSet, obj.imagePath, obj.imageSet, obj.startDateTime, obj.endDateTime, obj.aktiv, obj.id);
+                    var cardObj = new CardObj(umgebung, obj.titel, obj.checkSelect, obj.imagePath, obj.imageSet, obj.startDateTime, obj.endDateTime, obj.aktiv, obj.id);
                     new Beziehungen(umgebung, cardObj)
                 }
             })
@@ -204,7 +214,7 @@ function convertCardObjForDataBase(cardObjListe) {
             titel: cardObj[1],
             imagePath: cardObj[2],
             selectedTime: cardObj[3],
-            isTimeSet: cardObj[4], //True or false
+            checkSelect: cardObj[4], //True or false
             imageSet: cardObj[5], //True or false
             aktiv: cardObj[6], //True or false
             startDateTime: cardObj[7],
@@ -330,7 +340,7 @@ async function insertDatabase(cardObj) {
     // Erstellen eines JSON-Objekts
     const jsonData = {
         titel: cardObj.zugeordnet,
-        isTimeSet: cardObj.isTimeSet,
+        checkSelect: cardObj.checkSelect,
         imagePath: cardObj.imagePath,
         imageSet: cardObj.imageSet,
         startDateTime: cardObj.startDateTime,
@@ -357,7 +367,7 @@ async function insertDatabase(cardObj) {
 function prepareCardObj(cardObj) {
     var prepare =
         "&titel=" + cardObj.zugeordnet +
-        "&isTimeSet=" + cardObj.isTimeSet +
+        "&checkSelect=" + cardObj.checkSelect +
         "&imagePath=" + cardObj.imagePath +
         "&imageSet=" + cardObj.imageSet +
         "&startDateTime=" + cardObj.startDateTime +
@@ -372,7 +382,7 @@ function prepareCardObj(cardObj) {
 function JavaScriptCardObj(cardObj) {
     const jsonData = {
         titel: cardObj.zugeordnet,
-        isTimeSet: cardObj.isTimeSet,
+        checkSelect: cardObj.checkSelect,
         imagePath: cardObj.imagePath,
         imageSet: cardObj.imageSet,
         startDateTime: cardObj.startDateTime,
@@ -567,7 +577,7 @@ function updateCounter() {
 }
 
 function deleteBtn() {
-    const deleteBtns = document.querySelectorAll('.form-check-d input[type="checkbox"]');
+    const deleteBtns = document.querySelectorAll('[id^="deleteBtn"]');
     deleteBtns.forEach(deleteBtn => {
         deleteBtn.addEventListener('change', function () {
             const cardId = this.id.replace('deleteBtn', '');
@@ -630,7 +640,7 @@ function setupImagePicker(previewId, modalImageId, inputId, formID) {
     var imageInput = document.getElementById(inputId); // File input
     var imagePreview = document.getElementById(previewId); // Image preview container
     const form = document.getElementById(formID);
-    console.log("DSAGFDAGFDGGFDAGDAGDAFG");
+
 
     // Find object and set initial state if required
     var aktuellesObj = Umgebung.findObj(inputId);
@@ -701,7 +711,7 @@ function deletePicture(imagePreview, modalImage) {
         console.log(selectedValue);
         var selectedValue = ""
         select.selectedIndex = -1;
-        aktuellesObj.isTimeSet = false
+      
         aktuellesObj.startDateTime = ``;
         aktuellesObj.endDateTime = ``;
         aktuellesObj.selectedTime = selectedValue

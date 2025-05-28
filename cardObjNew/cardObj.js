@@ -1,17 +1,17 @@
 class CardObj {
     static idCounter = 1;
-    constructor(umgebung, titel, isTimeSet, imagePath, imageSet, startDateTime, endDateTime, aktiv, id) {
+    constructor(umgebung, titel, imagePath, imageSet, startDateTime, endDateTime, aktiv, currentSelected, id) {
 
         this.id = id;
         this.update = false;
 
         //AB hier kommt alles in die Datenbank rein:
         this.zugeordnet = titel // Der Name des Aufenhaltsortes
-        this.isTimeSet = isTimeSet //true or false
         this.imagePath = imagePath //Der Pfad zum Bild
         this.imageSet = imageSet  //true or false
         this.startDateTime = startDateTime //Der kalender, der den startdatum enthält
         this.endDateTime = endDateTime //Der kalender, der die enddatum enthält
+        this.currentSelected = currentSelected // Der aktuelle ausgewählte Wert
         this.aktiv = aktiv //true or false
         //-------------------------------------
 
@@ -39,7 +39,7 @@ class CardObj {
         this.closeBtn = `closeBtn${this.id}`
         this.sumbitBtnID = `submit${this.id}`;
         this.formID = `formID${this.id}`
-        this.selected = `select${this.id}`
+        this.checkSelect = `checkSelect${this.id}`
         //-------------------------------------    
 
         this.htmlKonstruktObjBody(umgebung)
@@ -77,11 +77,11 @@ class CardObj {
             </form>
         </div> 
         <div class="card-body d-flex align-items-center justify-content-between p-2 gap-2">
-              <div id="${this.selected}" class="select-container">
-                <input type="checkbox" id="checkbox${this.id}" name="checkbox${this.id}">
-        
-
-
+              
+        <div class="select-container">
+            <input type="checkbox" id="${this.checkSelect}" name="${this.checkSelect}">
+            <label for="${this.checkSelect}">auswählen: </label>        
+        </div>
             <button id="${this.openModalButtonId}" class="btn btn-light btn-sm modalBtn" data-toggle="modal">
                 <span class="material-symbols-outlined">date_range</span>
             </button>
@@ -240,7 +240,6 @@ class CardObj {
             let lastChar = selectedId[selectedId.length - 1];
             console.log(lastChar);
             var obj = Umgebung.findObj(lastChar)
-            obj.isTimeSet = true
             obj.selectedTime = selectedValue
             console.log(obj.selectedTime);
         });
@@ -328,4 +327,3 @@ class CardObj {
     }
 }
 
-console.log("Umgebung.js wurde geladen...");

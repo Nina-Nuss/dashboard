@@ -1,32 +1,42 @@
 <?php
 include("connection.php");
-include("select.php");
 
 $file = file_get_contents('php://input');
-
-
-
 $data = json_decode($file, true);
 
+if (
+    isset($data['ip']) &&
+    isset($data['titel']) &&
+    isset($data['von']) &&
+    isset($data['bis']) &&
+    isset($data['beschreibung'])
+) {
+    $ip = $data['ip'];
+    $titel = $data['titel'];
+    $von = $data['von'];
+    $bis = $data['bis'];
+    $beschreibung = $data['beschreibung'];
 
-// SQL-Abfrage mit Prepared Statement
-$sql = "INSERT INTO daten (ip, titel, von, bis, beschreibung) VALUES (?, ?, ?, ?, ?)";
-$stmt = mysqli_prepare($conn, $sql); // corrected mysql: to $conn
+    // SQL-Abfrage mit Prepared Statement für MSSQL
+    $sql = "INSERT INTO daten (ip, titel, von, bis, beschreibung) VALUES (?, ?, ?, ?, ?)";
+    $params = array($ip, $titel, $von, $bis, $beschreibung);
+    $stmt = sqlsrv_prepare($conn, $sql, $params);
 
-if ($stmt) {
-    // Parameter binden
-    mysqli_stmt_bind_param($stmt, "sssss", $ip, $titel, $von, $bis, $beschreibung);
-    
-    // Statement ausführen
-    if (mysqli_stmt_execute($stmt)) { // removed 'statement:' from here
-        echo "Datensatz erfolgreich eingefügt";
+    if ($stmt) {
+        if (sqlsrv_execute($stmt)) {
+            echo "Datensatz erfolgreich eingefügt";
+        } else {
+            echo "Fehler beim Einfügen: ";
+            print_r(sqlsrv_errors());
+        }
+        sqlsrv_free_stmt($stmt);
     } else {
-        echo "Fehler beim Einfügen: " . mysqli_stmt_error($stmt);
+        echo "Fehler bei der Vorbereitung: ";
+        print_r(sqlsrv_errors());
     }
-    
-    // Statement schließen
-    mysqli_stmt_close($stmt);
 } else {
-    echo "Fehler bei der Vorbereitung: " . mysqli_error($conn);
+    echo "Fehlende Daten";
 }
+
+sqlsrv_close($conn);
 ?>
