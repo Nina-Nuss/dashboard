@@ -14,7 +14,7 @@ window.onload = function () {
     const minusBtn = document.getElementById("minusBtn");
     let counter = document.getElementById("counter");
     console.log("window.onload läuft!");
-    executeDeleteNull();
+    // executeDeleteNull();
 
     const resultUmgebung = selectObj("cardObjNew/database/selectUmgebung.php").then(async (data) => {
         var HauptUmgebungsObj = new Umgebung(0, 0, "Alle Schemas");

@@ -1,6 +1,6 @@
 {
-    "phpserver.phpPath": "C:\\php\\php.exe",
-    "phpserver.phpConfigPath": "C:\\php\\php.ini",
+    "phpserver.phpPath": "C:\\xampp\\php\\php.exe",
+    "phpserver.phpConfigPath": "C:\\xampp\\php\\php.exe",
     "liveServer.settings.port": 5501,
     "sqltools.connections": [
         {
@@ -15,9 +15,11 @@
             "name": "NinchenSQL",
             "database": "infoterminal",
             "username": "root",
-            "askForPassword": true
+            "askForPassword": false
         }
     ],
-    "bitoAI.codeCompletion.enableAutoCompletion": false
+    "bitoAI.codeCompletion.enableAutoCompletion": false,
+    "fiveServer.php.executable": "C:\\xampp\\php\\php.exe",
+    "fiveServer.php.ini": "C:\\xampp\\php\\php.ini"
 }
 
