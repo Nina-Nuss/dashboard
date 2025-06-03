@@ -3,7 +3,7 @@
 include("connection.php");
 
 // Löschen von Datensätzen, bei denen der Titel null ist
-$deleteSql = "DELETE FROM card_objekte WHERE titel IS NULL";
+$deleteSql = "DELETE FROM schemas WHERE titel IS NULL";
 $deleteStmt = sqlsrv_query($conn, $deleteSql);
 if ($deleteStmt === false) {
     die("Fehler beim Löschen: " . print_r(sqlsrv_errors(), true));

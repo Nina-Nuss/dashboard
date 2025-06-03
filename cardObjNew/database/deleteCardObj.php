@@ -10,7 +10,7 @@ if (isset($data['id'])) {
     $id = $data['id'];
 
     // SQL-Abfrage mit Prepared Statement
-    $sql = "DELETE FROM card_objekte WHERE id = ?";
+    $sql = "DELETE FROM schemas WHERE id = ?";
     $params = array($id);
     $stmt = sqlsrv_prepare($conn, $sql, $params);
 

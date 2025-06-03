@@ -11,28 +11,43 @@
     <link rel="stylesheet" href="../css/anzeige.css">
 </head>
 <style>
-    @media (min-width: 1920px) {
-        body {
-            max-width: 1920px;
-            margin: 0 auto;
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
         }
-    }
-</style>
-
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+    
+        .iframe-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+     
+        }
+        iframe {
+            width: 700px;
+            height:600px;
+            border: none;
+            display: block;
+            object-fit: contain;
+        }
+    </style>
+</head>
 <body>
     <header class="pl-3">
         <?php include '..\header\header.php'; ?>
     </header>
-    <article class="content">
-        <div class="d-flex row h-100 flex-column justify-content-center align-items-center">            
-            <div class="d-flex col-auto gap-4 w-100 justify-content-center align-items-center">
-                <img src="../images/1.jpg" alt="logo" class="imageContainer rounded">
-            </div>
-        </div>
-    </article>
-    <footer  class="pr-3">
+
+    <container class="iframe-container">
+        <iframe src="begegnungshaus.php" ></iframe>
+    </container>
+
+    <footer class="pr-3">
         <?php include '..\liveTicker\liveTicker.php'; ?>
     </footer>
 </body>
-
 </html>

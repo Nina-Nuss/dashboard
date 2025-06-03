@@ -89,7 +89,7 @@
                                     </br>
                                     <button type="button" id="btnDis" data-toggle="modal" class="btn btn-light ml-0" data-target="#modal_loeschen">
                                         <span>
-                                            remove
+                                             del 
                                         </span>
                                     </button>
                                 </div>

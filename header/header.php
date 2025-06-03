@@ -35,7 +35,7 @@
 </style>
 
 <div class="parallelogram col-md-12 ml-1">
-    <div class="para_inhalt col-md-10 d-flex text justify-content-between px-5">
+    <div class="para_inhalt d-flex text justify-content-between px-5">
         <div class="clock"> Infoterminal Dashboard</div>
         <div class="clock">
             <div id="time"></div>
