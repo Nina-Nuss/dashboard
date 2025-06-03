@@ -37,14 +37,6 @@
         <?php include '..\liveTicker\liveTicker.php'; ?>
     </footer>
 </body>
-<script>
-    async function carousel(){
-        
-    }
 
-    setInterval(carousel, 5000);
-
-
-</script>
 
 </html>

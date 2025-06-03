@@ -27,9 +27,7 @@
 </style>
 
 <body>
-    <div>
-        <!-- <img src="../cardObjNew/uploads/file_6810d3cbb76e26.61801474.png" class="fullscreen" alt=""> -->
-    </div>
+    
 </body>
 <script>
     function sleep(ms) {
