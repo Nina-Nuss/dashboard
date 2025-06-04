@@ -40,24 +40,41 @@
     }
 </style>
 </head>
-<?php
-    $iframeSrc = $_SESSION["ip"] ?? 'begegnungshaus.php'; // Default to 'begegnungshaus.php' if no IP is provided
-    echo $iframeSrc;
-?>
 
+<script>
+
+
+</script>
 <body>
     <header class="pl-3">
         <?php include '..\header\header.php'; ?>
     </header>
 
-    <container class="iframe-container">
+    <div class="iframe-container" id="container">
 
-        <iframe src="begegnungshaus.php"></iframe>
-    </container>
+
+    </div>
 
     <footer class="pr-3">
         <?php include '..\liveTicker\liveTicker.php'; ?>
     </footer>
 </body>
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const ip = params.get('ip');
+    console.log('IP:', ip);
+    const container = document.getElementById('container');
+    if (ip && container != null) {
+        const iframe = document.createElement('iframe');
+        var datai = `${ip}.php`;
+        iframe.src = `${datai}`;
+        console.log('Iframe source:', iframe.src);
+        console.log();
+        
+        container.appendChild(iframe);
 
+    } else {
+        container.innerHTML = '<p class="text-danger">No IP address provided.</p>';
+    }
+</script>
 </html>
