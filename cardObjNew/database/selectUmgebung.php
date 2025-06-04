@@ -21,8 +21,13 @@ while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 }
 sqlsrv_free_stmt($result);
 
+
+
 $jsonList = json_encode($unsereTabelle);
 echo $jsonList;
 
 sqlsrv_close($conn);
+
+
+
 ?>

@@ -11,43 +11,53 @@
     <link rel="stylesheet" href="../css/anzeige.css">
 </head>
 <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-    
-        .iframe-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-     
-        }
-        iframe {
-            width: 700px;
-            height:600px;
-            border: none;
-            display: block;
-            object-fit: contain;
-        }
-    </style>
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .iframe-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+    }
+
+    iframe {
+        width: 700px;
+        height: 600px;
+        border: none;
+        display: block;
+        object-fit: contain;
+    }
+</style>
 </head>
+<?php
+    $iframeSrc = $_SESSION["ip"] ?? 'begegnungshaus.php'; // Default to 'begegnungshaus.php' if no IP is provided
+    echo $iframeSrc;
+?>
+
 <body>
     <header class="pl-3">
         <?php include '..\header\header.php'; ?>
     </header>
 
     <container class="iframe-container">
-        <iframe src="begegnungshaus.php" ></iframe>
+
+        <iframe src="begegnungshaus.php"></iframe>
     </container>
 
     <footer class="pr-3">
         <?php include '..\liveTicker\liveTicker.php'; ?>
     </footer>
 </body>
+
 </html>
