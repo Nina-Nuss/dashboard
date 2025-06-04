@@ -50,10 +50,10 @@
         <?php include '..\header\header.php'; ?>
     </header>
 
-    <div class="iframe-container" id="container">
+    <container class="iframe-container" id="container">
 
 
-    </div>
+    </container>
 
     <footer class="pr-3">
         <?php include '..\liveTicker\liveTicker.php'; ?>
@@ -61,7 +61,20 @@
 </body>
 <script>
     const params = new URLSearchParams(window.location.search);
+
+    function getImagePath(){
+        const jsonlist = fetch("..\web\index.php")
+            .then(response => response.json())
+            .then(data => {
+                console.log('Data received:', data);
+                return data;
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }
     const ip = params.get('ip');
+    getImagePath()
     console.log('IP:', ip);
     const container = document.getElementById('container');
     if (ip && container != null) {
