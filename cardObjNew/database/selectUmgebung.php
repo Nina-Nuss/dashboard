@@ -23,8 +23,8 @@ sqlsrv_free_stmt($result);
 
 
 
-$jsonList = json_encode($unsereTabelle1);
-// echo $jsonList;
+$jsonList2 = json_encode($unsereTabelle1);
+echo $jsonList2;
 
 sqlsrv_close($conn);
 

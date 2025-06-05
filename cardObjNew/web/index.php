@@ -37,6 +37,7 @@ foreach ($unsereTabelle1 as $datensatz) {
         // echo "Gefundene IP: " . $datensatz[2] . "<br>";
         // echo "Titel: " . $datensatz[1] . "<br>";
         // echo "<h4>------------</h4>";
+      
         echo json_encode($listePics);
 
         header("Location: /anzeigeTherminal/index.php?ip=" . urlencode($datensatz[1]));

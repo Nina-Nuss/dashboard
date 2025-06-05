@@ -32,6 +32,8 @@ window.onload = function () {
         setUmgebung(Umgebung.umgebungsListe[2]);
         disableInput(denied)
         createCardObj();
+        console.log("SADFDSAFSADFSAFSADFDSAFSDF");
+        
         updateAlwaysOnButtons()
 
 
@@ -193,12 +195,18 @@ function getJsonData(key) {
 function createCardObj() {
     selectObj("cardObjNew/database/selectCardObj.php").then(async (data) => {
         let objList = convertCardObjForDataBase(data)
+        console.log(objList);
+        
         objList.forEach(obj => {
-            console.log(obj.imagePath);
+            console.log(obj);
             Umgebung.umgebungsListe.forEach(umgebung => {
-                if (umgebung.titel == obj.titel) {
-                    var cardObj = new CardObj(umgebung, obj.titel, obj.checkSelect, obj.imagePath, obj.imageSet, obj.startDateTime, obj.endDateTime, obj.aktiv, obj.id);
+                console.log("umgebungsID= ", umgebung.id , " obj.infotherminalID= ", obj.infotherminalID);
+                
+                if (umgebung.id == obj.infotherminalID) {
+                    var cardObj = new CardObj(umgebung, obj.titel, obj.checkSelect, obj.imagePath, obj.imageSet, obj.startDateTime, obj.endDateTime, obj.aktiv, obj.infotherminalID);
                     new Beziehungen(umgebung, cardObj)
+                    console.log(cardObj);
+                    
                 }
             })
         });
@@ -207,18 +215,18 @@ function createCardObj() {
 
 function convertCardObjForDataBase(cardObjListe) {
     objListe = []
-
+    console.log(cardObjListe);
+    
     cardObjListe.forEach(cardObj => {
         var obj = {
             id: cardObj[0],
-            titel: cardObj[1],
-            imagePath: cardObj[2],
-            selectedTime: cardObj[3],
-            checkSelect: cardObj[4], //True or false
-            imageSet: cardObj[5], //True or false
-            aktiv: cardObj[6], //True or false
-            startDateTime: cardObj[7],
-            endDateTime: cardObj[8]
+            imagePath: cardObj[1],
+            selectedTime: cardObj[2], //True or false
+            isImageSet: cardObj[3], //True or false
+            isAktiv: cardObj[4], //True or false
+            startDateTime: cardObj[5],
+            endDateTime: cardObj[6],
+            infotherminalID: cardObj[7],
         };
         objListe.push(obj)
     });

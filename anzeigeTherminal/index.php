@@ -62,19 +62,33 @@
 <script>
     const params = new URLSearchParams(window.location.search);
 
-    function getImagePath(){
-        const jsonlist = fetch("..\web\index.php")
+    async function getImagePath(){
+        const jsonlist = await fetch("/cardObjNew/database/selectCardObj.php")
             .then(response => response.json())
             .then(data => {
-                console.log('Data received:', data);
-                return data;
+              
+                const jslist = {
+                    id: item[0],
+                    imagePath: data[1],
+                    selectedTime: data[2],
+                    isImageSet: data[3],
+                    isAktiv: data[4],
+                    startDateTime: data[5],
+                    endDateTime: data[6],
+                    infotherminal_id: data[7]
+                };
+                return jslist;
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
             });
     }
+
+
     const ip = params.get('ip');
-    getImagePath()
+    var list = getImagePath()
+    console.log('Image Path List:', list);
+    
     console.log('IP:', ip);
     const container = document.getElementById('container');
     if (ip && container != null) {

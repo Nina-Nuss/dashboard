@@ -39,8 +39,8 @@ while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 sqlsrv_free_stmt($result);
 
 // JSON-Ausgabe
-$jsonList = json_encode($unsereTabelle2);
-// echo $jsonList;
+$jsonList1 = json_encode($unsereTabelle2);
+echo $jsonList1;
 
 sqlsrv_close($conn);
 ?>

@@ -1,6 +1,6 @@
 class CardObj {
     static idCounter = 1;
-    constructor(umgebung, titel, imagePath, imageSet, startDateTime, endDateTime, aktiv, currentSelected, id) {
+    constructor(imagePath, selectedTime , startDateTime,  startDateTime, endDateTime, infotherminalID) {
 
         this.id = id;
         this.update = false;
@@ -11,8 +11,9 @@ class CardObj {
         this.imageSet = imageSet  //true or false
         this.startDateTime = startDateTime //Der kalender, der den startdatum enthält
         this.endDateTime = endDateTime //Der kalender, der die enddatum enthält
-        this.currentSelected = currentSelected // Der aktuelle ausgewählte Wert
+        this.selectedTime = selectedTime // Der aktuelle ausgewählte Wert
         this.aktiv = aktiv //true or false
+        this.infotherminalID = infotherminalID // Der Infoterminal ID, zu dem das Objekt gehört
         //-------------------------------------
 
 
