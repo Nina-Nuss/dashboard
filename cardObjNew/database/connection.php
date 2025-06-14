@@ -1,7 +1,10 @@
 <?php
 
 // MSSQL Verbindungsparameter
-$serverName = "FIS-BW-03\\SQLEXPRESS"; // Doppelter Backslash für PHP
+$serverName = "FIS-BW-03\\SQLEXPRESS"; 
+
+
+
 $connectionOptions = array(
     "Database" => "infotherminal",      // Hier den Datenbanknamen eintragen!
     "CharacterSet" => "UTF-8",

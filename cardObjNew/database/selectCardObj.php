@@ -27,11 +27,10 @@ while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
             $row["id"],
             $row["imagePath"],
             $row["selectedTime"],
-            (bool)$row["isImageSet"],
             (bool)$row["isAktiv"],
             $row["startDateTime"],
             $row["endDateTime"],
-            $row["infotherminal_id"]
+            $row["fk_infotherminal_id"]
         ));
     }
 }

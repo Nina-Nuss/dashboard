@@ -7,7 +7,7 @@ require("../database/selectCardObj.php");
 // echo "<h1>------------</h1>";
 
 
-$clientIP = $_GET["ip"] ?? '2';
+$clientIP = $_GET["ip"] ?? '1';
 
 
 
