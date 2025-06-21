@@ -1,11 +1,19 @@
 <?php
+
+require("../cardObjNew/database/selectCardObj.php");
+//                 imagePath: item[1],
+
 // Pfad zum gewünschten Ordner
 $ordner = "../cardObjNew/uploads";
+
 
 $array = array();
 
 
+
+
 // Prüfen, ob der Ordner existiert
+
 if (is_dir($ordner)) {
     // Alle Dateien und Ordner einlesen
     $dateien = scandir($ordner);
