@@ -1,10 +1,10 @@
 <?php
 
-require("../cardObjNew/database/selectCardObj.php");
+// include("../cardObjNew/database/selectCardObj.php");
 //                 imagePath: item[1],
 
 // Pfad zum gewünschten Ordner
-$ordner = "../cardObjNew/uploads";
+$ordner = "../uploads";
 
 
 $array = array();

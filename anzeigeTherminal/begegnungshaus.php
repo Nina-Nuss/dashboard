@@ -35,7 +35,7 @@
     }
 
     async function carousel() {
-        const response = await fetch("../php/getNamesFolder.php");
+        const response = await fetch("../cardObjNew/database/getNamesFolder.php");
         if (!response.ok) {
             console.error('Error fetching image:', response.statusText);
             return;
