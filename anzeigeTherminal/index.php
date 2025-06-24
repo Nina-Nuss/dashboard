@@ -45,6 +45,7 @@
 
 
 </script>
+
 <body>
     <header class="pl-3">
         <?php include '..\header\header.php'; ?>
@@ -66,7 +67,7 @@
     //     const jsonlist = await fetch("/cardObjNew/database/selectCardObj.php")
     //         .then(response => response.json())
     //         .then(data => {
-              
+
     //             const jslist = {
     //                 id: item[0],
     //                 imagePath: data[1],
@@ -86,22 +87,21 @@
 
 
     const ip = params.get('ip');
-    // var list = getImagePath()
-    // console.log('Image Path List:', list);
+    console.log('IP-Adresse:', ip); // IP-Adresse aus der URL holen
     
-    console.log('IP:', ip);
+    const foo = params.get('foo'); // weitere Variable aus der URL holen (optional)
     const container = document.getElementById('container');
     if (ip && container != null) {
         const iframe = document.createElement('iframe');
-        var datai = `${ip}.php`;
-        iframe.src = `${datai}`;
-        console.log('Iframe source:', iframe.src);
-        console.log();
-        
+        // Variablen als Query-Parameter anhängen
+        let data = `anzeige.php?ip=${encodeURIComponent(ip)}`;
+        // Wenn du weitere Variablen hast, einfach anhängen:
+        // data += `&foo=${encodeURIComponent(foo)}`;
+        iframe.src = data;
         container.appendChild(iframe);
-
     } else {
         container.innerHTML = '<p class="text-danger">No IP address provided.</p>';
     }
 </script>
+
 </html>
