@@ -12,11 +12,13 @@ ob_end_clean();
 
 $input = json_decode(file_get_contents("php://input"), true);
 
+$ipGefunden = false;
+
 $jsonList1 = json_decode($jsonList1); //Schemas
 $jsonList2 = json_decode($jsonList2); //Infoterminals
 
 
-$ip = $input['ip'] ?? 'aula';
+$ip = $input['ip'] ?? 'aulaa';
 
 
 
@@ -24,10 +26,15 @@ foreach ($jsonList2 as $infotherminal) {
     if ($ip == $infotherminal[1]) {
         $ip = $infotherminal[2];
         // echo "<br>Gefundene IP: " . $ip . "<br>";
+        $ipGefunden = true;
     }
+
 }
 
-
+if(!$ipGefunden) {
+    // echo "<br>IP nicht gefunden, Standardwert wird verwendet: " . $ip . "<br>";
+    return json_encode([]); // Rückgabe eines leeren Arrays, wenn die IP nicht gefunden wurde
+}
 
 
 

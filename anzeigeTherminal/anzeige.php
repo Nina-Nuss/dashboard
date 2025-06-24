@@ -55,6 +55,11 @@
             }
 
             const data = await response.json();
+
+            if (data === null || data === undefined) {
+                console.error('No data received or data is null/undefined');
+                return;
+            }
             console.log('Received data:', data);
             while (true) {
                 for (const element of data) {
