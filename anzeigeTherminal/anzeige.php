@@ -61,6 +61,10 @@
                 return;
             }
             console.log('Received data:', data);
+            if(data.length === 0) {
+                console.error('Received data is empty');
+                return;
+            }
             while (true) {
                 for (const element of data) {
                     console.log(element[1]);

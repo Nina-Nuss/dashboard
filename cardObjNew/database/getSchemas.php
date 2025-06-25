@@ -18,17 +18,23 @@ $jsonList1 = json_decode($jsonList1); //Schemas
 $jsonList2 = json_decode($jsonList2); //Infoterminals
 
 
-$ip = $input['ip'] ?? 'aulaa';
+// $clientIP = $_SERVER['REMOTE_ADDR'];
 
-$ipAdresse = $_SERVER['REMOTE_ADDR'];
-echo "Die IP-Adresse des Clients ist: " . $ipAdresse;
 
+$ip = $input['ip'] ?? 'begegnungshaus';
+
+
+
+$therminal = array();
 
 foreach ($jsonList2 as $infotherminal) {
     if ($ip == $infotherminal[1]) {
         $ip = $infotherminal[2];
+        $id = $infotherminal[0];
         // echo "<br>Gefundene IP: " . $ip . "<br>";
         $ipGefunden = true;
+      
+        array_push($therminal, $id, $ip);
     }
 }
 if(!$ipGefunden) {
@@ -37,16 +43,16 @@ if(!$ipGefunden) {
 }
 
 $images = getAllImages();
+
+
+
 $imagesContainer = array();
 
 foreach ($images as $image) {
     // echo "<br>" . "gesuchtes Bild: " . $image . "<br>";
     foreach ($jsonList1 as $item) {
-        if ($item[1] == $image && $item[6] == $ip) {
+        if ($item[1] == $image && $item[6] == $therminal[0]) {
             array_push($imagesContainer, $item);
-
-            // echo "<br>";
-            // echo "bild ist im ort: " . $item[6];
         }
     }
 };

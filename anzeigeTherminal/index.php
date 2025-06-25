@@ -63,38 +63,16 @@
 <script>
     const params = new URLSearchParams(window.location.search);
 
-    // async function getImagePath(){
-    //     const jsonlist = await fetch("/cardObjNew/database/selectCardObj.php")
-    //         .then(response => response.json())
-    //         .then(data => {
 
-    //             const jslist = {
-    //                 id: item[0],
-    //                 imagePath: data[1],
-    //                 selectedTime: data[2],
-    //                 isImageSet: data[3],
-    //                 isAktiv: data[4],
-    //                 startDateTime: data[5],
-    //                 endDateTime: data[6],
-    //                 infotherminal_id: data[7]
-    //             };
-    //             return jslist;
-    //         })
-    //         .catch(error => {
-    //             console.error('Error fetching data:', error);
-    //         });
-    // }
-
-
-    const ip = params.get('ip');
-    console.log('IP-Adresse:', ip); // IP-Adresse aus der URL holen
+    const ort = params.get('ip');
+    console.log('IP-Adresse:', ort); // IP-Adresse aus der URL holen
     
     const foo = params.get('foo'); // weitere Variable aus der URL holen (optional)
     const container = document.getElementById('container');
-    if (ip && container != null) {
+    if (ort && container != null) {
         const iframe = document.createElement('iframe');
         // Variablen als Query-Parameter anhängen
-        let data = `anzeige.php?ip=${encodeURIComponent(ip)}`;
+        let data = `anzeige.php?ip=${encodeURIComponent(ort)}`;
         // Wenn du weitere Variablen hast, einfach anhängen:
         // data += `&foo=${encodeURIComponent(foo)}`;
         iframe.src = data;
