@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON-Datei Test</title>
+</head>
+
+<body>
+    <h1>JSON-Datei Test</h1>
+    <div id="output"></div>
+
+    <script>
+        async function writeJson() {
+            const jsonData = {
+                id: 1,
+                name: "Max Mustermann",
+                aktiv: true
+            };
+
+            const jsonData2 = {
+                id: 2,
+                name: "Max Mustermann",
+                aktiv: true
+            };	
+
+            jsonList = [jsonData, jsonData2];
+
+            const jsonObj = JSON.stringify(jsonList, null, 2); 
+    
+            await fetch("setJson.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+                body: jsonObj
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Erfolgreich gespeichert:", data);
+            });
+           
+
+            
+        }
+
+
+
+        // Funktion zum Laden der JSON-Daten aus der Datei
+        async function loadJsonData() {
+            try {
+                // JSON-Datei laden
+                const response = await fetch("meineDaten.json");
+                if (!response.ok) {
+                    throw new Error("Fehler beim Laden der JSON-Datei");
+                }
+
+                // JSON-Daten parsen
+                const jsonData = await response.json();
+                console.log("Geladene JSON-Daten:", jsonData);
+
+                // Daten in localStorage speichern
+                localStorage.setItem("meineDaten", JSON.stringify(jsonData));
+
+                // Daten in der Benutzeroberfläche anzeigen
+                const outputDiv = document.getElementById("output");
+                outputDiv.innerHTML = `
+                    <p>ID: ${jsonData.id}</p>
+                    <p>Name: ${jsonData.name}</p>
+                    <p>Aktiv: ${jsonData.aktiv}</p>
+                `;
+            } catch (error) {
+                console.error("Fehler:", error);
+            }
+        }
+
+        // Funktion zum Abrufen der Daten aus localStorage
+        function loadFromLocalStorage() {
+            const saveData = JSON.parse(localStorage.getItem("meineDaten"));
+            if (saveData) {
+                console.log("Daten aus localStorage:", saveData);
+                const outputDiv = document.getElementById("output");
+
+                saveData.forEach(element => {
+                    outputDiv.innerHTML += `
+                    <p>ID: ${element.id}</p>
+                    <p>Name: ${element.name}</p>
+                    <p>Aktiv: ${element.aktiv}</p>
+                `;
+                });
+                // Daten in der Benutzeroberfläche anzeigen
+              
+               
+            } else {
+                console.log("Keine Daten im localStorage gefunden.");
+            }
+        }
+
+        writeJson()
+    
+        // loadJsonData();
+
+        loadFromLocalStorage();
+    </script>
+</body>
+
+</html>

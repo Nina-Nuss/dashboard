@@ -1,0 +1,322 @@
+* {
+    font-family: Roboto;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    margin-top: 5px;
+    width: 100%;
+}
+
+.leftscrollbar {
+    height: 100px;
+    overflow: auto;
+    direction: rtl;
+}
+
+.materialDesigne {
+    padding-bottom: 0;
+    height: auto;
+}
+
+.settings {
+    float: initial;
+
+}
+
+.form-group {
+    margin-top: 2vh;
+}
+
+#btnDis {
+    width: auto;
+    padding: 0;
+    padding-top: 5px;
+    height: auto;
+    margin: 0px;
+    overflow: hidden;
+   
+
+    margin-left: 0vh;
+}
+
+
+
+#btnPosition{
+    margin: 0px !important;
+    padding: 0px !important;
+    
+
+}
+
+
+@media (max-width: 1000px) {
+
+    /* DIV-Element ausblenden, wenn die Bildschirmbreite kleiner oder gleich 768px ist */
+    .bearbeiten {
+        display: none;
+    }
+}
+
+@media (min-width: 992px) {
+
+    .col-md-1,
+    .col-md-10,
+    .col-md-11,
+    .col-md-12,
+    .col-md-2,
+    .col-md-3,
+    .col-md-4,
+    .col-md-5,
+    .col-md-6,
+    .col-md-7,
+    .col-md-8,
+    .col-md-9 {
+        float: initial;
+    }
+}
+
+#anzeigeTerminal {
+    border: black;
+    border-radius: 10px;
+}
+
+.start-btn {
+    border-width: 2px !important;
+    border-color: 006c99 !important;
+}
+
+.para_inhalt {
+    float: initial;
+}
+
+.marquee {
+    max-width: 100vw;
+    /* iOS braucht das */
+    white-space: nowrap;
+    overflow: hidden;
+    /* hier evtl. noch font-size, color usw. */
+}
+
+.marquee span {
+    display: inline-block;
+    padding-left: 105%;
+    /* die zusätzlichen 5% erzeugen einen verzögerten Start und vermeiden so ein Ruckeln auf langsamen Seiten */
+    animation: marquee 10s linear infinite;
+}
+
+/* Make it move */
+@keyframes marquee {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    100% {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+#datetimepicker1 {
+    width: 90%;
+    margin-bottom: 10px;
+}
+
+#datetimepicker2 {
+    width: 90%;
+    margin-bottom: 10px;
+}
+
+.parallelogram {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 5px 0 rgba(0, 0, 0, 0.19);
+    background-color: #006c99;
+    transform: skew(-35deg);
+    width: 98%;
+    margin-left: 3vh;
+    z-index: -1;
+    overflow: hidden;
+    align-items: center;
+
+}
+
+.text {
+    width: auto;
+    color: aliceblue;
+    font-weight: bold;
+    transform: skewX(35deg);
+    font-size: 4vh;
+    margin: 0 auto;
+
+
+}
+
+label {
+    margin-bottom: 0px
+}
+
+.start-btn:hover {
+    background-color: #006c99 !important;
+    color: white !important;
+}
+
+.center-block {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.list-group-item.active,
+.list-group-item.active:focus,
+.list-group-item.active:hover {
+    z-index: 2;
+    color: white !important;
+    background-color: #006c99;
+    border-color: #006c99;
+}
+
+#dokumente {
+    overflow: scroll;
+    height: 70%;
+    scroll-behavior: smooth;
+
+}
+
+.clock {
+    text-align: center;
+}
+
+.clock h1 {
+    margin: 0;
+    color: #333;
+}
+
+.clock p {
+    margin: 10px 0 0;
+    color: #666;
+}
+
+.displayIp {
+    height: 12vh;
+    /* max-width: 100px; */
+    width: 100%;
+    background-color: red;
+    width: auto;
+    padding: 5px;
+    overflow: scroll;
+
+}
+
+/* Webkit Scrollbar-Styling */
+::-webkit-scrollbar {
+    width: 12px;
+    /* Breite der Scrollleiste */
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 4px #006c99;
+    
+    ;
+ 
+}
+
+::-webkit-scrollbar-track-piece {
+    display: none;
+}
+
+
+
+.btnDisplay {
+    font-size: 15px;
+    width: 20vh;
+    align-self: center;
+}
+
+hr {
+    width: 100%;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+
+}
+
+.vr {
+    margin: 0;
+    position: fixed;
+}
+
+.btn {
+    width: 25vh;
+    margin-left: 1vh;
+    padding: 5px !important;
+    height: auto;
+    font-size: auto;
+
+
+}
+
+.links,
+.mitte,
+.rechts {
+    width: 33.33%;
+}
+
+.materialDesigne{
+    padding-bottom: 0px !important;
+} 
+
+#IP_Adress {
+    height: 100%;
+    align-items: center;
+}
+
+#IP_Adresse_main{
+    width: 40vh;
+    float: left;
+}
+
+.row {
+    flex-wrap: nowrap;
+    margin-top: 1vh;
+}
+
+#anzeige {
+    font-size: 2.5ch;
+    padding-bottom: 10px;
+
+}
+
+#website-name {
+    font-weight: bold;
+}
+
+#container_btn1 {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1vh;
+    margin-top: 1vh;
+}
+
+#container_btn2 {
+    display: block;
+    float: right;
+    margin-bottom: 1vh;
+    margin-top: 1vh;
+}
+
+.button_time {
+    width: 50px;
+    background: none;
+    border: none;
+    display: flex;
+    justify-content: center;
+    margin-left: 10px;
+}
+
+.button_time:hover {
+    background-color: grey;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none;
+}
+

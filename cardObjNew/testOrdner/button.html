@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Increment and Decrement</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #number {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Increment and Decrement</h1>
+    <div id="number">0</div>
+    <button id="increment">Increase</button>
+    <button id="decrement">Decrease</button>
+
+    <script>
+        let number = 0;
+        const numberDisplay = document.getElementById('number');
+        const incrementButton = document.getElementById('increment');
+        const decrementButton = document.getElementById('decrement');
+
+        incrementButton.addEventListener('click', () => {
+            number++;
+            numberDisplay.innerHTML = number;
+        });
+
+        decrementButton.addEventListener('click', () => {
+            number--;
+            numberDisplay.textContent = number;
+        });
+    </script>
+</body>
+</html>

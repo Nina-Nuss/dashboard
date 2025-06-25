@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adjustable Timer</title>
+</head>
+<body>
+    <div>
+        <label for="minutes">Minutes:</label>
+        <input type="number" id="minutes" min="0" value="5">
+    </div>
+    <div>
+        <label for="seconds">Seconds:</label>
+        <input type="number" id="seconds" min="0" value="0">
+    </div>
+    <button onclick="startTimer()">Start Timer</button>
+    <div id="timer">00:00</div>
+
+    <script src="timer.js"></script>
+</body>
+</html>

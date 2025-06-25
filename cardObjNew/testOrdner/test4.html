@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divs nebeneinander ohne Flexbox</title>
+    <style>
+        /* Methode 1: Inline-Block */
+        .inline-block-container {
+        
+            margin-bottom: 20px;
+        }
+        .inline-block-box {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            background-color: lightblue;
+            margin: 10px;
+        }
+        /* Methode 2: Float */
+        .float-container {
+            overflow: hidden; /* Float-Clearing */
+            margin-bottom: 20px;
+        }
+        .float-box {
+            float: left;
+            width: 100px;
+            height: 100px;
+            background-color: lightcoral;
+            margin: 10px;
+        }
+
+        /* Methode 3: CSS Grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 100px); /* 3 Spalten */
+            gap: 10px;
+        }
+        .grid-box {
+            width: 100px;
+            height: 100px;
+            background-color: lightgreen;
+        }
+    </style>
+</head>
+<body>
+    <h1>Divs nebeneinander ohne Flexbox</h1>
+
+    <h2>1. Methode: Inline-Block</h2>
+    <div class="inline-block-container">
+        <div class="inline-block-box"></div>
+        <div class="inline-block-box"></div>
+        <div class="inline-block-box"></div>
+    </div>
+
+    <h2>2. Methode: Float</h2>
+    <div class="float-container">
+        <div class="float-box"></div>
+        <div class="float-box"></div>
+        <div class="float-box"></div>
+    </div>
+
+    <h2>3. Methode: CSS Grid</h2>
+    <div class="grid-container">
+        <div class="grid-box"></div>
+        <div class="grid-box"></div>
+        <div class="grid-box"></div>
+    </div>
+</body>
+</html>

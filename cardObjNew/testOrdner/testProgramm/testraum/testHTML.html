@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Einbinden der jQuery-Bibliothek über ein CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="content">
+        <h1>Willkommen auf meiner Webseite</h1>
+        <p>Dies ist ein Beispieltext.</p>
+        <button id="openModal1">Klick mich</button>
+        <div id="myModal1" class="modal">
+            <div class="modal-content">
+                <span id="closeModal1" class="close">&times;</span>
+                <div class="container mt-3" id="zeitManagment1" style="display: block;">
+                    <div class="input-group">
+                        <span class="input-group-text" id="daterange-icon1">
+                            <i class="bi bi-calendar3"></i>
+                            <input type="text" id="daterange1" class="file-input-button" readonly>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $(document).ready(function () {
+        $(document).on('click', 'button[id^="openModal"]', function () {
+            const buttonId = $(this).attr('id'); //"openModal1"
+            const modalId = buttonId.replace('openModal', 'myModal'); // e.g., "myModal1"
+            const aktuellesObj = findObj(modalId);
+            console.log(aktuellesObj);
+            console.log(modalId);
+            if (!aktuellesObj.imageSet) {
+                return;
+            } else {
+                $(`#${modalId}`).fadeIn(() => {
+                    // Sobald das Modal sichtbar ist, den DateTimePicker fokussieren
+                    const dateRangeId = modalId.replace('myModal', 'daterange');
+                    console.log(dateRangeId);
+
+                    // Warten Sie einen kurzen Moment, um sicherzustellen, dass das Element vollständig sichtbar ist
+                    setTimeout(() => {
+                        $(`#${dateRangeId}`).focus(); // Fokus auf das Eingabefeld
+                    }, 100); // 100 Millisekunden Verzögerung
+                });
+            }
+        });
+
+        // Close the modal when the "x" button is clicked
+        $(document).on('click', '.close', function () {
+            $(this).closest('.modal').fadeOut();
+        });
+
+        // Schließt modal wenn außerhalb des modales geklickt wird
+        $(document).on('click', function (event) {
+            const $target = $(event.target);
+            if ($target.hasClass('modal')) { // Check if the clicked element has the "modal" class
+                $target.fadeOut();
+            }
+        });
+    });
+</script>
+</html>

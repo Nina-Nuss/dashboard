@@ -1,0 +1,33 @@
+<!-- Modal Error Log -->
+<div class="modal fade" id="modalerrorcontent" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content" style="width: 800px;">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Error Log letzte 10.000 Einträge.</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <ul id="ul_list" class="list-group list-group-flush"
+                style="height: 600px;overflow: auto;width: 700px;">
+
+                <!-- <script>
+                    (async function () {
+                        // var fetchPromise = await fetch("../../php/geterrorlog.php");
+                        var fetchPromise = await fetch("../php/geterrorlog.php");
+                        var result = await fetchPromise.text();
+                        if (result == "") return false;
+                        document.getElementById("ul_list").innerHTML = result;
+                    })();
+
+                </script> -->
+            </ul>
+        </div>
+        <div class="modal-footer">
+            <button type="button" style="width: 100px;" class="btn btn-primary" data-dismiss="modal">Ok</button>
+        </div>
+    </div>
+</div>
+</div>

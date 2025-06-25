@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warnung beim Schließen</title>
+</head>
+<body>
+    <h1>Warnung beim Schließen des Browsers</h1>
+    <button>meow</button>
+</body>
+<script>
+    window.addEventListener("beforeunload", function (event) {
+        // Standardverhalten verhindern
+        event.preventDefault();
+
+        // Einige Browser benötigen die Rückgabe eines Strings, um die Warnung anzuzeigen
+        event.returnValue = "Sind Sie sicher, dass Sie die Seite verlassen möchten? Nicht gespeicherte Änderungen gehen verloren.";
+        return "Sind Sie sicher, dass Sie die Seite verlassen möchten? Nicht gespeicherte Änderungen gehen verloren.";
+    });
+</script>
+</html>
