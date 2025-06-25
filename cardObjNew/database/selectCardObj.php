@@ -11,11 +11,11 @@ if ($result === false) {
 }
 
 // Pfad zu den Bildern
-$path = "../uploads";
+$path = "/uploads";
 $absolutePath = realpath($path);
 
 if (!$absolutePath || !is_dir($absolutePath)) {
-    die("Der Ordner 'uploads' existiert nicht.");
+    echo "Der Ordner 'uploads' existiert nicht.";
 }
 
 // Tabelle für die Ergebnisse

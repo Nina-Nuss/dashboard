@@ -1,14 +1,16 @@
 <?php
 
-require("../database/selectUmgebung.php");
-require("../database/selectCardObj.php");
+
+include("database/selectUmgebung.php");
+include("database/selectCardObj.php");
 
 
 // echo "<h1>------------</h1>";
 
 
-$clientIP = $_GET["ip"] ?? '1';
 
+$clientIP = $_SERVER['REMOTE_ADDR'];
+echo "Die IP-Adresse des Clients ist: " . $clientIP;
 
 
 // echo "ip adresse: " . $clientIP . "<br>";

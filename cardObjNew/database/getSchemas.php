@@ -20,6 +20,8 @@ $jsonList2 = json_decode($jsonList2); //Infoterminals
 
 $ip = $input['ip'] ?? 'aulaa';
 
+$ipAdresse = $_SERVER['REMOTE_ADDR'];
+echo "Die IP-Adresse des Clients ist: " . $ipAdresse;
 
 
 foreach ($jsonList2 as $infotherminal) {
@@ -28,20 +30,14 @@ foreach ($jsonList2 as $infotherminal) {
         // echo "<br>Gefundene IP: " . $ip . "<br>";
         $ipGefunden = true;
     }
-
 }
-
 if(!$ipGefunden) {
     // echo "<br>IP nicht gefunden, Standardwert wird verwendet: " . $ip . "<br>";
     return json_encode([]); // Rückgabe eines leeren Arrays, wenn die IP nicht gefunden wurde
 }
 
-
-
 $images = getAllImages();
-
 $imagesContainer = array();
-
 
 foreach ($images as $image) {
     // echo "<br>" . "gesuchtes Bild: " . $image . "<br>";
@@ -56,7 +52,6 @@ foreach ($images as $image) {
 };
 
 $imageList = json_encode($imagesContainer);
-
 echo $imageList;
 
 // echo "<br>";
@@ -83,7 +78,6 @@ echo $imageList;
 
 // echo json_encode($array);
 // Optional: IP-Adresse zurückgeben, falls benötigt
-
 function getAllImages()
 {
 
@@ -104,6 +98,5 @@ function getAllImages()
     } else {
         echo "Ordner nicht gefunden.";
     };
-
     return $array;
 }
