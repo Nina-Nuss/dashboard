@@ -200,7 +200,7 @@ function createCardObj() {
         objList.forEach(obj => {
             console.log(obj);
             Umgebung.umgebungsListe.forEach(umgebung => {
-                console.log("umgebungsID= ", umgebung.id , " obj.infotherminalID= ", obj.infotherminalID);
+              
                 
                 if (umgebung.id == obj.infotherminalID) {
                     var cardObj = new CardObj(umgebung, obj.titel, obj.checkSelect, obj.imagePath, obj.imageSet, obj.startDateTime, obj.endDateTime, obj.aktiv, obj.infotherminalID);
@@ -209,6 +209,7 @@ function createCardObj() {
                     
                 }
             })
+            
         });
     })
 }

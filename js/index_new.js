@@ -173,7 +173,7 @@ function cutAndCreate(responseText) {
     }
 }
 
-docuument.getElementById("adminBereich").addEventListener("click", function () {
+document.getElementById("adminBereich").addEventListener("click", function () {
     
 
 });
