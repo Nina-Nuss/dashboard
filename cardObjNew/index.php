@@ -1,8 +1,10 @@
 <?php
-
+ob_start();
 
 require("database/selectUmgebung.php");
 require("database/selectCardObj.php");
+
+ob_end_clean();
 
 
 // echo "<h1>------------</h1>";
@@ -18,13 +20,14 @@ echo "Die IP-Adresse des Clients ist: " . $clientIP;
 
 $listePics = array();
 
-foreach ($unsereTabelle1 as $datensatz) {
+foreach ($infothermalList1 as $datensatz) {
     // Überprüfen, ob die IP-Adresse im Datensatz vorhanden ist und nicht null ist
     if (isset($datensatz[2]) && $clientIP === $datensatz[2] && $datensatz[2] !== null) {
         $idDatensatz = $datensatz[0];
+        echo "<h3>Gefundenes Bild:</h3>";
         // echo $idDatensatz;
         // Wenn die IP-Adresse übereinstimmt, führe die folgenden Aktionen aus
-        foreach ($unsereTabelle2 as $datensatz2) {
+        foreach ($schemalist1 as $datensatz2) {
             
             if($idDatensatz === $datensatz2[6]) {
                 // echo "<h3>Gefundenes Bild:</h3>";
@@ -41,6 +44,7 @@ foreach ($unsereTabelle1 as $datensatz) {
         // echo "Titel: " . $datensatz[1] . "<br>";
         // echo "<h4>------------</h4>";
       
+
         echo json_encode($listePics);
 
         header("Location: ../anzeigeTherminal/index.php?ip=" . urlencode($datensatz[1]));

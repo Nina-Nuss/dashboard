@@ -19,11 +19,11 @@ if (!$absolutePath || !is_dir($absolutePath)) {
 }
 
 // Tabelle für die Ergebnisse
-$unsereTabelle2 = [];
+$schemaList1 = [];
 
 while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
     if (isset($row['id']) && $row['id'] !== null) {
-        array_push($unsereTabelle2, array(
+        array_push($schemaList1, array(
             $row["id"],
             $row["imagePath"],
             $row["selectedTime"],
@@ -38,8 +38,8 @@ while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 sqlsrv_free_stmt($result);
 
 // JSON-Ausgabe
-$jsonList1 = json_encode($unsereTabelle2);
-echo $jsonList1;
+$schemaList = json_encode($schemaList1);
+echo $schemaList;
 
 sqlsrv_close($conn);
 ?>

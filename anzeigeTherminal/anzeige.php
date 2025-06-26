@@ -56,15 +56,12 @@
 
             const data = await response.json();
 
-            if (data === null || data === undefined) {
+            if (data === null || data === undefined || data.length === 0) {
                 console.error('No data received or data is null/undefined');
                 return;
             }
             console.log('Received data:', data);
-            if(data.length === 0) {
-                console.error('Received data is empty');
-                return;
-            }
+         
             while (true) {
                 for (const element of data) {
                     console.log(element[1]);
@@ -85,7 +82,14 @@
             console.error('Fetch failed:', error);
         }
     }
+    timerRefresh(0.1);
     carousel(); // Initial call to set the first image
+
+    function timerRefresh(time) {
+        setTimeout(() => {
+            location.reload();
+        }, 1000 * 60 * time); // Alle 5 Minuten neu laden
+    }
 </script>
 <?php
 

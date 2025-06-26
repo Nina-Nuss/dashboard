@@ -14,8 +14,8 @@ $input = json_decode(file_get_contents("php://input"), true);
 
 $ipGefunden = false;
 
-$jsonList1 = json_decode($jsonList1); //Schemas
-$jsonList2 = json_decode($jsonList2); //Infoterminals
+$schemaList = json_decode($schemaList); //Schemas
+$infothermalList = json_decode($infothermalList); //Infoterminals
 
 
 // $clientIP = $_SERVER['REMOTE_ADDR'];
@@ -27,7 +27,7 @@ $ip = $input['ip'] ?? 'begegnungshaus';
 
 $therminal = array();
 
-foreach ($jsonList2 as $infotherminal) {
+foreach ($infothermalList as $infotherminal) {
     if ($ip == $infotherminal[1]) {
         $ip = $infotherminal[2];
         $id = $infotherminal[0];
@@ -50,8 +50,8 @@ $imagesContainer = array();
 
 foreach ($images as $image) {
     // echo "<br>" . "gesuchtes Bild: " . $image . "<br>";
-    foreach ($jsonList1 as $item) {
-        if ($item[1] == $image && $item[6] == $therminal[0]) {
+    foreach ($schemaList as $item) {
+        if ($item[1] == $image && $item[6] == $therminal[0] && $item[3] == true) {
             array_push($imagesContainer, $item);
         }
     }

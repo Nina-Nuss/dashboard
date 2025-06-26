@@ -9,7 +9,7 @@ if ($result === false) {
     die("Abfragefehler: " . print_r(sqlsrv_errors(), true));
 }
 
-$unsereTabelle1 = [];
+$beziehungsList1 = [];
 
 while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
     if (
@@ -18,10 +18,10 @@ while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 
     ) {
         $key = $row['fk_infotherminal_id'] . '-' . $row['fk_schema_id'];
-        if (in_array($key, $unsereTabelle1)) {
+        if (in_array($key, $beziehungsList1)) {
             continue; // Überspringe doppelte Einträge
         } else {
-            array_push($unsereTabelle1, array(
+            array_push($beziehungsList1, array(
                 $row["fk_infotherminal_id"],
                 $row['fk_schema_id'],
             ));
@@ -30,7 +30,7 @@ while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
 }
 sqlsrv_free_stmt($result);
 
-$jsonList2 = json_encode($unsereTabelle1);
-echo $jsonList2;
+$beziehungsList = json_encode($beziehungsList1);
+echo $beziehungsList;
 
 sqlsrv_close($conn);

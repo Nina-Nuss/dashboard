@@ -172,6 +172,12 @@ function cutAndCreate(responseText) {
             new anzeigebereich(inZeile[0], inZeile[1], inZeile[2], inZeile[3], inZeile[4], inZeile[5], inZeile[6])   
     }
 }
+
+docuument.getElementById("adminBereich").addEventListener("click", function () {
+    
+
+});
+
 function insert() {
     fetch("./db/insert.php").then(async (response) => {
         this.responseText = await response.text();

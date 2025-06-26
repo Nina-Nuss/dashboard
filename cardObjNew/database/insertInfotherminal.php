@@ -1,0 +1,37 @@
+<?php
+session_start();
+include("connection.php");
+
+
+$ip = $_SESSION['ip'] ?? '';
+$name = $_SESSION['name'] ?? '';
+// ...weiter wie gehabt...
+// IP und Name aus POST-Daten abrufen
+
+// Überprüfen, ob beide Werte vorhanden sind
+if ($ip !== '' && $name !== '') {
+    // SQL-Abfrage mit Prepared Statement
+    $sql = "INSERT INTO infotherminals (titel, ipAdresse) VALUES (?, ?)";
+    $params = array($name, $ip);
+    $stmt = sqlsrv_prepare($conn, $sql, $params);
+
+    if ($stmt) {
+        // Statement ausführen
+        if (sqlsrv_execute($stmt)) {
+            echo "Datensatz erfolgreich eingefügt";
+        } else {
+            echo "Fehler beim Einfügen: ";
+            print_r(sqlsrv_errors());
+        }
+        // Statement schließen
+        sqlsrv_free_stmt($stmt);
+    } else {
+        echo "Fehler bei der Vorbereitung: ";
+        print_r(sqlsrv_errors());
+    }
+} else {
+    echo "Fehler: IP oder Name nicht gesetzt";
+}
+
+sqlsrv_close($conn);
+?>
