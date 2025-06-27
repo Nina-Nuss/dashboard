@@ -22,7 +22,7 @@
                          </div>
                      </div>
                      <!-- Card Objecte -->
-                 </div>
+                 </div>c
                  <div class="col-md-10 text-center pt-2">
                      <div class="col-md-12 mx-auto pl-auto bg-gray-100 ">
                          <div class="d-flex justify-content-center" style="margin-right: 10vh;">
