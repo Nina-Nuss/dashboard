@@ -29,9 +29,9 @@ window.onload = function () {
 
     resultUmgebung.then(() => {
         ladenUmgebung();
-        setUmgebung(Umgebung.umgebungsListe[2]);
+        // setUmgebung(Umgebung.umgebungsListe[1]);
         disableInput(denied)
-        createCardObj();
+        // createCardObj();
         console.log("SADFDSAFSADFSAFSADFDSAFSDF");
         
         updateAlwaysOnButtons()
@@ -193,7 +193,7 @@ function getJsonData(key) {
 }
 
 function createCardObj() {
-    selectObj("cardObjNew/database/selectCardObj.php").then(async (data) => {
+    selectObj("/cardObjNew/database/selectCardObj.php").then(async (data) => {
         let objList = convertCardObjForDataBase(data)
         console.log(objList);
         console.log("createCardObj wurde aufgerufen");

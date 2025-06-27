@@ -1,6 +1,6 @@
 class Umgebung {
     ipAdresse = ""
-      static id = 1;
+    static id = 1;
     static umgebungsListe = [];
     static allCardList = [];
     static ipList = [];
@@ -9,10 +9,9 @@ class Umgebung {
     static allCardsInOneList = [];
 
     static check = false
-    static list = [];
     static listDataBase = [];
 
-     constructor(id, titel, ipAdresse) {
+    constructor(id, titel, ipAdresse) {
         this.id = id;
         this.cardCounter = 0;
         //HTMLOBJEKTE-------------------------
@@ -107,7 +106,7 @@ class Umgebung {
     static event_remove(id) {
         var element = document.getElementById(`CHECK${id}`);
         if (element.checked && !this.temp_remove.includes(id)) {
-            this.list.forEach(checkID => {
+            this.umgebungsListe.forEach(checkID => {
                 if (checkID.id == id) {
                     checkID.check = true
                     // console.log(checkID)
@@ -116,7 +115,7 @@ class Umgebung {
             this.temp_remove.push(id);
         }
         else {
-            this.list.forEach(checkID => {
+            this.umgebungsListe.forEach(checkID => {
                 if (checkID.id == id) {
                     checkID.check = false
                     // console.log(checkID)
@@ -144,10 +143,14 @@ class Umgebung {
                 temp.push(element);
 
             } else {
-                deletee(element.id);
-                console.log("Das Element wurde gefunden und wird gelöscht! " + element.id);
-                // Delete muss in der Datenbank nun hier ausgefuehrt werden
-
+                // Verhindere das Löschen der Hauptumgebung (ID 0 - "Alle Schemas")
+                if (element.id != 0) {
+                    deletee(element.id);
+                    console.log("Das Element wurde gefunden und wird gelöscht! " + element.id);
+                    // Delete muss in der Datenbank nun hier ausgefuehrt werden
+                } else {
+                    console.warn("Hauptumgebung (Alle Schemas) kann nicht gelöscht werden!");
+                }
                 return;
             }
         });
@@ -157,14 +160,18 @@ class Umgebung {
         // DIese Methode wird aufgerufen sobald wir auf Minus (-) klicken
         // Hier benötigen wir die Aktuellen IDS der Datenbank zum löschen
         this.temp_remove.forEach(id => {
-            this.list = this.removeFromListViaID(id, Umgebung.umgebungsListe);
+            this.umgebungsListe = this.removeFromListViaID(id, Umgebung.umgebungsListe);
 
         });
         this.temp_remove = []
-        console.log(this.list);
+        console.log(this.umgebungsListe);
     }
     static remove_generate() {
+        console.log("remove_generate wurde aufgerufen");
+        
         this.removeFromListLogik()
+        console.log("dfsdfsdsdfsdfsdfsdfs");
+        
         this.update()
     }
     static async add() {
@@ -177,7 +184,7 @@ class Umgebung {
         listeObj.push(ip.value, title.value, beschreibung.value, von.value, bis.value)
 
         var prepare = "?ip=" + ip.value + "&titel=" + title.value + "&beschreibung=" + beschreibung.value + "&von=" + von.value + "&bis=" + bis.value;
-        var result = await fetch("./db/insert.php" + prepare);
+        var result = await fetch("db/insert.php" + prepare);
 
         listeObj.forEach(listValue => {
             if (listValue == "") {
@@ -193,27 +200,28 @@ class Umgebung {
         Umgebung.update();
     }
 
-    static update() {
+    static update() {    
         var anzeigebereichv = document.getElementById("anzeigebereichV")
         const anzeigebereicht = document.getElementById("tabelle")
-       
-        if (anzeigebereichv == null || anzeigebereicht == null) {
-            return;
+        var delInfo = document.getElementById("deleteInfotherminal")
+        if(anzeigebereichv != null || anzeigebereicht != null){
+            anzeigebereichv.innerHTML = ""
+            anzeigebereicht.innerHTML = ""
+            var vorhanden = true
         }
-        anzeigebereichv.innerHTML = ""
-        anzeigebereicht.innerHTML = ""
-        for (let i = 0; i < this.list.length; i++) {
-            var ele = this.list[i]
+      
+        delInfo.innerHTML = ""
+   
+        for (let i = 0; i < this.umgebungsListe.length; i++) {
+            var ele = this.umgebungsListe[i]
             console.log(ele);
 
 
         }
-
-
-
         // selectFromDatabase("beispielPOST.php")
-        for (let i = 0; i < this.list.length; i++) {
-            const element = this.list[i];
+        for (let i = 0; i < this.umgebungsListe.length; i++) {
+            const element = this.umgebungsListe[i];
+           if(vorhanden == true){
             anzeigebereichv.innerHTML += `<div style="display: flex;">
                                 <span name="${element.titel}" id="${element.id}" style="float: left;  margin-right: 10px;">${element.ipAdresse}</span>
                                 <label for="Schulaula" clSs="text-wrap"value="15">${element.beschreibung}</label>
@@ -226,8 +234,11 @@ class Umgebung {
                                                 <td>${element.beschreibung}</td>
                                                 <td>${element.von}</td>
                                                 <td>${element.bis}</td>
-                                                <td><input type="checkbox" name="${element.id}" id="CHECK${element.id}" onchange="anzeigebereich.event_remove(${element.id})"></td>
+                                                <td><input type="checkbox" name="${element.id}" id="CHECK${element.id}" onchange="Umgebung.event_remove(${element.id})"></td>
                                            </tr>`
+           }
+
+            delInfo.innerHTML += `<input type="checkbox" id="CHECK${element.id}" name="${element.titel}" onchange="Umgebung.event_remove(${element.id})"> ${element.titel} - ${element.ipAdresse} <br>`
         }
     }
 }
@@ -252,13 +263,41 @@ window.onload = function () {
 }
 function select() {
     getCuttedList = []
-    fetch("/cardObjNew/database/selectUmgebung").then(async (response) => {
-        var responseText = await response.text();
-        cutAndCreate(responseText)
-        Umgebung.update()
-
-
-    });
+    
+    // Versuche verschiedene Pfade
+    const possiblePaths = [
+        "cardObjNew/database/selectUmgebung.php",
+        "./cardObjNew/database/selectUmgebung.php",
+        "/cardObjNew/database/selectUmgebung.php",
+        "selectUmgebung.php"
+    ];
+    
+    async function tryFetch(paths, index = 0) {
+        if (index >= paths.length) {
+            console.error("Keine gültigen Pfade für selectUmgebung.php gefunden");
+            return;
+        }
+        
+        try {
+            console.log(`Versuche Pfad: ${paths[index]}`);
+            const response = await fetch(paths[index]);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const responseText = await response.text();
+            console.log("Select Response:", responseText);
+            cutAndCreate(responseText);
+            Umgebung.update();
+        } catch (error) {
+            console.warn(`Pfad ${paths[index]} fehlgeschlagen:`, error.message);
+            // Versuche nächsten Pfad
+            await tryFetch(paths, index + 1);
+        }
+    }
+    
+    tryFetch(possiblePaths);
 }
 
 
@@ -275,7 +314,7 @@ function cutAndCreate(responseText) {
 document.getElementById("adminBereich").addEventListener("click", async function () {
     const settingsPanel = document.getElementById("settingsPanel")
 
-    await fetch("./bereiche/adminbereich.php")
+    await fetch("bereiche/adminbereich.php")
         .then(response => response.text())
         .then(html => {
             settingsPanel.innerHTML = html;
@@ -313,6 +352,7 @@ document.getElementById("adminBereich").addEventListener("click", async function
 
     deleteBtn.addEventListener("click", function () {
         Umgebung.remove_generate();
+        
     });
     settingsPanel.appendChild(deleteBtn);
 
@@ -327,7 +367,7 @@ document.getElementById("adminBereich").addEventListener("click", async function
 
 
 function insert() {
-    fetch("./db/insert.php").then(async (response) => {
+    fetch("db/insert.php").then(async (response) => {
         this.responseText = await response.text();
         var obj = JSON.parse(this.responseText);
         var anzeigebereichv = document.getElementById("anzeigebereichV")
@@ -340,8 +380,29 @@ function insert() {
 }
 async function deletee(idDelete) {
     console.log("deletee wurde aufgerufen");
-    prepare = "?idDelete=" + idDelete;
-    result = await fetch("/dashboard/cardObjNew/database/deleteInfotherminal" + prepare)
-    var meow = await result.text()
-    console.log(meow)
+    try {
+        const prepare = "?idDelete=" + idDelete;
+        const response = await fetch("dashboard/cardObjNew/database/deleteInfotherminal.php" + prepare);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const responseText = await response.text();
+        console.log("Delete Response:", responseText);
+        
+        // Versuche JSON zu parsen, falls möglich
+        try {
+            const jsonResponse = JSON.parse(responseText);
+            console.log("Delete Result:", jsonResponse);
+            return jsonResponse;
+        } catch (jsonError) {
+            // Falls kein JSON, gib Text zurück
+            console.log("Non-JSON Response:", responseText);
+            return { message: responseText };
+        }
+    } catch (error) {
+        console.error("Fehler beim Löschen:", error);
+        return { error: error.message };
+    }
 }
