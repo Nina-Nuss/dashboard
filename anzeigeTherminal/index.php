@@ -11,51 +11,48 @@
     <link rel="stylesheet" href="../css/anzeige.css">
 </head>
 <style>
-    html,
-    body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
+ html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
 
-    body {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-    }
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+}
 
-    .iframe-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+header, footer {
+    flex: 0 0 auto;
+}
 
-    }
+.iframe-container {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+}
 
-    iframe {
-        width: 700px;
-        height: 600px;
-        border: none;
-        display: block;
-        object-fit: contain;
-    }
+.iframe-container iframe {
+    width: 75vw;
+    height: 100%;
+    border: none;
+    display: block;
+}
 </style>
 </head>
-
-<script>
-
-
-</script>
 
 <body>
     <header class="pl-3">
         <?php include '..\header\header.php'; ?>
     </header>
-
-    <container class="iframe-container" id="container">
-
-
-    </container>
-
+    <div class="iframe-container" id="container">
+    </div>
     <footer class="pr-3">
         <?php include '..\liveTicker\liveTicker.php'; ?>
     </footer>
@@ -63,10 +60,9 @@
 <script>
     const params = new URLSearchParams(window.location.search);
 
-
     const ort = params.get('ip');
     console.log('IP-Adresse:', ort); // IP-Adresse aus der URL holen
-    
+
     const foo = params.get('foo'); // weitere Variable aus der URL holen (optional)
     const container = document.getElementById('container');
     if (ort && container != null) {

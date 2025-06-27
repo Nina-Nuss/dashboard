@@ -21,7 +21,7 @@ window.onload = function () {
 
         data.forEach(umgebung => {
             console.log(umgebung);
-            var umgebungObj = new Umgebung(umgebung[0], umgebung[2], umgebung[1]);
+            var umgebungObj = new Umgebung(umgebung[0], umgebung[1], umgebung[2]);
         })
         var selectedUmgebung = Umgebung.umgebungsListe[1];
     })
@@ -57,7 +57,7 @@ window.onload = function () {
                 console.log(selectedUmgebung);
                 console.log(selectedUmgebung.titel);
                 var newId = createID()
-                const newCardObj = new CardObj(selectedUmgebung, selectedUmgebung.titel, false, "", false, "", "", true, newId);
+                const newCardObj = new CardObj(id, selectedUmgebung.titel, false, "", false, "", "", true, newId);
                 new Beziehungen(selectedUmgebung, newCardObj);
                 selectedUmgebung.addCardObjs(newCardObj);
                 console.log(selectedUmgebung);
@@ -196,6 +196,7 @@ function createCardObj() {
     selectObj("cardObjNew/database/selectCardObj.php").then(async (data) => {
         let objList = convertCardObjForDataBase(data)
         console.log(objList);
+        console.log("createCardObj wurde aufgerufen");
         
         objList.forEach(obj => {
             console.log(obj);
@@ -203,7 +204,7 @@ function createCardObj() {
               
                 
                 if (umgebung.id == obj.infotherminalID) {
-                    var cardObj = new CardObj(umgebung, obj.titel, obj.checkSelect, obj.imagePath, obj.imageSet, obj.startDateTime, obj.endDateTime, obj.aktiv, obj.infotherminalID);
+                    var cardObj = new CardObj(umgebung, obj.imagePath, obj.aktiv, obj.startDateTime, obj.endDateTime, obj.infotherminalID);
                     new Beziehungen(umgebung, cardObj)
                     console.log(cardObj);
                     
@@ -415,7 +416,7 @@ function setUmgebung(umgebung) {
     console.log("umgebunng wurde auf: " + umgebung.titel + " gesetzt");
     selectUmgebung.value = umgebung.id;
     selectedUmgebung = umgebung;
-    zeigeUmgebungAn(umgebung)
+    // zeigeUmgebungAn(umgebung)
     updateAnzeigeCounter()
 }
 

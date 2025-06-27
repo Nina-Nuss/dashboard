@@ -1,14 +1,11 @@
 class CardObj {
     static idCounter = 1;
-    constructor(imagePath, selectedTime , startDateTime,  startDateTime, endDateTime, infotherminalID) {
+    constructor(id, imagePath, selectedTime , aktiv,  startDateTime, endDateTime, infotherminalID) {
 
         this.id = id;
         this.update = false;
-
         //AB hier kommt alles in die Datenbank rein:
-        this.zugeordnet = titel // Der Name des Aufenhaltsortes
         this.imagePath = imagePath //Der Pfad zum Bild
-        this.imageSet = imageSet  //true or false
         this.startDateTime = startDateTime //Der kalender, der den startdatum enthält
         this.endDateTime = endDateTime //Der kalender, der die enddatum enthält
         this.selectedTime = selectedTime // Der aktuelle ausgewählte Wert
@@ -100,28 +97,22 @@ class CardObj {
             </div>
         </div>
     <!-- Modal structure -->
-    <div id="${this.modalId}" class="modal">
-        <div id="${this.dateRangeContainerId}" class="mt-2 text-muted"></div>
-        <div class="modal-content">           
-            <span id="${this.modalCloseButtonId}" class="close">&times;</span>
-            <div id="${this.modalImageId}"></div>
-            <div class="container mt-3" id="zeitManagment${this.id}" style="display: block;">
-                <div class="input-group">
-                    <span class="input-group-text" id="${this.daterangeIconId}">
-                        <i class="bi bi-calendar3"></i>
-                        <input type="text" id="${this.dateRangeInputId}"  class="file-input-button" readonly>
-                    </span>
-                </div>
-            </div>         
-        </div>
-    </div>
+    // <div id="${this.modalId}" class="modal">
+    //     <div id="${this.dateRangeContainerId}" class="mt-2 text-muted"></div>
+    //     <div class="modal-content">           
+    //         <span id="${this.modalCloseButtonId}" class="close">&times;</span>
+    //         <div id="${this.modalImageId}"></div>
+    //         <div class="container mt-3" id="zeitManagment${this.id}" style="display: block;">
+    //             <div class="input-group">
+    //                 <span class="input-group-text" id="${this.daterangeIconId}">
+    //                     <i class="bi bi-calendar3"></i>
+    //                     <input type="text" id="${this.dateRangeInputId}"  class="file-input-button" readonly>
+    //                 </span>
+    //             </div>
+    //         </div>         
+    //     </div>
+    // </div>
     `;
-
-
-    
-
-
-
     }
     removeHtmlElement() {
         const element = document.getElementById(this.cardObjekte);
@@ -184,6 +175,28 @@ class CardObj {
         // }
     
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     initializeDateRangePicker() {

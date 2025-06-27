@@ -21,6 +21,7 @@ if ($stmt) {
     // Statement ausführen
     if (mysqli_stmt_execute($stmt)) {
         echo "Datensatz erfolgreich eingefügt";
+        
     } else {
         echo "Fehler beim Einfügen: " . mysqli_stmt_error($stmt);
     }

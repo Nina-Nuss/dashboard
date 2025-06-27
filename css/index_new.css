@@ -51,6 +51,18 @@ body {
 }
 
 
+#deleteBtnForInfotherminal {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+
 @media (max-width: 1000px) {
 
     /* DIV-Element ausblenden, wenn die Bildschirmbreite kleiner oder gleich 768px ist */

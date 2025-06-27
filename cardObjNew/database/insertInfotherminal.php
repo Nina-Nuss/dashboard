@@ -19,6 +19,8 @@ if ($ip !== '' && $name !== '') {
         // Statement ausführen
         if (sqlsrv_execute($stmt)) {
             echo "Datensatz erfolgreich eingefügt";
+            $ip = "";
+            $name = "";
         } else {
             echo "Fehler beim Einfügen: ";
             print_r(sqlsrv_errors());
