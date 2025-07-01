@@ -11,9 +11,11 @@
         display: flex;
         justify-content: space-around;
     }
+
     .deleteInfotherminal {
         margin-left: 20px;
     }
+
     .addTerminal {
         margin-right: 20px;
     }
@@ -28,47 +30,26 @@
     <div class="panelAdmin">
         <div class="addInfotherminal">
             <h2>Infotherminals hinzufügen</h2>
+            <ul>
+                <li>IP-Adresse soll dem Format "00.0.0.000" entsprechen</li>
+                <li>Es darf keine Leerzeichen vorhanden sein</li>
+                <li>Sonderzeichen sind nicht erlaubt</li>
+            </ul>
+            <br>
             <form id="formID" action="/bereiche/bereitsVorhanden.php" method="post">
                 <label for="infotherminalIp">IP-Adresse:</label>
-                <input type="text" id="infotherminalIp" name="infotherminalIp" required><br>
+                <input class="inputAddInfo" type="text" id="infotherminalIp" name="infotherminalIp" required><br>
                 <label for="infotherminalName">Name:</label>
-                <input type="text" id="infotherminalName" name="infotherminalName" required><br>
+                <input class="inputAddInfo" type="text" id="infotherminalName" name="infotherminalName" required><br>
                 <button type="submit">Hinzufügen</button>
             </form>
         </div>
         <div class="deleteInfotherminal">
             <h2>Infotherminals löschen</h2>
+
             <div id="deleteInfotherminal">
             </div>
         </div>
     </div>
 </body>
-<script>
-    // ...existing code...
-    console.log("me3oewrpojsgjdaglikjfdglikjgl");
-    // Beispiel: Event Listener für alle CardObj-Formulare
-    // ...existing code...
-    document.getElementById('formID').addEventListener('submit', function(event) {
-        event.preventDefault(); // Standard-Submit verhindern
-
-
-        const form = event.target;
-        const formData = new FormData(form);
-
-        fetch(form.action, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(result => {
-                // Optional: Rückmeldung anzeigen
-                console.log(result);
-                // z.B. Erfolgsmeldung anzeigen oder UI aktualisieren
-            })
-            .catch(error => {
-                console.error('Fehler beim Hinzufügen:', error);
-            });
-    });
-</script>
-
 </html>

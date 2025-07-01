@@ -28,18 +28,18 @@ class Umgebung {
         this.umgebungsBodyList = [];
         //-------------------------------------
         this.htmlUmgebungsBody = `umgebungsBody${this.id}`;
-        // this.ladeUmgebung(this.htmlUmgebungsBody);
+        this.ladeUmgebung(this.htmlUmgebungsBody);
         Umgebung.ipList.push(this.ipAdresse);
         Umgebung.allCardList.push(this.cardObjList);
         Umgebung.umgebungsListe.push(this);
     }
 
-    
+
     static temp_remove = []
     static eleListe = []
     static responseText = ""
 
-   addCardObjs(cardObj) {
+    addCardObjs(cardObj) {
         this.cardObjList.push(cardObj);
     }
     addCardObjToAnzeige(cardObj) {
@@ -88,7 +88,7 @@ class Umgebung {
     static findObj(id) {
         const number = extractNumberFromString(id); // Extrahiere die ID
         console.log(`ID: ${number}`);
-        
+
         for (const cardList of Umgebung.allCardList) {
             for (const cardObj of cardList) {
                 if (cardObj.id == number) {
@@ -100,9 +100,6 @@ class Umgebung {
         console.warn(`Objekt mit ID ${id} nicht gefunden.`);
         return null; // Rückgabe von null, wenn kein Objekt gefunden wurde
     }
-
-
-
     static event_remove(id) {
         var element = document.getElementById(`CHECK${id}`);
         if (element.checked && !this.temp_remove.includes(id)) {
@@ -168,10 +165,10 @@ class Umgebung {
     }
     static remove_generate() {
         console.log("remove_generate wurde aufgerufen");
-        
+
         this.removeFromListLogik()
         console.log("dfsdfsdsdfsdfsdfsdfs");
-        
+
         this.update()
     }
     static async add() {
@@ -200,34 +197,43 @@ class Umgebung {
         Umgebung.update();
     }
 
-    static update() {    
+    static async update() {
         var anzeigebereichv = document.getElementById("anzeigebereichV")
         const anzeigebereicht = document.getElementById("tabelle")
         var delInfo = document.getElementById("deleteInfotherminal")
-        if(anzeigebereichv != null || anzeigebereicht != null){
+        if (anzeigebereichv != null || anzeigebereicht != null) {
             anzeigebereichv.innerHTML = ""
             anzeigebereicht.innerHTML = ""
             var vorhanden = true
         }
-      
-        delInfo.innerHTML = ""
-   
-        for (let i = 0; i < this.umgebungsListe.length; i++) {
-            var ele = this.umgebungsListe[i]
-            console.log(ele);
-
-
+        if (delInfo != null) {
+            Umgebung.umgebungsListe = [];
+            console.log("Umgebung.umgebungsListe: ", Umgebung.umgebungsListe.length);
+            
+            delInfo.innerHTML = "" 
+            console.log("Umgebung.umgebungsListe: ", Umgebung.umgebungsListe);  
+            
+            // KEINE neuen Umgebung-Objekte hier erzeugen!
+            await getInfothermianl().then(result => {
+                // Umgebung.umgebungsListe vorher leeren, damit keine Duplikate entstehen
+                console.log( Umgebung.umgebungsListe); 
+                result.forEach(listInfo => {
+                    // Nur hier neue Umgebung-Objekte erzeugen
+                    new Umgebung(listInfo[0], listInfo[1], listInfo[2]);
+                    delInfo.innerHTML += `<input type="checkbox" id="CHECK${listInfo[0]}" name="${listInfo[1]}" onchange="Umgebung.event_remove(${listInfo[0]})"> ${listInfo[1]} - ${listInfo[2]} <br>`
+                });
+                console.log(Umgebung.umgebungsListe);
+            });
         }
-        // selectFromDatabase("beispielPOST.php")
         for (let i = 0; i < this.umgebungsListe.length; i++) {
             const element = this.umgebungsListe[i];
-           if(vorhanden == true){
-            anzeigebereichv.innerHTML += `<div style="display: flex;">
+            if (vorhanden == true) {
+                anzeigebereichv.innerHTML += `<div style="display: flex;">
                                 <span name="${element.titel}" id="${element.id}" style="float: left;  margin-right: 10px;">${element.ipAdresse}</span>
                                 <label for="Schulaula" clSs="text-wrap"value="15">${element.beschreibung}</label>
                             </div>
                             `;
-            anzeigebereicht.innerHTML += `<tr>
+                anzeigebereicht.innerHTML += `<tr>
                                                 <td>${element.id}</td>
                                                 <td>${element.ipAdresse}</td>
                                                 <td>${element.titel}</td>
@@ -236,13 +242,15 @@ class Umgebung {
                                                 <td>${element.bis}</td>
                                                 <td><input type="checkbox" name="${element.id}" id="CHECK${element.id}" onchange="Umgebung.event_remove(${element.id})"></td>
                                            </tr>`
-           }
-
-            delInfo.innerHTML += `<input type="checkbox" id="CHECK${element.id}" name="${element.titel}" onchange="Umgebung.event_remove(${element.id})"> ${element.titel} - ${element.ipAdresse} <br>`
+            }
         }
     }
 }
 
+async function getInfothermianl() {
+    listUmgebung = await selectObj("/cardObjNew/database/selectUmgebung.php")
+    return listUmgebung;
+}
 function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -252,18 +260,9 @@ function extractNumberFromString(str) {
 }
 // Wait for DOM to be loaded
 
-
-console.log("Umgebung.js wurde geladen...");
-
-
-
-window.onload = function () {
-    Umgebung.update();
-    select()
-}
 function select() {
     getCuttedList = []
-    
+
     // Versuche verschiedene Pfade
     const possiblePaths = [
         "cardObjNew/database/selectUmgebung.php",
@@ -271,21 +270,19 @@ function select() {
         "/cardObjNew/database/selectUmgebung.php",
         "selectUmgebung.php"
     ];
-    
     async function tryFetch(paths, index = 0) {
         if (index >= paths.length) {
             console.error("Keine gültigen Pfade für selectUmgebung.php gefunden");
             return;
         }
-        
         try {
             console.log(`Versuche Pfad: ${paths[index]}`);
             const response = await fetch(paths[index]);
-            
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
+
             const responseText = await response.text();
             console.log("Select Response:", responseText);
             cutAndCreate(responseText);
@@ -296,12 +293,8 @@ function select() {
             await tryFetch(paths, index + 1);
         }
     }
-    
     tryFetch(possiblePaths);
 }
-
-
-
 function cutAndCreate(responseText) {
     var obj = responseText.split("],[");
     for (let i = 0; i < obj.length; i++) {
@@ -310,7 +303,6 @@ function cutAndCreate(responseText) {
         new Umgebung(inZeile[0], inZeile[1], inZeile[2])
     }
 }
-
 document.getElementById("adminBereich").addEventListener("click", async function () {
     const settingsPanel = document.getElementById("settingsPanel")
 
@@ -323,9 +315,10 @@ document.getElementById("adminBereich").addEventListener("click", async function
     document.getElementById('formID').addEventListener('submit', function (event) {
         event.preventDefault(); // Standard-Submit verhindern
 
-
         const form = event.target;
         const formData = new FormData(form);
+        console.log(form);
+        console.log(formData);
 
         fetch(form.action, {
             method: 'POST',
@@ -337,6 +330,12 @@ document.getElementById("adminBereich").addEventListener("click", async function
 
                 alert(result); // Hier können Sie eine Erfolgsmeldung anzeigen
                 // z.B. Erfolgsmeldung anzeigen oder UI aktualisieren
+                if (result.includes("Datensatz erfolgreich eingefügt")) {
+                    Umgebung.update();
+                    document.querySelectorAll(".addInfotherminal input[type='text']").forEach(input => {
+                        input.value = ""; // Eingabefelder leeren
+                    });
+                }
             })
             .catch(error => {
                 console.error('Fehler beim Hinzufügen:', error);
@@ -352,7 +351,7 @@ document.getElementById("adminBereich").addEventListener("click", async function
 
     deleteBtn.addEventListener("click", function () {
         Umgebung.remove_generate();
-        
+
     });
     settingsPanel.appendChild(deleteBtn);
 
@@ -382,15 +381,17 @@ async function deletee(idDelete) {
     console.log("deletee wurde aufgerufen");
     try {
         const prepare = "?idDelete=" + idDelete;
-        const response = await fetch("dashboard/cardObjNew/database/deleteInfotherminal.php" + prepare);
+        console.log(prepare);
         
+        const response = await fetch("/cardObjNew/database/deleteInfotherminal.php" + prepare);
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        
+
         const responseText = await response.text();
         console.log("Delete Response:", responseText);
-        
+
         // Versuche JSON zu parsen, falls möglich
         try {
             const jsonResponse = JSON.parse(responseText);

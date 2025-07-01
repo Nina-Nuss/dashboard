@@ -3,7 +3,7 @@ var zeitEingegeben = false
 let pushDelete = false
 let json;
 
-window.onload = function () {
+window.onload = async function () {
     var selectUmgebung = document.getElementById("selectUmgebung");
     const deleteBtnForCards = document.getElementById("deleteBtnForCards");
     const UmgebungsTitel = document.getElementById("titelUmgebung")
@@ -18,27 +18,20 @@ window.onload = function () {
 
     const resultUmgebung = selectObj("cardObjNew/database/selectUmgebung.php").then(async (data) => {
         var HauptUmgebungsObj = new Umgebung(0, 0, "Alle Schemas");
-
+        Umgebung.umgebungsListe = [];
         data.forEach(umgebung => {
-            console.log(umgebung);
             var umgebungObj = new Umgebung(umgebung[0], umgebung[1], umgebung[2]);
         })
         var selectedUmgebung = Umgebung.umgebungsListe[1];
     })
-
-
-    resultUmgebung.then(() => {
-        ladenUmgebung();
+    await resultUmgebung.then(() => {
+         ladenUmgebung();
+         Umgebung.update()
         // setUmgebung(Umgebung.umgebungsListe[1]);
         disableInput(denied)
-        // createCardObj();
-        console.log("SADFDSAFSADFSAFSADFDSAFSDF");
-        
+        // createCardObj(); 
         updateAlwaysOnButtons()
-
-
     });
-
     // setTimeout(() => {
     //     console.log("Funktion wird nach window.onload ausgeführt");
 
@@ -49,7 +42,6 @@ window.onload = function () {
     //     });
 
     // }, 1000); // V
-
     plusBtn.addEventListener("click", function () {
         let currentCounter = parseInt(counter.innerHTML);
         if (currentCounter < 5) {
@@ -197,20 +189,20 @@ function createCardObj() {
         let objList = convertCardObjForDataBase(data)
         console.log(objList);
         console.log("createCardObj wurde aufgerufen");
-        
+
         objList.forEach(obj => {
             console.log(obj);
             Umgebung.umgebungsListe.forEach(umgebung => {
-              
-                
+
+
                 if (umgebung.id == obj.infotherminalID) {
                     var cardObj = new CardObj(umgebung, obj.imagePath, obj.aktiv, obj.startDateTime, obj.endDateTime, obj.infotherminalID);
                     new Beziehungen(umgebung, cardObj)
                     console.log(cardObj);
-                    
+
                 }
             })
-            
+
         });
     })
 }
@@ -218,7 +210,7 @@ function createCardObj() {
 function convertCardObjForDataBase(cardObjListe) {
     objListe = []
     console.log(cardObjListe);
-    
+
     cardObjListe.forEach(cardObj => {
         var obj = {
             id: cardObj[0],
@@ -511,10 +503,6 @@ function updateAlwaysOnButtons() {
         }
     });
 }
-
-
-
-
 function saveTempAddDatabase() {
     Umgebung.tempListForSaveCards.forEach(cardObj => {
         console.log(cardObj);
@@ -532,8 +520,6 @@ function updateAnzeigeCounter() {
         counter.innerHTML = currentlength;
     }
 }
-
-
 function checkSelectedUmgebung() {
     if (!selectedUmgebung || selectedUmgebung === "undefined") {
         console.error("Keine Umgebung ausgewählt!");
@@ -614,10 +600,6 @@ function saveCardObj() {
         });
     });
 }
-
-
-
-
 
 function sucheUmgebung(UmgebungsID) {
     let umgebung = Umgebung.umgebungsListe.find(umgebung => umgebung.id == UmgebungsID);
@@ -721,7 +703,7 @@ function deletePicture(imagePreview, modalImage) {
         console.log(selectedValue);
         var selectedValue = ""
         select.selectedIndex = -1;
-      
+
         aktuellesObj.startDateTime = ``;
         aktuellesObj.endDateTime = ``;
         aktuellesObj.selectedTime = selectedValue

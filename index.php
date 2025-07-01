@@ -18,6 +18,7 @@
                          <h2 id="titelUmgebung"></h2>
                          <div class="container d-flex " id="umgebungsContainer" style="justify-content: center; align-items: center;">
                              <div id="rowForCards" class="col-4 p-2">
+                                <div></div>
                              </div>
                          </div>
                      </div>
