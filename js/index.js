@@ -16,7 +16,7 @@ window.onload = async function () {
     console.log("window.onload läuft!");
     // executeDeleteNull();
 
-    const resultUmgebung = selectObj("cardObjNew/database/selectUmgebung.php").then(async (data) => {
+    const resultUmgebung = selectObj("./database/selectInfotherminal.php").then(async (data) => {
         var HauptUmgebungsObj = new Umgebung(0, 0, "Alle Schemas");
         Umgebung.umgebungsListe = [];
         data.forEach(umgebung => {
@@ -122,9 +122,6 @@ window.onload = async function () {
             });
         });
     });
-
-
-
 }
 
 function createJsonObjForJsonFile() {
@@ -185,7 +182,7 @@ function getJsonData(key) {
 }
 
 function createCardObj() {
-    selectObj("/cardObjNew/database/selectCardObj.php").then(async (data) => {
+    selectObj("./database/selectCardObj.php").then(async (data) => {
         let objList = convertCardObjForDataBase(data)
         console.log(objList);
         console.log("createCardObj wurde aufgerufen");
@@ -233,7 +230,7 @@ async function updateDataBase(cardObj) {
         const jsObj = JavaScriptCardObj(cardObj);
         const createJsObj = JSON.stringify(jsObj)
         console.log(jsObj);
-        var result = await fetch("cardObjNew/database/update.php", {
+        var result = await fetch("database/update.php", {
             method: "POST",
             body: createJsObj
         });
@@ -247,7 +244,7 @@ async function updateDataBase(cardObj) {
 
 async function executeDeleteNull() {
     try {
-        const response = await fetch("cardObjNew/database/deleteNull.php", {
+        const response = await fetch("database/deleteNull.php", {
             method: "GET"
         });
 
@@ -263,7 +260,7 @@ async function executeDeleteNull() {
 }
 async function deleteCardObjDataBase(cardObjId) {
     try {
-        const response = await fetch("cardObjNew/database/deleteCardObj.php", {
+        const response = await fetch("database/deleteCardObj.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -352,7 +349,7 @@ async function insertDatabase(cardObj) {
     };
     console.log(JSON.stringify(jsonData));
     // Senden der POST-Anfrage mit JSON-Daten
-    const response = await fetch("cardObjNew/database/insert.php", {
+    const response = await fetch("database/insert.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

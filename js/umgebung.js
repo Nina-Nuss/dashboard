@@ -28,7 +28,7 @@ class Umgebung {
         this.umgebungsBodyList = [];
         //-------------------------------------
         this.htmlUmgebungsBody = `umgebungsBody${this.id}`;
-        this.ladeUmgebung(this.htmlUmgebungsBody);
+        // this.ladeUmgebung(this.htmlUmgebungsBody);
         Umgebung.ipList.push(this.ipAdresse);
         Umgebung.allCardList.push(this.cardObjList);
         Umgebung.umgebungsListe.push(this);
@@ -248,7 +248,7 @@ class Umgebung {
 }
 
 async function getInfothermianl() {
-    listUmgebung = await selectObj("/cardObjNew/database/selectUmgebung.php")
+    listUmgebung = await selectObj("/database/selectInfotherminal.php")
     return listUmgebung;
 }
 function wait(ms) {
@@ -265,14 +265,14 @@ function select() {
 
     // Versuche verschiedene Pfade
     const possiblePaths = [
-        "cardObjNew/database/selectUmgebung.php",
-        "./cardObjNew/database/selectUmgebung.php",
-        "/cardObjNew/database/selectUmgebung.php",
-        "selectUmgebung.php"
+        "database/selectInfotherminal.php",
+        "./database/selectInfotherminal.php",
+        "/database/selectInfotherminal.php",
+        "selectInfotherminal.php"
     ];
     async function tryFetch(paths, index = 0) {
         if (index >= paths.length) {
-            console.error("Keine gültigen Pfade für selectUmgebung.php gefunden");
+            console.error("Keine gültigen Pfade für selectInfotherminal.php gefunden");
             return;
         }
         try {
@@ -383,7 +383,7 @@ async function deletee(idDelete) {
         const prepare = "?idDelete=" + idDelete;
         console.log(prepare);
         
-        const response = await fetch("/cardObjNew/database/deleteInfotherminal.php" + prepare);
+        const response = await fetch("/database/deleteInfotherminal.php" + prepare);
 
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

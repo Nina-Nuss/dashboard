@@ -10,17 +10,16 @@ if (!isset($_GET['idDelete'])) {
 
 $sql = "SELECT * FROM infotherminals";
 
-// Zuerst alle CardObj-Datensätze löschen, die auf dieses Infotherminal verweisen
-$sqlDeleteCardObjs = "DELETE FROM schemas WHERE fk_infotherminal_id = ?";
+$sqlDeleteCardObjs = "DELETE FROM infotherminal_schema WHERE fk_infotherminal_id = ?";
 $paramsCardObjs = array($_GET['idDelete']);
 $stmtCardObjs = sqlsrv_query($conn, $sqlDeleteCardObjs, $paramsCardObjs);
 
 if ($stmtCardObjs) {
     $cardObjsDeleted = sqlsrv_rows_affected($stmtCardObjs);
-    echo "CardObj-Datensätze gelöscht: " . $cardObjsDeleted . "<br>";
+    echo "beziehungen gelöscht: " . $cardObjsDeleted . "<br>";
     sqlsrv_free_stmt($stmtCardObjs);
 } else {
-    echo "Fehler beim Löschen der CardObj-Datensätze: " . print_r(sqlsrv_errors(), true) . "<br>";
+    echo "Fehler beim Löschen der beziehung-Datensätze: " . print_r(sqlsrv_errors(), true) . "<br>";
 }
 
 // Dann das Infotherminal selbst löschen

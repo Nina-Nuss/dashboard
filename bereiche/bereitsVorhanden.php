@@ -2,7 +2,7 @@
 session_start();
 
 
-include("/xampp/htdocs/Infotherminal/dashboard/cardObjNew/database/selectUmgebung.php");
+include("/xampp/htdocs/Infotherminal/dashboard/database/selectInfotherminal.php");
 // echo "<br>";
 ob_end_clean();
 
@@ -13,10 +13,8 @@ $patternIp = '/^[A-Za-z0-9._@-]+$/';
 
 $patternIpFormat = '/^\d{2}\.\d\.\d\.\d{1,3}$/';
 
-
 $ip = $_POST["infotherminalIp"] ?? '';
 $name = $_POST["infotherminalName"] ?? '';
-
 
 // echo $ip;
 // echo "<br>";
@@ -42,6 +40,6 @@ if (isset($ip) && isset($name)) {
     
     $_SESSION['ip'] = $ip;
     $_SESSION['name'] = $name;
-    include $_SERVER['DOCUMENT_ROOT'] . '/cardObjNew/database/insertInfotherminal.php';
+    include $_SERVER['DOCUMENT_ROOT'] . '/database/insertInfotherminal.php';
     exit;
 }

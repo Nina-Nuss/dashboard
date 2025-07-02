@@ -4,12 +4,7 @@ ob_start();
 require("../database/selectInfotherminal.php");
 require("../database/selectSchemas.php");
 
-
-
-
 // echo "<h1>------------</h1>";
-
-
 
 // $clientIP = $_SERVER['REMOTE_ADDR'];
 // echo "Die IP-Adresse des Clients ist: " . $clientIP;
@@ -51,6 +46,5 @@ foreach ($infothermalList1 as $datensatz) {
         
     };
 }
-
 
 ?>
