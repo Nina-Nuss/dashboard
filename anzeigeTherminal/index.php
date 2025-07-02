@@ -11,63 +11,61 @@
     <link rel="stylesheet" href="../css/anzeige.css">
 </head>
 <style>
- html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
 
-body {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    margin: 0;
-}
+    body {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+    }
 
-header, footer {
-    flex: 0 0 auto;
-}
+    header,
+    footer {
+        flex: 0 0 auto;
+    }
 
-.iframe-container {
-    flex: 1 1 auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100vw;
-    height: 50%;
-    margin: 0;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-.iframe-container iframe {
-    width: 85vw;
-    height: calc(100% - 40px);
-    max-width: 80%;
-    max-height: 100%;
-    border: none;
-    display: block;
-    object-fit: contain;
-    object-position: center;
-}
+    .iframe-container {
+        flex: 1 1 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100vw;
+        margin: 0;
+        box-sizing: border-box;
+        overflow: hidden;
+        /* <- verhinder Überlauf */
+    }
 
 
-
+    .iframe-container iframe {
+        width: 70%;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        border: none;
+        object-fit: contain;
+        display: block;
+    }
 </style>
 </head>
 
+<header class="pl-3">
+    <?php include '..\header\header.php'; ?>
+</header>
+
 <body>
-    <header class="pl-3">
-        <?php include '..\header\header.php'; ?>
-    </header>
     <div class="iframe-container" id="container">
     </div>
-    <div>
-        <footer class="pr-3">
-            <?php include '..\liveTicker\liveTicker.php'; ?>
-        </footer>
-    </div>
 </body>
+<footer class="pr-3">
+    <?php include '..\liveTicker\liveTicker.php'; ?>
+</footer>
+
 <script>
     const params = new URLSearchParams(window.location.search);
 
