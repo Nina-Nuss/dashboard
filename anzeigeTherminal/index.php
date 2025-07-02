@@ -32,18 +32,27 @@ header, footer {
     flex: 1 1 auto;
     display: flex;
     justify-content: center;
-    align-items: stretch;
+    align-items: center;
     width: 100vw;
+    height: 50%;
     margin: 0;
-    padding: 0;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .iframe-container iframe {
-    width: 75vw;
-    height: 100%;
+    width: 85vw;
+    height: calc(100% - 40px);
+    max-width: 80%;
+    max-height: 100%;
     border: none;
     display: block;
+    object-fit: contain;
+    object-position: center;
 }
+
+
+
 </style>
 </head>
 
@@ -53,9 +62,11 @@ header, footer {
     </header>
     <div class="iframe-container" id="container">
     </div>
-    <footer class="pr-3">
-        <?php include '..\liveTicker\liveTicker.php'; ?>
-    </footer>
+    <div>
+        <footer class="pr-3">
+            <?php include '..\liveTicker\liveTicker.php'; ?>
+        </footer>
+    </div>
 </body>
 <script>
     const params = new URLSearchParams(window.location.search);

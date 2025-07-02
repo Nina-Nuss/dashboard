@@ -178,9 +178,7 @@ class CardObj {
 
 
 
-
-
-
+  
 
 
 
@@ -339,5 +337,11 @@ class CardObj {
             $(this).val(selectedrange);
         });
     }
+}
+
+Window.onload = function () {
+    new CardObj(1, '', '', false, '', '', ''); // Beispiel-Instanz
+
+
 }
 
