@@ -277,22 +277,7 @@ class CardObj {
     }
 }
 
-async function meow(event) {
-    event.preventDefault(); // Verhindert das Standardverhalten des Formulars
 
-    const file = new FormData(form) // Zugriff auf die ausgewählte Datei
-    console.log(file);
-    
-    await fetch("/schemas/movePic.php", {
-        method: 'POST',
-        body: file
-    }).then(response => response.text())
-        .then(response => {
-            document.getElementById('imageContainer').src = '/schemas/' + response; // Aktualisiert das Bild mit dem neuen Dateinamen
-        }).catch(error => {
-            console.error('Error:', error);
-        });
-}
 
 const templatebereich = document.getElementById("templatebereich");
 if (templatebereich) {

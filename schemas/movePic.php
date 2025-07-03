@@ -1,12 +1,12 @@
 <?php
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Überprüfen, ob eine Datei hochgeladen wurde
-        if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+        if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
             // Informationen über die hochgeladene Datei
-            $fileTmpPath = $_FILES['file']['tmp_name']; // Temporärer Pfad
-            $fileName = $_FILES['file']['name'];       // Ursprünglicher Name
-            $fileSize = $_FILES['file']['size'];       // Dateigröße
-            $fileType = $_FILES['file']['type'];       // MIME-Typ
+            $fileTmpPath = $_FILES['img']['tmp_name']; // Temporärer Pfad
+            $fileName = $_FILES['img']['name'];       // Ursprünglicher Name
+            $fileSize = $_FILES['img']['size'];       // Dateigröße
+            $fileType = $_FILES['img']['type'];       // MIME-Typ
             $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
             $randomName = uniqid('file_', true) . '.' . $fileExtension;
             // Zielordner für die hochgeladene Datei
