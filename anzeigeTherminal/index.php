@@ -25,31 +25,68 @@
     }
 
     header,
-    footer {
-        flex: 0 0 auto;
-    }
+    footer {}
 
     .iframe-container {
-        flex: 1 1 auto;
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 100vw;
+        width: 70vw;
+        height: 90vh;
+        border: 1px solid black;
         margin: 0;
         box-sizing: border-box;
-        overflow: hidden;
         /* <- verhinder Überlauf */
     }
 
 
     .iframe-container iframe {
-        width: 70%;
+        width: 100%;
         height: 100%;
-        max-width: 100%;
-        max-height: 100%;
         border: none;
-        object-fit: contain;
+        object-fit: cover;
         display: block;
+    }
+
+    /* 
+    @media screen and (max-width: 1920px) {
+        .iframe-container {
+            border: 8px solid pink;
+        }
+    } */
+
+
+    @media screen and (max-width: 3840px) {
+        .iframe-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 70vw;
+            height: 70vh;
+            border: 1px solid black;
+            margin: 0;
+            box-sizing: border-box;
+            /* <- verhinder Überlauf */
+        }
+
+
+    }
+
+    @media screen and (max-width: 1920px) {
+
+        .iframe-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 70vw;
+            height: 69.5vh;
+            border: 1px solid black;
+            margin: 0;
+            box-sizing: border-box;
+            /* <- verhinder Überlauf */
+        }
+
+
     }
 </style>
 </head>
@@ -59,7 +96,8 @@
 </header>
 
 <body>
-    <div class="iframe-container" id="container">
+    <div style="display: flex; justify-content: center; height: 100%;">
+        <div class="iframe-container" id="container"></div>
     </div>
 </body>
 <footer class="pr-3">

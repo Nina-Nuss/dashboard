@@ -1,6 +1,6 @@
 class CardObj {
     static idCounter = 1;
-    constructor(id, imagePath, selectedTime , aktiv,  startDateTime, endDateTime, infotherminalID) {
+    constructor(id, imagePath, selectedTime, aktiv, startDateTime, endDateTime, infotherminalID) {
 
         this.id = id;
         this.update = false;
@@ -49,70 +49,8 @@ class CardObj {
     }
     htmlKonstruktObjBody(umgebung) {
         var htmlUmgebungsBody = document.getElementById(umgebung.htmlUmgebungsBody);
-        var dateTime = document.getElementById("dateTime");
-        
-        htmlUmgebungsBody.innerHTML += `
-        <div id="${this.cardObjekte}" class="card m-1" style="width: 10rem;" >
-            <div class="position-absolute form-check-d d-none">
-                <input class="form-check-input" type="checkbox" value="" id="${this.deleteBtn}">
-            </div>
-            <span class="material-symbols-outlined removePicBtn z-3" id="${this.closeBtn}" onclick="deletePicture('${this.imagePreviewId}', '${this.modalImageId}')" >close</span>
-        <div class="picture pt-0">
-            <form action="test.php" method="post" enctype="multipart/form-data" id="${this.formID}">
-                <label class="upload-container">
-                    <div id="${this.imagePreviewId}">Bild auswählen oder hierher ziehen</div>  
-                    <input 
-                        type="file" 
-                        name="file" 
-                        id="${this.imageInputId}"
-                        accept="image/*" 
-                        required 
-                        onclick="setupImagePicker('${this.imagePreviewId}', '${this.modalImageId}', '${this.imageInputId}', '${this.formID}')"
-                    >      
-                </label>
-                <!-- Der versteckte Submit-Button -->
-                <input type="submit" name="submit" value="Hochladen" class="hidden-submit z-3">
-            </form>
-        </div> 
-        <div class="card-body d-flex align-items-center justify-content-between p-2 gap-2">
-              
-        <div class="select-container">
-            <input type="checkbox" id="${this.checkSelect}" name="${this.checkSelect}">
-            <label for="${this.checkSelect}">auswählen: </label>        
-        </div>
-            <button id="${this.openModalButtonId}" class="btn btn-light btn-sm modalBtn" data-toggle="modal">
-                <span class="material-symbols-outlined">date_range</span>
-            </button>
-           
-            <div class="btn-group dropend" >
-                <button id="${this.infoBtn}" type="button" class="btn btn-light dropdown-toggle p-0" data-bs-toggle="dropdown" aria-expanded="false">
-                    <span class="material-symbols-outlined">info</span>
-                </button>
-                <ul class="dropdown-menu p-2">
-                    <label class="p-0 d-flex justify-content-center align-items-center " id="${this.infoCard}"></label>
-                </ul>      
-            </div>  
-            <div class="form-check form-switch align-self-end ">
-                <input  class="form-check-input pl-3" type="checkbox" role="switch" onclick="cardSwitch('${this.alwaysOnBtn}')" id="${this.alwaysOnBtn}">
-            </div>
-        </div>
-    <!-- Modal structure -->
-    // <div id="${this.modalId}" class="modal">
-    //     <div id="${this.dateRangeContainerId}" class="mt-2 text-muted"></div>
-    //     <div class="modal-content">           
-    //         <span id="${this.modalCloseButtonId}" class="close">&times;</span>
-    //         <div id="${this.modalImageId}"></div>
-    //         <div class="container mt-3" id="zeitManagment${this.id}" style="display: block;">
-    //             <div class="input-group">
-    //                 <span class="input-group-text" id="${this.daterangeIconId}">
-    //                     <i class="bi bi-calendar3"></i>
-    //                     <input type="text" id="${this.dateRangeInputId}"  class="file-input-button" readonly>
-    //                 </span>
-    //             </div>
-    //         </div>         
-    //     </div>
-    // </div>
-    `;
+
+
     }
     removeHtmlElement() {
         const element = document.getElementById(this.cardObjekte);
@@ -165,20 +103,20 @@ class CardObj {
 
         // const closebtn = document.getElementById(this.closeBtn);
         // closebtn.style.display = "block";
-       
+
         // // Container in das DOM einfügen (z. B. in ein Element mit der ID "imagePreview")
-   
+
         // if (imageContainer) {
         //     imageContainer.appendChild(container);
         // } else {
         //     console.warn("Elternelement mit ID 'imagePreview' nicht gefunden.");
         // }
-    
+
     }
 
 
 
-  
+
 
 
 
@@ -339,9 +277,26 @@ class CardObj {
     }
 }
 
-Window.onload = function () {
-    new CardObj(1, '', '', false, '', '', ''); // Beispiel-Instanz
 
 
-}
+document.getElementById("templateBereich").addEventListener("click", async function (event) {
 
+    var settingPanel = document.getElementById("settingsPanel");
+    const form = event.target;
+    const formData = new FormData(form);
+    console.log(form);
+    console.log(formData);
+    
+    await fetch("bereiche/templatebereich.php")
+        .then(response => response.text())
+        .then(html => {
+            settingPanel.innerHTML = html;
+        });
+
+
+    // await fetch('/bereiche/templatebereich.js'){
+
+    // }
+
+});
+console.log("schema wurde geladen");

@@ -21,9 +21,10 @@
     img.fullscreen {
         width: 100vw;
         height: 100vh;
-        object-fit: cover;
         display: block;
+        object-fit: contain;
     }
+
 </style>
 
 <body>
