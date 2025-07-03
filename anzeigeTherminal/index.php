@@ -85,8 +85,6 @@
             box-sizing: border-box;
             /* <- verhinder Überlauf */
         }
-
-
     }
 </style>
 </head>

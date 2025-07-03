@@ -277,26 +277,41 @@ class CardObj {
     }
 }
 
+async function meow(event) {
+    event.preventDefault(); // Verhindert das Standardverhalten des Formulars
 
-
-document.getElementById("templateBereich").addEventListener("click", async function (event) {
-
-    var settingPanel = document.getElementById("settingsPanel");
-    const form = event.target;
-    const formData = new FormData(form);
-    console.log(form);
-    console.log(formData);
+    const file = new FormData(form) // Zugriff auf die ausgewählte Datei
+    console.log(file);
     
-    await fetch("bereiche/templatebereich.php")
-        .then(response => response.text())
-        .then(html => {
-            settingPanel.innerHTML = html;
+    await fetch("/schemas/movePic.php", {
+        method: 'POST',
+        body: file
+    }).then(response => response.text())
+        .then(response => {
+            document.getElementById('imageContainer').src = '/schemas/' + response; // Aktualisiert das Bild mit dem neuen Dateinamen
+        }).catch(error => {
+            console.error('Error:', error);
         });
+}
+
+const templatebereich = document.getElementById("templatebereich");
+if (templatebereich) {
+    templatebereich.addEventListener("click", async function (event) {
+
+        var settingPanel = document.getElementById("settingsPanel");
+
+        await fetch("bereiche/templatebereich.php")
+            .then(response => response.text())
+            .then(html => {
+                settingPanel.innerHTML = html;
+            });
 
 
-    // await fetch('/bereiche/templatebereich.js'){
+        // await fetch('/bereiche/templatebereich.js'){
 
-    // }
+        // }
 
-});
+    });
+}
+
 console.log("schema wurde geladen");

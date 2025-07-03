@@ -638,19 +638,9 @@ function setupImagePicker(previewId, modalImageId, inputId, formID) {
     console.log("imagePath ist leer");
     if (aktuellesObj.imagePath == "") {
         imageInput.addEventListener('change', function (event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    modalImage.innerHTML = `<img src="${e.target.result}" alt="Bild" class="img-fluid">`;
-                    imagePreview.innerHTML = `<img src="${e.target.result}" alt="Bild" class="img-fluid">`;
-                    aktuellesObj.imagePath = file.name;
-                    console.log(aktuellesObj.imagePath);
-                };
-                reader.readAsDataURL(file);
-            } else {
-                modalImage.innerHTML = ``;
-                imagePreview.innerHTML = `Bild auswählen oder hierher ziehen`;
+            const file = event.target.form.elements['image'].files[0];
+            if(!file) {
+                
             }
             let selectedId = $(this).attr('id');
             let id = extractNumberFromString(selectedId)
