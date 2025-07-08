@@ -1,51 +1,21 @@
-<!-- Modal hinzufügen -->
-<div class="modal fade" id="modal_hinzufuegen" tabindex="-1" role="dialog" aria-labelledby="modal_hinzufuegen_Title"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal_hinzufuegen_Title">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div id="Wlan grid">
-                    <div class="">
-                        <div class="text-sm-left lh-base font-normal text-none text-decoration-none text-reset">
-                            IP....
-                            <input type="text" name="" id="modal_hinzufuegen_txtbox_ip" value="aaa">
-                        </div><br>
-                        <div class="text-sm-left lh-base font-normal text-none text-decoration-none text-reset">
-                            titel
-                            <input type="text" name="" id="modal_hinzufuegen_txtbox_titel" value="aaa">
-                        </div>
-                    </div>
-                    <div class="d-flex ">
-                        <div class="mt-4 text-start font-normal text-none text-decoration-none">
-                            von
-                            <input class="w-50" type="text" name="" id="modal_hinzufuegen_datepicker_von" value="aaa">
-                        </div>
-                        <div class=" mt-4 font-normal text-none text-decoration-none">
-                            bis.
-                            <input class="w-50" type="text" name="" id="modal_hinzufuegen_datepicker_bis" value="aaa">
-                        </div>
-                    </div>
-                    <div class="d-flex"></div>
-                    <div class="d-flex mt-3">
-                        <div class="text-sm-left lh-base font-normal text-none text-decoration-none text-reset">
-                            beschreibung:
-                            <textarea type="text" name="" id="modal_hinzufuegen_txtbox_beschreibung" class=" w-100 h-95"
-                                value="aaa">aaa</textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="anzeigebereich.add()"
-                    data-dismiss="modal">Add</button>
-            </div>
-        </div>
+<!-- Modal -->
+<div class="modal fade" id="modal_hinzufuegen" tabindex="-1" role="dialog" aria-labelledby="modalHinzufuegenLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalHinzufuegenLabel">Hinzufügen</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Hier dein Formular oder Inhalt -->
+        <input type="text" class="form-control" placeholder="Eingabe">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
+        <button type="button" class="btn btn-primary">Speichern</button>
+      </div>
     </div>
+  </div>
 </div>

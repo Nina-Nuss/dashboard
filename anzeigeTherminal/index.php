@@ -25,7 +25,11 @@
     }
 
     header,
-    footer {}
+    footer {
+     display: flex;
+        flex-direction: column;
+       
+    }
 
     .iframe-container {
         display: flex;
@@ -56,13 +60,13 @@
     } */
 
 
-    @media screen and (max-width: 3840px) {
+    @media screen and (max-width: 1920px) {
         .iframe-container {
             display: flex;
             justify-content: center;
             align-items: center;
             width: 70vw;
-            height: 70vh;
+            height: 69.8vh;
             border: 1px solid black;
             margin: 0;
             box-sizing: border-box;
@@ -72,14 +76,13 @@
 
     }
 
-    @media screen and (max-width: 1920px) {
-
+    @media screen and (min-width: 3840px) {
         .iframe-container {
             display: flex;
             justify-content: center;
             align-items: center;
             width: 70vw;
-            height: 69.5vh;
+            height: 71vh;
             border: 1px solid black;
             margin: 0;
             box-sizing: border-box;
@@ -89,18 +92,21 @@
 </style>
 </head>
 
+
 <header class="pl-3">
     <?php include '..\header\header.php'; ?>
 </header>
 
 <body>
-    <div style="display: flex; justify-content: center; height: 100%;">
+    <div style="display: flex; justify-content: center;">
         <div class="iframe-container" id="container"></div>
     </div>
 </body>
+
 <footer class="pr-3">
     <?php include '..\liveTicker\liveTicker.php'; ?>
 </footer>
+
 
 <script>
     const params = new URLSearchParams(window.location.search);

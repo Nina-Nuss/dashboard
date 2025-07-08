@@ -209,14 +209,14 @@ class Umgebung {
         if (delInfo != null) {
             Umgebung.umgebungsListe = [];
             console.log("Umgebung.umgebungsListe: ", Umgebung.umgebungsListe.length);
-            
-            delInfo.innerHTML = "" 
-            console.log("Umgebung.umgebungsListe: ", Umgebung.umgebungsListe);  
-            
+
+            delInfo.innerHTML = ""
+            console.log("Umgebung.umgebungsListe: ", Umgebung.umgebungsListe);
+
             // KEINE neuen Umgebung-Objekte hier erzeugen!
             await getInfothermianl().then(result => {
                 // Umgebung.umgebungsListe vorher leeren, damit keine Duplikate entstehen
-                console.log( Umgebung.umgebungsListe); 
+                console.log(Umgebung.umgebungsListe);
                 result.forEach(listInfo => {
                     // Nur hier neue Umgebung-Objekte erzeugen
                     new Umgebung(listInfo[0], listInfo[1], listInfo[2]);
@@ -303,61 +303,70 @@ function cutAndCreate(responseText) {
         new Umgebung(inZeile[0], inZeile[1], inZeile[2])
     }
 }
-document.getElementById("adminBereich").addEventListener("click", async function () {
-    const settingsPanel = document.getElementById("settingsPanel")
 
-    await fetch("bereiche/adminbereich.php")
-        .then(response => response.text())
-        .then(html => {
-            settingsPanel.innerHTML = html;
-        });
+var adminBereich = document.getElementById("adminBereich")
 
-    document.getElementById('formID').addEventListener('submit', function (event) {
-        event.preventDefault(); // Standard-Submit verhindern
+if (adminBereich != null) {
+    document.getElementById("adminBereich").addEventListener("click", async function () {
+        const settingsPanel = document.getElementById("settingsPanel")
 
-        const form = event.target;
-        const formData = new FormData(form);
-        console.log(form);
-        console.log(formData);
-
-        fetch(form.action, {
-            method: 'POST',
-            body: formData
-        })
+        await fetch("bereiche/adminbereich.php")
             .then(response => response.text())
-            .then(result => {
-                // Optional: Rückmeldung anzeigen
+            .then(html => {
+                settingsPanel.innerHTML = html;
+        });
+        document.getElementById('formID').addEventListener('submit', function (event) {
+            event.preventDefault(); // Standard-Submit verhindern
 
-                alert(result); // Hier können Sie eine Erfolgsmeldung anzeigen
-                // z.B. Erfolgsmeldung anzeigen oder UI aktualisieren
-                if (result.includes("Datensatz erfolgreich eingefügt")) {
-                    Umgebung.update();
-                    document.querySelectorAll(".addInfotherminal input[type='text']").forEach(input => {
-                        input.value = ""; // Eingabefelder leeren
-                    });
-                }
+            const form = event.target;
+            const formData = new FormData(form);
+            console.log(form);
+            console.log(formData);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
             })
-            .catch(error => {
-                console.error('Fehler beim Hinzufügen:', error);
-            });
+                .then(response => response.text())
+                .then(result => {
+                    // Optional: Rückmeldung anzeigen
+
+                    alert(result); // Hier können Sie eine Erfolgsmeldung anzeigen
+                    // z.B. Erfolgsmeldung anzeigen oder UI aktualisieren
+                    if (result.includes("Datensatz erfolgreich eingefügt")) {
+                        Umgebung.update();
+                        document.querySelectorAll(".addInfotherminal input[type='text']").forEach(input => {
+                            input.value = ""; // Eingabefelder leeren
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Fehler beim Hinzufügen:', error);
+                });
+        });
+        const delInfo = document.getElementById("deleteInfotherminal")
+        Umgebung.umgebungsListe.forEach(element => {
+            delInfo.innerHTML += `<input type="checkbox" id="CHECK${element.id}" name="${element.titel}" onchange="Umgebung.event_remove(${element.id})"> ${element.titel} - ${element.ipAdresse} <br>`
+        });
+        const deleteBtn = document.createElement("button");
+        deleteBtn.id = "deleteBtnForInfotherminal";
+        deleteBtn.textContent = "löschen";
+
+        deleteBtn.addEventListener("click", function () {
+            Umgebung.remove_generate();
+
+        });
+        settingsPanel.appendChild(deleteBtn);
+
+
+
     });
-    const delInfo = document.getElementById("deleteInfotherminal")
-    Umgebung.umgebungsListe.forEach(element => {
-        delInfo.innerHTML += `<input type="checkbox" id="CHECK${element.id}" name="${element.titel}" onchange="Umgebung.event_remove(${element.id})"> ${element.titel} - ${element.ipAdresse} <br>`
-    });
-    const deleteBtn = document.createElement("button");
-    deleteBtn.id = "deleteBtnForInfotherminal";
-    deleteBtn.textContent = "löschen";
-
-    deleteBtn.addEventListener("click", function () {
-        Umgebung.remove_generate();
-
-    });
-    settingsPanel.appendChild(deleteBtn);
 
 
 
-});
+
+}
+// Event Listener für den Admin-Bereich
 
 
 // Beispiel: Event Listener für alle CardObj-Formulare
@@ -382,7 +391,7 @@ async function deletee(idDelete) {
     try {
         const prepare = "?idDelete=" + idDelete;
         console.log(prepare);
-        
+
         const response = await fetch("/database/deleteInfotherminal.php" + prepare);
 
         if (!response.ok) {

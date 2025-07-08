@@ -32,9 +32,12 @@
     .div {
         text-align: center;
     }
+    .parallelogram {
+        margin-right: 5px;
+    }
 </style>
 
-<div class="parallelogram col-md-12 ml-1">
+<div class="parallelogram col-md-12 ml-2">
     <div class="para_inhalt d-flex text justify-content-between px-5">
         <div class="clock"> Infoterminal Dashboard</div>
         <div class="clock">

@@ -1,6 +1,6 @@
 class CardObj {
     static idCounter = 1;
-    constructor(id, imagePath, selectedTime, aktiv, startDateTime, endDateTime, infotherminalID) {
+    constructor(id, imagePath, selectedTime, aktiv, titel, beschreibung, startDateTime, endDateTime) {
 
         this.id = id;
         this.update = false;
@@ -10,9 +10,9 @@ class CardObj {
         this.endDateTime = endDateTime //Der kalender, der die enddatum enthält
         this.selectedTime = selectedTime // Der aktuelle ausgewählte Wert
         this.aktiv = aktiv //true or false
-        this.infotherminalID = infotherminalID // Der Infoterminal ID, zu dem das Objekt gehört
+        this.titel = titel //Der Titel des Objektes
+        this.beschreibung = beschreibung //Die Beschreibung des Objektes
         //-------------------------------------
-
 
         //HTMLOBJEKTE-------------------------
         this.deleteBtn = `deleteBtn${this.id}`
@@ -39,18 +39,14 @@ class CardObj {
         this.formID = `formID${this.id}`
         this.checkSelect = `checkSelect${this.id}`
         //-------------------------------------    
-
-        this.htmlKonstruktObjBody(umgebung)
-        setTimeout(() => {
-            this.updateObj();
-        }, 100);
-        umgebung.addCardObjs(this)
+        // setTimeout(() => {
+        //     this.updateObj();
+        // }, 100);
+        // umgebung.addCardObjs(this)
         Umgebung.allCardsInOneList.push(this)
     }
     htmlKonstruktObjBody(umgebung) {
         var htmlUmgebungsBody = document.getElementById(umgebung.htmlUmgebungsBody);
-
-
     }
     removeHtmlElement() {
         const element = document.getElementById(this.cardObjekte);
@@ -62,14 +58,10 @@ class CardObj {
         // Checkbox-Status aktualisieren
         const objSwitch = document.getElementById(this.alwaysOnBtn);
         const calendarBtn = document.getElementById(this.openModalButtonId);
-
         const imageContainer = document.getElementById(this.imagePreviewId);
-
         console.log("edfsfdsfdsfdsfsdf");
         objSwitch.checked = this.aktiv;
-
         console.log(this);
-
         // Kalender-Button aktualisieren
         console.log("kalenderbtn: " + calendarBtn.disabled);
         console.log("switch: " + objSwitch.checked);
@@ -113,15 +105,6 @@ class CardObj {
         // }
 
     }
-
-
-
-
-
-
-
-
-
 
 
 

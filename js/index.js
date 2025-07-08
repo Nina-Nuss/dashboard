@@ -13,10 +13,11 @@ window.onload = async function () {
     const plusBtn = document.getElementById("plusBtn");
     const minusBtn = document.getElementById("minusBtn");
     let counter = document.getElementById("counter");
+    const saveBtn = document.getElementById("saveBtn")
     console.log("window.onload läuft!");
     // executeDeleteNull();
 
-    const resultUmgebung = selectObj("./database/selectInfotherminal.php").then(async (data) => {
+    const resultUmgebung = selectObj("../database/selectInfotherminal.php").then(async (data) => {
         var HauptUmgebungsObj = new Umgebung(0, 0, "Alle Schemas");
         Umgebung.umgebungsListe = [];
         data.forEach(umgebung => {
@@ -25,103 +26,101 @@ window.onload = async function () {
         var selectedUmgebung = Umgebung.umgebungsListe[1];
     })
     await resultUmgebung.then(() => {
-         ladenUmgebung();
-         Umgebung.update()
-        // setUmgebung(Umgebung.umgebungsListe[1]);
-        disableInput(denied)
-        // createCardObj(); 
-        updateAlwaysOnButtons()
+        Umgebung.update()
     });
-    // setTimeout(() => {
-    //     console.log("Funktion wird nach window.onload ausgeführt");
+ 
 
-    //     saveToLocalStorage("Umgebungen", Umgebung.umgebungsListe);
-    //     const obj = getJsonData("test")
-    //     obj.forEach(obj => {
-    //         console.log(obj);
-    //     });
+    const cardObj1 = new CardObj(0, "natur.jpg", true, "", "", "", "");
+    console.log(cardObj1);
+    console.log("cardObj1 wurde erstellt");
+    
+    
+    if (plusBtn != null) {
+        plusBtn.addEventListener("click", function () {
+            let currentCounter = parseInt(counter.innerHTML);
+            if (currentCounter < 5) {
+                if (checkSelectedUmgebung()) {
+                    console.log(selectedUmgebung);
+                    console.log(selectedUmgebung.titel);
+                    var newId = createID()
+                    const newCardObj = new CardObj(id, selectedUmgebung.titel, false, "", false, "", "", true, newId);
+                    new Beziehungen(selectedUmgebung, newCardObj);
+                    selectedUmgebung.addCardObjs(newCardObj);
+                    console.log(selectedUmgebung);
+                    Umgebung.tempListForSaveCards.push(newCardObj);
+                    console.log(newCardObj);
 
-    // }, 1000); // V
-    plusBtn.addEventListener("click", function () {
-        let currentCounter = parseInt(counter.innerHTML);
-        if (currentCounter < 5) {
-            if (checkSelectedUmgebung()) {
-                console.log(selectedUmgebung);
-                console.log(selectedUmgebung.titel);
-                var newId = createID()
-                const newCardObj = new CardObj(id, selectedUmgebung.titel, false, "", false, "", "", true, newId);
-                new Beziehungen(selectedUmgebung, newCardObj);
-                selectedUmgebung.addCardObjs(newCardObj);
-                console.log(selectedUmgebung);
-                Umgebung.tempListForSaveCards.push(newCardObj);
-                console.log(newCardObj);
-
-                Beziehungen.beziehungsListe.forEach(beziehung => {
-                    console.log(beziehung);
-                    console.log("beziehung gefunden");
-                });
-                updateAnzeigeCounter()
-            }
-        } else {
-            return
-        }
-    });
-    console.log("index_new.js wurde geladen");
-    selectUmgebung.addEventListener("change", function () {
-        selectedUmgebung = sucheUmgebung(selectUmgebung.value);
-        console.log(selectedUmgebung);
-        plusBtn.disabled = false;
-        updateAnzeigeCounter()
-        console.log("wächsle umgebung");
-        UmgebungsTitel.innerHTML = selectedUmgebung.titel;
-
-        if (selectedUmgebung.id == 0) {
-            showAllUmgebungen()
-            disableInput(denied)
-        } else {
-            zeigeUmgebungAn(selectedUmgebung)
-            disableInput(denied)
-        }
-    })
-
-    minusBtn.addEventListener("click", function () {
-        console.log("minus");
-        checkBoxShow();
-    });
-
-    deleteBtnForCards.addEventListener('click', function () {
-        if (selectedUmgebung.tempListForDeleteCards.length == 0) {
-            alert("wähle ein Object aus")
-            return
-        }
-        selectedUmgebung.tempListForDeleteCards.forEach(cardObj => {
-            cardObj.removeHtmlElement();
-            selectedUmgebung.removeObjFromList(selectedUmgebung.cardObjList, cardObj);
-            selectedUmgebung.removeObjFromList(selectedUmgebung.listAnzeige, cardObj);
-            deleteCardObjDataBase(cardObj.id)
-        });
-
-        selectedUmgebung.tempListForDeleteCards = [];
-        checkBoxShow();
-        updateAnzeigeCounter()
-
-    });
-
-
-    document.getElementById("saveBtn").addEventListener("click", function () {
-        alert("Daten werden gespeichert")
-        saveTempAddDatabase()
-        Umgebung.allCardList.forEach(cardObjlist => {
-            cardObjlist.forEach(cardObj => {
-                console.log(cardObj);
-                if (cardObj.update == true) {
-                    console.log(cardObj.update);
-                    cardObj.update = false
-                    updateDataBase(cardObj)
+                    Beziehungen.beziehungsListe.forEach(beziehung => {
+                        console.log(beziehung);
+                        console.log("beziehung gefunden");
+                    });
+                    updateAnzeigeCounter()
                 }
+            } else {
+                return
+            }
+        });
+    }
+    console.log("index_new.js wurde geladen");
+    if (selectUmgebung != null) {
+        selectUmgebung.addEventListener("change", function () {
+            selectedUmgebung = sucheUmgebung(selectUmgebung.value);
+            console.log(selectedUmgebung);
+            plusBtn.disabled = false;
+            updateAnzeigeCounter()
+            console.log("wächsle umgebung");
+            UmgebungsTitel.innerHTML = selectedUmgebung.titel;
+
+            if (selectedUmgebung.id == 0) {
+                showAllUmgebungen()
+                disableInput(denied)
+            } else {
+                zeigeUmgebungAn(selectedUmgebung)
+                disableInput(denied)
+            }
+        })
+    }
+    if (minusBtn != null) {
+        minusBtn.addEventListener("click", function () {
+            console.log("minus");
+            checkBoxShow();
+        });
+    }
+    if (deleteBtnForCards != null) {
+        deleteBtnForCards.addEventListener('click', function () {
+            if (selectedUmgebung.tempListForDeleteCards.length == 0) {
+                alert("wähle ein Object aus")
+                return
+            }
+            selectedUmgebung.tempListForDeleteCards.forEach(cardObj => {
+                cardObj.removeHtmlElement();
+                selectedUmgebung.removeObjFromList(selectedUmgebung.cardObjList, cardObj);
+                selectedUmgebung.removeObjFromList(selectedUmgebung.listAnzeige, cardObj);
+                deleteCardObjDataBase(cardObj.id)
+            });
+
+            selectedUmgebung.tempListForDeleteCards = [];
+            checkBoxShow();
+            updateAnzeigeCounter()
+
+        });
+    }
+    if (saveBtn != null) {
+        saveBtn.addEventListener("click", function () {
+            alert("Daten werden gespeichert")
+            saveTempAddDatabase()
+            Umgebung.allCardList.forEach(cardObjlist => {
+                cardObjlist.forEach(cardObj => {
+                    console.log(cardObj);
+                    if (cardObj.update == true) {
+                        console.log(cardObj.update);
+                        cardObj.update = false
+                        updateDataBase(cardObj)
+                    }
+                });
             });
         });
-    });
+    }
 }
 
 function createJsonObjForJsonFile() {
@@ -639,8 +638,8 @@ function setupImagePicker(previewId, modalImageId, inputId, formID) {
     if (aktuellesObj.imagePath == "") {
         imageInput.addEventListener('change', function (event) {
             const file = event.target.form.elements['image'].files[0];
-            if(!file) {
-                
+            if (!file) {
+
             }
             let selectedId = $(this).attr('id');
             let id = extractNumberFromString(selectedId)
