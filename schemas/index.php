@@ -9,7 +9,7 @@ require("../database/selectSchemas.php");
 // $clientIP = $_SERVER['REMOTE_ADDR'];
 // echo "Die IP-Adresse des Clients ist: " . $clientIP;
 
-$clientIP = "10.1.5.127";
+$clientIP = "10.1.5.119";
 
 // echo "ip adresse: " . $clientIP . "<br>";
 
@@ -42,7 +42,7 @@ foreach ($infothermalList1 as $datensatz) {
 
         echo json_encode($listePics);
 
-        header("Location: /anzeigeTherminal/index.php?ip=" . urlencode($datensatz[1]));
+        header("Location: ../anzeigeTherminal/index.php?ip=" . urlencode($datensatz[1]));
         
     };
 }

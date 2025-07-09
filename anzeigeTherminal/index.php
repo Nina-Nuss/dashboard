@@ -36,7 +36,7 @@
         justify-content: center;
         align-items: center;
         width: 70vw;
-        height: 90vh;
+        height: 480px;
         border: 1px solid black;
         margin: 0;
         box-sizing: border-box;
@@ -66,7 +66,7 @@
             justify-content: center;
             align-items: center;
             width: 70vw;
-            height: 69.8vh;
+            height: 750px;
             border: 1px solid black;
             margin: 0;
             box-sizing: border-box;
@@ -82,7 +82,7 @@
             justify-content: center;
             align-items: center;
             width: 70vw;
-            height: 71vh;
+            height: 1700px;
             border: 1px solid black;
             margin: 0;
             box-sizing: border-box;

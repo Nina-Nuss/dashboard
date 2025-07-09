@@ -5,7 +5,7 @@
         <img src="../images/logo.png" alt="logo" style="padding-bottom: 25px;">
     </div>
     <link rel="stylesheet" href="../css/index_new.css">
-    
+
 </div>
 
 <style>
@@ -32,6 +32,7 @@
     .div {
         text-align: center;
     }
+
     .parallelogram {
         margin-right: 5px;
     }
@@ -49,23 +50,35 @@
     </div>
 </div>
 <script>
-    function updateTime() {
-        const now = new Date();
-        const timeElement = document.getElementById('time');
-        const dateElement = document.getElementById('date');
+    async function updateTime() {
+        try {
+            const response = await fetch('https://timeapi.io/api/timezone/zone?timeZone=Europe%2FBerlin');
+            const data = await response.json();
+            // Beispiel: "datetime": "2025-07-09T09:30:00.123456+02:00"
+         
 
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
+            const dateTime = new Date(data.currentLocalTime);
+          
 
-        const day = String(now.getDate()).padStart(2, '0');
-        const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-        const year = now.getFullYear();
 
-        timeElement.textContent = `${hours}:${minutes}:${seconds}`;
-        dateElement.textContent = `${day}.${month}.${year}`;
+            const timeElement = document.getElementById('time');
+            const dateElement = document.getElementById('date');
+
+            const hours = String(dateTime.getHours()).padStart(2, '0');
+            const minutes = String(dateTime.getMinutes()).padStart(2, '0');
+            const seconds = String(dateTime.getSeconds()).padStart(2, '0');
+
+            const day = String(dateTime.getDate()).padStart(2, '0');
+            const month = String(dateTime.getMonth() + 1).padStart(2, '0');
+            const year = dateTime.getFullYear();
+
+            timeElement.textContent = `${hours}:${minutes}:${seconds}`;
+            dateElement.textContent = `${day}.${month}.${year}`;
+        } catch (error) {
+           
+        }
     }
 
     setInterval(updateTime, 1000);
-    updateTime(); // Initial call to set immediately
+    updateTime();
 </script>

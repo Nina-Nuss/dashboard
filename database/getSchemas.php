@@ -48,10 +48,24 @@ $imagesContainer = array();
 foreach ($images as $image) {
     // echo "<br>" . "gesuchtes Bild: " . $image . "<br>";
     foreach ($schemaList as $schema) {
-        if($schema[1] == $image && $schema[3] == true){
+
+
+        if ($schema[1] == $image && $schema[3] == true) {
             foreach ($relationList as $relation) {
                 if ($relation[0] == $id && $relation[1] == $schema[0]) {
+                    // Konvertiere stdClass zu DateTime
+                    if ($startTime != null && $endTime != null) {
+                        $startTimeStr = $schema[4];
+                        $endTimeStr = $schema[5];
+                        if (isNowBetween($startTimeStr, $endTimeStr)) {
+                            array_push($imagesContainer, $schema);
+                        } else {
+                            
+                        }
+                    } else {
+                        // Wenn die Zeitangaben nicht gesetzt sind, füge das Bild hinzu
                         array_push($imagesContainer, $schema);
+                    }
                 }
             }
         }
@@ -84,6 +98,37 @@ echo $imageList;
 
 // echo json_encode($array);
 // Optional: IP-Adresse zurückgeben, falls benötigt
+
+
+function isNowBetween($startTimeStr, $endTimeStr): bool
+{
+    // Datumsformat für die Eingabe
+    $datetimeFormat = 'Y-m-d H:i:s';
+    $startTime = DateTime::createFromFormat($datetimeFormat, $startTimeStr);
+    $endTime = DateTime::createFromFormat($datetimeFormat, $endTimeStr);
+    $timezone = new DateTimeZone('Europe/Berlin');
+    $now = new DateTime('now', $timezone);
+
+    // Optional: Zeitzone der Vergleichsobjekte anpassen, falls nötig
+    $startTime->setTimezone($timezone);
+    $endTime->setTimezone($timezone);
+    if ($startTime && $startTime->format($datetimeFormat) === $startTimeStr[4] && $endTime && $endTime->format($datetimeFormat) === $endTimeStr[4]) {
+        return false; // Invalid date format
+    }
+    return $now >= $startTime && $now <= $endTime;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 function getAllImages()
 {
 

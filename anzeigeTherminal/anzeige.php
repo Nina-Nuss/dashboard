@@ -40,7 +40,7 @@
         const ort = params.get('ip');
         console.log('IP-Adresse:', ort);
         try {
-            const response = await fetch("/database/getSchemas.php", {
+            const response = await fetch("../database/getSchemas.php", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -69,7 +69,7 @@
                     // Hier könntest du das Bild anzeigen
 
                     const img = document.createElement('img');
-                    img.src = "/schemas/uploads/" + element[1];
+                    img.src = "../schemas/uploads/" + element[1];
                     img.className = "fullscreen";
                     img.alt = "Image";
                     document.body.innerHTML = ''; // Clear the body content
