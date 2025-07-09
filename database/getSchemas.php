@@ -57,14 +57,17 @@ foreach ($images as $image) {
                         $endTime = createDateTimeObj($schema[5]);
                         if ($startTime === false || $endTime === false) {
                             array_push($imagesContainer, $schema);
+                            continue; // Springt zum nächsten Durchlauf der innersten Schleife
                         }
                         if (isNowBetween($startTime, $endTime)) {
                             array_push($imagesContainer, $schema);
+                            continue;
                         } else {
-                            
+
                         }
                     } else {
                         array_push($imagesContainer, $schema);
+                        continue;
                     }
                 }
             }

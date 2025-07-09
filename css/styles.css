@@ -96,28 +96,6 @@ select::after {
     display: none;
 }
 
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-content {
-    position: relative;
-    margin: auto;
-    padding: 20px;
-    background-color: white;
-    width: 50%;
-    max-width: 250px;
-    border-radius: 5px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.0);
-    text-align: center;
-}
 
 .close {
     position: absolute;
