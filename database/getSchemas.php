@@ -48,22 +48,22 @@ $imagesContainer = array();
 foreach ($images as $image) {
     // echo "<br>" . "gesuchtes Bild: " . $image . "<br>";
     foreach ($schemaList as $schema) {
-
-
         if ($schema[1] == $image && $schema[3] == true) {
             foreach ($relationList as $relation) {
                 if ($relation[0] == $id && $relation[1] == $schema[0]) {
                     // Konvertiere stdClass zu DateTime
-                    if ($startTime != null && $endTime != null) {
-                        $startTimeStr = $schema[4];
-                        $endTimeStr = $schema[5];
-                        if (isNowBetween($startTimeStr, $endTimeStr)) {
+                    if (isset($schema[4]) && $schema[4] !== null && isset($schema[5]) && $schema[5] !== null) {
+                        $startTime = createDateTimeObj($schema[4]);
+                        $endTime = createDateTimeObj($schema[5]);
+                        if ($startTime === false || $endTime === false) {
+                            array_push($imagesContainer, $schema);
+                        }
+                        if (isNowBetween($startTime, $endTime)) {
                             array_push($imagesContainer, $schema);
                         } else {
                             
                         }
                     } else {
-                        // Wenn die Zeitangaben nicht gesetzt sind, füge das Bild hinzu
                         array_push($imagesContainer, $schema);
                     }
                 }
@@ -76,57 +76,33 @@ $imageList = json_encode($imagesContainer);
 
 echo $imageList;
 
-// echo "<br>";
-
-// foreach ($jsonList2 as $item) {
-//     echo "<br>" . "ip adresse: " . $item[2] . "<br>";
-//     if($item[2] == $ip) {
-//         echo "<br>aktueller ort: " .  $item[1] . "<br>";
-
-//     }
-//     // foreach ($images as $image) {
-//     //     if ($item[1] == $image) {
-//     //         // echo "<br>Gefundenes Bild: " .  $image . "<br>";
-//     //         array_push($array, $image);
-//     //     }
-//     // }
-// }   
-
-// echo "<br>";
-// echo "<br>";
-// echo "<br>";
-
-// echo json_encode($array);
-// Optional: IP-Adresse zurückgeben, falls benötigt
 
 
-function isNowBetween($startTimeStr, $endTimeStr): bool
+function isNowBetween($startTime, $endTime)
 {
-    // Datumsformat für die Eingabe
-    $datetimeFormat = 'Y-m-d H:i:s';
-    $startTime = DateTime::createFromFormat($datetimeFormat, $startTimeStr);
-    $endTime = DateTime::createFromFormat($datetimeFormat, $endTimeStr);
-    $timezone = new DateTimeZone('Europe/Berlin');
-    $now = new DateTime('now', $timezone);
-
-    // Optional: Zeitzone der Vergleichsobjekte anpassen, falls nötig
-    $startTime->setTimezone($timezone);
-    $endTime->setTimezone($timezone);
-    if ($startTime && $startTime->format($datetimeFormat) === $startTimeStr[4] && $endTime && $endTime->format($datetimeFormat) === $endTimeStr[4]) {
-        return false; // Invalid date format
-    }
+    $timezone2 = new DateTimeZone('Europe/Berlin');
+    $now = new DateTime('now', $timezone2);
     return $now >= $startTime && $now <= $endTime;
 }
 
+function createDateTimeObj($dateTimeSrt)
+{
+    $datetimeFormat = 'Y-m-d H:i:s';
+    if ($dateTime = DateTime::createFromFormat($datetimeFormat, $dateTimeSrt)) {
+        $timezone = new DateTimeZone('Europe/Berlin');
+        $dateTime->setTimezone($timezone);
+        // Datumsformat für die Eingabe
 
-
-
-
-
-
-
-
-
+        if (
+            !$dateTime || $dateTime->format($datetimeFormat) !== trim($dateTimeSrt)
+        ) {
+            return false; // Ungültiges Datumsformat
+        }
+        return $dateTime;
+    }else{
+        return false;
+    }
+}
 
 
 function getAllImages()

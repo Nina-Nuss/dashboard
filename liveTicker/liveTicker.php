@@ -68,6 +68,8 @@
             // Text verdoppeln für nahtlosen Übergang
             tickerText = tickerText + tickerText;
             document.getElementById('ticker').innerHTML = '<span>' + tickerText + '</span>';
+            
+            
         }
 
         document.addEventListener('DOMContentLoaded', fetchRSS);
