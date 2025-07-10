@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<?php include '../assets/links.html'; ?>
+<?php include '../assets/scripts.html'; ?>
+
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +13,8 @@
 </head>
 
 <body>
-    <H1>mewwwwwwwwwwwoo</H1>
+   
+    <H1>Erstelle Schemas</H1>
     <form action="/schemas/movePic.php">
         <label for="img">Select image:</label>
         <input type="file" id="img" name="img" accept="image/*">
@@ -33,11 +38,13 @@
         event.preventDefault(); // Verhindert das Standardverhalten des Formulars
         const form = event.target.form;
         const formData = new FormData(form);
+        new CardObj(0, formData.get('img').name, true, "", "", "", "", "", formData.get('title'), formData.get('description'));
 
-
+        
+        sendPicture(formData)
 
     }
-    async function sendPicture() {
+    async function sendPicture(formData) {
         await fetch("/schemas/movePic.php", {
                 method: 'POST',
                 body: formData

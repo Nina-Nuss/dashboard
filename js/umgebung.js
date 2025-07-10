@@ -201,11 +201,21 @@ class Umgebung {
         var anzeigebereichv = document.getElementById("anzeigebereichV")
         const anzeigebereicht = document.getElementById("tabelle")
         var delInfo = document.getElementById("deleteInfotherminal")
-        if (anzeigebereichv != null || anzeigebereicht != null) {
+        var selectAddUmgebung = document.getElementById("selectAddUmgebung")
+
+        if (anzeigebereichv != null) {
             anzeigebereichv.innerHTML = ""
-            anzeigebereicht.innerHTML = ""
-            var vorhanden = true
+            var avvorhanden = true
         }
+        if (anzeigebereicht != null) {
+            anzeigebereicht.innerHTML = ""
+            var atvorhanden = true
+        }
+        if (selectAddUmgebung != null) {
+            selectAddUmgebung.innerHTML = "";
+            var sAu = true
+        }
+
         if (delInfo != null) {
             Umgebung.umgebungsListe = [];
             console.log("Umgebung.umgebungsListe: ", Umgebung.umgebungsListe.length);
@@ -227,25 +237,38 @@ class Umgebung {
         }
         for (let i = 0; i < this.umgebungsListe.length; i++) {
             const element = this.umgebungsListe[i];
-            if (vorhanden == true) {
+
+            if (sAu) {
+                selectAddUmgebung.innerHTML += `<option value="${element.id}">${element.titel}</option>`;
+            }
+
+            if (avvorhanden) {
                 anzeigebereichv.innerHTML += `<div style="display: flex;">
                                 <span name="${element.titel}" id="${element.id}" style="float: left;  margin-right: 10px;">${element.ipAdresse}</span>
-                                <label for="Schulaula" clSs="text-wrap"value="15">${element.beschreibung}</label>
+                                
+                                <label for="Schulaula" clSs="text-wrap"value="15">${element.titel}</label>
                             </div>
                             `;
+            }
+            if (atvorhanden) {
                 anzeigebereicht.innerHTML += `<tr>
                                                 <td>${element.id}</td>
                                                 <td>${element.ipAdresse}</td>
                                                 <td>${element.titel}</td>
-                                                <td>${element.beschreibung}</td>
-                                                <td>${element.von}</td>
-                                                <td>${element.bis}</td>
                                                 <td><input type="checkbox" name="${element.id}" id="CHECK${element.id}" onchange="Umgebung.event_remove(${element.id})"></td>
                                            </tr>`
             }
         }
+
+        if (selectAddUmgebung != null) {
+            selectAddUmgebung.addEventListener("change", function () {
+                console.log("Auswahl geändert:", selectAddUmgebung.value);
+            });
+        }
+
     }
 }
+
 
 async function getInfothermianl() {
     listUmgebung = await selectObj("/database/selectInfotherminal.php")
@@ -306,6 +329,8 @@ function cutAndCreate(responseText) {
 
 var adminBereich = document.getElementById("adminBereich")
 
+
+
 if (adminBereich != null) {
     document.getElementById("adminBereich").addEventListener("click", async function () {
         const settingsPanel = document.getElementById("settingsPanel")
@@ -314,7 +339,7 @@ if (adminBereich != null) {
             .then(response => response.text())
             .then(html => {
                 settingsPanel.innerHTML = html;
-        });
+            });
         document.getElementById('formID').addEventListener('submit', function (event) {
             event.preventDefault(); // Standard-Submit verhindern
 

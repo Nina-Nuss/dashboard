@@ -28,13 +28,7 @@ window.onload = async function () {
     await resultUmgebung.then(() => {
         Umgebung.update()
     });
- 
 
-    const cardObj1 = new CardObj(0, "natur.jpg", true, "", "", "", "");
-    console.log(cardObj1);
-    console.log("cardObj1 wurde erstellt");
-    
-    
     if (plusBtn != null) {
         plusBtn.addEventListener("click", function () {
             let currentCounter = parseInt(counter.innerHTML);
@@ -106,8 +100,6 @@ window.onload = async function () {
         });
     }
 
- 
-    
     if (saveBtn != null) {
         saveBtn.addEventListener("click", function () {
             alert("Daten werden gespeichert")
@@ -124,7 +116,33 @@ window.onload = async function () {
             });
         });
     }
+    const addCardToUmgebung = document.getElementById("addCardToUmgebung");
+
+    if (addCardToUmgebung != null) {
+        addCardToUmgebung.addEventListener("click", function () {
+            console.log("addCardToUmgebung wurde aufgerufen");
+
+        });
+    }
+
+    const infotherminalBereich = document.getElementById("infotherminalBereich");
+    if (infotherminalBereich !== null) {
+        console.log(234);
+        infotherminalBereich.addEventListener("click", async function (event) {
+            var settingPanel = document.getElementById("settingsPanel");
+            await fetch("bereiche/startSeite.php")
+                .then(response => response.text())
+                .then(html => {
+                    settingPanel.innerHTML = html;
+                });
+            
+            
+        });
+    }
+
 }
+
+
 
 function createJsonObjForJsonFile() {
     let jsonObjUmgebung = []
@@ -156,6 +174,7 @@ function createJsonObjForJsonFile() {
 
 
     return jsonObj
+
 }
 
 
@@ -382,7 +401,6 @@ function prepareCardObj(cardObj) {
 
 function JavaScriptCardObj(cardObj) {
     const jsonData = {
-        titel: cardObj.zugeordnet,
         checkSelect: cardObj.checkSelect,
         imagePath: cardObj.imagePath,
         imageSet: cardObj.imageSet,
@@ -390,7 +408,6 @@ function JavaScriptCardObj(cardObj) {
         endDateTime: cardObj.endDateTime,
         aktiv: cardObj.aktiv,
         selectedTime: cardObj.selectedTime,
-        id: cardObj.id // Hinzufügen des fehlenden Schlüssels
     };
 
     return jsonData
