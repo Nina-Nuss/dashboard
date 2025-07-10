@@ -103,11 +103,11 @@ class Umgebung {
     static event_remove(id) {
         var element = document.getElementById(`CHECK${id}`);
         console.log(element);
-     
-        
+
+
         if (element.checked && !this.temp_remove.includes(id)) {
             console.log(`Checkbox mit ID ${id} wurde aktiviert.`);
-            
+
             this.umgebungsListe.forEach(checkID => {
                 if (checkID.id == id) {
                     checkID.check = true
@@ -116,7 +116,7 @@ class Umgebung {
             });
             this.temp_remove.push(id);
             console.log(this.temp_remove);
-            
+
         }
         else {
             this.umgebungsListe.forEach(checkID => {
@@ -276,6 +276,65 @@ class Umgebung {
     }
 }
 
+window.addEventListener("load", function () {
+    var adminBereich = document.getElementById("adminBereich")
+    if (adminBereich != null) {
+        document.getElementById("adminBereich").addEventListener("click", async function () {
+            const settingsPanel = document.getElementById("settingsPanel")
+
+            await fetch("bereiche/adminbereich.php")
+                .then(response => response.text())
+                .then(html => {
+                    settingsPanel.innerHTML = html;
+                });
+            document.getElementById('formID').addEventListener('submit', function (event) {
+                event.preventDefault(); // Standard-Submit verhindern
+
+                const form = event.target;
+                const formData = new FormData(form);
+                console.log(form);
+                console.log(formData);
+
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.text())
+                    .then(result => {
+                        // Optional: Rückmeldung anzeigen
+
+                        alert(result); // Hier können Sie eine Erfolgsmeldung anzeigen
+                        // z.B. Erfolgsmeldung anzeigen oder UI aktualisieren
+                        if (result.includes("Datensatz erfolgreich eingefügt")) {
+                            Umgebung.update();
+                            document.querySelectorAll(".addInfotherminal input[type='text']").forEach(input => {
+                                input.value = ""; // Eingabefelder leeren
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Fehler beim Hinzufügen:', error);
+                    });
+            });
+            const delInfo = document.getElementById("deleteInfotherminal")
+            console.log("deleteInfotherminal: ", delInfo);
+            
+            Umgebung.umgebungsListe.forEach(element => {
+                delInfo.innerHTML += `<input type="checkbox" id="CHECK${element.id}" name="${element.titel}" onchange="Umgebung.event_remove(${element.id})"> ${element.titel} - ${element.ipAdresse} <br>`
+            });
+            const deleteBtn = document.createElement("button");
+            deleteBtn.id = "deleteBtnForInfotherminal";
+            deleteBtn.textContent = "löschen";
+
+            deleteBtn.addEventListener("click", function () {
+                Umgebung.remove_generate();
+
+            });
+            settingsPanel.appendChild(deleteBtn);
+        });
+    }
+});
+
 
 async function getInfothermianl() {
     listUmgebung = await selectObj("/database/selectInfotherminal.php")
@@ -334,70 +393,8 @@ function cutAndCreate(responseText) {
     }
 }
 
-var adminBereich = document.getElementById("adminBereich")
 
 
-
-if (adminBereich != null) {
-    document.getElementById("adminBereich").addEventListener("click", async function () {
-        const settingsPanel = document.getElementById("settingsPanel")
-
-        await fetch("bereiche/adminbereich.php")
-            .then(response => response.text())
-            .then(html => {
-                settingsPanel.innerHTML = html;
-            });
-        document.getElementById('formID').addEventListener('submit', function (event) {
-            event.preventDefault(); // Standard-Submit verhindern
-
-            const form = event.target;
-            const formData = new FormData(form);
-            console.log(form);
-            console.log(formData);
-
-            fetch(form.action, {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.text())
-                .then(result => {
-                    // Optional: Rückmeldung anzeigen
-
-                    alert(result); // Hier können Sie eine Erfolgsmeldung anzeigen
-                    // z.B. Erfolgsmeldung anzeigen oder UI aktualisieren
-                    if (result.includes("Datensatz erfolgreich eingefügt")) {
-                        Umgebung.update();
-                        document.querySelectorAll(".addInfotherminal input[type='text']").forEach(input => {
-                            input.value = ""; // Eingabefelder leeren
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Fehler beim Hinzufügen:', error);
-                });
-        });
-        const delInfo = document.getElementById("deleteInfotherminal")
-        Umgebung.umgebungsListe.forEach(element => {
-            delInfo.innerHTML += `<input type="checkbox" id="CHECK${element.id}" name="${element.titel}" onchange="Umgebung.event_remove(${element.id})"> ${element.titel} - ${element.ipAdresse} <br>`
-        });
-        const deleteBtn = document.createElement("button");
-        deleteBtn.id = "deleteBtnForInfotherminal";
-        deleteBtn.textContent = "löschen";
-
-        deleteBtn.addEventListener("click", function () {
-            Umgebung.remove_generate();
-
-        });
-        settingsPanel.appendChild(deleteBtn);
-
-
-
-    });
-
-
-
-
-}
 // Event Listener für den Admin-Bereich
 
 

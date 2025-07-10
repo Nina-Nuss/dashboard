@@ -1,12 +1,3 @@
-<?php include '../assets/links.html'; ?>
-<?php include '../assets/scripts.html'; ?>
-
-<?php include '../modal/hinzufuegen.html'; ?>
-<?php include '../modal/loeschen.html'; ?>
-
-
-
-
 <div class="col-md-11 pt-3 d-flex align-items-center justify-content-center position-relative">
     <div class=" col-md-4 container-fluid position-relative ">
         Webseite name: <span style="font-weight: bold;">Snapbar_Warm</span><br>
