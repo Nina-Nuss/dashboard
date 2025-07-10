@@ -1,15 +1,21 @@
 class Beziehungen {
     static beziehungsListe = [];
-    constructor(umgebung, cardObjekt) {
-        this.id = 
-        this.aktuelleUmgebung = umgebung;
-        this.aktuellesCardObjekt = cardObjekt;  
+    constructor(id, umgebung, cardObjekt) {
+        this.id = id;
+        this.umgebung = umgebung;
+        this.cardObjekt = cardObjekt;  
         Beziehungen.beziehungsListe.push(this);
     }
     setUmgebung(umgebung) {
-        this.aktuelleUmgebung = umgebung;
+        this.umgebung = umgebung;
     } 
     getUmgebung() {
-        return this.aktuelleUmgebung;
+        return this.umgebung;
+    }
+    getCardObjekt() {
+        return this.cardObjekt;
+    }
+    setCardObjekt(cardObjekt) {
+        this.cardObjekt = cardObjekt;
     }
 }

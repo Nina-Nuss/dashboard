@@ -12,7 +12,6 @@
                 <p style="font-size: 3vh; font-weight: bold; margin-bottom: 1vh;">Bearbeiten</p>
                 <!-- Card Objecte -->
                 <div id="dokumente">
-                    <select id="selectUmgebung" class="form-select" aria-label="Default select example"></select>
                     <button id="minusBtn" type="button" class="btn btn-light">Select
                     </button>
                     <div id="counter">0</div>

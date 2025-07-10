@@ -101,9 +101,10 @@ class Umgebung {
         return null; // Rückgabe von null, wenn kein Objekt gefunden wurde
     }
     static event_remove(id) {
+  
         var element = document.getElementById(`CHECK${id}`);
         console.log(element);
-
+       
 
         if (element.checked && !this.temp_remove.includes(id)) {
             console.log(`Checkbox mit ID ${id} wurde aktiviert.`);
@@ -258,12 +259,12 @@ class Umgebung {
                             `;
             }
             if (atvorhanden) {
-                anzeigebereicht.innerHTML += `<tr>
-                                                <td>${element.id}</td>
-                                                <td>${element.ipAdresse}</td>
-                                                <td>${element.titel}</td>
-                                                <td><input type="checkbox" name="${element.id}" id="CHECK${element.id}" onchange="Umgebung.event_remove(${element.id})"></td>
-                                           </tr>`
+                // anzeigebereicht.innerHTML += `<tr>
+                //                                 <td>${element.id}</td>
+                //                                 <td>${element.ipAdresse}</td>
+                //                                 <td>${element.titel}</td>
+                //                                 <td><input type="checkbox" name="${element.id}" id="CHECK${element.id}" onchange="Umgebung.event_remove(${element.id})"></td>
+                //                            </tr>`
             }
         }
 
