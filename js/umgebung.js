@@ -102,7 +102,12 @@ class Umgebung {
     }
     static event_remove(id) {
         var element = document.getElementById(`CHECK${id}`);
+        console.log(element);
+     
+        
         if (element.checked && !this.temp_remove.includes(id)) {
+            console.log(`Checkbox mit ID ${id} wurde aktiviert.`);
+            
             this.umgebungsListe.forEach(checkID => {
                 if (checkID.id == id) {
                     checkID.check = true
@@ -110,6 +115,8 @@ class Umgebung {
                 }
             });
             this.temp_remove.push(id);
+            console.log(this.temp_remove);
+            
         }
         else {
             this.umgebungsListe.forEach(checkID => {

@@ -22,6 +22,7 @@ while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
             continue; // Überspringe doppelte Einträge
         } else {
             array_push($beziehungsList1, array(
+                $row["id"],
                 $row["fk_infotherminal_id"],
                 $row['fk_schema_id'],
             ));

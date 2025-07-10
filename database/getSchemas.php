@@ -59,7 +59,7 @@ foreach ($images as $image) {
     foreach ($schemaList as $schema) {
         if ($schema[1] == $image && $schema[3] == true) {
             foreach ($relationList as $relation) {
-                if ($relation[0] == $id && $relation[1] == $schema[0]) {
+                if ($relation[1] == $id && $relation[2] == $schema[0]) {
                     // Konvertiere stdClass zu DateTime
                     if (isset($schema[4]) && isset($schema[5])) {
                         $trueTime = checkDateTime($schema[4], $schema[5], $timeFormat, $nowTime);
