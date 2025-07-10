@@ -19,6 +19,15 @@ $schemaList = json_decode($schemaList); //Schemas
 $infothermalList = json_decode($infothermalList); //Infoterminals
 $relationList = json_decode($beziehungsList); //Beziehungen
 
+
+$timeFormat = 'H:i:s';
+$dateFormat = 'Y-m-d';
+
+$now = new DateTime('now', new DateTimeZone('Europe/Berlin'));
+
+$nowTime = $now->format('H:i:s');
+$nowDate = $now->format('Y-m-d');
+
 // $clientIP = $_SERVER['REMOTE_ADDR'];
 
 $ip = $input['ip'] ?? 'begegnungshaus';
@@ -52,23 +61,18 @@ foreach ($images as $image) {
             foreach ($relationList as $relation) {
                 if ($relation[0] == $id && $relation[1] == $schema[0]) {
                     // Konvertiere stdClass zu DateTime
-                    if (isset($schema[4]) && $schema[4] !== null && isset($schema[5]) && $schema[5] !== null) {
-                        $startTime = createDateTimeObj($schema[4]);
-                        $endTime = createDateTimeObj($schema[5]);
-                        if ($startTime === false || $endTime === false) {
-                            array_push($imagesContainer, $schema);
-                            continue; // Springt zum nächsten Durchlauf der innersten Schleife
-                        }
-                        if (isNowBetween($startTime, $endTime)) {
-                            array_push($imagesContainer, $schema);
-                            continue;
-                        } else {
-
-                        }
-                    } else {
-                        array_push($imagesContainer, $schema);
-                        continue;
+                    if (isset($schema[4]) && isset($schema[5])) {
+                        $trueTime = checkDateTime($schema[4], $schema[5], $timeFormat, $nowTime);
                     }
+                    if(isset($schema[6]) && isset($schema[7])) {
+                        $trueDate = checkDateTime($schema[6], $schema[7], $dateFormat, $nowDate);
+                    } 
+                    // if($trueDate === true && $trueTime === true) {
+                    //     array_push($imagesContainer, $schema);
+                    // } else {
+                    //    continue; // Wenn die Zeit oder das Datum nicht im Bereich ist, überspringe das Schema
+                    // }
+                    array_push($imagesContainer, $schema);
                 }
             }
         }
@@ -79,33 +83,44 @@ $imageList = json_encode($imagesContainer);
 
 echo $imageList;
 
-
-
-function isNowBetween($startTime, $endTime)
+function checkDateTime($start, $end, $format, $now)
 {
-    $timezone2 = new DateTimeZone('Europe/Berlin');
-    $now = new DateTime('now', $timezone2);
-    return $now >= $startTime && $now <= $endTime;
-}
-
-function createDateTimeObj($dateTimeSrt)
-{
-    $datetimeFormat = 'Y-m-d H:i:s';
-    if ($dateTime = DateTime::createFromFormat($datetimeFormat, $dateTimeSrt)) {
-        $timezone = new DateTimeZone('Europe/Berlin');
-        $dateTime->setTimezone($timezone);
-        // Datumsformat für die Eingabe
-
-        if (
-            !$dateTime || $dateTime->format($datetimeFormat) !== trim($dateTimeSrt)
-        ) {
-            return false; // Ungültiges Datumsformat
+    $startTime = $start;
+    $endTime = $end;
+    $startTime = createDateTimeFormat($startTime, $format);
+    $endTime = createDateTimeFormat($endTime, $format);
+    if ($startTime !== null && $endTime !== null) {
+        if ($now >= $startTime && $now <= $endTime) {
+           
+            return true;
+        } else {
+  
+            return false;
         }
-        return $dateTime;
-    }else{
+    } else {
         return false;
     }
 }
+
+function createDateTimeFormat($dateTime, $format)
+{
+    $dateTime = str_replace(' ', '', $dateTime);
+
+    trim($dateTime);
+
+    $dateTime = DateTime::createFromFormat($format, $dateTime);
+
+    if (!$dateTime) {
+        return null; // Ungültiges Datumsformat
+    }
+    $dateTime = $dateTime->format($format);
+    if ($dateTime !== false) {
+        return $dateTime;
+    } else {
+        return null;
+    }
+}
+
 
 
 function getAllImages()
