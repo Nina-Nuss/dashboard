@@ -2,7 +2,8 @@
 <html lang="en">
 
 
-
+<?php include '../assets/links.html'; ?>
+<?php include '../assets/scripts.html'; ?>
 
 <head>
     <meta charset="UTF-8">

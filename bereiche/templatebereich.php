@@ -46,70 +46,7 @@
     </div>
 </body>
 <script>
-    async function meow(event) {
-        event.preventDefault(); // Verhindert das Standardverhalten des Formulars
-        const form = event.target.form;
-        const formData = new FormData(form);
-        const selectedTime = String(formData.get('selectedTime')); // Wert als Zahl
-        const aktiv = formData.get('aktiv'); // Wert der ausgewählten Option
-      
-        const titel = formData.get('title');
-        const description = formData.get('description');
-     
-
-        console.log("Selected Time:", selectedTime);
-        
-        const imgFile = formData.get("img");
-        const localImageName = imgFile && imgFile.name ? imgFile.name : "";
-        if (localImageName === "" || localImageName === null || selectedTime === null || aktiv === null || titel === "" || description === "") {
-            alert("Bitte füllen Sie alle Felder aus inkl Bild.");
-            return;
-        }
-        // Bild hochladen und vom Server den Dateinamen erhalten
-        const serverImageName = await sendPicture(formData);
-        // CardObj mit dem vom Server erhaltenen Bildnamen erstellen
-        if (serverImageName === "") {
-            console.error("Bild konnte nicht hochgeladen werden.");
-            return;
-        }
-        try {
-            // Lokalen Dateinamen in den CardObj einfügen
-            const obj1 = new CardObj(
-                "",
-                serverImageName, // Nur Bildname, kein Pfad
-                selectedTime, 
-                aktiv,
-                "",
-                "",
-                "",
-                "",
-                titel,
-                description
-            )
-            console.log(obj1.selectedTime);
-            
-            await insertDatabase(obj1);
-            alert("Schema erfolgreich erstellt!");
-        } catch (error) {
-            console.error("Fehler beim erstellen des CardObj:", error);
-        }
-    }
-    async function sendPicture(formData) {
-        try {
-            const response = await fetch("/schemas/movePic.php", {
-                method: 'POST',
-                body: formData
-            });
-            let imageName = await response.text();
-            // Falls der Server einen Pfad zurückgibt, extrahiere nur den Dateinamen
-            imageName = imageName.split('/').pop();
-            
-            return imageName;
-        } catch (error) {
-            console.error('Error:', error);
-            return "";
-        }
-    }
+   
 </script>
 
 </html>

@@ -1,4 +1,7 @@
 
+<?php include '../assets/links.html'; ?>
+<?php include '../assets/scripts.html'; ?>
+
 
 
 <div class="col-md-11 pt-3 d-flex align-items-center justify-content-center position-relative">
