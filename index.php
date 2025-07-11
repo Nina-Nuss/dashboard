@@ -8,25 +8,36 @@
 <div id="content">
     <div class="container-fluid">
         <div class="row ">
-            <div id="rowForCards" class="bearbeiten col-md-2 text-center ">
-                <p style="font-size: 3vh; font-weight: bold; margin-bottom: 1vh;">Bearbeiten</p>
-                <!-- Card Objecte -->
-                <div id="dokumente">
-                    <button id="minusBtn" type="button" class="btn btn-light">Select
-                    </button>
-                    <div id="counter">0</div>
-                    <h2 id="titelUmgebung"></h2>
-                    <div class="container d-flex " id="umgebungsContainer" style="justify-content: center; align-items: center;">
-                        <div id="rowForCards" class="col-4 p-2">
-                            <div></div>
-                        </div>
+
+            <div class="col-md-10 text-center pt-2">
+                <div class="col-md-12 mx-auto pl-auto bg-gray-100 ">
+                    <div class="d-flex justify-content-center" style="margin-right: 10vh;">
+                        <button id="infotherminalBereich" type="button" class="btn  text-dark start-btn  pt-0"
+                            style="background-color: rgba(255, 255, 255, 0.952); border-color: #006c99;">Infoterminal</button>
+                        <button id="templateBereich" type="button" class="btn  text-dark  start-btn" style="border-color: #006c99;"
+                            style="background-color: rgba(255, 255, 255, 0.952);">Templates</button>
+                        <button id="adminBereich" type="button" class="btn   text-dark start-btn" style="border-color: #006c99;"
+                            style="background-color: rgba(255, 255, 255, 0.952);">Administation</button>
+                        <button type="button" class="btn   text-dark start-btn" style="border-color: #006c99;"
+                            style="background-color: rgba(255, 255, 255, 0.952);">Video</button>
                     </div>
                 </div>
-                <!-- Card Objecte -->
-            </div>
-            <div class="col-md-10 text-center pt-2">
-                <?php include 'bereiche/selectBereich.php'; ?>
-                <?php include 'bereiche/crud.php'; ?>
+                <div class="col-md-12  mx-auto pl-auto bg-gray-100 pt-2">
+                    <div class="d-flex justify-content-center" style="margin-left: 10vh;">
+                        <button id="plusBtn" type="button" class="btn btn-primary">add
+                        </button>
+                        <button id="saveBtn" type="button" class="shadow-sm save btn btn-success">
+                            <span>save</span>
+                        </button>
+                        <button id="deleteBtnForCards" type="button" class="shadow-sm btn btn-danger">
+                            <span>delete</span>
+                        </button>
+                        <button type="button" class="shadow-sm btn btn-dark">
+                            <span>close</span>
+                        </button>
+
+                    </div>
+                </div>
                 <div id="settingsPanel">
 
                 </div>

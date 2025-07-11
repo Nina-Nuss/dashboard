@@ -11,18 +11,18 @@ echo json_encode($data);
 
 // Überprüfen, ob die Daten korrekt abgerufen wurden
 if (is_array($data)) {
-    $titel = $data["titel"];
     $imagePath = $data["imagePath"];
     $selectedTime = $data["selectedTime"];
-    $imageSet = $data["imageSet"];
-    $curSelect = $data["curSelect"];
-    $startDateTime = $data["startDateTime"];
-    $endDateTime = $data["endDateTime"];
     $aktiv = $data["aktiv"];
-
+    $startTime = $data["startTime"];
+    $endTime = $data["endTime"];
+    $startDate = $data["startDate"];
+    $endDate = $data["endDate"];
+    $titel = $data["titel"];
+    $beschreibung = $data["beschreibung"];
     // SQL-Abfrage mit Prepared Statement
-    $sql = "INSERT INTO schemas (imagePath, selectedTime, isAktiv, curSelect, startDateTime, endDateTime) VALUES (?, ?, ?, ?, ?, ?)";
-    $params = array($titel, $imagePath, $selectedTime, $imageSet, $aktiv, $startDateTime, $endDateTime);
+    $sql = "INSERT INTO schemas (imagePath, selectedTime, isAktiv, startTime, endTime, startDate, endDate, titel, beschreibung) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $params = array( $imagePath, $selectedTime, $aktiv, $startTime, $endTime, $startDate, $endDate, $titel, $beschreibung);
     $stmt = sqlsrv_prepare($conn, $sql, $params);
 
     if ($stmt) {
@@ -42,5 +42,4 @@ if (is_array($data)) {
 } else {
     echo "Fehler beim Abrufen der Daten";
 }
-
 sqlsrv_close($conn);

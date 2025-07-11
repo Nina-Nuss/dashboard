@@ -89,7 +89,7 @@
     function timerRefresh(time) {
         setTimeout(() => {
             location.reload();
-        }, 1000 * 60 * time); // Alle 5 Minuten neu laden
+        }, 4000 * 60 * time); // Alle 5 Minuten neu laden
     }
 </script>
 <?php

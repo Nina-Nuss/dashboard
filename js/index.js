@@ -2,6 +2,7 @@ let cancelUplaod = false
 var zeitEingegeben = false
 let pushDelete = false
 let json;
+let selectedCard = "";
 
 window.onload = async function () {
     var selectUmgebung = document.getElementById("selectUmgebung");
@@ -28,7 +29,7 @@ window.onload = async function () {
     await resultUmgebung.then(() => {
         Umgebung.update()
     });
-
+  
     if (plusBtn != null) {
         plusBtn.addEventListener("click", function () {
             let currentCounter = parseInt(counter.innerHTML);
@@ -37,7 +38,7 @@ window.onload = async function () {
                     console.log(selectedUmgebung);
                     console.log(selectedUmgebung.titel);
                     var newId = createID()
-                    const newCardObj = new CardObj(id, selectedUmgebung.titel, false, "", false, "", "", true, newId);
+                
                     new Beziehungen(selectedUmgebung, newCardObj);
                     selectedUmgebung.addCardObjs(newCardObj);
                     console.log(selectedUmgebung);
@@ -190,6 +191,7 @@ function checkTrue(check) {
     }
 }
 
+console.log("index_new.js wurde geladen");
 
 function saveToLocalStorage(key, jsonData) {
     const jsonString = JSON.stringify(jsonData, null, 2); // Formatierung für bessere Lesbarkeit
@@ -214,7 +216,6 @@ function createCardObj() {
 
 
                 if (umgebung.id == obj.infotherminalID) {
-                    var cardObj = new CardObj(umgebung, obj.imagePath, obj.aktiv, obj.startDateTime, obj.endDateTime, obj.infotherminalID);
                     new Beziehungen(umgebung, cardObj)
                     console.log(cardObj);
 
@@ -359,18 +360,22 @@ async function createJsonFile(jsonData) {
 async function insertDatabase(cardObj) {
     // Erstellen eines JSON-Objekts
     const jsonData = {
-        titel: cardObj.zugeordnet,
-        checkSelect: cardObj.checkSelect,
+        titel: cardObj.titel,
+        beschreibung: cardObj.beschreibung,
         imagePath: cardObj.imagePath,
-        imageSet: cardObj.imageSet,
-        startDateTime: cardObj.startDateTime,
-        endDateTime: cardObj.endDateTime,
+        selectedTime: cardObj.selectedTime,
         aktiv: cardObj.aktiv,
-        selectedTime: cardObj.selectedTime // Hinzufügen des fehlenden Schlüssels
+        startTime: cardObj.startTime,
+        endTime: cardObj.endTime,
+        startDate: cardObj.startDate,
+        endDate: cardObj.endDate
     };
+
+    console.log(jsonData.selectedTime);
+    
     console.log(JSON.stringify(jsonData));
     // Senden der POST-Anfrage mit JSON-Daten
-    const response = await fetch("database/insert.php", {
+    const response = await fetch("/database/insertSchema.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -723,3 +728,4 @@ function deletePicture(imagePreview, modalImage) {
     }
     return
 }
+

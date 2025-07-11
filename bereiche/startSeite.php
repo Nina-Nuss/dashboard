@@ -1,4 +1,23 @@
+
+
+
 <div class="col-md-11 pt-3 d-flex align-items-center justify-content-center position-relative">
+    <div id="rowForCards" class="bearbeiten col-md-2 text-center ">
+        <p style="font-size: 3vh; font-weight: bold; margin-bottom: 1vh;">Bearbeiten</p>
+        <!-- Card Objecte -->
+        <div id="dokumente">
+            <button id="minusBtn" type="button" class="btn btn-light">Select
+            </button>
+            <div id="counter">0</div>
+            <h2 id="titelUmgebung"></h2>
+            <div class="container d-flex " id="umgebungsContainer" style="justify-content: center; align-items: center;">
+                <div id="rowForCards" class="col-4 p-2">
+                    <div></div>
+                </div>
+            </div>
+        </div>
+        <!-- Card Objecte -->
+    </div>
     <div class=" col-md-4 container-fluid position-relative ">
         Webseite name: <span style="font-weight: bold;">Snapbar_Warm</span><br>
         <input type="checkbox" name="checkA">

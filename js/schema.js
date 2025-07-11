@@ -1,5 +1,5 @@
 class CardObj {
-    static idCounter = 1;
+    static idCounter = 0;
     constructor(id, imagePath, selectedTime, aktiv, startTime, endTime, startDate, endDate, titel, beschreibung) {
 
         this.id = id;
@@ -32,7 +32,6 @@ class CardObj {
         this.infoBtn = `infoBtn${this.id}`;
         this.timerSelectRange = `timerSelect${this.id}`
         this.alwaysOnBtn = `alwaysOnBtn${this.id}`
-        this.selectedTime = ""
         this.cardObjekte = `cardObjekt${this.id}`
         this.infoCard = `showDateInCard${this.id}`
         this.shownInCarousel = `showInCarousel${this.id}`;
@@ -40,15 +39,40 @@ class CardObj {
         this.sumbitBtnID = `submit${this.id}`;
         this.formID = `formID${this.id}`
         this.checkSelect = `checkSelect${this.id}`
+
         //-------------------------------------    
         // setTimeout(() => {
         //     this.updateObj();
         // }, 100);
         // umgebung.addCardObjs(this)
-        Umgebung.allCardsInOneList.push(this)
+        // Umgebung.allCardsInOneList.push(this)
     }
-    htmlKonstruktObjBody(umgebung) {
-        var htmlUmgebungsBody = document.getElementById(umgebung.htmlUmgebungsBody);
+    htmlKonstruktObjBody(umgebung) {    
+        // Dynamische Card mit CardObj-Daten
+        const body = `
+            <div class="card-deck">
+                <div class="card" id="${this.cardObjekte}">
+                    <img class="card-img-top" src="/uploads/${this.imagePath}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">${this.titel}</h5>
+                        <p class="card-text">${this.beschreibung}</p>
+                        <div class="form-check">
+                            <input class="form-check-input single-active-checkbox" type="checkbox" value="" id="flexCheck${this.id}"}>
+                            <label class="form-check-label" name="MEOW" for="flexCheck${this.id}">
+                                Aktiv
+                            </label>
+                        </div>
+                        <div>
+                            <small class="text-muted">selectedTime: ${this.selectedTime} ms</small>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Last updated just now</small>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.getElementById(umgebung).innerHTML += body;
     }
     removeHtmlElement() {
         const element = document.getElementById(this.cardObjekte);
@@ -88,6 +112,8 @@ class CardObj {
     }
 }
 
+
+
 window.addEventListener("load", function () {
     const templatebereich = document.getElementById("templateBereich");
     if (templatebereich !== null) {
@@ -110,6 +136,38 @@ window.addEventListener("load", function () {
 
         });
     }
+
+    const checkboxes = document.querySelectorAll('.form-check-input');
+    const labels = document.querySelectorAll('.form-check-label');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            if (this.checked) {
+                console.log(`Checkbox with ID ${this.id} is checked`);
+                const id = extractNumberFromString(this.id);
+                console.log(`Checkbox ID extracted: ${id}`);
+                
+                console.log(this.checked);
+                checkboxes.forEach(cb => {
+                    if (cb !== this) {
+                        cb.checked = false;
+
+                    }
+                }); 
+                labels.forEach(label => {
+                    
+                    
+                    if (label.html == id) {
+                        label.innerHTML = "checked"; // Set the label text to "checked" when checked
+                    } else {
+                        label.innerHTML = ""; // Clear the label text for unchecked checkboxes
+                    }
+                });
+
+            } else {
+                console.log(`Checkbox with ID ${id} is unchecked`);
+            }
+        });
+    });
 
 });
 console.log("Schema wurde geladen");
