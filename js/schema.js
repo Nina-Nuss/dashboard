@@ -1,5 +1,7 @@
 class CardObj {
     static idCounter = 0;
+    static selectedID = 0;
+    static allCardObjekte = [];
     constructor(id, imagePath, selectedTime, aktiv, startTime, endTime, startDate, endDate, titel, beschreibung) {
 
         this.id = id;
@@ -144,6 +146,8 @@ window.addEventListener("load", function () {
             if (this.checked) {
                 console.log(`Checkbox with ID ${this.id} is checked`);
                 const id = extractNumberFromString(this.id);
+                CardObj.selectedID = id; // Set the selected ID
+                console.log(`Selected ID set to: ${CardObj.selectedID}`);
                 console.log(`Checkbox ID extracted: ${id}`);
 
                 console.log(this.checked);

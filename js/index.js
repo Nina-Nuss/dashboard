@@ -29,7 +29,7 @@ window.onload = async function () {
     await resultUmgebung.then(() => {
         Umgebung.update()
     });
-  
+    createCardObj()
     if (plusBtn != null) {
         plusBtn.addEventListener("click", function () {
             let currentCounter = parseInt(counter.innerHTML);
@@ -38,7 +38,7 @@ window.onload = async function () {
                     console.log(selectedUmgebung);
                     console.log(selectedUmgebung.titel);
                     var newId = createID()
-                
+
                     new Beziehungen(selectedUmgebung, newCardObj);
                     selectedUmgebung.addCardObjs(newCardObj);
                     console.log(selectedUmgebung);
@@ -136,8 +136,8 @@ window.onload = async function () {
                 .then(html => {
                     settingPanel.innerHTML = html;
                 });
-            
-            
+
+
         });
     }
 
@@ -205,41 +205,47 @@ function getJsonData(key) {
 }
 
 function createCardObj() {
-    selectObj("./database/selectCardObj.php").then(async (data) => {
+    selectObj("./database/selectSchemas.php").then(async (data) => {
         let objList = convertCardObjForDataBase(data)
         console.log(objList);
         console.log("createCardObj wurde aufgerufen");
+        objList.forEach(cardObj => {
 
-        objList.forEach(obj => {
-            console.log(obj);
-            Umgebung.umgebungsListe.forEach(umgebung => {
-
-
-                if (umgebung.id == obj.infotherminalID) {
-                    new Beziehungen(umgebung, cardObj)
-                    console.log(cardObj);
-
-                }
-            })
-
+            new CardObj(
+                cardObj.id,
+                cardObj.imagePath,
+                cardObj.selectedTime,
+                cardObj.isAktiv,
+                cardObj.startTime,
+                cardObj.endTime,
+                cardObj.startDate,
+                cardObj.endDate,
+                cardObj.titel,
+                cardObj.beschreibung
+            )
         });
+        console.log(Umgebung.addCardsInOneList);
+
+        // Umgebung.allCardsInOneList.push(this); // Das ist hier falsch! "this" ist kein CardObj.
+        // Die CardObj-Instanzen werden im Konstruktor selbst zu Umgebung.allCardsInOneList hinzugefügt (falls dort implementiert).
     })
 }
 
 function convertCardObjForDataBase(cardObjListe) {
     objListe = []
     console.log(cardObjListe);
-
     cardObjListe.forEach(cardObj => {
         var obj = {
             id: cardObj[0],
             imagePath: cardObj[1],
             selectedTime: cardObj[2], //True or false
-            isImageSet: cardObj[3], //True or false
-            isAktiv: cardObj[4], //True or false
-            startDateTime: cardObj[5],
-            endDateTime: cardObj[6],
-            infotherminalID: cardObj[7],
+            isAktiv: cardObj[3], //True or false
+            startTime: cardObj[4],
+            endTime: cardObj[5],
+            startDate: cardObj[6],
+            endDate: cardObj[7],
+            titel: cardObj[8],
+            beschreibung: cardObj[9]
         };
         objListe.push(obj)
     });
@@ -372,7 +378,7 @@ async function insertDatabase(cardObj) {
     };
 
     console.log(jsonData.selectedTime);
-    
+
     console.log(JSON.stringify(jsonData));
     // Senden der POST-Anfrage mit JSON-Daten
     const response = await fetch("/database/insertSchema.php", {

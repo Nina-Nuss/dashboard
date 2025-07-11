@@ -18,30 +18,6 @@
 </body>
 <script>
     // Beispiel-CardObj mit allen Parametern
-    const test = new CardObj(
-        1,                // id
-        "",       // imagePath
-        "3000",           // selectedTime
-        "1",              // aktiv
-        "08:00",          // startTime
-        "10:00",          // endTime
-        "2024-06-01",     // startDate
-        "2024-06-30",     // endDate
-        "Beispiel-Titel", // titel
-        "Beschreibung"    // beschreibung
-    )
-    const test2 = new CardObj(
-        2,                // id
-        "",       // imagePath
-        "3000",           // selectedTime
-        "1",              // aktiv
-        "08:00",          // startTime
-        "10:00",          // endTime
-        "2024-06-01",     // startDate
-        "2024-06-30",     // endDate
-        "Beispiel-Titel", // titel
-        "Beschreibung"    // beschreibung
-    )
     test.htmlKonstruktObjBody("cardContainer");
     test2.htmlKonstruktObjBody("cardContainer");
     
