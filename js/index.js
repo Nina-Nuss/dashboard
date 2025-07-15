@@ -258,6 +258,7 @@ async function createCardObj() {
         )
     });
 
+    console.log(Umgebung.allCardsInOneList);
 
     // Umgebung.allCardsInOneList.push(this); // Das ist hier falsch! "this" ist kein CardObj.
     // Die CardObj-Instanzen werden im Konstruktor selbst zu Umgebung.allCardsInOneList hinzugefügt (falls dort implementiert).

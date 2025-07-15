@@ -11,6 +11,14 @@ class Umgebung {
     static check = false
     static listDataBase = [];
 
+
+    static temp_list = []
+
+    static eleListe = []
+
+    static responseText = ""
+
+
     constructor(id, titel, ipAdresse) {
         this.id = id;
         this.cardCounter = 0;
@@ -34,12 +42,7 @@ class Umgebung {
         Umgebung.umgebungsListe.push(this);
     }
 
-    static temp_list = []
-    static temp_remove = []
-    static temp_remove_info = []
-    static temp_add = []
-    static eleListe = []
-    static responseText = ""
+ 
 
     addCardObjs(cardObj) {
         this.cardObjList.push(cardObj);
@@ -103,25 +106,15 @@ class Umgebung {
         return null; // Rückgabe von null, wenn kein Objekt gefunden wurde
     }
     static event_remove(id) {
-        var eleDelInfo = document.getElementById(`checkDelInfo${id}`);
-        var eleAdd = document.getElementById(`checkAdd${id}`);
-        var eleDel = document.getElementById(`checkDel${id}`);
-        var element = ""
+        var element = document.getElementById(`checkDelInfo${id}`);
+   
         
-        if (eleDelInfo) {
-            element = eleDelInfo
-            this.temp_list = this.temp_remove_info
-        } else if (eleAdd) {
-            element = eleAdd
-            this.temp_list = this.temp_remove
-        } else if (eleDel) {
-            element = eleDel
-             this.temp_list = this.temp_remove
-        }
-        if (element.checked && !thistemp_list.includes(id)) {
+
+        if (element.checked && !this.temp_list.includes(id)) {
             console.log(`Checkbox mit ID ${id} wurde aktiviert.`);
 
             this.umgebungsListe.forEach(checkID => {
+                console.log(checkID);
                 if (checkID.id == id) {
                     checkID.check = true
                     // console.log(checkID)
@@ -170,20 +163,18 @@ class Umgebung {
         });
         return temp;
     }
-    static removeFromListLogik() {
+    static async removeFromListLogik() {
         // DIese Methode wird aufgerufen sobald wir auf Minus (-) klicken
         // Hier benötigen wir die Aktuellen IDS der Datenbank zum löschen
         this.temp_list.forEach(id => {
             this.umgebungsListe = this.removeFromListViaID(id, Umgebung.umgebungsListe);
 
         });
-        this.temp_list = []
-        this.temp_remove = []
-        this.temp_remove_info = []
+        console.log(this.umgebungsListe);
         this.temp_add = []
         console.log(this.umgebungsListe);
+        await Umgebung.update();
     }
-
 
     static remove_generate() {
         console.log("remove_generate wurde aufgerufen");
@@ -191,50 +182,14 @@ class Umgebung {
         this.removeFromListLogik()
         this.update()
     }
-    static async add_generate() {
-        console.log("add_generate wurde aufgerufen");
-        // Hier müssen wir die IDs der Datenbank abfragen und dann die Objekte hinzufügen
-        this.temp_add.forEach(id => {
-            this.umgebungsListe = this.removeFromListViaID(id, Umgebung.umgebungsListe);
-            console.log("UmgebungsListe: ", this.umgebungsListe);
-        });
-        this.temp_add = []
-        console.log(this.umgebungsListe);
-        await Umgebung.update();
-    }
 
-    static async update() {
-        var anzeigebereichv = document.getElementById("anzeigebereichV")
-        const anzeigebereicht = document.getElementById("tabelleAdd")
-        const anzeigebereichD = document.getElementById("tabelleDelete")
+    static async update() {   
         var delInfo = document.getElementById("deleteInfotherminal")
-        var selectAddUmgebung = document.getElementById("selectAddUmgebung")
-        const anzeigebereichS = document.getElementById("anzeigebereichS")
-
-        if (anzeigebereichv != null) {
-            anzeigebereichv.innerHTML = ""
-            var avvorhanden = true
-        }
-        if (anzeigebereicht != null) {
-            anzeigebereicht.innerHTML = ""
-            var atvorhanden = true
-        }
-        if (selectAddUmgebung != null) {
-            selectAddUmgebung.innerHTML = "";
-            var sAu = true
-        }
-        if (anzeigebereichD != null) {
-            anzeigebereichD.innerHTML = "";
-            var advorhanden = true
-        }
-
         if (delInfo != null) {
             Umgebung.umgebungsListe = [];
             console.log("Umgebung.umgebungsListe: ", Umgebung.umgebungsListe.length);
-
             delInfo.innerHTML = ""
             console.log("Umgebung.umgebungsListe: ", Umgebung.umgebungsListe);
-
             // KEINE neuen Umgebung-Objekte hier erzeugen!
             await getInfothermianl().then(result => {
                 // Umgebung.umgebungsListe vorher leeren, damit keine Duplikate entstehen
@@ -242,47 +197,12 @@ class Umgebung {
                 result.forEach(listInfo => {
                     // Nur hier neue Umgebung-Objekte erzeugen
                     new Umgebung(listInfo[0], listInfo[1], listInfo[2]);
-                    delInfo.innerHTML += `<input type="checkbox" id="checkDelInfo${listInfo[0]}" name="${listInfo[1]}" onchange="Umgebung.event_remove(${listInfo[0]})"> ${listInfo[1]} - ${listInfo[2]} <br>`
+                    delInfo.innerHTML += `<input type="checkbox" id="checkDelInfo${listInfo[0]}" name="${listInfo[1]}" onchange="Umgebung.event_remove(${this.temp_remove_info}, ${this.eleListeForRemoveInfo}, ${listInfo[0]})"> ${listInfo[1]} - ${listInfo[2]} <br>`
                 });
                 console.log(Umgebung.umgebungsListe);
             });
         }
-        for (let i = 0; i < this.umgebungsListe.length; i++) {
-            const element = this.umgebungsListe[i];
-            if (sAu) {
-                selectAddUmgebung.innerHTML += `<option value="${element.id}">${element.titel}</option>`;
-            }
-            if (avvorhanden) {
-                anzeigebereichv.innerHTML += `<div style="display: flex;">
-                                <span name="${element.titel}" id="${element.id}" style="float: left;  margin-right: 10px;">${element.ipAdresse}</span>
-                                
-                                <label for="Schulaula" clSs="text-wrap"value="15">${element.titel}</label>
-                            </div>
-                            `;
-            }
-            if (atvorhanden) {
-                anzeigebereicht.innerHTML += `<tr>
-                                                <td>${element.id}</td>
-                                                <td>${element.ipAdresse}</td>
-                                                <td>${element.titel}</td>
-                                                <td><input type="checkbox" name="${element.id}" id="checkAdd${element.id}" onchange="Umgebung.event_remove(${element.id})"></td>
-                                           </tr>`
-            }
-            if (advorhanden) {
-                anzeigebereichD.innerHTML += `<tr>
-                                                <td>${element.id}</td>
-                                                <td>${element.ipAdresse}</td>
-                                                <td>${element.titel}</td>
-                                                <td><input type="checkbox" name="${element.id}" id="checkDel${element.id}" onchange="Umgebung.event_remove(${element.id})"></td>
-                                           </tr>`
-            }
-
-        }
-        if (selectAddUmgebung != null) {
-            selectAddUmgebung.addEventListener("change", function () {
-                console.log("Auswahl geändert:", selectAddUmgebung.value);
-            });
-        }
+       
 
     }
 }
