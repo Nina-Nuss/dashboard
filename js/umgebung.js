@@ -142,6 +142,7 @@ class Umgebung {
 
     static removeFromListViaID(id, liste) {
         var temp = [];
+        console.log(liste);     
         liste.forEach(element => {
             if (element.id != id) {
                 //ID muss aus Liste gelöscht werden
@@ -164,40 +165,43 @@ class Umgebung {
     static async removeFromListLogik() {
         // DIese Methode wird aufgerufen sobald wir auf Minus (-) klicken
         // Hier benötigen wir die Aktuellen IDS der Datenbank zum löschen
+        console.log( this.temp_list);
+        
         this.temp_list.forEach(id => {
-            this.umgebungsListe = this.removeFromListViaID(id, this.umgebungsListe);
+            Umgebung.umgebungsListe = this.removeFromListViaID(id, Umgebung.umgebungsListe);
         });
         console.log(this.umgebungsListe);
         this.temp_add = []
         this.eleListe = []
-        Umgebung.umgebungsListe = [];
-        await this.update();
     }
 
     static remove_generate() {
         console.log("remove_generate wurde aufgerufen");
 
         this.removeFromListLogik()
+       
         this.update()
+        
     }
 
-    static async update() {   
+    static async update() { 
+ 
         var delInfo = document.getElementById("deleteInfotherminal")
         if (delInfo != null) {
-            Umgebung.umgebungsListe = [];
             console.log(this.umgebungsListe);
             delInfo.innerHTML = "";
             // KEINE neuen Umgebung-Objekte hier erzeugen!
             const result = await getInfothermianl();
             console.log("result: ", result);
             await result.forEach(listInfo => {
-                console.log(this.umgebungsListe);
+          
                 // Nur hier neue Umgebung-Objekte erzeugen
                 new Umgebung(listInfo[0], listInfo[1], listInfo[2]);
                 delInfo.innerHTML += `<input type="checkbox" id="checkDelInfo${listInfo[0]}" name="${listInfo[1]}" onchange="Umgebung.event_remove(${listInfo[0]})"> ${listInfo[1]} - ${listInfo[2]} <br>`
             });
-            console.log(this.umgebungsListe);
+      
         }
+        console.log(Umgebung.umgebungsListe);
     }
 }
 
@@ -316,7 +320,7 @@ function cutAndCreate(responseText) {
     for (let i = 0; i < obj.length; i++) {
         var zeile = obj[i].replace("[[", "").replace("]]", "").replace("[", "").replace("]", "").replace(/"/g, '')
         const inZeile = zeile.split(",");
-        new Umgebung(inZeile[0], inZeile[1], inZeile[2])
+        // new Umgebung(inZeile[0], inZeile[1], inZeile[2])
     }
 }
 
