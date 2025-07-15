@@ -177,9 +177,7 @@ class Umgebung {
 
     static remove_generate() {
         console.log("remove_generate wurde aufgerufen");
-
         this.removeFromListLogik()
-       
         this.update()
         
     }
