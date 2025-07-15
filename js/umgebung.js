@@ -107,9 +107,7 @@ class Umgebung {
     }
     static event_remove(id) {
         var element = document.getElementById(`checkDelInfo${id}`);
-   
         
-
         if (element.checked && !this.temp_list.includes(id)) {
             console.log(`Checkbox mit ID ${id} wurde aktiviert.`);
 
@@ -167,13 +165,13 @@ class Umgebung {
         // DIese Methode wird aufgerufen sobald wir auf Minus (-) klicken
         // Hier benötigen wir die Aktuellen IDS der Datenbank zum löschen
         this.temp_list.forEach(id => {
-            this.umgebungsListe = this.removeFromListViaID(id, Umgebung.umgebungsListe);
-
+            this.umgebungsListe = this.removeFromListViaID(id, this.umgebungsListe);
         });
         console.log(this.umgebungsListe);
         this.temp_add = []
-        console.log(this.umgebungsListe);
-        await Umgebung.update();
+        this.eleListe = []
+        Umgebung.umgebungsListe = [];
+        await this.update();
     }
 
     static remove_generate() {
@@ -187,23 +185,19 @@ class Umgebung {
         var delInfo = document.getElementById("deleteInfotherminal")
         if (delInfo != null) {
             Umgebung.umgebungsListe = [];
-            console.log("Umgebung.umgebungsListe: ", Umgebung.umgebungsListe.length);
-            delInfo.innerHTML = ""
-            console.log("Umgebung.umgebungsListe: ", Umgebung.umgebungsListe);
+            console.log(this.umgebungsListe);
+            delInfo.innerHTML = "";
             // KEINE neuen Umgebung-Objekte hier erzeugen!
-            await getInfothermianl().then(result => {
-                // Umgebung.umgebungsListe vorher leeren, damit keine Duplikate entstehen
-                console.log(Umgebung.umgebungsListe);
-                result.forEach(listInfo => {
-                    // Nur hier neue Umgebung-Objekte erzeugen
-                    new Umgebung(listInfo[0], listInfo[1], listInfo[2]);
-                    delInfo.innerHTML += `<input type="checkbox" id="checkDelInfo${listInfo[0]}" name="${listInfo[1]}" onchange="Umgebung.event_remove(${this.temp_remove_info}, ${this.eleListeForRemoveInfo}, ${listInfo[0]})"> ${listInfo[1]} - ${listInfo[2]} <br>`
-                });
-                console.log(Umgebung.umgebungsListe);
+            const result = await getInfothermianl();
+            console.log("result: ", result);
+            await result.forEach(listInfo => {
+                console.log(this.umgebungsListe);
+                // Nur hier neue Umgebung-Objekte erzeugen
+                new Umgebung(listInfo[0], listInfo[1], listInfo[2]);
+                delInfo.innerHTML += `<input type="checkbox" id="checkDelInfo${listInfo[0]}" name="${listInfo[1]}" onchange="Umgebung.event_remove(${listInfo[0]})"> ${listInfo[1]} - ${listInfo[2]} <br>`
             });
+            console.log(this.umgebungsListe);
         }
-       
-
     }
 }
 

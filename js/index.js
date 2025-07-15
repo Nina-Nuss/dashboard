@@ -5,6 +5,27 @@ let json;
 let selectedCard = "";
 
 
+class Crud{
+    createCard(cardData) {
+        // Implement create logic
+    }
+
+    readCard(cardId) {
+        // Implement read logic
+    }
+
+    updateCard(cardId, updatedData) {
+        // Implement update logic
+    }
+
+    deleteCard(cardId) {
+        // Implement delete logic
+    }
+}
+
+
+
+
 window.onload = async function () {
     var selectUmgebung = document.getElementById("selectUmgebung");
     const deleteBtnForCards = document.getElementById("deleteBtnForCards");
