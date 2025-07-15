@@ -7,7 +7,7 @@ class Umgebung {
     static nameList = [];
     static tempListForSaveCards = [];
     static allCardsInOneList = [];
-
+    static currentSelect = 0;
     static check = false
     static listDataBase = [];
 
@@ -34,8 +34,10 @@ class Umgebung {
         Umgebung.umgebungsListe.push(this);
     }
 
-
+    static temp_list = []
     static temp_remove = []
+    static temp_remove_info = []
+    static temp_add = []
     static eleListe = []
     static responseText = ""
 
@@ -101,12 +103,22 @@ class Umgebung {
         return null; // Rückgabe von null, wenn kein Objekt gefunden wurde
     }
     static event_remove(id) {
-  
-        var element = document.getElementById(`CHECK${id}`);
-        console.log(element);
-       
-
-        if (element.checked && !this.temp_remove.includes(id)) {
+        var eleDelInfo = document.getElementById(`checkDelInfo${id}`);
+        var eleAdd = document.getElementById(`checkAdd${id}`);
+        var eleDel = document.getElementById(`checkDel${id}`);
+        var element = ""
+        
+        if (eleDelInfo) {
+            element = eleDelInfo
+            this.temp_list = this.temp_remove_info
+        } else if (eleAdd) {
+            element = eleAdd
+            this.temp_list = this.temp_remove
+        } else if (eleDel) {
+            element = eleDel
+             this.temp_list = this.temp_remove
+        }
+        if (element.checked && !thistemp_list.includes(id)) {
             console.log(`Checkbox mit ID ${id} wurde aktiviert.`);
 
             this.umgebungsListe.forEach(checkID => {
@@ -115,8 +127,8 @@ class Umgebung {
                     // console.log(checkID)
                 }
             });
-            this.temp_remove.push(id);
-            console.log(this.temp_remove);
+            this.temp_list.push(id);
+            console.log(this.temp_list);
 
         }
         else {
@@ -126,20 +138,17 @@ class Umgebung {
                     // console.log(checkID)
                 }
             });
-            this.temp_remove.forEach(idd => {
+            this.temp_list.forEach(idd => {
                 if (id != idd) {
                     this.eleListe.push(idd)
                 }
             });
-            this.temp_remove = this.eleListe
+            this.temp_list = this.eleListe
             this.eleListe = []
         }
-        console.log(this.temp_remove);
+        console.log(this.temp_list);
     };
 
-    static delete_checkbox() {
-        alert("Geandert")
-    }
     static removeFromListViaID(id, liste) {
         var temp = [];
         liste.forEach(element => {
@@ -164,52 +173,43 @@ class Umgebung {
     static removeFromListLogik() {
         // DIese Methode wird aufgerufen sobald wir auf Minus (-) klicken
         // Hier benötigen wir die Aktuellen IDS der Datenbank zum löschen
-        this.temp_remove.forEach(id => {
+        this.temp_list.forEach(id => {
             this.umgebungsListe = this.removeFromListViaID(id, Umgebung.umgebungsListe);
 
         });
+        this.temp_list = []
         this.temp_remove = []
+        this.temp_remove_info = []
+        this.temp_add = []
         console.log(this.umgebungsListe);
     }
+
+
     static remove_generate() {
         console.log("remove_generate wurde aufgerufen");
 
         this.removeFromListLogik()
-        console.log("dfsdfsdsdfsdfsdfsdfs");
-
         this.update()
     }
-    static async add() {
-        var listeObj = []
-        var alleObjVorhanden = true
-        let ip = document.getElementById("modal_hinzufuegen_txtbox_ip");
-        let title = document.getElementById("modal_hinzufuegen_txtbox_titel");
-
-
-        listeObj.push(ip.value, title.value, beschreibung.value, von.value, bis.value)
-
-        var prepare = "?ip=" + ip.value + "&titel=" + title.value + "&beschreibung=" + beschreibung.value + "&von=" + von.value + "&bis=" + bis.value;
-        var result = await fetch("db/insert.php" + prepare);
-
-        listeObj.forEach(listValue => {
-            if (listValue == "") {
-                listeObj = []
-                alleObjVorhanden = falseh
-            }
+    static async add_generate() {
+        console.log("add_generate wurde aufgerufen");
+        // Hier müssen wir die IDs der Datenbank abfragen und dann die Objekte hinzufügen
+        this.temp_add.forEach(id => {
+            this.umgebungsListe = this.removeFromListViaID(id, Umgebung.umgebungsListe);
+            console.log("UmgebungsListe: ", this.umgebungsListe);
         });
-        if (alleObjVorhanden == false) {
-            alert("bite alle Werte im Textbox eingeben")
-            return
-        }
-        new Umgebung(ip.value, title.value, beschreibung.value, von.value, bis.value);
-        Umgebung.update();
+        this.temp_add = []
+        console.log(this.umgebungsListe);
+        await Umgebung.update();
     }
 
     static async update() {
         var anzeigebereichv = document.getElementById("anzeigebereichV")
-        const anzeigebereicht = document.getElementById("tabelle")
+        const anzeigebereicht = document.getElementById("tabelleAdd")
+        const anzeigebereichD = document.getElementById("tabelleDelete")
         var delInfo = document.getElementById("deleteInfotherminal")
         var selectAddUmgebung = document.getElementById("selectAddUmgebung")
+        const anzeigebereichS = document.getElementById("anzeigebereichS")
 
         if (anzeigebereichv != null) {
             anzeigebereichv.innerHTML = ""
@@ -222,6 +222,10 @@ class Umgebung {
         if (selectAddUmgebung != null) {
             selectAddUmgebung.innerHTML = "";
             var sAu = true
+        }
+        if (anzeigebereichD != null) {
+            anzeigebereichD.innerHTML = "";
+            var advorhanden = true
         }
 
         if (delInfo != null) {
@@ -238,18 +242,16 @@ class Umgebung {
                 result.forEach(listInfo => {
                     // Nur hier neue Umgebung-Objekte erzeugen
                     new Umgebung(listInfo[0], listInfo[1], listInfo[2]);
-                    delInfo.innerHTML += `<input type="checkbox" id="CHECK${listInfo[0]}" name="${listInfo[1]}" onchange="Umgebung.event_remove(${listInfo[0]})"> ${listInfo[1]} - ${listInfo[2]} <br>`
+                    delInfo.innerHTML += `<input type="checkbox" id="checkDelInfo${listInfo[0]}" name="${listInfo[1]}" onchange="Umgebung.event_remove(${listInfo[0]})"> ${listInfo[1]} - ${listInfo[2]} <br>`
                 });
                 console.log(Umgebung.umgebungsListe);
             });
         }
         for (let i = 0; i < this.umgebungsListe.length; i++) {
             const element = this.umgebungsListe[i];
-
             if (sAu) {
                 selectAddUmgebung.innerHTML += `<option value="${element.id}">${element.titel}</option>`;
             }
-
             if (avvorhanden) {
                 anzeigebereichv.innerHTML += `<div style="display: flex;">
                                 <span name="${element.titel}" id="${element.id}" style="float: left;  margin-right: 10px;">${element.ipAdresse}</span>
@@ -259,15 +261,23 @@ class Umgebung {
                             `;
             }
             if (atvorhanden) {
-                // anzeigebereicht.innerHTML += `<tr>
-                //                                 <td>${element.id}</td>
-                //                                 <td>${element.ipAdresse}</td>
-                //                                 <td>${element.titel}</td>
-                //                                 <td><input type="checkbox" name="${element.id}" id="CHECK${element.id}" onchange="Umgebung.event_remove(${element.id})"></td>
-                //                            </tr>`
+                anzeigebereicht.innerHTML += `<tr>
+                                                <td>${element.id}</td>
+                                                <td>${element.ipAdresse}</td>
+                                                <td>${element.titel}</td>
+                                                <td><input type="checkbox" name="${element.id}" id="checkAdd${element.id}" onchange="Umgebung.event_remove(${element.id})"></td>
+                                           </tr>`
             }
-        }
+            if (advorhanden) {
+                anzeigebereichD.innerHTML += `<tr>
+                                                <td>${element.id}</td>
+                                                <td>${element.ipAdresse}</td>
+                                                <td>${element.titel}</td>
+                                                <td><input type="checkbox" name="${element.id}" id="checkDel${element.id}" onchange="Umgebung.event_remove(${element.id})"></td>
+                                           </tr>`
+            }
 
+        }
         if (selectAddUmgebung != null) {
             selectAddUmgebung.addEventListener("change", function () {
                 console.log("Auswahl geändert:", selectAddUmgebung.value);
@@ -276,6 +286,8 @@ class Umgebung {
 
     }
 }
+
+console.log("Umgebung.js loaded");
 
 window.addEventListener("load", function () {
     var adminBereich = document.getElementById("adminBereich")
@@ -319,9 +331,9 @@ window.addEventListener("load", function () {
             });
             const delInfo = document.getElementById("deleteInfotherminal")
             console.log("deleteInfotherminal: ", delInfo);
-            
+
             Umgebung.umgebungsListe.forEach(element => {
-                delInfo.innerHTML += `<input type="checkbox" id="CHECK${element.id}" name="${element.titel}" onchange="Umgebung.event_remove(${element.id})"> ${element.titel} - ${element.ipAdresse} <br>`
+                delInfo.innerHTML += `<input type="checkbox" id="checkDelInfo${element.id}" name="${element.titel}" onchange="Umgebung.event_remove(${element.id})"> ${element.titel} - ${element.ipAdresse} <br>`
             });
             const deleteBtn = document.createElement("button");
             deleteBtn.id = "deleteBtnForInfotherminal";

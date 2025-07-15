@@ -4,32 +4,36 @@ let pushDelete = false
 let json;
 let selectedCard = "";
 
+
 window.onload = async function () {
     var selectUmgebung = document.getElementById("selectUmgebung");
     const deleteBtnForCards = document.getElementById("deleteBtnForCards");
     const UmgebungsTitel = document.getElementById("titelUmgebung")
     // const ersteAuswahl = selectUmgebung.querySelector('option');
     const denied = document.getElementById("umgebungsContainer");
-    var cardAnzeige = document.getElementById("rowForCards")
+
     const plusBtn = document.getElementById("plusBtn");
-    const minusBtn = document.getElementById("minusBtn");
+  
     let counter = document.getElementById("counter");
     const saveBtn = document.getElementById("saveBtn")
-    console.log("window.onload läuft!");
+    console.log("window.onload von index.js läuft!");
     // executeDeleteNull();
 
-    const resultUmgebung = selectObj("../database/selectInfotherminal.php").then(async (data) => {
-        var HauptUmgebungsObj = new Umgebung(0, 0, "Alle Schemas");
-        Umgebung.umgebungsListe = [];
-        data.forEach(umgebung => {
-            var umgebungObj = new Umgebung(umgebung[0], umgebung[1], umgebung[2]);
-        })
-        var selectedUmgebung = Umgebung.umgebungsListe[1];
+    const resultUmgebung = selectObj("../database/selectInfotherminal.php")
+    const data = await resultUmgebung
+    var HauptUmgebungsObj = new Umgebung(0, 0, "Alle Schemas");
+    Umgebung.umgebungsListe = [];
+    data.forEach(umgebung => {
+        var umgebungObj = new Umgebung(umgebung[0], umgebung[1], umgebung[2]);
     })
-    await resultUmgebung.then(() => {
-        Umgebung.update()
-    });
-    createCardObj()
+    var selectedUmgebung = Umgebung.umgebungsListe[1];
+    Umgebung.update()
+    try {
+        await createCardObj()
+    } catch (error) {
+        console.error("Fehler beim Erstellen der CardObjekte:", error);
+    }
+
     if (plusBtn != null) {
         plusBtn.addEventListener("click", function () {
             let currentCounter = parseInt(counter.innerHTML);
@@ -75,12 +79,7 @@ window.onload = async function () {
             }
         })
     }
-    if (minusBtn != null) {
-        minusBtn.addEventListener("click", function () {
-            console.log("minus");
-            checkBoxShow();
-        });
-    }
+    
     if (deleteBtnForCards != null) {
         deleteBtnForCards.addEventListener('click', function () {
             if (selectedUmgebung.tempListForDeleteCards.length == 0) {
@@ -118,32 +117,77 @@ window.onload = async function () {
         });
     }
     const addCardToUmgebung = document.getElementById("addCardToUmgebung");
-
+    const selectAddUmgebung = document.getElementById("selectAddUmgebung");
     if (addCardToUmgebung != null) {
         addCardToUmgebung.addEventListener("click", function () {
-            console.log("addCardToUmgebung wurde aufgerufen");
+            Umgebung.currentSelect = selectAddUmgebung.value;
+            console.log("aktuelle Umgebung: " + Umgebung.currentSelect);
+            console.log("aktuelles Schema: " + CardObj.selectedID);
+            if(Umgebung.currentSelect == 0 || CardObj.selectedID == 0) {
+                alert("Bitte eine Umgebung und ein Schema auswählen!")
+                return
+            }
 
         });
     }
 
+    // Hier wird die startseite ausgewählt
     const infotherminalBereich = document.getElementById("infotherminalBereich");
     if (infotherminalBereich !== null) {
         console.log(234);
         infotherminalBereich.addEventListener("click", async function (event) {
             var settingPanel = document.getElementById("settingsPanel");
-            await fetch("bereiche/startSeite.php")
-                .then(response => response.text())
-                .then(html => {
-                    settingPanel.innerHTML = html;
+            const response = await fetch("bereiche/startSeite.php")
+            const responseText = await response.text();
+            settingPanel.innerHTML = responseText;
+            Umgebung.allCardsInOneList.forEach(cardObj => {
+                const cardContainer = "cardContainer"
+                cardObj.htmlBody(cardContainer);
+            });
+            console.log(Umgebung.allCardsInOneList);
+            const cbForSelectSchema = document.querySelectorAll('[id^="flexCheck"]')
+            const labels = document.querySelectorAll('label[name^="label"]');
+
+            console.log(cbForSelectSchema.length);
+            // Alle Checkboxen mit ID, die mit "flexCheck" beginnt, auswählen und loopen
+            cbForSelectSchema.forEach(checkbox => {
+                // Hier kannst du mit jeder Checkbox arbeiten
+                checkbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        console.log(`Checkbox with ID ${this.id} is checked`);
+                        const id = extractNumberFromString(this.id);
+                        CardObj.selectedID = id; // Set the selected ID
+                        console.log(`Selected ID set to: ${CardObj.selectedID}`);
+                        console.log(`Checkbox ID extracted: ${id}`);
+                        console.log(this.checked);
+                        cbForSelectSchema.forEach(cb => {
+                            if (cb !== this) {
+                                cb.checked = false;
+                            }
+                        });
+                        labels.forEach(label => {
+                            const labelId = extractNumberFromString(label.getAttribute('name'));
+                            console.log(`Label ID: ${labelId}, Checkbox ID: ${id}`);
+
+                            if (labelId == id) {
+                                console.log(`Label with ID ${labelId} is associated with checkbox ${this.id}`);
+
+                                label.innerHTML = "checked"; // Set the label text to "checked" when checked
+                            } else {
+                                label.innerHTML = ""; // Clear the label text for unchecked checkboxes
+                            }
+                        });
+                    } else {
+                        console.log(`Checkbox with ID ${this.id} is unchecked`);
+                        CardObj.selectedID = 0; // Reset the selected ID
+                    }
                 });
-
-
+            });
         });
     }
+       
 
 }
-
-
 
 function createJsonObjForJsonFile() {
     let jsonObjUmgebung = []
@@ -172,13 +216,8 @@ function createJsonObjForJsonFile() {
         };
         jsonObjUmgebung.push(obj)
     });
-
-
     return jsonObj
-
 }
-
-
 // Funktion zum Überprüfen, ob eine Checkbox oder switch aktiviert ist
 function checkTrue(check) {
     var isChecked = document.getElementById(check).checked;
@@ -190,50 +229,42 @@ function checkTrue(check) {
         return false;
     }
 }
-
 console.log("index_new.js wurde geladen");
-
 function saveToLocalStorage(key, jsonData) {
     const jsonString = JSON.stringify(jsonData, null, 2); // Formatierung für bessere Lesbarkeit
     localStorage.setItem(key, jsonString);
 }
-
 function getJsonData(key) {
     const jsonData = localStorage.getItem(key);
     const obj = JSON.parse(jsonData);
     return obj
 }
+async function createCardObj() {
+    const response = await selectObj("../database/selectSchemas.php")
+    let objList = convertCardObjForDataBase(response)
 
-function createCardObj() {
-    selectObj("./database/selectSchemas.php").then(async (data) => {
-        let objList = convertCardObjForDataBase(data)
-        console.log(objList);
-        console.log("createCardObj wurde aufgerufen");
-        objList.forEach(cardObj => {
+    objList.forEach(cardObj => {
+        const cardObjj = new CardObj(
+            cardObj.id,
+            cardObj.imagePath,
+            cardObj.selectedTime,
+            cardObj.isAktiv,
+            cardObj.startTime,
+            cardObj.endTime,
+            cardObj.startDate,
+            cardObj.endDate,
+            cardObj.titel,
+            cardObj.beschreibung
+        )
+    });
 
-            new CardObj(
-                cardObj.id,
-                cardObj.imagePath,
-                cardObj.selectedTime,
-                cardObj.isAktiv,
-                cardObj.startTime,
-                cardObj.endTime,
-                cardObj.startDate,
-                cardObj.endDate,
-                cardObj.titel,
-                cardObj.beschreibung
-            )
-        });
-        console.log(Umgebung.addCardsInOneList);
 
-        // Umgebung.allCardsInOneList.push(this); // Das ist hier falsch! "this" ist kein CardObj.
-        // Die CardObj-Instanzen werden im Konstruktor selbst zu Umgebung.allCardsInOneList hinzugefügt (falls dort implementiert).
-    })
+    // Umgebung.allCardsInOneList.push(this); // Das ist hier falsch! "this" ist kein CardObj.
+    // Die CardObj-Instanzen werden im Konstruktor selbst zu Umgebung.allCardsInOneList hinzugefügt (falls dort implementiert).
 }
 
 function convertCardObjForDataBase(cardObjListe) {
     objListe = []
-    console.log(cardObjListe);
     cardObjListe.forEach(cardObj => {
         var obj = {
             id: cardObj[0],
@@ -436,7 +467,7 @@ function setUmgebung(umgebung) {
     selectUmgebung.value = umgebung.id;
     selectedUmgebung = umgebung;
     // zeigeUmgebungAn(umgebung)
-    updateAnzeigeCounter()
+
 }
 
 function disableInput(container) {
@@ -469,84 +500,15 @@ function createID() {
 
 
 
-function cardSwitch(idBtn) {
-    console.log(idBtn);
-    const cardId = idBtn.replace('alwaysOnBtn', ''); // Extrahiere die ID
-    const cardObj = Umgebung.findObj(cardId); // Finde das entsprechende Objekt
-    const checkbox = document.getElementById(idBtn);
-
-    // Überprüfen, ob das CardObj gefunden wurde
-    if (!cardObj) {
-        console.error(`CardObj mit ID ${cardId} nicht gefunden.`);
-        return;
-    }
-
-    const calenderBtn = document.querySelector(`#${cardObj.openModalButtonId}`); // Hole den Kalender-Button
-
-    // Umschalten des Aktiv-Status basierend auf dem aktuellen Checkbox-Status
-    if (cardObj.imageSet == true) {
-        // Checkbox wurde aktiviert
-        calenderBtn.disabled = false;
-
-        cardObj.update = true; // Update-Flag setzen
-        console.log(`CardObj aktiviert. Counter: ${counter}`);
-    }
-
-    if (cardObj.aktiv == true) {
-        // Checkbox wurde deaktiviert
-        cardObj.update = true; // Update-Flag setzen
-        cardObj.aktiv = false; // Deaktivieren
-        console.log("aktiv?: " + cardObj.aktiv);
-        console.log("kalenderBtn: " + calenderBtn);
-        selectedUmgebung.removeObjFromList(selectedUmgebung.listAnzeige, cardObj); // Aus der Anzeige entfernen
-        console.log(`CardObj deaktiviert. Counter: ${counter}`);
-    } else {
-        cardObj.aktiv = true; // Aktivieren
-        calenderBtn.disabled = true; // Deaktivieren des Kalenders
-    }
-
-    // Debugging: Zeige den aktuellen Status von cardObj.aktiv
-    console.log(`Aktueller Status von cardObj.aktiv: ${cardObj.aktiv}`);
-}
-
-function updateAlwaysOnButtons() {
-    console.log("updateAlwaysOnButtons wurde aufgerufen");
-
-    // Hole alle Elemente mit einer ID, die mit "alwaysOnBtn" beginnt
-    const alwaysOnButtons = document.querySelectorAll('[id^="alwaysOnBtn"]');
-    alwaysOnButtons.forEach(button => {
-        // Hole die ID des Buttons
-        const id = button.id.replace('alwaysOnBtn', ''); // Extrahiere die ID
-        const cardObj = Umgebung.findObj(id); // Finde das entsprechende Objekt
-        console.log(`ID: ${id}, cardObj:`, cardObj); // Debugging-Ausgabe
-
-
-        if (cardObj && cardObj.aktiv === true) {
-            button.checked = true; // Setze die Checkbox auf true
-            console.log(`Checkbox für alwaysOnBtn${id} wurde aktiviert.`);
-        } else {
-            button.checked = false; // Setze die Checkbox auf false
-            console.log(`Checkbox für alwaysOnBtn${id} wurde deaktiviert.`);
-        }
-    });
-}
 function saveTempAddDatabase() {
     Umgebung.tempListForSaveCards.forEach(cardObj => {
-        console.log(cardObj);
         insertDatabase(cardObj)
         console.log(cardObj.imagePath);
-
     });
     Umgebung.tempListForSaveCards = []
 }
 
-function updateAnzeigeCounter() {
-    if (checkSelectedUmgebung()) {
-        var currentlength = selectedUmgebung.lengthListCardObj();
-        console.log("aktuelle länge: " + currentlength);
-        counter.innerHTML = currentlength;
-    }
-}
+
 function checkSelectedUmgebung() {
     if (!selectedUmgebung || selectedUmgebung === "undefined") {
         console.error("Keine Umgebung ausgewählt!");
@@ -572,32 +534,9 @@ function showAllUmgebungen() {
     });
 }
 
-function checkBoxShow() {
-    var formCheckboxes = document.querySelectorAll('.form-check-d');
-    console.log("bin da");
-    // Iteriere über alle Elemente und ändere ihre Klassen
-    formCheckboxes.forEach(formCheckbox => {
-        // Entferne die Klasse "d-none", falls vorhanden
-        if (!formCheckbox.classList.contains('d-none')) {
-            formCheckbox.classList.add('d-none');
-            formCheckbox.classList.remove('d-block');
-            deleteBtnForCards.classList.add('d-none');
-            plusBtn.disabled = false;
-        } else {
-            formCheckbox.classList.add('d-block');
-            formCheckbox.classList.remove('d-none');
-            deleteBtnForCards.classList.remove('d-none');
-            plusBtn.disabled = true;
-        }
-    });
-    deleteBtn()
-}
 
-function updateCounter() {
-    var currentlength = lengthListUmgebung();
-    console.log(currentlength);
-    counter.innerHTML = currentlength;
-}
+
+
 
 function deleteBtn() {
     const deleteBtns = document.querySelectorAll('[id^="deleteBtn"]');

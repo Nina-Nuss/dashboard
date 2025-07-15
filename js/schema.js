@@ -43,24 +43,21 @@ class CardObj {
         this.checkSelect = `checkSelect${this.id}`
 
         //-------------------------------------    
-        // setTimeout(() => {
-        //     this.updateObj();
-        // }, 100);
-        // umgebung.addCardObjs(this)
-        // Umgebung.allCardsInOneList.push(this)
+
+        Umgebung.allCardsInOneList.push(this)
+
     }
-    htmlKonstruktObjBody(umgebung) {
-        // Dynamische Card mit CardObj-Daten
+    htmlBody(umgebung) {
         const body = `
-            <div class="card-deck">
+            <div class="card-deck p-1">
                 <div class="card" id="${this.cardObjekte}">
-                    <img class="card-img-top" src="/uploads/${this.imagePath}" alt="Card image cap">
+                    <img class="card-img-top" src="/schemas/uploads/${this.imagePath}" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">${this.titel}</h5>
                         <p class="card-text">${this.beschreibung}</p>
                         <div class="form-check">
                             <input class="form-check-input single-active-checkbox" type="checkbox" value="" id="flexCheck${this.id}"}>
-                            <label class="form-check-label" name="MEOW" for="flexCheck${this.id}">
+                            <label class="form-check-label" name="label${this.id}" for="flexCheck${this.id}">
                                 Aktiv
                             </label>
                         </div>
@@ -68,7 +65,7 @@ class CardObj {
                             <small class="text-muted">selectedTime: ${this.selectedTime} ms</small>
                         </div>
                     </div>
-                    <div class="card-footer">
+                    <div class="card-footer p-1">
                         <small class="text-muted">Last updated just now</small>
                     </div>
                 </div>
@@ -138,40 +135,6 @@ window.addEventListener("load", function () {
 
         });
     }
-
-    const checkboxes = document.querySelectorAll('.form-check-input');
-    const labels = document.querySelectorAll('.form-check-label');
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function () {
-            if (this.checked) {
-                console.log(`Checkbox with ID ${this.id} is checked`);
-                const id = extractNumberFromString(this.id);
-                CardObj.selectedID = id; // Set the selected ID
-                console.log(`Selected ID set to: ${CardObj.selectedID}`);
-                console.log(`Checkbox ID extracted: ${id}`);
-
-                console.log(this.checked);
-                checkboxes.forEach(cb => {
-                    if (cb !== this) {
-                        cb.checked = false;
-
-                    }
-                });
-                labels.forEach(label => {
-
-
-                    if (label.html == id) {
-                        label.innerHTML = "checked"; // Set the label text to "checked" when checked
-                    } else {
-                        label.innerHTML = ""; // Clear the label text for unchecked checkboxes
-                    }
-                });
-
-            } else {
-                console.log(`Checkbox with ID ${id} is unchecked`);
-            }
-        });
-    });
 
 });
 console.log("Schema wurde geladen");

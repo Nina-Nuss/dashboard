@@ -1,6 +1,8 @@
 <!-- Modal -->
-<link href="../assets/links.html"></link>
-<link href="../assets/scripts.html"></link>
+<link href="../assets/links.html">
+</link>
+<link href="../assets/scripts.html">
+</link>
 
 
 <div class="modal fade" id="modal_hinzufuegen" tabindex="-1" role="dialog" aria-labelledby="modalHinzufuegenLabel"
@@ -13,15 +15,25 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+    
         <!-- Hier dein Formular oder Inhalt -->
 
-        <select id="selectAddUmgebung" class="form-select" aria-label="Default select example">
-        </select>
-      </div>
+        <table class="table table-hover position-relative">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>IP</th>
+              <th>Titel</th>
+            </tr>
+          </thead>
+          <tbody id="tabelleAdd">
+
+          </tbody>
+        </table>
+   
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
-        <button id="addCardToUmgebung" type="button" class="btn btn-primary">Speichern</button>
+        <button id="addCardToUmgebung" type="button" class="btn btn-primary" onclick="Umgebung.remove_generate()">Speichern</button>
       </div>
     </div>
   </div>
