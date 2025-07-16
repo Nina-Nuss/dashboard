@@ -1,11 +1,16 @@
+
+
 class Beziehungen {
     static beziehungsListe = [];
     static temp_list = [];
+
     static eleListe = []
-    constructor(id, umgebung, cardObjekt) {
+
+
+    constructor(id, umgebungsID, cardObjektID) {
         this.id = id;
-        this.umgebung = umgebung;
-        this.cardObjekt = cardObjekt;
+        this.umgebungsID = umgebungsID;
+        this.cardObjektID = cardObjektID;
         Beziehungen.beziehungsListe.push(this);
     }
     setUmgebung(umgebung) {
@@ -31,74 +36,99 @@ class Beziehungen {
         var relationListe = await response.json();
         return relationListe;
     }
-
-
     update() {
-        console.log("Update der Beziehung: " + this.id);
-    
-        this.tempBeziehungen.push(this);
-
-        var anzeigebereichv = document.getElementById("anzeigebereichV")
-        if (anzeigebereichv != null) {
-            anzeigebereichv.innerHTML = "";
-            console.log("anzeigebereichv geleert");
-        }
+        const anzeigebereichv = document.getElementById("anzeigebereichV");
         const anzeigebereicht = document.getElementById("tabelleAdd");
-        if (anzeigebereicht != null) {
-            anzeigebereicht.innerHTML = "";
-            console.log("tabelleAdd geleert");
-        }
         const anzeigebereichD = document.getElementById("tabelleDelete");
-        if (anzeigebereichD != null) {
-            anzeigebereichD.innerHTML = "";
-            console.log("tabelleDelete geleert");
-        }  
-       
-        // for (let i = 0; i < this.umgebungsListe.length; i++) {
-        //     const element = this.umgebungsListe[i];
-        //     if (sAu) {
-        //         selectAddUmgebung.innerHTML += `<option value="${element.id}">${element.titel}</option>`;
-        //     }
-        //     if (avvorhanden) {
-        //         anzeigebereichv.innerHTML += `<div style="display: flex;">
-        //                         <span name="${element.titel}" id="${element.id}" style="float: left;  margin-right: 10px;">${element.ipAdresse}</span>
-                                
-        //                         <label for="Schulaula" clSs="text-wrap"value="15">${element.titel}</label>
-        //                     </div>
-        //                     `;
-        //     }
-        //     if (atvorhanden) {
-        //         anzeigebereicht.innerHTML += `<tr>
-        //                                         <td>${element.id}</td>
-        //                                         <td>${element.ipAdresse}</td>
-        //                                         <td>${element.titel}</td>
-        //                                         <td><input type="checkbox" name="${element.id}" id="checkAdd${element.id}" onchange="Umgebung.event_remove(${Umgebung.temp_add}, ${Umgebung.eleListeForAdd}, ${element.id})"></td>
-        //                                    </tr>`
-        //     }
-        //     if (advorhanden) {
-        //         anzeigebereichD.innerHTML += `<tr>
-        //                                         <td>${element.id}</td>
-        //                                         <td>${element.ipAdresse}</td>
-        //                                         <td>${element.titel}</td>
-        //                                         <td><input type="checkbox" name="${element.id}" id="checkDel${element.id}" onchange="Umgebung.event_remove(${Umgebung.temp_remove_info}, ${Umgebung.eleListeForRemove}, ${element.id})"></td>
-        //                                    </tr>`
-        //     }
+        console.log("Update der Beziehung: " + this.id);
+        this.temp_list = [];
+        Beziehungen.beziehungsListe.forEach(element => {
+            if (element.cardObjektID === this.id) {
+                console.log(`Beziehung gefunden: ${element.id} mit CardObjektID: ${element.cardObjektID}`);
+                this.temp_list.push(element);
 
-        // }
+            }
+        });
+        leereListe(anzeigebereichv);
+        leereListe(anzeigebereicht);
+        leereListe(anzeigebereichD);
+
+        console.log(anzeigebereichv);
+
+        for (let i = 0; i < this.temp_list.length; i++) {
+            const element = this.temp_list[i];
+            let obj = erstelleObj(element);
+            console.log("Objekt erstellt:", obj);
+            if (anzeigebereichv != null) {
+                console.log("anzeigebereichv vorhanden");
+
+                anzeigebereichv.innerHTML += `<div style="display: flex;">
+                                <span name="${obj.titel}" id="${obj.id}" style="float: left;  margin-right: 10px;">${obj.ipAdresse}</span>
+
+                                <label for="Schulaula" class="text-wrap" value="15">${obj.titel}</label>
+                            </div>
+                            `;
+            }
+            if (anzeigebereicht != null) {
+                anzeigebereicht.innerHTML += `<tr>
+                                                <td>${obj.id}</td>
+                                                <td>${obj.ipAdresse}</td>
+                                                <td>${obj.titel}</td>
+                                                <td><input type="checkbox" name="${obj.id}" id="checkAdd${obj.id}" onchange="Crud.event_remove('beziehungsListe', this.id, ${obj.id})"></td>
+                                           </tr>`
+            }
+            if (anzeigebereichD != null) {
+                Umgebung.umgebungsListe.forEach(element => {
+                    if (!element.id == obj.umgebungID) {
+                        anzeigebereichD.innerHTML += `<tr>
+                                                <td>${element.id}</td>
+                                                <td>${element.ipAdresse}</td>
+                                                <td>${element.titel}</td>
+                                                <td><input type="checkbox" name="${element.id}" id="checkDel${element.id}" onchange="Crud.event_remove('beziehungsListe', this.id, ${element.id})"></td>
+                                           </tr>`
+                    }
+                });
+
+            }
+        }
     }
+}
 
 
+function leereListe(anzeigebereich) {
+    if (anzeigebereich != null) {
+        anzeigebereich.innerHTML = "";
+        console.log("anzeigebereich: " + anzeigebereich.id + " geleert");
+    }
 }
 
 window.addEventListener("load", async () => {
-    const relationListe =  await Beziehungen.getRelation();
-    console.log(relationListe);
 
+
+
+
+    const relationListe = await Beziehungen.getRelation();
+    console.log(relationListe);
     relationListe.forEach(element => {
         new Beziehungen(element[0], element[1], element[2]);
     });
-
     console.log(Beziehungen.beziehungsListe);
-
 })
 
+
+function erstelleObj(element) {
+    obj = {};
+    Umgebung.umgebungsListe.forEach(umgebung => {
+        if (umgebung.id === element.umgebungsID) {
+            obj = {
+                titel: umgebung.titel,
+                ipAdresse: umgebung.ipAdresse,
+                id: umgebung.id,
+                umgebungID: element.umgebungsID,
+                cardObjektID: element.cardObjektID,
+            };
+
+        }
+    });
+    return obj;
+}

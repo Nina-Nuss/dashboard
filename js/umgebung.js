@@ -80,8 +80,6 @@ class Umgebung {
             console.log(`Object with id ${obj.id} added to list.`);
         }
     }
-    
-
     static async update() {
         var delInfo = document.getElementById("deleteInfotherminal")
         if (delInfo != null) {
@@ -95,7 +93,6 @@ class Umgebung {
                 new Umgebung(listInfo[0], listInfo[1], listInfo[2]);
                 delInfo.innerHTML += `<input type="checkbox" id="checkDelInfo${listInfo[0]}" name="${listInfo[1]}" onchange="Crud.event_remove('umgebungsListe', this.id, ${listInfo[0]})"> ${listInfo[1]} - ${listInfo[2]} <br>`
             });
-      
         }
         console.log(Umgebung.umgebungsListe);
     }
@@ -108,7 +105,7 @@ window.addEventListener("load", function () {
     if (adminBereich != null) {
         document.getElementById("adminBereich").addEventListener("click", async function () {
             const settingsPanel = document.getElementById("settingsPanel")
-
+            Umgebung.temp_list = [];
             await fetch("bereiche/adminbereich.php")
                 .then(response => response.text())
                 .then(html => {

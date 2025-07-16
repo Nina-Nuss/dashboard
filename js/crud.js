@@ -42,6 +42,18 @@ class Crud {
                 return;
             }
         }
+        else if (liste === "beziehungsListe") {
+            var listRef = Beziehungen.beziehungsListe;
+            var temp_list = Beziehungen.temp_list;
+            var nodeObj = document.getElementById(nodeObjId);
+            if (!nodeObj) {
+                console.warn(`Element mit ID ${nodeObjId} nicht gefunden.`);
+                return;
+            }
+        } else {
+            console.error("Ungültige Liste angegeben:", liste);
+            return
+        }
         if (nodeObj.checked && !temp_list.includes(id)) {
             console.log(`Checkbox mit ID ${id} wurde aktiviert.`);
             listRef.forEach(checkID => {
@@ -61,6 +73,9 @@ class Crud {
         }
         if (liste === "umgebungsListe") {
             Umgebung.temp_list = temp_list; // Aktualisiere die globale Liste
+        }
+        if (liste === "beziehungsListe") {
+            Beziehungen.temp_list = temp_list; // Aktualisiere die globale Liste
         }
         console.log("Aktuelle temp_list:", temp_list);
     }

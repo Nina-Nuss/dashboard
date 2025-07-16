@@ -6,6 +6,7 @@ let selectedCard = "";
 
 
 window.onload = async function () {
+
     var selectUmgebung = document.getElementById("selectUmgebung");
     const deleteBtnForCards = document.getElementById("deleteBtnForCards");
     const UmgebungsTitel = document.getElementById("titelUmgebung")
@@ -215,9 +216,6 @@ function convertCardObjForDataBase(cardObjListe) {
     });
     return objListe
 }
-
-
-
 async function executeDeleteNull() {
     try {
         const response = await fetch("database/deleteNull.php", {
@@ -272,10 +270,7 @@ async function selectObj(select) {
         console.error("Fehler beim Laden der Umgebung:", error);
         return null;
     }
-
-
 }
-
 async function getImagePath(formID, ob) {
     const form = document.getElementById(formID);
     const formData = new FormData(form);
@@ -311,38 +306,6 @@ async function createJsonFile(jsonData) {
         console.error("Fehler beim Speichern der JSON-Daten:", error);
     }
 }
-
-function prepareCardObj(cardObj) {
-    var prepare =
-        "&titel=" + cardObj.zugeordnet +
-        "&checkSelect=" + cardObj.checkSelect +
-        "&imagePath=" + cardObj.imagePath +
-        "&imageSet=" + cardObj.imageSet +
-        "&startDateTime=" + cardObj.startDateTime +
-        "&endDateTime=" + cardObj.endDateTime +
-        "&aktiv=" + cardObj.aktiv +
-        "&selectedTime=" + cardObj.selectedTime +
-        "&id=" + cardObj.id;
-
-    return prepare
-}
-
-
-function ladenUmgebung() {
-    Umgebung.umgebungsListe.forEach(umgebung => {
-        selectUmgebung.innerHTML += `<option value="${umgebung.id}">${umgebung.titel}</option>`;
-    });
-
-};
-
-function setUmgebung(umgebung) {
-    console.log("umgebunng wurde auf: " + umgebung.titel + " gesetzt");
-    selectUmgebung.value = umgebung.id;
-    selectedUmgebung = umgebung;
-    // zeigeUmgebungAn(umgebung)
-
-}
-
 function disableInput(container) {
     if (selectUmgebung.value == 0) {
         console.log("readonly wurde aufgerufen");
@@ -354,8 +317,6 @@ function disableInput(container) {
         container.style.opacity = "1"; // Optional: Setzt die Sichtbarkeit zurück
     }
 }
-
-
 
 function createID() {
     const cardObjIDList = Umgebung.allCardsInOneList

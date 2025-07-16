@@ -304,12 +304,13 @@ function createBodyCardObj() {
                     }
                 });
             } else {
-
+               
                 CardObj.selectedID = 0; // Reset the selected ID
             }
-            Beziehungen.beziehungsListe.forEach(element => {
-                if (CardObj.selectedID == element.cardObjekt) {
-                    element.update();
+            Beziehungen.beziehungsListe.forEach(beziehung => {
+                if (CardObj.selectedID == beziehung.cardObjektID) {
+                    Beziehungen.temp_list = [];
+                    beziehung.update();
 
                 }
             });
