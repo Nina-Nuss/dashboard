@@ -5,27 +5,6 @@ let json;
 let selectedCard = "";
 
 
-class Crud{
-    createCard(cardData) {
-        // Implement create logic
-    }
-
-    readCard(cardId) {
-        // Implement read logic
-    }
-
-    updateCard(cardId, updatedData) {
-        // Implement update logic
-    }
-
-    deleteCard(cardId) {
-        // Implement delete logic
-    }
-}
-
-
-
-
 window.onload = async function () {
     var selectUmgebung = document.getElementById("selectUmgebung");
     const deleteBtnForCards = document.getElementById("deleteBtnForCards");
@@ -34,7 +13,7 @@ window.onload = async function () {
     const denied = document.getElementById("umgebungsContainer");
 
     const plusBtn = document.getElementById("plusBtn");
-  
+
     let counter = document.getElementById("counter");
     const saveBtn = document.getElementById("saveBtn")
     console.log("window.onload von index.js läuft!");
@@ -100,7 +79,7 @@ window.onload = async function () {
             }
         })
     }
-    
+
     if (deleteBtnForCards != null) {
         deleteBtnForCards.addEventListener('click', function () {
             if (selectedUmgebung.tempListForDeleteCards.length == 0) {
@@ -144,7 +123,7 @@ window.onload = async function () {
             Umgebung.currentSelect = selectAddUmgebung.value;
             console.log("aktuelle Umgebung: " + Umgebung.currentSelect);
             console.log("aktuelles Schema: " + CardObj.selectedID);
-            if(Umgebung.currentSelect == 0 || CardObj.selectedID == 0) {
+            if (Umgebung.currentSelect == 0 || CardObj.selectedID == 0) {
                 alert("Bitte eine Umgebung und ein Schema auswählen!")
                 return
             }
@@ -155,90 +134,22 @@ window.onload = async function () {
     // Hier wird die startseite ausgewählt
     const infotherminalBereich = document.getElementById("infotherminalBereich");
     if (infotherminalBereich !== null) {
-        console.log(234);
         infotherminalBereich.addEventListener("click", async function (event) {
             var settingPanel = document.getElementById("settingsPanel");
             const response = await fetch("bereiche/startSeite.php")
             const responseText = await response.text();
             settingPanel.innerHTML = responseText;
-            Umgebung.allCardsInOneList.forEach(cardObj => {
-                const cardContainer = "cardContainer"
-                cardObj.htmlBody(cardContainer);
-            });
-            console.log(Umgebung.allCardsInOneList);
-            const cbForSelectSchema = document.querySelectorAll('[id^="flexCheck"]')
-            const labels = document.querySelectorAll('label[name^="label"]');
-
-            console.log(cbForSelectSchema.length);
-            // Alle Checkboxen mit ID, die mit "flexCheck" beginnt, auswählen und loopen
-            cbForSelectSchema.forEach(checkbox => {
-                // Hier kannst du mit jeder Checkbox arbeiten
-                checkbox.addEventListener('change', function () {
-                    if (this.checked) {
-                        console.log(`Checkbox with ID ${this.id} is checked`);
-                        const id = extractNumberFromString(this.id);
-                        CardObj.selectedID = id; // Set the selected ID
-                        console.log(`Selected ID set to: ${CardObj.selectedID}`);
-                        console.log(`Checkbox ID extracted: ${id}`);
-                        console.log(this.checked);
-                        cbForSelectSchema.forEach(cb => {
-                            if (cb !== this) {
-                                cb.checked = false;
-                            }
-                        });
-                        labels.forEach(label => {
-                            const labelId = extractNumberFromString(label.getAttribute('name'));
-                            console.log(`Label ID: ${labelId}, Checkbox ID: ${id}`);
-
-                            if (labelId == id) {
-                                console.log(`Label with ID ${labelId} is associated with checkbox ${this.id}`);
-
-                                label.innerHTML = "checked"; // Set the label text to "checked" when checked
-                            } else {
-                                label.innerHTML = ""; // Clear the label text for unchecked checkboxes
-                            }
-                        });
-                    } else {
-                        console.log(`Checkbox with ID ${this.id} is unchecked`);
-                        CardObj.selectedID = 0; // Reset the selected ID
-                    }
-                });
-            });
+            createBodyCardObj();
         });
     }
-       
+
 
 }
-
-function createJsonObjForJsonFile() {
-    let jsonObjUmgebung = []
-    let jsonObjCardObj = []
-    Umgebung.allCardsInOneList.forEach(cardObj => {
-        var obj = {
-            id: cardObj.id,
-            titel: cardObj.zugeordnet,
-            imagePath: cardObj.imagePath,
-            selectedTime: cardObj.selectedTime,
-            checkSelect: cardObj.checkSelect, //True or false
-            imageSet: cardObj.imageSet, //True or false
-            aktiv: cardObj.aktiv, //True or false
-            startDateTime: cardObj.startDateTime,
-            endDateTime: cardObj.endDateTime
-        };
-        jsonObj.push(obj)
-    });
-
-    Umgebung.umgebungsListe.forEach(umgebung => {
-        var obj = {
-            id: umgebung.id,
-            titel: umgebung.titel,
-            cardObjList: umgebung.cardObjList,
-            listAnzeige: umgebung.listAnzeige
-        };
-        jsonObjUmgebung.push(obj)
-    });
-    return jsonObj
+function extractNumberFromString(str) {
+    const match = str.match(/\d+$/);
+    return match ? match[0] : null;
 }
+
 // Funktion zum Überprüfen, ob eine Checkbox oder switch aktiviert ist
 function checkTrue(check) {
     var isChecked = document.getElementById(check).checked;
@@ -304,23 +215,7 @@ function convertCardObjForDataBase(cardObjListe) {
     });
     return objListe
 }
-async function updateDataBase(cardObj) {
-    // Erstellen eines FormData-Objekts
-    try {
-        console.log("updateDataBase wurde aufgerufen");
-        const jsObj = JavaScriptCardObj(cardObj);
-        const createJsObj = JSON.stringify(jsObj)
-        console.log(jsObj);
-        var result = await fetch("database/update.php", {
-            method: "POST",
-            body: createJsObj
-        });
-        const responseText = await result.text();
-        console.log("Antwort vom Server:", responseText);
-    } catch (error) {
-        console.error("Fehler in updateDataBase:", error);
-    }
-}
+
 
 
 async function executeDeleteNull() {
@@ -416,38 +311,7 @@ async function createJsonFile(jsonData) {
         console.error("Fehler beim Speichern der JSON-Daten:", error);
     }
 }
-async function insertDatabase(cardObj) {
-    // Erstellen eines JSON-Objekts
-    const jsonData = {
-        titel: cardObj.titel,
-        beschreibung: cardObj.beschreibung,
-        imagePath: cardObj.imagePath,
-        selectedTime: cardObj.selectedTime,
-        aktiv: cardObj.aktiv,
-        startTime: cardObj.startTime,
-        endTime: cardObj.endTime,
-        startDate: cardObj.startDate,
-        endDate: cardObj.endDate
-    };
 
-    console.log(jsonData.selectedTime);
-
-    console.log(JSON.stringify(jsonData));
-    // Senden der POST-Anfrage mit JSON-Daten
-    const response = await fetch("/database/insertSchema.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(jsonData)
-    });
-    if (!response.ok) {
-        console.error("Fehler beim Einfügen:", response.statusText);
-    } else {
-        const result = await response.text();
-        console.log(result);
-    }
-}
 function prepareCardObj(cardObj) {
     var prepare =
         "&titel=" + cardObj.zugeordnet +
@@ -463,19 +327,6 @@ function prepareCardObj(cardObj) {
     return prepare
 }
 
-function JavaScriptCardObj(cardObj) {
-    const jsonData = {
-        checkSelect: cardObj.checkSelect,
-        imagePath: cardObj.imagePath,
-        imageSet: cardObj.imageSet,
-        startDateTime: cardObj.startDateTime,
-        endDateTime: cardObj.endDateTime,
-        aktiv: cardObj.aktiv,
-        selectedTime: cardObj.selectedTime,
-    };
-
-    return jsonData
-}
 
 function ladenUmgebung() {
     Umgebung.umgebungsListe.forEach(umgebung => {
@@ -566,7 +417,7 @@ function deleteBtn() {
         deleteBtn.addEventListener('change', function () {
             const cardId = this.id.replace('deleteBtn', '');
             console.log(cardId);
-            const cardObj = Umgebung.findObj(cardId);
+            const cardObj = Crud.findObj(CardObj.allCardObjekte ,cardId);
             const element = document.getElementById(cardObj.id);
             if (this.checked) {
                 selectedUmgebung.tempListForDeleteCards.push(cardObj);
@@ -598,101 +449,3 @@ function lengthListUmgebung() {
     var length = Umgebung.umgebungsIdList.length
     return length
 }
-
-// let changesMade = false;
-// document.addEventListener("input", function() {
-//     changesMade = true;
-// });
-
-// window.addEventListener("beforeunload", function(event) {
-//     if (changesMade) {
-//         const message = "Sind Sie sicher, dass Sie die Seite verlassen möchten? Nicht gespeicherte Änderungen gehen verloren.";
-
-//         event.preventDefault();
-//         event.returnValue = message;
-//         return message;
-//     }
-// });
-
-//Ab hie geht es mit dem CardObj ansich weiter
-function setupImagePicker(previewId, modalImageId, inputId, formID) {
-    var modalImage = document.getElementById(modalImageId); // Modal for image preview
-    var imageInput = document.getElementById(inputId); // File input
-    var imagePreview = document.getElementById(previewId); // Image preview container
-    const form = document.getElementById(formID);
-
-
-    // Find object and set initial state if required
-    var aktuellesObj = Umgebung.findObj(inputId);
-    console.log(aktuellesObj);
-
-    console.log("imagePath ist leer");
-    if (aktuellesObj.imagePath == "") {
-        imageInput.addEventListener('change', function (event) {
-            const file = event.target.form.elements['image'].files[0];
-            if (!file) {
-
-            }
-            let selectedId = $(this).attr('id');
-            let id = extractNumberFromString(selectedId)
-            let closebtnID = '#closeBtn' + id
-            $(closebtnID).css("display", "block")
-            let meow = $('#timerSelect' + id).val()
-            console.log(meow);
-            $('#timerSelect' + id).prop('disabled', false);
-            let isDisabled = $('#timerSelect' + id).prop('disabled');
-            console.log('Ist das Element disabled?', isDisabled);
-            console.log(isDisabled);
-            aktuellesObj.imageSet = true;
-            var alwaysOnBtn = 'alwaysOnBtn' + id
-            var inputbtn = document.getElementById(alwaysOnBtn)
-            getImagePath(formID, aktuellesObj)
-            this.value = '';
-        })
-    }
-
-    // Drag and drop functionality 
-    imagePreview.addEventListener('dragover', function (event) {
-        event.preventDefault();
-        imagePreview.classList.add('drag-over');
-    });
-    imagePreview.addEventListener('dragleave', function (event) {
-        event.preventDefault();
-        imagePreview.classList.remove('drag-over');
-    });
-}
-
-function deletePicture(imagePreview, modalImage) {
-    var modalImage = document.getElementById(modalImage).id; // Modal for image preview
-    var imagePreview = document.getElementById(imagePreview);
-    var aktuellesObj = Umgebung.findObj(modalImage);
-    console.log(aktuellesObj);
-    if (aktuellesObj.imageSet == true) {
-        modalImage.innerHTML = ``;
-        imagePreview.innerHTML = `Bild auswählen oder hierher ziehen`;
-        aktuellesObj.imagePath = ``;
-        aktuellesObj.imageSet = false
-        var select = document.getElementById("timerSelect" + aktuellesObj.id)
-        console.log(select);
-
-        var infoBtn = document.getElementById("infoBtn" + aktuellesObj.id)
-        var closeBtn = document.getElementById("closeBtn" + aktuellesObj.id)
-        var selectedValue = $(select).val();
-        console.log(selectedValue);
-        var selectedValue = ""
-        select.selectedIndex = -1;
-
-        aktuellesObj.startDateTime = ``;
-        aktuellesObj.endDateTime = ``;
-        aktuellesObj.selectedTime = selectedValue
-        select.disabled = true
-        $('#timerSelect' + aktuellesObj.id).val(3)
-        infoBtn.style.display = "none"
-        closeBtn.style.display = "none"
-        let alwaysOnBtn = '#alwaysOnBtn' + aktuellesObj.id
-        $(alwaysOnBtn).css("display", "block");
-        alwaysOnBtn.disabled = true
-    }
-    return
-}
-

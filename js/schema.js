@@ -2,6 +2,8 @@ class CardObj {
     static idCounter = 0;
     static selectedID = 0;
     static allCardObjekte = [];
+    static temp_list = [];
+    static eleListe = []
     constructor(id, imagePath, selectedTime, aktiv, startTime, endTime, startDate, endDate, titel, beschreibung) {
 
         this.id = id;
@@ -49,12 +51,12 @@ class CardObj {
     }
     htmlBody(umgebung) {
         const body = `
-            <div class="card-deck p-1">
+            <div class="card-deck p-1 h-50">
                 <div class="card" id="${this.cardObjekte}">
                     <img class="card-img-top" src="/schemas/uploads/${this.imagePath}" alt="Card image cap">
-                    <div class="card-body">
-                        <h5 class="card-title">${this.titel}</h5>
-                        <p class="card-text">${this.beschreibung}</p>
+                    <div class="card-body p-2 h-50">
+                        <h5 class="card-title m-0">${this.titel}</h5>
+                        <p class="card-text m-0">${this.beschreibung}</p>
                         <div class="form-check">
                             <input class="form-check-input single-active-checkbox" type="checkbox" value="" id="flexCheck${this.id}"}>
                             <label class="form-check-label" name="label${this.id}" for="flexCheck${this.id}">
@@ -139,7 +141,6 @@ window.addEventListener("load", function () {
 });
 console.log("Schema wurde geladen");
 
-
 async function meow(event) {
     event.preventDefault(); // Verhindert das Standardverhalten des Formulars
     const form = event.target.form;
@@ -204,3 +205,117 @@ async function sendPicture(formData) {
         return "";
     }
 }
+async function insertDatabase(cardObj) {
+    // Erstellen eines JSON-Objekts
+    const jsonData = {
+        titel: cardObj.titel,
+        beschreibung: cardObj.beschreibung,
+        imagePath: cardObj.imagePath,
+        selectedTime: cardObj.selectedTime,
+        aktiv: cardObj.aktiv,
+        startTime: cardObj.startTime,
+        endTime: cardObj.endTime,
+        startDate: cardObj.startDate,
+        endDate: cardObj.endDate
+    };
+
+    console.log(jsonData.selectedTime);
+
+    console.log(JSON.stringify(jsonData));
+    // Senden der POST-Anfrage mit JSON-Daten
+    const response = await fetch("/database/insertSchema.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(jsonData)
+    });
+    if (!response.ok) {
+        console.error("Fehler beim Einfügen:", response.statusText);
+    } else {
+        const result = await response.text();
+        console.log(result);
+    }
+}
+async function insertDatabase(cardObj) {
+    // Erstellen eines JSON-Objekts
+    const jsonData = {
+        titel: cardObj.titel,
+        beschreibung: cardObj.beschreibung,
+        imagePath: cardObj.imagePath,
+        selectedTime: cardObj.selectedTime,
+        aktiv: cardObj.aktiv,
+        startTime: cardObj.startTime,
+        endTime: cardObj.endTime,
+        startDate: cardObj.startDate,
+        endDate: cardObj.endDate
+    };
+
+    console.log(jsonData.selectedTime);
+
+    console.log(JSON.stringify(jsonData));
+    // Senden der POST-Anfrage mit JSON-Daten
+    const response = await fetch("/database/insertSchema.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(jsonData)
+    });
+    if (!response.ok) {
+        console.error("Fehler beim Einfügen:", response.statusText);
+    } else {
+        const result = await response.text();
+        console.log(result);
+    }
+}
+function createBodyCardObj() {
+    Umgebung.allCardsInOneList.forEach(cardObj => {
+        const cardContainer = "cardContainer"
+        cardObj.htmlBody(cardContainer);
+    });
+    console.log(Umgebung.allCardsInOneList);
+    const cbForSelectSchema = document.querySelectorAll('[id^="flexCheck"]')
+    const labels = document.querySelectorAll('label[name^="label"]');
+
+    console.log(cbForSelectSchema.length);
+    // Alle Checkboxen mit ID, die mit "flexCheck" beginnt, auswählen und loopen
+    cbForSelectSchema.forEach(checkbox => {
+        // Hier kannst du mit jeder Checkbox arbeiten
+        checkbox.addEventListener('change', function () {
+            if (this.checked) {
+
+                const id = extractNumberFromString(this.id);
+                CardObj.selectedID = id; // Set the selected ID
+                console.log("Checkbox mit ID " + id + " wurde aktiviert.");
+
+                console.log(this.checked);
+                cbForSelectSchema.forEach(cb => {
+                    if (cb !== this) {
+                        cb.checked = false;
+                    }
+                });
+                labels.forEach(label => {
+                    const labelId = extractNumberFromString(label.getAttribute('name'));
+                    if (labelId == id) {
+                        label.innerHTML = "checked"; // Set the label text to "checked" when checked
+                    } else {
+                        label.innerHTML = ""; // Clear the label text for unchecked checkboxes
+                    }
+                });
+            } else {
+
+                CardObj.selectedID = 0; // Reset the selected ID
+            }
+            Beziehungen.beziehungsListe.forEach(element => {
+                if (CardObj.selectedID == element.cardObjekt) {
+                    element.update();
+
+                }
+            });
+        });
+    });
+};
+
+
+

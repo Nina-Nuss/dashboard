@@ -8,17 +8,11 @@ class Umgebung {
     static tempListForSaveCards = [];
     static allCardsInOneList = [];
     static currentSelect = 0;
-    static check = false
     static listDataBase = [];
-
-
+    check = false;
     static temp_list = []
-
     static eleListe = []
-
     static responseText = ""
-
-
     constructor(id, titel, ipAdresse) {
         this.id = id;
         this.cardCounter = 0;
@@ -42,7 +36,6 @@ class Umgebung {
         Umgebung.umgebungsListe.push(this);
     }
 
- 
 
     addCardObjs(cardObj) {
         this.cardObjList.push(cardObj);
@@ -68,9 +61,6 @@ class Umgebung {
         var length = this.cardObjList.length
         return length
     }
-
-
-
     static loadAllCardObj() {
         Umgebung.allCardList.forEach(cardList => {
             cardList.forEach(cardObj => {
@@ -90,112 +80,20 @@ class Umgebung {
             console.log(`Object with id ${obj.id} added to list.`);
         }
     }
-    static findObj(id) {
-        const number = extractNumberFromString(id); // Extrahiere die ID
-        console.log(`ID: ${number}`);
+    
 
-        for (const cardList of Umgebung.allCardList) {
-            for (const cardObj of cardList) {
-                if (cardObj.id == number) {
-                    cardObj.update = true;
-                    return cardObj; // Rückgabe des gefundenen Objekts
-                }
-            }
-        }
-        console.warn(`Objekt mit ID ${id} nicht gefunden.`);
-        return null; // Rückgabe von null, wenn kein Objekt gefunden wurde
-    }
-    static event_remove(id) {
-        var element = document.getElementById(`checkDelInfo${id}`);
-        
-        if (element.checked && !this.temp_list.includes(id)) {
-            console.log(`Checkbox mit ID ${id} wurde aktiviert.`);
-
-            this.umgebungsListe.forEach(checkID => {
-                console.log(checkID);
-                if (checkID.id == id) {
-                    checkID.check = true
-                    // console.log(checkID)
-                }
-            });
-            this.temp_list.push(id);
-            console.log(this.temp_list);
-
-        }
-        else {
-            this.umgebungsListe.forEach(checkID => {
-                if (checkID.id == id) {
-                    checkID.check = false
-                    // console.log(checkID)
-                }
-            });
-            this.temp_list.forEach(idd => {
-                if (id != idd) {
-                    this.eleListe.push(idd)
-                }
-            });
-            this.temp_list = this.eleListe
-            this.eleListe = []
-        }
-        console.log(this.temp_list);
-    };
-
-    static removeFromListViaID(id, liste) {
-        var temp = [];
-        console.log(liste);     
-        liste.forEach(element => {
-            if (element.id != id) {
-                //ID muss aus Liste gelöscht werden
-                temp.push(element);
-
-            } else {
-                // Verhindere das Löschen der Hauptumgebung (ID 0 - "Alle Schemas")
-                if (element.id != 0) {
-                    deletee(element.id);
-                    console.log("Das Element wurde gefunden und wird gelöscht! " + element.id);
-                    // Delete muss in der Datenbank nun hier ausgefuehrt werden
-                } else {
-                    console.warn("Hauptumgebung (Alle Schemas) kann nicht gelöscht werden!");
-                }
-                return;
-            }
-        });
-        return temp;
-    }
-    static async removeFromListLogik() {
-        // DIese Methode wird aufgerufen sobald wir auf Minus (-) klicken
-        // Hier benötigen wir die Aktuellen IDS der Datenbank zum löschen
-        console.log( this.temp_list);
-        
-        this.temp_list.forEach(id => {
-            Umgebung.umgebungsListe = this.removeFromListViaID(id, Umgebung.umgebungsListe);
-        });
-        console.log(this.umgebungsListe);
-        this.temp_add = []
-        this.eleListe = []
-    }
-
-    static remove_generate() {
-        console.log("remove_generate wurde aufgerufen");
-        this.removeFromListLogik()
-        this.update()
-        
-    }
-
-    static async update() { 
- 
+    static async update() {
         var delInfo = document.getElementById("deleteInfotherminal")
         if (delInfo != null) {
             console.log(this.umgebungsListe);
             delInfo.innerHTML = "";
             // KEINE neuen Umgebung-Objekte hier erzeugen!
-            const result = await getInfothermianl();
+            const result = await Crud.readDatabase("selectInfotherminal");
             console.log("result: ", result);
             await result.forEach(listInfo => {
-          
                 // Nur hier neue Umgebung-Objekte erzeugen
                 new Umgebung(listInfo[0], listInfo[1], listInfo[2]);
-                delInfo.innerHTML += `<input type="checkbox" id="checkDelInfo${listInfo[0]}" name="${listInfo[1]}" onchange="Umgebung.event_remove(${listInfo[0]})"> ${listInfo[1]} - ${listInfo[2]} <br>`
+                delInfo.innerHTML += `<input type="checkbox" id="checkDelInfo${listInfo[0]}" name="${listInfo[1]}" onchange="Crud.event_remove('umgebungsListe', this.id, ${listInfo[0]})"> ${listInfo[1]} - ${listInfo[2]} <br>`
             });
       
         }
@@ -249,14 +147,14 @@ window.addEventListener("load", function () {
             console.log("deleteInfotherminal: ", delInfo);
 
             Umgebung.umgebungsListe.forEach(element => {
-                delInfo.innerHTML += `<input type="checkbox" id="checkDelInfo${element.id}" name="${element.titel}" onchange="Umgebung.event_remove(${element.id})"> ${element.titel} - ${element.ipAdresse} <br>`
+                delInfo.innerHTML += `<input type="checkbox" id="checkDelInfo${element.id}" name="${element.titel}" onchange="Crud.event_remove('umgebungsListe', this.id, ${element.id})"> ${element.titel} - ${element.ipAdresse} <br>`
             });
             const deleteBtn = document.createElement("button");
             deleteBtn.id = "deleteBtnForInfotherminal";
             deleteBtn.textContent = "löschen";
 
             deleteBtn.addEventListener("click", function () {
-                Umgebung.remove_generate();
+                Crud.remove_generate(Umgebung);
 
             });
             settingsPanel.appendChild(deleteBtn);
@@ -265,17 +163,11 @@ window.addEventListener("load", function () {
 });
 
 
-async function getInfothermianl() {
-    listUmgebung = await selectObj("/database/selectInfotherminal.php")
-    return listUmgebung;
-}
+
 function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-function extractNumberFromString(str) {
-    const match = str.match(/\d+$/);
-    return match ? match[0] : null;
-}
+
 // Wait for DOM to be loaded
 
 function select() {
@@ -343,34 +235,4 @@ function insert() {
         });
         // RESULT: responseText => [[183,"0","aaa"],[186,"1","bbb"],[187,"2","ccc"],[184,"0","aaa"]]
     });
-}
-async function deletee(idDelete) {
-    console.log("deletee wurde aufgerufen");
-    try {
-        const prepare = "?idDelete=" + idDelete;
-        console.log(prepare);
-
-        const response = await fetch("/database/deleteInfotherminal.php" + prepare);
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const responseText = await response.text();
-        console.log("Delete Response:", responseText);
-
-        // Versuche JSON zu parsen, falls möglich
-        try {
-            const jsonResponse = JSON.parse(responseText);
-            console.log("Delete Result:", jsonResponse);
-            return jsonResponse;
-        } catch (jsonError) {
-            // Falls kein JSON, gib Text zurück
-            console.log("Non-JSON Response:", responseText);
-            return { message: responseText };
-        }
-    } catch (error) {
-        console.error("Fehler beim Löschen:", error);
-        return { error: error.message };
-    }
 }
