@@ -4,6 +4,7 @@ class CardObj {
     static allCardObjekte = [];
     static temp_list = [];
     static eleListe = []
+    static list = [];
     constructor(id, imagePath, selectedTime, aktiv, startTime, endTime, startDate, endDate, titel, beschreibung) {
 
         this.id = id;
@@ -46,7 +47,7 @@ class CardObj {
 
         //-------------------------------------    
 
-        Umgebung.allCardsInOneList.push(this)
+        CardObj.list.push(this)
 
     }
     htmlBody(umgebung) {
@@ -270,11 +271,11 @@ async function insertDatabase(cardObj) {
     }
 }
 function createBodyCardObj() {
-    Umgebung.allCardsInOneList.forEach(cardObj => {
+    CardObj.list.forEach(cardObj => {
         const cardContainer = "cardContainer"
         cardObj.htmlBody(cardContainer);
     });
-    console.log(Umgebung.allCardsInOneList);
+    console.log(CardObj.list);
     const cbForSelectSchema = document.querySelectorAll('[id^="flexCheck"]')
     const labels = document.querySelectorAll('label[name^="label"]');
 
@@ -307,11 +308,10 @@ function createBodyCardObj() {
                
                 CardObj.selectedID = 0; // Reset the selected ID
             }
-            Beziehungen.beziehungsListe.forEach(beziehung => {
+            Beziehungen.list.forEach(beziehung => {
                 if (CardObj.selectedID == beziehung.cardObjektID) {
-                    Beziehungen.temp_list = [];
-                    beziehung.update();
-
+                    beziehung.temp_remove = [];
+                    Beziehungen.update();
                 }
             });
         });

@@ -20,15 +20,7 @@ window.onload = async function () {
     console.log("window.onload von index.js läuft!");
     // executeDeleteNull();
 
-    const resultUmgebung = selectObj("../database/selectInfotherminal.php")
-    const data = await resultUmgebung
-    var HauptUmgebungsObj = new Umgebung(0, 0, "Alle Schemas");
-    Umgebung.umgebungsListe = [];
-    data.forEach(umgebung => {
-        var umgebungObj = new Umgebung(umgebung[0], umgebung[1], umgebung[2]);
-    })
-    var selectedUmgebung = Umgebung.umgebungsListe[1];
-    Umgebung.update()
+    createUmgebung()
     try {
         await createCardObj()
     } catch (error) {
@@ -50,7 +42,7 @@ window.onload = async function () {
                     Umgebung.tempListForSaveCards.push(newCardObj);
                     console.log(newCardObj);
 
-                    Beziehungen.beziehungsListe.forEach(beziehung => {
+                    Beziehungen.list.forEach(beziehung => {
                         console.log(beziehung);
                         console.log("beziehung gefunden");
                     });
@@ -117,20 +109,6 @@ window.onload = async function () {
             });
         });
     }
-    const addCardToUmgebung = document.getElementById("addCardToUmgebung");
-    const selectAddUmgebung = document.getElementById("selectAddUmgebung");
-    if (addCardToUmgebung != null) {
-        addCardToUmgebung.addEventListener("click", function () {
-            Umgebung.currentSelect = selectAddUmgebung.value;
-            console.log("aktuelle Umgebung: " + Umgebung.currentSelect);
-            console.log("aktuelles Schema: " + CardObj.selectedID);
-            if (Umgebung.currentSelect == 0 || CardObj.selectedID == 0) {
-                alert("Bitte eine Umgebung und ein Schema auswählen!")
-                return
-            }
-
-        });
-    }
 
     // Hier wird die startseite ausgewählt
     const infotherminalBereich = document.getElementById("infotherminalBereich");
@@ -146,9 +124,26 @@ window.onload = async function () {
 
 
 }
+
+
+async function createUmgebung() {
+    const resultUmgebung = selectObj("../database/selectInfotherminal.php")
+    const data = await resultUmgebung
+    Umgebung.list = [];
+    data.forEach(umgebung => {
+        var umgebungObj = new Umgebung(umgebung[0], umgebung[1], umgebung[2]);
+    })
+    var selectedUmgebung = Umgebung.list[1];
+}
+
 function extractNumberFromString(str) {
     const match = str.match(/\d+$/);
     return match ? match[0] : null;
+}
+
+async function readDatabase(databaseUrl) {
+    const listUmgebung = await selectObj(`/database/${databaseUrl}.php`)
+    return listUmgebung;
 }
 
 // Funktion zum Überprüfen, ob eine Checkbox oder switch aktiviert ist
@@ -191,11 +186,25 @@ async function createCardObj() {
         )
     });
 
-    console.log(Umgebung.allCardsInOneList);
-
-    // Umgebung.allCardsInOneList.push(this); // Das ist hier falsch! "this" ist kein CardObj.
-    // Die CardObj-Instanzen werden im Konstruktor selbst zu Umgebung.allCardsInOneList hinzugefügt (falls dort implementiert).
+    console.log(CardObj.list);
 }
+
+function findObj(list, id) {
+    const number = extractNumberFromString(id);
+    if (!Array.isArray(list)) {
+        console.warn('findObj: list ist kein Array');
+        return null;
+    }
+    const found = list.find(cardObj => String(cardObj.id) === String(number));
+    if (found) {
+        found.update = true; // Optional: nur wenn du das Flag wirklich brauchst
+        return found;
+    }
+    console.warn(`Objekt mit ID ${id} nicht gefunden.`);
+    return null;
+}
+
+
 
 function convertCardObjForDataBase(cardObjListe) {
     objListe = []
@@ -319,7 +328,7 @@ function disableInput(container) {
 }
 
 function createID() {
-    const cardObjIDList = Umgebung.allCardsInOneList
+    const cardObjIDList = CardObj.list
         .map(cardObj => parseInt(cardObj.id)) // Konvertiere alle IDs in Zahlen
         .filter(id => !isNaN(id)); // Entferne ungültige Werte (NaN)
     console.log("Gefilterte ID-Liste:", cardObjIDList);
@@ -353,7 +362,7 @@ function checkSelectedUmgebung() {
 
 function zeigeUmgebungAn(selectedUmgebung) {
     console.log(selectedUmgebung.id);
-    Umgebung.umgebungsListe.forEach(umgebung => {
+    Umgebung.list.forEach(umgebung => {
         if (umgebung.id == selectedUmgebung.id) {
             document.getElementById("umgebungsBody" + umgebung.id).style.display = "block";
         } else {
@@ -378,7 +387,7 @@ function deleteBtn() {
         deleteBtn.addEventListener('change', function () {
             const cardId = this.id.replace('deleteBtn', '');
             console.log(cardId);
-            const cardObj = Crud.findObj(CardObj.allCardObjekte ,cardId);
+            const cardObj = findObj(CardObj.allCardObjekte, cardId);
             const element = document.getElementById(cardObj.id);
             if (this.checked) {
                 selectedUmgebung.tempListForDeleteCards.push(cardObj);
@@ -402,11 +411,29 @@ function saveCardObj() {
 }
 
 function sucheUmgebung(UmgebungsID) {
-    let umgebung = Umgebung.umgebungsListe.find(umgebung => umgebung.id == UmgebungsID);
+    let umgebung = Umgebung.list.find(umgebung => umgebung.id == UmgebungsID);
     return umgebung
 }
 
 function lengthListUmgebung() {
     var length = Umgebung.umgebungsIdList.length
     return length
+}
+
+async function updateDataBase(cardObj, databaseUrl) {
+    // Erstellen eines FormData-Objekts
+    try {
+        console.log("updateDataBase wurde aufgerufen");
+        const jsObj = JavaScriptCardObj(cardObj);
+        const createJsObj = JSON.stringify(jsObj)
+        console.log(jsObj);
+        var result = await fetch(`database/${databaseUrl}.php`, {
+            method: "POST",
+            body: createJsObj
+        });
+        const responseText = await result.text();
+        console.log("Antwort vom Server:", responseText);
+    } catch (error) {
+        console.error("Fehler in updateDataBase:", error);
+    }
 }
