@@ -35,18 +35,24 @@ class Beziehungen {
         return relationlistee;
     }
 
-    static update() {
+    static update(cardObjID) {
         const anzeigebereichv = document.getElementById("anzeigebereichV");
         const anzeigebereicht = document.getElementById("tabelleAdd");
         const anzeigebereichD = document.getElementById("tabelleDelete");
-        console.log("Update der Beziehung: " + this.id);
+        console.log("Update wird aufgerufen mit CardObjektID: " + cardObjID);
+        
         this.temp_list = [];
+        console.log();
+        
         this.list.forEach(element => {
-            if (element.cardObjektID === this.id) {
+            console.log(`Überprüfe Element: ${element.cardObjektID} mit CardObjektID: ${cardObjID}`);
+            if (element.cardObjektID == cardObjID) {
                 console.log(`Beziehung gefunden: ${element.id} mit CardObjektID: ${element.cardObjektID}`);
                 this.temp_list.push(element);
             }
         });
+        console.log("Temp Liste: " + this.temp_list);
+        
         leereListe(anzeigebereichv);
         leereListe(anzeigebereicht);
         leereListe(anzeigebereichD);
@@ -141,7 +147,7 @@ class Beziehungen {
         }
     }
 
-    removeFromListLogik() {
+    static  removeFromListLogik() {
         this.temp_remove.forEach(id => {
             this.list = this.removeFromListViaID(id, this.list);
         });
@@ -150,11 +156,8 @@ class Beziehungen {
 
     static remove_generate(id) {
         console.log(Beziehungen.list);
-        // console.log(Beziehungen.list);
-
-        // if (cardObj) {
-        //     cardObj.update();
-        // }
+        this.removeFromListLogik()
+        this.update(id);
     }
 }
 function leereListe(anzeigebereich) {

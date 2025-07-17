@@ -308,12 +308,7 @@ function createBodyCardObj() {
                
                 CardObj.selectedID = 0; // Reset the selected ID
             }
-            Beziehungen.list.forEach(beziehung => {
-                if (CardObj.selectedID == beziehung.cardObjektID) {
-                    beziehung.temp_remove = [];
-                    Beziehungen.update();
-                }
-            });
+            Beziehungen.update(CardObj.selectedID);
         });
     });
 };
