@@ -3,6 +3,8 @@ class Beziehungen {
     static temp_remove = [];
     static eleListe = [];
     static temp_list = [];
+    static temp_list_add = [];
+
     constructor(id, umgebungsID, cardObjektID) {
         this.id = id;
         this.umgebungsID = umgebungsID;
@@ -70,28 +72,27 @@ class Beziehungen {
                     <label for="Schulaula" class="text-wrap" value="15">${obj.titel}</label>
                 </div>`;
             }
-            if (anzeigebereicht != null) {
-                anzeigebereicht.innerHTML += `<tr>
+            if (anzeigebereichD != null) {
+                anzeigebereichD.innerHTML += `<tr>
                     <td>${obj.id}</td>
                     <td>${obj.ipAdresse}</td>
                     <td>${obj.titel}</td>
-                    <td><input type="checkbox" name="${obj.id}" id="checkAdd${obj.id}" onchange="Beziehungen.event_remove(${obj.id})"></td>
+                    <td><input type="checkbox" name="${obj.id}" id="checkAdd${obj.id}" onchange="Beziehungen.event_remove(${this.temp_remove}, ${obj.id})"></td>
                 </tr>`;
             }
 
 
 
-            if (anzeigebereichD != null) {
-                debugger
+            if (anzeigebereicht != null) {
                 Umgebung.list.forEach(umgebung => {
                     const istInTempList = this.temp_list.some(beziehung => beziehung.umgebungsID == umgebung.id);
-                    if (!istInTempList && !this.temp_list_remove.includes(umgebung.id)) {
-                        this.temp_list_remove.push(umgebung.id);
-                        anzeigebereichD.innerHTML += `<tr>
+                    if (!istInTempList && !this.temp_list_add.includes(umgebung.id)) {
+                        this.temp_list_add.push(umgebung.id);
+                        anzeigebereicht.innerHTML += `<tr>
                             <td>${umgebung.id}</td>
                             <td>${umgebung.ipAdresse}</td>
                             <td>${umgebung.titel}</td>
-                            <td><input type="checkbox" name="${umgebung.id}" id="checkAdd${umgebung.id}" onchange="Beziehungen.event_remove(${umgebung.id})"></td>
+                            <td><input type="checkbox" name="${umgebung.id}" id="checkAdd${umgebung.id}" onchange="Beziehungen.event_remove(${this.temp_remove}, ${umgebung.id})"></td>
                         </tr>`;
                     }
                 });
@@ -118,25 +119,27 @@ class Beziehungen {
         return temp;
     }
 
-    static event_remove(id) {
+    static event_remove(list ,id) {
         var element = document.getElementById(`checkAdd${id}`);
-        if (element.checked && !this.temp_remove.includes(id)) {
-            this.list.forEach(checkID => {
+        if (element.checked && !list.includes(id)) {
+            list.forEach(checkID => {
                 if (checkID.id == id) {
                     checkID.check = true;
                 }
             });
-            this.temp_remove.push(id);
+            list.push(id);
         } else {
-            this.list.forEach(checkID => {
+            list.forEach(checkID => {
                 if (checkID.id == id) {
                     checkID.check = false;
                 }
             });
-            this.temp_remove = this.temp_remove.filter(idd => id != idd);
+            list = list.filter(idd => id != idd);
         }
-        console.log(this.temp_remove);
+        console.log(list);
     }
+    
+
 
     static async deletee(idDelete, databaseUrl) {
         console.log("deletee wurde aufgerufen");

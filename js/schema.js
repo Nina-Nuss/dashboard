@@ -309,6 +309,7 @@ function createBodyCardObj() {
                 CardObj.selectedID = 0; // Reset the selected ID
             }
             Beziehungen.update(CardObj.selectedID);
+            Beziehungen.temp_remove = [];
         });
     });
 };
