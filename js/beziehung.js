@@ -1,4 +1,3 @@
-
 class Beziehungen {
     static list = [];
     static temp_remove = [];
@@ -40,10 +39,11 @@ class Beziehungen {
         const anzeigebereicht = document.getElementById("tabelleAdd");
         const anzeigebereichD = document.getElementById("tabelleDelete");
         console.log("Update wird aufgerufen mit CardObjektID: " + cardObjID);
-        
+
         this.temp_list = [];
+        this.temp_list_remove = [];
         console.log();
-        
+
         this.list.forEach(element => {
             console.log(`Überprüfe Element: ${element.cardObjektID} mit CardObjektID: ${cardObjID}`);
             if (element.cardObjektID == cardObjID) {
@@ -52,7 +52,7 @@ class Beziehungen {
             }
         });
         console.log("Temp Liste: " + this.temp_list);
-        
+
         leereListe(anzeigebereichv);
         leereListe(anzeigebereicht);
         leereListe(anzeigebereichD);
@@ -60,6 +60,10 @@ class Beziehungen {
         for (let i = 0; i < this.temp_list.length; i++) {
             const element = this.temp_list[i];
             let obj = erstelleObj(element);
+            if (!obj) {
+                console.warn("Kein passendes Umgebung-Objekt gefunden für:", element);
+                continue; // Überspringe diesen Durchlauf
+            }
             if (anzeigebereichv != null) {
                 anzeigebereichv.innerHTML += `<div style="display: flex;">
                     <span name="${obj.titel}" id="${obj.id}" style="float: left;  margin-right: 10px;">${obj.ipAdresse}</span>
@@ -71,23 +75,30 @@ class Beziehungen {
                     <td>${obj.id}</td>
                     <td>${obj.ipAdresse}</td>
                     <td>${obj.titel}</td>
-                    <td><input type="checkbox" name="${obj.id}" id="checkAdd${obj.id}" onchange="beziehung.event_remove(${obj.id})"></td>
+                    <td><input type="checkbox" name="${obj.id}" id="checkAdd${obj.id}" onchange="Beziehungen.event_remove(${obj.id})"></td>
                 </tr>`;
             }
+
+
+
             if (anzeigebereichD != null) {
-                Umgebung.list.forEach(element => {
-                    if (element.id !== obj.umgebungID) {
+                debugger
+                Umgebung.list.forEach(umgebung => {
+                    const istInTempList = this.temp_list.some(beziehung => beziehung.umgebungsID == umgebung.id);
+                    if (!istInTempList && !this.temp_list_remove.includes(umgebung.id)) {
+                        this.temp_list_remove.push(umgebung.id);
                         anzeigebereichD.innerHTML += `<tr>
-                            <td>${element.id}</td>
-                            <td>${element.ipAdresse}</td>
-                            <td>${element.titel}</td>
-                            <td><input type="checkbox" name="${element.id}" id="checkDel${element.id}" onchange="beziehung.event_remove(${element.id})"></td>
+                            <td>${umgebung.id}</td>
+                            <td>${umgebung.ipAdresse}</td>
+                            <td>${umgebung.titel}</td>
+                            <td><input type="checkbox" name="${umgebung.id}" id="checkAdd${umgebung.id}" onchange="Beziehungen.event_remove(${umgebung.id})"></td>
                         </tr>`;
                     }
                 });
             }
         }
     }
+
 
     static removeFromListViaID(id, list) {
         var temp = [];
@@ -147,7 +158,7 @@ class Beziehungen {
         }
     }
 
-    static  removeFromListLogik() {
+    static removeFromListLogik() {
         this.temp_remove.forEach(id => {
             this.list = this.removeFromListViaID(id, this.list);
         });
@@ -166,6 +177,11 @@ function leereListe(anzeigebereich) {
     }
 }
 
+function checkeID(obj) {
+
+
+}
+
 window.addEventListener("load", async () => {
     const relationListe = await Beziehungen.getRelation();
     console.log(relationListe);
@@ -176,7 +192,7 @@ window.addEventListener("load", async () => {
 
 
 function erstelleObj(element) {
-    obj = {};
+    let obj = undefined;
     Umgebung.list.forEach(umgebung => {
         if (umgebung.id === element.umgebungsID) {
             obj = {
