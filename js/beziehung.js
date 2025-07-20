@@ -102,13 +102,13 @@ class Beziehungen {
     static createList(type, temp_list, cardObjID){
         console.log("createList aufgerufen mit CardObjektID: " + cardObjID);
             this.list.forEach(ele => {
-                if (type === "remove") {
+                if (type == "remove") {
                     if(ele.cardObjektID == cardObjID){
                         console.log(`Beziehung gefunden: ${ele.id} mit CardObjektID: ${ele.cardObjektID}`);
                         temp_list.push(ele.umgebungsID);  
                     }
                    // Nur die Umgebungs-ID
-                }else if (type === "add") {
+                }else if (type == "add") {
                     if(ele.cardObjektID != cardObjID){
                         console.log(`Beziehung gefunden: ${ele.id} mit CardObjektID: ${ele.cardObjektID}`);
                         temp_list.push(ele.umgebungsID);  
@@ -120,45 +120,47 @@ class Beziehungen {
     }
 
     static event_remove(id) {
+         
         console.log(`Event remove aufgerufen für ID: ${id}`);
         var element = document.getElementById(`checkDel${id}`);
-        if (element.checked && !this.temp_remove.includes(id)) {
+        if (!this.temp_list_remove.includes(id) ) {
             console.log(`Element mit ID ${id} wird zur Liste hinzugefügt.`);
-            this.temp_remove.forEach(checkID => {
+            this.temp_list_remove.forEach(checkID => {
                 if (checkID == id && !element.checked) {
                     element.checked = true;
                 }
             });
-            this.temp_remove.push(id);
+            this.temp_list_remove.push(id);
         } else {
-            this.temp_remove.forEach(checkID => {
+            this.temp_list_remove.forEach(checkID => {
                 if (checkID == id && element.checked) {
                     element.checked = false;
                 }
             });
-            this.temp_remove = this.temp_remove.filter(idd => id != idd);
+            this.temp_list_remove = this.temp_list_remove.filter(idd => id != idd);
         }
-        console.log(this.temp_remove);
+        console.log(this.temp_list_remove);
     }
     
     static event_add(id) {
         var element = document.getElementById(`checkAdd${id}`);
-        if (element.checked && !this.temp_add.includes(id)) {
-            this.temp_add.forEach(checkID => {
+        if (!this.temp_list_add.includes(id) ) {
+            console.log(`Element mit ID ${id} wird zur Liste hinzugefügt.`);
+            this.temp_list_add.forEach(checkID => {
                 if (checkID == id && !element.checked) {
                     element.checked = true;
                 }
             });
-            this.temp_add.push(id);
+            this.temp_list_add.push(id);
         } else {
-            this.temp_add.forEach(checkID => {
+            this.temp_list_add.forEach(checkID => {
                 if (checkID == id && element.checked) {
                     element.checked = false;
                 }
             });
-            this.temp_add = this.temp_add.filter(idd => id != idd);
+            this.temp_list_add = this.temp_list_add.filter(idd => id != idd);
         }
-        console.log(this.temp_add);
+        console.log(this.temp_list_add);
     }
 
     
@@ -189,6 +191,10 @@ class Beziehungen {
             
         });
         this.temp_remove = [];
+        this.temp_list_add = [];
+        this.temp_list_remove = [];
+        this.temp_list = [];
+        
     }
 
     static remove_generate(id, list) {
