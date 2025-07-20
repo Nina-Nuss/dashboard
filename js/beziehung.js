@@ -101,6 +101,7 @@ class Beziehungen {
 }
     static createList(type, temp_list, cardObjID){
         console.log("createList aufgerufen mit CardObjektID: " + cardObjID);
+       
             this.list.forEach(ele => {
                 if (type == "remove") {
                     if(ele.cardObjektID == cardObjID){
@@ -117,6 +118,8 @@ class Beziehungen {
             });
       
         console.log("Temp Liste: " + temp_list);
+     
+
     }
 
     static event_remove(id) {
