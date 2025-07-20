@@ -20,7 +20,7 @@ class CardObj {
         this.titel = titel //Der Titel des Objektes
         this.beschreibung = beschreibung //Die Beschreibung des Objektes
         //-------------------------------------
-
+     
         //HTMLOBJEKTE-------------------------
         this.deleteBtn = `deleteBtn${this.id}`
         this.imagePreviewId = `imagePreview${this.id}`;
