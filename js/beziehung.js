@@ -77,7 +77,7 @@ class Beziehungen {
                     <td>${obj.id}</td>
                     <td>${obj.ipAdresse}</td>
                     <td>${obj.titel}</td>
-                    <td><input type="checkbox" name="${obj.id}" id="checkAdd${obj.id}" onchange="Beziehungen.event_remove(${this.temp_remove}, ${obj.id})"></td>
+                    <td><input type="checkbox" name="${obj.id}" id="checkAdd${obj.id}" onchange="Beziehungen.event_remove( ${obj.id})"></td>
                 </tr>`;
             }
 
@@ -104,12 +104,12 @@ class Beziehungen {
     static removeFromListViaID(id, list) {
         var temp = [];
         list.forEach(element => {
-            if (element.id != id) {
+            if (element.umgebungsID != id) {
                 temp.push(element);
             } else {
-                if (element.id != 0) {
-                    this.deletee(element.id, "deleteInfotherminal");
-                    console.log("Das Element wurde gefunden und wird gelöscht! " + element.id);
+                if (element.umgebungsID != 0) {
+                    this.deletee(element.umgebungsID, "deleteInfotherminal");
+                    console.log("Das Element wurde gefunden und wird gelöscht! " + element.umgebungsID);
                 } else {
                     console.warn("Hauptumgebung (Alle Schemas) kann nicht gelöscht werden!");
                 }
@@ -119,24 +119,25 @@ class Beziehungen {
         return temp;
     }
 
-    static event_remove(list ,id) {
+    static event_remove(id) {
+        
         var element = document.getElementById(`checkAdd${id}`);
-        if (element.checked && !list.includes(id)) {
-            list.forEach(checkID => {
+        if (element.checked && !this.temp_list_remove.includes(id)) {
+            this.list.forEach(checkID => {
                 if (checkID.id == id) {
                     checkID.check = true;
                 }
             });
-            list.push(id);
+            this.temp_list_remove.push(id);
         } else {
-            list.forEach(checkID => {
+            this.temp_list_remove.forEach(checkID => {
                 if (checkID.id == id) {
                     checkID.check = false;
                 }
             });
-            list = list.filter(idd => id != idd);
+            this.temp_list_remove = this.temp_list_remove.filter(idd => id != idd);
         }
-        console.log(list);
+        console.log(this.temp_list_remove);
     }
     
 
@@ -162,10 +163,11 @@ class Beziehungen {
     }
 
     static removeFromListLogik() {
-        this.temp_remove.forEach(id => {
+        this.temp_list_remove.forEach(id => {
             this.list = this.removeFromListViaID(id, this.list);
         });
-        this.temp_remove = [];
+        this.temp_list_remove = [];
+        this.temp_list = [];
     }
 
     static remove_generate(id) {
