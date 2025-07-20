@@ -172,6 +172,9 @@ async function createCardObj() {
     let objList = convertCardObjForDataBase(response)
 
     objList.forEach(cardObj => {
+        if(cardObj.imagePath == null || cardObj.imagePath == "null" || cardObj.imagePath == "") {
+            cardObj.imagePath = "img/bild.png"; // Setze einen Standardwert,
+        }else {
         const cardObjj = new CardObj(
             cardObj.id,
             cardObj.imagePath,
@@ -183,7 +186,7 @@ async function createCardObj() {
             cardObj.endDate,
             cardObj.titel,
             cardObj.beschreibung
-        )
+        )}
     });
 
     console.log(CardObj.list);
