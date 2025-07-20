@@ -92,7 +92,7 @@ class Beziehungen {
                             <td>${umgebung.id}</td>
                             <td>${umgebung.ipAdresse}</td>
                             <td>${umgebung.titel}</td>
-                            <td><input type="checkbox" name="${umgebung.id}" id="checkAdd${umgebung.id}" onchange="Beziehungen.event_remove(${this.temp_remove}, ${umgebung.id})"></td>
+                            <td><input type="checkbox" name="${umgebung.id}" id="checkAdd${umgebung.id}" onchange="Beziehungen.event_remove( ${umgebung.id})"></td>
                         </tr>`;
                     }
                 });
@@ -108,7 +108,7 @@ class Beziehungen {
                 temp.push(element);
             } else {
                 if (element.umgebungsID != 0) {
-                    this.deletee(element.umgebungsID, "deleteInfotherminal");
+                    // this.deletee(element.umgebungsID, "deleteInfotherminal");
                     console.log("Das Element wurde gefunden und wird gelöscht! " + element.umgebungsID);
                 } else {
                     console.warn("Hauptumgebung (Alle Schemas) kann nicht gelöscht werden!");
