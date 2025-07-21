@@ -23,27 +23,21 @@ class Beziehungen {
         return relationlistee;
     }
 
+  
     static update(cardObjID) {
-        const anzeigebereichv = document.getElementById("anzeigebereichV");
-        const anzeigebereicht = document.getElementById("tabelleAdd");
-        const anzeigebereichD = document.getElementById("tabelleDelete");
+
         console.log("Update wird aufgerufen mit CardObjektID: " + cardObjID);
-        this.temp_remove = [];
-        this.temp_add = [];
+
         this.temp_list_add = [];
         this.temp_list_remove = [];
 
         leereListe(anzeigebereichv);
         leereListe(anzeigebereicht);
         leereListe(anzeigebereichD);
-      
-        this.createList("add" , this.temp_add, cardObjID)
-        this.createList("remove", this.temp_remove, cardObjID)
+
+        this.createList(cardObjID)
         console.log("Temp Liste Add: " + this.temp_add);
         console.log("Temp Liste Remove: " + this.temp_remove);
-
-      
-
         // for (let i = 0; i < this.temp_list.length; i++) {
         //     const element = this.temp_list[i];
         //     let obj = erstelleObj(element);
@@ -60,113 +54,95 @@ class Beziehungen {
         //     //         <td><input type="checkbox" name="${obj.id}" id="checkDel${obj.id}" onchange="Beziehungen.event_remove(${obj.id})"></td>
         //     //     </tr>`;
         //     // }
-            
+
         // }
 
-         if (anzeigebereichv != null) {
-
-            this.createListForAnzeige("checkAdd", "event_add", this.temp_add, anzeigebereicht);
-            }
-
-
-        // console.log("Temp Liste Add: " + this.temp_list_add);
-
-        if (anzeigebereichD != null) {
-            this.createListForAnzeige("checkDel", "event_remove", this.temp_remove, anzeigebereichD);
-        }
-        console.log("Temp Liste Remove: " + this.temp_list_remove);
+        this.createListForAnzeige();
     }
-   static createListForAnzeige(check, event_remove, temp_list, anzeigebereich) {
-    // Iteriere über die temp_list (umgebungsIDs)
-    
-    Umgebung.list.forEach(umgebung => {
-        // Finde die entsprechende Beziehung
-        console.log(temp_list);
-        temp_list.forEach(element => {
-            if (element == umgebung.id) {
-                   let obj = erstelleObj(umgebung.id);
-                   console.log("Objekt erstellt:", obj);
-                   if (obj) {
-                       anzeigebereich.innerHTML += `<tr>
-                           <td>${obj.id}</td>
-                           <td>${obj.ipAdresse}</td>
-                           <td>${obj.titel}</td>
-                           <td><input type="checkbox" name="${obj.id}" id="${check}${obj.id}" onchange="Beziehungen.${event_remove}(${obj.id})"></td>
-                       </tr>`;
-                   }
-            }
-        });
-    });
-    console.log("Temp Liste verarbeitet:", temp_list);
-}
-    static createList(type, temp_list, cardObjID){
-        console.log("createList aufgerufen mit CardObjektID: " + cardObjID);
-       
-            this.list.forEach(ele => {
-                if (type == "remove") {
-                    if(ele.cardObjektID == cardObjID){
-                        console.log(`Beziehung gefunden: ${ele.id} mit CardObjektID: ${ele.cardObjektID}`);
-                        temp_list.push(ele.umgebungsID);  
-                    }
-                   // Nur die Umgebungs-ID
-                }else if (type == "add") {
-                    if(ele.cardObjektID != cardObjID){
-                        console.log(`Beziehung gefunden: ${ele.id} mit CardObjektID: ${ele.cardObjektID}`);
-                        temp_list.push(ele.umgebungsID);  
-                    }
+    static createListForAnzeige() {
+        console.log("createListForAnzeige aufgerufen");
+        // Display items to remove
+        if (anzeigebereichD && this.temp_remove.length > 0) {
+            this.temp_remove.forEach(umgebungsId => {
+                let obj = erstelleObj(umgebungsId);
+                if (obj) {
+                    anzeigebereichD.innerHTML += `<tr>
+                    <td>${obj.id}</td>
+                    <td>${obj.ipAdresse}</td>
+                    <td>${obj.titel}</td>
+                    <td><input type="checkbox" name="${obj.id}" id="checkDel${obj.id}" onchange="Beziehungen.event_remove(${obj.id})"></td>
+                </tr>`;
                 }
             });
-      
-        console.log("Temp Liste: " + temp_list);
-     
+        }
 
+        // Display items to add
+        if (anzeigebereicht && this.temp_add.length > 0) {
+            this.temp_add.forEach(umgebungsId => {
+                let obj = erstelleObj(umgebungsId);
+                if (obj) {
+                    anzeigebereicht.innerHTML += `<tr>
+                    <td>${obj.id}</td>
+                    <td>${obj.ipAdresse}</td>
+                    <td>${obj.titel}</td>
+                    <td><input type="checkbox" name="${obj.id}" id="checkAdd${obj.id}" onchange="Beziehungen.event_add(${obj.id})"></td>
+                </tr>`;
+                }
+            });
+        }
+
+        console.log("Temp Remove verarbeitet:", this.temp_remove);
+        console.log("Temp Add verarbeitet:", this.temp_add);
+    }
+    static createList(cardObjID) {
+        console.log("createList aufgerufen mit CardObjektID: " + cardObjID);
+        // Clear arrays first
+        this.temp_remove = [];
+        this.temp_add = [];
+
+        this.list.forEach(ele => {
+            if (ele.cardObjektID == cardObjID) {
+                console.log(`Beziehung gefunden: ${ele.id} mit CardObjektID: ${ele.cardObjektID}`);
+                this.temp_remove.push(ele.umgebungsID);
+            }
+        });
+        // Find available umgebungsIDs (not connected to this cardObjID)
+        Umgebung.list.forEach(umgebung => {
+            if (!this.temp_remove.includes(umgebung.id)) {
+                this.temp_add.push(umgebung.id);
+            }
+        });
+        console.log("Temp Remove:", this.temp_remove);
+        console.log("Temp Add:", this.temp_add);
     }
 
     static event_remove(id) {
-         
         console.log(`Event remove aufgerufen für ID: ${id}`);
         var element = document.getElementById(`checkDel${id}`);
-        if (!this.temp_list_remove.includes(id) ) {
-            console.log(`Element mit ID ${id} wird zur Liste hinzugefügt.`);
-            this.temp_list_remove.forEach(checkID => {
-                if (checkID == id && !element.checked) {
-                    element.checked = true;
-                }
-            });
+        if (!this.temp_list_remove.includes(id)) {
+            element.checked = true;
             this.temp_list_remove.push(id);
         } else {
-            this.temp_list_remove.forEach(checkID => {
-                if (checkID == id && element.checked) {
-                    element.checked = false;
-                }
-            });
+            element.checked = false;
             this.temp_list_remove = this.temp_list_remove.filter(idd => id != idd);
         }
         console.log(this.temp_list_remove);
     }
-    
+
     static event_add(id) {
+        console.log(`Event add aufgerufen für ID: ${id}`);
         var element = document.getElementById(`checkAdd${id}`);
-        if (!this.temp_list_add.includes(id) ) {
-            console.log(`Element mit ID ${id} wird zur Liste hinzugefügt.`);
-            this.temp_list_add.forEach(checkID => {
-                if (checkID == id && !element.checked) {
-                    element.checked = true;
-                }
-            });
+        if (!this.temp_list_add.includes(id)) {
+            element.checked = true;
             this.temp_list_add.push(id);
         } else {
-            this.temp_list_add.forEach(checkID => {
-                if (checkID == id && element.checked) {
-                    element.checked = false;
-                }
-            });
+            element.checked = false;
             this.temp_list_add = this.temp_list_add.filter(idd => id != idd);
         }
         console.log(this.temp_list_add);
     }
 
-    
+
     static removeFromListViaID(id, list) {
         var temp = [];
         list.forEach(element => {
@@ -184,20 +160,20 @@ class Beziehungen {
         });
         return temp;
     }
-    
-   static removeFromListLogik(list) {
-    console.log("removeFromListLogik aufgerufen mit Liste:", list);
-        
-    list.forEach(id => {
+
+    static removeFromListLogik(list) {
+        console.log("removeFromListLogik aufgerufen mit Liste:", list);
+
+        list.forEach(id => {
             this.list = this.removeFromListViaID(id, this.list);
             console.log(this.list);
-            
+
         });
         this.temp_remove = [];
         this.temp_list_add = [];
         this.temp_list_remove = [];
         this.temp_list = [];
-        
+
     }
 
     static remove_generate(id, list) {
@@ -224,14 +200,16 @@ class Beziehungen {
         }
     }
 
- 
+
 }
 function leereListe(anzeigebereich) {
     if (anzeigebereich != null) {
         anzeigebereich.innerHTML = "";
     }
 }
-
+  const anzeigebereichv = document.getElementById("anzeigebereichV");
+    const anzeigebereicht = document.getElementById("tabelleAdd");
+    const anzeigebereichD = document.getElementById("tabelleDelete");
 
 
 window.addEventListener("load", async () => {
@@ -251,8 +229,6 @@ function erstelleObj(element) {
                 titel: umgebung.titel,
                 ipAdresse: umgebung.ipAdresse,
                 id: umgebung.id,
-                umgebungID: element.umgebungsID,
-                cardObjektID: element.cardObjektID,
             };
 
         }
