@@ -7,8 +7,10 @@
     <div class="col-md-10 pt-3 d-flex align-items-center justify-content-center position-relative">
         <div class="col-md-4 container-fluid position-relative">
             Webseite name: <span style="font-weight: bold;">Snapbar_Warm</span><br>
-            <input type="checkbox" name="checkA">
-            <label style="margin-right: 2vh;" for="checkA">Aktiv</label>
+            <div>
+                <input type="checkbox" id="" name="checkA">
+                 <label style="margin-right: 2vh;" for="checkA">Aktiv</label>
+            </div>
             <select id="timerSelectRange">
                 <option value="3">1</option>
                 <option value="4">2</option>

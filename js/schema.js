@@ -20,7 +20,7 @@ class CardObj {
         this.titel = titel //Der Titel des Objektes
         this.beschreibung = beschreibung //Die Beschreibung des Objektes
         //-------------------------------------
-     
+
         //HTMLOBJEKTE-------------------------
         this.deleteBtn = `deleteBtn${this.id}`
         this.imagePreviewId = `imagePreview${this.id}`;
@@ -75,6 +75,10 @@ class CardObj {
             </div>
         `;
         document.getElementById(umgebung).innerHTML += body;
+        // document.getElementById(this.checkAktiv).addEventListener("change", (event) => {
+        //     this.aktiv = event.target.checked;
+        // });
+
     }
     removeHtmlElement() {
         const element = document.getElementById(this.cardObjekte);
@@ -112,6 +116,16 @@ class CardObj {
         container.id = this.imagePreviewId;
         container.className = "image-container";
     }
+
+    checkboxAktiv() {
+        const cbAktiv = document.querySelectorAll('[id^="cbAktiv"]')
+        cbAktiv.forEach(cb => {
+            cb.addEventListener("change", (event) => {
+                this.aktiv = event.target.checked;
+            });
+        });
+    }
+
 }
 
 
@@ -138,9 +152,8 @@ window.addEventListener("load", function () {
 
         });
     }
-
+ 
 });
-console.log("Schema wurde geladen");
 
 async function meow(event) {
     event.preventDefault(); // Verhindert das Standardverhalten des Formulars
@@ -305,7 +318,7 @@ function createBodyCardObj() {
                     }
                 });
             } else {
-               
+
                 CardObj.selectedID = 0; // Reset the selected ID
             }
             Beziehungen.update(CardObj.selectedID);
