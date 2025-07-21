@@ -142,45 +142,9 @@ class Beziehungen {
         console.log(this.temp_list_add);
     }
 
-
-    static removeFromListViaID(id, umgebungsID) {
-        console.log("addToDatabaseViaID aufgerufen mit UmgebungsID:", umgebungsID, "CardObjektID:", cardObjektID);
-        fetch(`/database/insert_Relation.php`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                umgebungsID: umgebungsID,
-                cardObjektID: cardObjektID
-            })
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.text();
-            })
-            .then(responseText => {
-                try {
-                    const jsonResponse = JSON.parse(responseText);
-                    console.log("Daten erfolgreich hinzugefügt:", jsonResponse);
-                } catch (jsonError) {
-                    console.error("Fehler beim Parsen der Antwort:", jsonError);
-                    console.log("Response Text:", responseText);
-                }
-            })
-            .catch(error => {
-                console.error("Fehler beim Hinzufügen der Daten:", error);
-            });
-    }
-
-    static removeFromListLogik(id, list) {
-        console.log("removeFromListLogik aufgerufen mit Liste:", list);
-        this.temp_list_remove.forEach(umgebungsID => {
-            this.removeFromListViaID(id, umgebungsID);
-            console.log(this.list);
-
+    static removeFromListLogik(id, list, databaseUrl) {
+        list.forEach(umgebungsID => {
+            this.addToDatabaseViaID(id, umgebungsID, databaseUrl);
         });
         this.temp_remove = [];
         this.temp_list_add = [];
@@ -188,8 +152,8 @@ class Beziehungen {
         this.temp_list = [];
     }
 
-    static remove_generate(id, list) {
-        this.removeFromListLogik(id, list)
+    static remove_generate(id, list, databaseUrl) {
+        this.removeFromListLogik(id, list, databaseUrl);
         this.update(id);
     }
 
@@ -198,21 +162,9 @@ class Beziehungen {
         this.update(id);
     }
 
-    static addToListLogik(id) {
-        console.log("addToListLogik aufgerufen mit ID:", id);
-        this.temp_list_add.forEach(umgebungsID => {
-            this.addToDatabaseViaID(id, umgebungsID);
-            console.log(this.list);
-
-        });
-        this.temp_remove = [];
-        this.temp_list_add = [];
-        this.temp_list_remove = [];
-        this.temp_list = [];
-    }
-    static addToDatabaseViaID(cardObjektID, umgebungsID) {
+    static addToDatabaseViaID(cardObjektID, umgebungsID, databaseUrl) {
         console.log("addToDatabaseViaID aufgerufen mit UmgebungsID:", umgebungsID, "CardObjektID:", cardObjektID);
-        fetch(`/database/insert_Relation.php`, {
+        fetch(`/database/${databaseUrl}.php`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
