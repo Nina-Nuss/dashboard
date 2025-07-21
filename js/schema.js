@@ -61,7 +61,7 @@ class CardObj {
                         <div class="form-check">
                             <input class="form-check-input single-active-checkbox" type="checkbox" value="" id="flexCheck${this.id}"}>
                             <label class="form-check-label" name="label${this.id}" for="flexCheck${this.id}">
-                                Aktiv
+                                
                             </label>
                         </div>
                         <div>
