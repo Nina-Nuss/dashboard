@@ -12,10 +12,20 @@ class Beziehungen {
         this.cardObjektID = cardObjektID;
         Beziehungen.list.push(this);
     }
-   
+    static async getRelation() {
+        const response = await fetch('database/selectRelation.php', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+        var relationlistee = await response.json();
+        return relationlistee;
+    }
+
+
     static update(cardObjID) {
 
-        
         this.temp_remove = [];
         this.temp_list_add = [];
         this.temp_list_remove = [];
@@ -159,6 +169,7 @@ class Beziehungen {
                 console.error("Fehler beim Hinzufügen der Daten:", error);
             });
     }
+
 }
 
 function leereListe(anzeigebereich) {
