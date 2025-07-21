@@ -23,7 +23,7 @@ class Beziehungen {
         return relationlistee;
     }
 
-  
+
     static update(cardObjID) {
 
         console.log("Update wird aufgerufen mit CardObjektID: " + cardObjID);
@@ -180,6 +180,56 @@ class Beziehungen {
         this.removeFromListLogik(list)
         this.update(id);
     }
+
+    static add_generate(id, list) {
+        this.addToListLogik(id, list)
+        this.update(id);
+    }
+
+    static addToListLogik(id) {
+        console.log("addToListLogik aufgerufen mit ID:", id);
+        this.temp_list_add.forEach(umgebungsID => {
+            this.addToDatabaseViaID(id, umgebungsID);
+            console.log(this.list);
+
+        });
+        this.temp_remove = [];
+        this.temp_list_add = [];
+        this.temp_list_remove = [];
+        this.temp_list = [];
+    }
+    static addToDatabaseViaID(cardObjektID, umgebungsID) {
+        console.log("addToDatabaseViaID aufgerufen mit UmgebungsID:", umgebungsID, "CardObjektID:", cardObjektID);
+
+        fetch(`/database/addRelation.php`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                umgebungsID: umgebungsID,
+                cardObjektID: cardObjektID
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(responseText => {
+                try {
+                    const jsonResponse = JSON.parse(responseText);
+                    console.log("Daten erfolgreich hinzugefügt:", jsonResponse);
+                } catch (jsonError) {
+                    console.error("Fehler beim Parsen der Antwort:", jsonError);
+                    console.log("Response Text:", responseText);
+                }
+            })
+            .catch(error => {
+                console.error("Fehler beim Hinzufügen der Daten:", error);
+            });
+    }
     static async deletee(idDelete, databaseUrl) {
         console.log("deletee wurde aufgerufen");
         try {
@@ -207,9 +257,9 @@ function leereListe(anzeigebereich) {
         anzeigebereich.innerHTML = "";
     }
 }
-  const anzeigebereichv = document.getElementById("anzeigebereichV");
-    const anzeigebereicht = document.getElementById("tabelleAdd");
-    const anzeigebereichD = document.getElementById("tabelleDelete");
+const anzeigebereichv = document.getElementById("anzeigebereichV");
+const anzeigebereicht = document.getElementById("tabelleAdd");
+const anzeigebereichD = document.getElementById("tabelleDelete");
 
 
 window.addEventListener("load", async () => {
