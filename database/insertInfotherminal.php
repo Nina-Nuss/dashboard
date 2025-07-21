@@ -1,39 +1,39 @@
 <?php
-// filepath: c:\Infotherminal\database\insertRelation.php
 
 include("connection.php");
 
 
-echo "insertRelation.php is running";
-// Get JSON input data
-// $input = json_decode(file_get_contents('php://input'), true);
+$ip = $_SESSION['ip'] ?? '';
+$name = $_SESSION['name'] ?? '';
+// ...weiter wie gehabt...
+// IP und Name aus POST-Daten abrufen
 
-// $umgebungsID = $input['umgebungsID'] ?? '';
-// $cardObjektID = $input['cardObjektID'] ?? '';
+// Überprüfen, ob beide Werte vorhanden sind
+if ($ip !== '' && $name !== '') {
+    // SQL-Abfrage mit Prepared Statement
+    $sql = "INSERT INTO infotherminals (titel, ipAdresse) VALUES (?, ?)";
+    $params = array($name, $ip);
+    $stmt = sqlsrv_prepare($conn, $sql, $params);
 
-// // Überprüfen, ob beide Werte vorhanden sind
-// if ($umgebungsID !== '' && $cardObjektID !== '') {
-//     $sql = "INSERT INTO infotherminal_schema (fk_infotherminal_id, fk_schema_id) VALUES (?, ?)";
-//     $params = array($umgebungsID, $cardObjektID);
-//     $stmt = sqlsrv_prepare($conn, $sql, $params);
+    if ($stmt) {
+        // Statement ausführen
+        if (sqlsrv_execute($stmt)) {
+            echo "Datensatz erfolgreich eingefügt";
+            $ip = "";
+            $name = "";
+        } else {
+            echo "Fehler beim Einfügen: ";
+            print_r(sqlsrv_errors());
+        }
+        // Statement schließen
+        sqlsrv_free_stmt($stmt);
+    } else {
+        echo "Fehler bei der Vorbereitung: ";
+        print_r(sqlsrv_errors());
+    }
+} else {
+    echo "Fehler: IP oder Name nicht gesetzt";
+}
 
-//     if ($stmt) {
-//         // Statement ausführen
-//         if (sqlsrv_execute($stmt)) {
-//             echo "Beziehung erfolgreich eingefügt";
-//         } else {
-//             echo "Fehler beim Einfügen: ";
-//             print_r(sqlsrv_errors());
-//         }
-//         // Statement schließen
-//         sqlsrv_free_stmt($stmt);
-//     } else {
-//         echo "Fehler bei der Vorbereitung: ";
-//         print_r(sqlsrv_errors());
-//     }
-// } else {
-//     echo "Fehler: umgebungsID oder cardObjektID nicht gesetzt";
-// }
-
-// sqlsrv_close($conn);
+sqlsrv_close($conn);
 ?>

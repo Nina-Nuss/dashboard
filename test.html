@@ -11,14 +11,14 @@
 
 </body>
 <script>
-    fetch(`database/insertRelation.php`,{
+    fetch(`database/insert_Relation.php`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            umgebungsID: 1,
-            cardObjektID: 1,
+            umgebungsID: 36,
+            cardObjektID: 2,
         })
     })
         .then(response => {
