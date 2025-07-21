@@ -12,24 +12,16 @@ class Beziehungen {
         this.cardObjektID = cardObjektID;
         Beziehungen.list.push(this);
     }
-    static async getRelation() {
-        const response = await fetch('database/selectRelation.php', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
-        var relationlistee = await response.json();
-        return relationlistee;
-    }
-
-
+   
     static update(cardObjID) {
 
-        console.log("Update wird aufgerufen mit CardObjektID: " + cardObjID);
-
+        
+        this.temp_remove = [];
         this.temp_list_add = [];
         this.temp_list_remove = [];
+        this.temp_list = [];
+        console.log("Update wird aufgerufen mit CardObjektID: " + cardObjID);
+
 
         leereListe(anzeigebereichv);
         leereListe(anzeigebereicht);
@@ -38,27 +30,10 @@ class Beziehungen {
         this.createList(cardObjID)
         console.log("Temp Liste Add: " + this.temp_add);
         console.log("Temp Liste Remove: " + this.temp_remove);
-        // for (let i = 0; i < this.temp_list.length; i++) {
-        //     const element = this.temp_list[i];
-        //     let obj = erstelleObj(element);
-        //     if (!obj) {
-        //         console.warn("Kein passendes Umgebung-Objekt gefunden für:", element);
-        //         continue; // Überspringe diesen Durchlauf
-        //     }
-        //    
-        //     // if (anzeigebereichD != null) {
-        //     //     anzeigebereichD.innerHTML += `<tr>
-        //     //         <td>${obj.id}</td>
-        //     //         <td>${obj.ipAdresse}</td>
-        //     //         <td>${obj.titel}</td>
-        //     //         <td><input type="checkbox" name="${obj.id}" id="checkDel${obj.id}" onchange="Beziehungen.event_remove(${obj.id})"></td>
-        //     //     </tr>`;
-        //     // }
-
-        // }
 
         this.createListForAnzeige();
     }
+
     static createListForAnzeige() {
         console.log("createListForAnzeige aufgerufen");
         // Display items to remove
@@ -142,29 +117,20 @@ class Beziehungen {
         console.log(this.temp_list_add);
     }
 
-    static removeFromListLogik(id, list, databaseUrl) {
-        list.forEach(umgebungsID => {
-            this.addToDatabaseViaID(id, umgebungsID, databaseUrl);
-        });
-        this.temp_remove = [];
-        this.temp_list_add = [];
-        this.temp_list_remove = [];
-        this.temp_list = [];
+    static async removeFromListLogik(id, list, databaseUrl) {
+        for (const umgebungsID of list) {
+            await this.addToDatabaseViaID(id, umgebungsID, databaseUrl);
+        };
     }
 
-    static remove_generate(id, list, databaseUrl) {
-        this.removeFromListLogik(id, list, databaseUrl);
+    static async remove_generate(id, list, databaseUrl) {
+        await this.removeFromListLogik(id, list, databaseUrl);
         this.update(id);
     }
 
-    static add_generate(id, list) {
-        this.addToListLogik(id, list)
-        this.update(id);
-    }
-
-    static addToDatabaseViaID(cardObjektID, umgebungsID, databaseUrl) {
+    static async addToDatabaseViaID(cardObjektID, umgebungsID, databaseUrl) {
         console.log("addToDatabaseViaID aufgerufen mit UmgebungsID:", umgebungsID, "CardObjektID:", cardObjektID);
-        fetch(`/database/${databaseUrl}.php`, {
+        await fetch(`/database/${databaseUrl}.php`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -212,6 +178,10 @@ window.addEventListener("load", async () => {
         new Beziehungen(element[0], element[1], element[2]);
     });
 })
+
+
+
+
 function erstelleObj(element) {
     let obj = undefined;
     Umgebung.list.forEach(umgebung => {
