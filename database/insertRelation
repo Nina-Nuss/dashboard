@@ -2,7 +2,8 @@
 
 include("connection.php");
 
-
+$ip = $_POST['ip'] ?? '';
+$name = $_POST['name'] ?? '';
 
 // ...weiter wie gehabt...
 // IP und Name aus POST-Daten abrufen

@@ -200,8 +200,7 @@ class Beziehungen {
     }
     static addToDatabaseViaID(cardObjektID, umgebungsID) {
         console.log("addToDatabaseViaID aufgerufen mit UmgebungsID:", umgebungsID, "CardObjektID:", cardObjektID);
-
-        fetch(`/database/addRelation.php`, {
+        fetch(`/database/insertRelation.php`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
