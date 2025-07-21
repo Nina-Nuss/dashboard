@@ -24,7 +24,14 @@ class Beziehungen {
     }
 
 
-    static update(cardObjID) {
+    static async update(cardObjID) {
+        this.list = [];
+        const relationListe = await Beziehungen.getRelation();
+        console.log(relationListe);
+        relationListe.forEach(element => {
+            new Beziehungen(element[0], element[1], element[2]);
+        });
+
 
         this.temp_remove = [];
         this.temp_list_add = [];
@@ -181,7 +188,6 @@ const anzeigebereichv = document.getElementById("anzeigebereichV");
 const anzeigebereicht = document.getElementById("tabelleAdd");
 const anzeigebereichD = document.getElementById("tabelleDelete");
 
-
 window.addEventListener("load", async () => {
     const relationListe = await Beziehungen.getRelation();
     console.log(relationListe);
@@ -189,9 +195,6 @@ window.addEventListener("load", async () => {
         new Beziehungen(element[0], element[1], element[2]);
     });
 })
-
-
-
 
 function erstelleObj(element) {
     let obj = undefined;
