@@ -40,7 +40,7 @@ class Beziehungen {
         console.log("Update wird aufgerufen mit CardObjektID: " + cardObjID);
 
 
-        leereListe(anzeigebereichv);
+        leereListe(anzeigebereichV);
         leereListe(anzeigebereicht);
         leereListe(anzeigebereichD);
 
@@ -64,6 +64,7 @@ class Beziehungen {
                     <td>${obj.titel}</td>
                     <td><input type="checkbox" name="${obj.id}" id="checkDel${obj.id}" onchange="Beziehungen.event_remove(${obj.id})"></td>
                 </tr>`;
+
                 }
             });
         }
@@ -81,6 +82,21 @@ class Beziehungen {
                 </tr>`;
                 }
             });
+        }
+
+        if (anzeigebereichV != null) {
+            console.log("anzeigebereichv ist nicht null, füge Elemente hinzu");
+            this.temp_remove.forEach(umgebungsId => {
+                let obj = erstelleObj(umgebungsId);
+                if (obj) {
+                    anzeigebereichV.innerHTML += `<div style="display: flex;">
+                    <span name="${obj.titel}" id="${obj.id}" style="float: left;  margin-right: 10px;">${obj.ipAdresse}</span>
+                    <label for="Schulaula" class="text-wrap" value="15">${obj.titel}</label>
+                </div>`;
+                }
+            });
+        } else {
+            console.log("anzeigebereichV ist null, keine Elemente hinzugefügt");
         }
 
         console.log("Temp Remove verarbeitet:", this.temp_remove);
@@ -178,17 +194,18 @@ class Beziehungen {
     }
 
 }
-
+const anzeigebereicht = document.getElementById("tabelleAdd");
+const anzeigebereichD = document.getElementById("tabelleDelete");
 function leereListe(anzeigebereich) {
     if (anzeigebereich != null) {
         anzeigebereich.innerHTML = "";
     }
 }
-const anzeigebereichv = document.getElementById("anzeigebereichV");
-const anzeigebereicht = document.getElementById("tabelleAdd");
-const anzeigebereichD = document.getElementById("tabelleDelete");
+
 
 window.addEventListener("load", async () => {
+    const anzeigebereichV = document.getElementById("anzeigebereichV");
+
     const relationListe = await Beziehungen.getRelation();
     console.log(relationListe);
     relationListe.forEach(element => {
