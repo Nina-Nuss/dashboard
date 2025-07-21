@@ -143,29 +143,42 @@ class Beziehungen {
     }
 
 
-    static removeFromListViaID(id, list) {
-        var temp = [];
-        list.forEach(element => {
-            if (element.umgebungsID != id) {
-                temp.push(element);
-            } else {
-                if (element.umgebungsID != 0) {
-                    this.deletee(element.id, "deleteInfotherminal");
-                    console.log("Das Element wurde gefunden und wird gelöscht! " + element.id);
-                } else {
-                    console.warn("Hauptumgebung (Alle Schemas) kann nicht gelöscht werden!");
+    static removeFromListViaID(id, umgebungsID) {
+        console.log("addToDatabaseViaID aufgerufen mit UmgebungsID:", umgebungsID, "CardObjektID:", cardObjektID);
+        fetch(`/database/insert_Relation.php`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                umgebungsID: umgebungsID,
+                cardObjektID: cardObjektID
+            })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                return;
-            }
-        });
-        return temp;
+                return response.text();
+            })
+            .then(responseText => {
+                try {
+                    const jsonResponse = JSON.parse(responseText);
+                    console.log("Daten erfolgreich hinzugefügt:", jsonResponse);
+                } catch (jsonError) {
+                    console.error("Fehler beim Parsen der Antwort:", jsonError);
+                    console.log("Response Text:", responseText);
+                }
+            })
+            .catch(error => {
+                console.error("Fehler beim Hinzufügen der Daten:", error);
+            });
     }
 
-    static removeFromListLogik(list) {
+    static removeFromListLogik(id, list) {
         console.log("removeFromListLogik aufgerufen mit Liste:", list);
-
-        list.forEach(id => {
-            this.list = this.removeFromListViaID(id, this.list);
+        this.temp_list_remove.forEach(umgebungsID => {
+            this.removeFromListViaID(id, umgebungsID);
             console.log(this.list);
 
         });
@@ -173,11 +186,10 @@ class Beziehungen {
         this.temp_list_add = [];
         this.temp_list_remove = [];
         this.temp_list = [];
-
     }
 
     static remove_generate(id, list) {
-        this.removeFromListLogik(list)
+        this.removeFromListLogik(id, list)
         this.update(id);
     }
 
@@ -229,28 +241,8 @@ class Beziehungen {
                 console.error("Fehler beim Hinzufügen der Daten:", error);
             });
     }
-    static async deletee(idDelete, databaseUrl) {
-        console.log("deletee wurde aufgerufen");
-        try {
-            const prepare = "?idDelete=" + idDelete;
-            const response = await fetch(`/database/${databaseUrl}.php` + prepare);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const responseText = await response.text();
-            try {
-                const jsonResponse = JSON.parse(responseText);
-                return jsonResponse;
-            } catch (jsonError) {
-                return { message: responseText };
-            }
-        } catch (error) {
-            return { error: error.message };
-        }
-    }
-
-
 }
+
 function leereListe(anzeigebereich) {
     if (anzeigebereich != null) {
         anzeigebereich.innerHTML = "";
@@ -268,8 +260,6 @@ window.addEventListener("load", async () => {
         new Beziehungen(element[0], element[1], element[2]);
     });
 })
-
-
 function erstelleObj(element) {
     let obj = undefined;
     Umgebung.list.forEach(umgebung => {
