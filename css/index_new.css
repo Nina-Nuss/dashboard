@@ -45,7 +45,10 @@ body {
 }
 
 
+input[type="checkbox"] {
+  transform: scale(2);
 
+}
 
 
 #btnPosition button{

@@ -2,7 +2,7 @@ class CardObj {
     static idCounter = 0;
     static selectedID = 0;
     static allCardObjekte = [];
-    static temp_list = [];
+    static temp_remove = [];
     static eleListe = []
     static list = [];
     constructor(id, imagePath, selectedTime, aktiv, startTime, endTime, startDate, endDate, titel, beschreibung) {
@@ -126,7 +126,133 @@ class CardObj {
         });
     }
 
+    static event_remove(id) {
+        var element = document.getElementById(`checkDelSchema${id}`);
+        if (element.checked && !this.temp_remove.includes(id)) {
+            this.list.forEach(checkID => {
+                if (checkID.id == id) {
+                    checkID.check = true
+                    // console.log(checkID)
+                }
+            });
+            this.temp_remove.push(id);
+        }
+        else {
+            this.list.forEach(checkID => {
+                if (checkID.id == id) {
+                    checkID.check = false
+                    // console.log(checkID)
+                }
+            });
+            this.temp_remove.forEach(idd => {
+                if (id != idd) {
+                    this.eleListe.push(idd)
+                }
+            });
+            this.temp_remove = this.eleListe
+            this.eleListe = []
+        }
+        console.log(this.temp_remove);
+    };
+    static remove_generate() {
+        this.removeFromListLogik();
+        this.update();
+    }
+
+    static async removeFromListLogik() {
+        // DIese Methode wird aufgerufen sobald wir auf Minus (-) klicken
+        // Hier benötigen wir die Aktuellen IDS der Datenbank zum löschen
+        console.log(this.list);
+
+        this.temp_remove.forEach(id => {
+            this.list = this.removeFromListViaID(id, this.list);
+
+        });
+        this.temp_remove = []
+        console.log(this.list);
+    }
+
+    static removeFromListViaID(id, list) {
+        var temp = [];
+        console.log(list);
+
+        list.forEach(element => {
+            if (element.id != id) {
+                //ID muss aus Liste gelöscht werden
+                temp.push(element);
+
+            } else {
+                // Verhindere das Löschen der Hauptumgebung (ID 0 - "Alle Schemas")
+                if (element.id != 0) {
+                    this.deleteCardObjDataBase(element.id);
+                    console.log("Das Element wurde gefunden und wird gelöscht! " + element.id);
+                    // Delete muss in der Datenbank nun hier ausgefuehrt werden
+                } else {
+                    console.warn("Hauptumgebung (Alle Schemas) kann nicht gelöscht werden!");
+                }
+                return;
+            }
+        });
+        return temp;
+    }
+
+    static async deleteCardObjDataBase(cardObjId) {
+        try {
+            const response = await fetch("database/deleteCardObj.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    id: cardObjId
+                })
+            });
+            if (!response.ok) {
+                throw new Error(`Fehler beim Löschen: ${response.statusText}`);
+            }
+            const result = await response.text();
+            console.log(result);
+        } catch (error) {
+            console.error("Fehler:", error);
+        }
+    }
+
+    static async update() {
+        var delSchema = document.getElementById("deleteSchema")
+        var cardContainer = document.getElementById("cardContainer");
+      
+        if (delSchema != null) {
+            delSchema.innerHTML = "";
+            cardContainer.innerHTML = "";
+            this.list = [];
+            // KEINE neuen Umgebung-Objekte hier erzeugen!
+            const result = await readDatabase("selectSchemas");
+            console.log("result: ", result);
+            await result.forEach(listInfo => {
+                // Nur hier neue Umgebung-Objekte erzeugen - alle Datenbankfelder verwenden
+                new CardObj(
+                    listInfo[0], // id
+                    listInfo[1], // imagePath
+                    listInfo[2], // selectedTime
+                    listInfo[3], // isAktiv
+                    listInfo[4], // startTime
+                    listInfo[5], // endTime
+                    listInfo[6], // startDate
+                    listInfo[7], // endDate
+                    listInfo[8], // titel
+                    listInfo[9]  // beschreibung
+                );
+                delSchema.innerHTML += `<input type="checkbox" id="checkDelSchema${listInfo[0]}" name="${listInfo[8]}" onchange="CardObj.event_remove(${listInfo[0]})"> ${listInfo[8]} - ${listInfo[9]} <br>`
+            });
+        }
+        createBodyCardObj();
+        console.log(this.list);
+
+
+    }
 }
+
+
 
 
 
@@ -146,13 +272,24 @@ window.addEventListener("load", function () {
                 });
 
 
-            // await fetch('/bereiche/templatebereich.js'){
+            const delSchema = document.getElementById("deleteSchema")
+            console.log("deleteSchema: ", delSchema);
 
-            // }
+            CardObj.list.forEach(element => {
+                delSchema.innerHTML += `<input type="checkbox" id="checkDelSchema${element.id}" name="${element.titel}" onchange="CardObj.event_remove(${element.id})"> ${element.titel} <br>`
+            });
+            const deletBtnForSchemas = document.createElement("button");
+            deletBtnForSchemas.id = "deleteBtnForSchemas";
+            deletBtnForSchemas.textContent = "löschen";
 
+            deletBtnForSchemas.addEventListener("click", function () {
+                CardObj.remove_generate();
+
+            });
+            settingPanel.appendChild(deletBtnForSchemas);
         });
     }
- 
+
 });
 
 async function meow(event) {
@@ -199,9 +336,12 @@ async function meow(event) {
 
         await insertDatabase(obj1);
         alert("Schema erfolgreich erstellt!");
+        await CardObj.update();
+        createBodyCardObj();
     } catch (error) {
         console.error("Fehler beim erstellen des CardObj:", error);
     }
+    
 }
 async function sendPicture(formData) {
     try {
@@ -284,6 +424,12 @@ async function insertDatabase(cardObj) {
     }
 }
 function createBodyCardObj() {
+    var cardContainer = document.getElementById("cardContainer");
+    if (!cardContainer) {
+        console.error("Card container not found");
+        return;
+    }
+    cardContainer.innerHTML = ""; // Clear existing content
     CardObj.list.forEach(cardObj => {
         const cardContainer = "cardContainer"
         cardObj.htmlBody(cardContainer);

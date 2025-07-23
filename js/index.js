@@ -244,26 +244,7 @@ async function executeDeleteNull() {
         console.error("Fehler:", error);
     }
 }
-async function deleteCardObjDataBase(cardObjId) {
-    try {
-        const response = await fetch("database/deleteCardObj.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                id: cardObjId
-            })
-        });
-        if (!response.ok) {
-            throw new Error(`Fehler beim Löschen: ${response.statusText}`);
-        }
-        const result = await response.text();
-        console.log(result);
-    } catch (error) {
-        console.error("Fehler:", error);
-    }
-}
+
 // Aufruf der Funktion
 
 async function selectObj(select) {

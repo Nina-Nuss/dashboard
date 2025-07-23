@@ -1,5 +1,3 @@
-<?php include '../assets/links.html'; ?>
-<?php include '../assets/scripts.html'; ?>
 
 
 

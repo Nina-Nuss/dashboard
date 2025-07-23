@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<?php include '../assets/links.html'; ?>
-<?php include '../assets/scripts.html'; ?>
-
 
 <head>
     <meta charset="UTF-8">
@@ -38,6 +35,15 @@
         </select>
         <br>
         <input type="submit" onclick="meow(event)">
+
+
+        <div class="deleteSchema">
+            <h2>Schemas löschen</h2>
+
+            <div id="deleteSchema">
+
+            </div>
+        </div>
     </form>
     <div>
         <div>
@@ -46,7 +52,7 @@
     </div>
 </body>
 <script>
-   
+
 </script>
 
 </html>
