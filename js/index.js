@@ -6,6 +6,8 @@ let selectedCard = "";
 
 
 window.onload = async function () {
+            
+
 
     var selectUmgebung = document.getElementById("selectUmgebung");
     const deleteBtnForCards = document.getElementById("deleteBtnForCards");
@@ -118,7 +120,6 @@ window.onload = async function () {
             const response = await fetch("bereiche/startSeite.php")
             const responseText = await response.text();
             settingPanel.innerHTML = responseText;
-            createBodyCardObj();
         });
     }
 
@@ -188,7 +189,7 @@ async function createCardObj() {
             cardObj.beschreibung
         )}
     });
-
+    createBodyCardObj();
     console.log(CardObj.list);
 }
 

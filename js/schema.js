@@ -248,7 +248,6 @@ class CardObj {
         createBodyCardObj();
         console.log(this.list);
 
-
     }
 }
 

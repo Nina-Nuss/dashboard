@@ -9,19 +9,21 @@ echo "Received data: " . json_encode($data);
 
 // Daten aus der Anfrage abrufen
 $titel = $data["titel"];
+$beschreibung = $data["beschreibung"];
 $imagePath = $data["imagePath"];
 $selectedTime = $data["selectedTime"];
-$imageSet = $data["imageSet"];
-$aktiv = $data["aktiv"];
-$startDateTime = $data["startDateTime"];
-$endDateTime = $data["endDateTime"];
+$isAktiv = $data["aktiv"];
+$startTime = $data["startTime"];
+$endTime = $data["endTime"];
+$startDate = $data["startDate"];
+$endDate = $data["endDate"];
 $id = $data["id"]; // ID muss ebenfalls aus der Anfrage abgerufen werden
 
 // SQL-Abfrage mit Prepared Statement für MSSQL
-$sql = "UPDATE card_objekte 
-        SET titel = ?, imagePath = ?, selectedTime = ?, imageSet = ?, aktiv = ?, startDateTime = ?, endDateTime = ? 
+$sql = "UPDATE infotherminal_schema
+        SET imagePath = ?, selectedTime = ?, isAktiv = ?, startTime = ?, endTime = ?, startDate = ?, endDate = ?, titel = ?, beschreibung = ?
         WHERE id = ?";
-$params = array($titel, $imagePath, $selectedTime, $imageSet, $aktiv, $startDateTime, $endDateTime, $id);
+$params = array($imagePath, $selectedTime, $isAktiv, $startTime, $endTime, $startDate, $endDate, $titel, $beschreibung, $id);
 $stmt = sqlsrv_prepare($conn, $sql, $params);
 
 if ($stmt) {
