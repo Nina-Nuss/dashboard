@@ -54,6 +54,9 @@ class CardObj {
         const body = `
             <div class="card-deck p-1 h-50">
                 <div class="card" id="${this.cardObjekte}">
+                    <div class="card-header p-1">
+                        <small class="text-muted">Datum: ${this.startDate} - ${this.endDate} Uhrzeit: ${this.startTime} - ${this.endTime}</small>
+                    </div>
                     <img class="card-img-top" src="/schemas/uploads/${this.imagePath}" alt="Card image cap">
                     <div class="card-body p-2 h-50">
                         <h5 class="card-title m-0">${this.titel}</h5>
@@ -67,9 +70,6 @@ class CardObj {
                         <div>
                             <small class="text-muted">selectedTime: ${this.selectedTime} ms</small>
                         </div>
-                    </div>
-                    <div class="card-footer p-1">
-                        <small class="text-muted">Last updated just now</small>
                     </div>
                 </div>
             </div>
@@ -277,15 +277,9 @@ window.addEventListener("load", function () {
             CardObj.list.forEach(element => {
                 delSchema.innerHTML += `<input type="checkbox" id="checkDelSchema${element.id}" name="${element.titel}" onchange="CardObj.event_remove(${element.id})"> ${element.titel} <br>`
             });
-            const deletBtnForSchemas = document.createElement("button");
-            deletBtnForSchemas.id = "deleteBtnForSchemas";
-            deletBtnForSchemas.textContent = "löschen";
-
-            deletBtnForSchemas.addEventListener("click", function () {
-                CardObj.remove_generate();
-
-            });
-            settingPanel.appendChild(deletBtnForSchemas);
+          
+        
+           
         });
     }
 

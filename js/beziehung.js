@@ -1,3 +1,4 @@
+
 class Beziehungen {
     static list = [];
     static temp_remove = [];

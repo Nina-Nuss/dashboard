@@ -209,6 +209,7 @@ window.addEventListener("load", function () {
     if (adminBereich != null) {
         document.getElementById("adminBereich").addEventListener("click", async function () {
             const settingsPanel = document.getElementById("settingsPanel")
+           
             Umgebung.temp_remove = [];
             await fetch("bereiche/adminbereich.php")
                 .then(response => response.text())
@@ -244,21 +245,13 @@ window.addEventListener("load", function () {
                         console.error('Fehler beim Hinzufügen:', error);
                     });
             });
+            const cardBodyDelInfo = document.getElementById("cardBodyForDelInfo");
             const delInfo = document.getElementById("deleteInfotherminal")
             console.log("deleteInfotherminal: ", delInfo);
 
             Umgebung.list.forEach(element => {
                 delInfo.innerHTML += `<input type="checkbox" id="checkDelInfo${element.id}" name="${element.titel}" onchange="Umgebung.event_remove(${element.id})"> ${element.titel} - ${element.ipAdresse} <br>`
             });
-            const deleteBtn = document.createElement("button");
-            deleteBtn.id = "deleteBtnForInfotherminal";
-            deleteBtn.textContent = "löschen";
-
-            deleteBtn.addEventListener("click", function () {
-                Umgebung.remove_generate();
-
-            });
-            settingsPanel.appendChild(deleteBtn);
         });
     }
 });

@@ -29,32 +29,9 @@ window.onload = async function () {
         console.error("Fehler beim Erstellen der CardObjekte:", error);
     }
 
-    if (plusBtn != null) {
-        plusBtn.addEventListener("click", function () {
-            let currentCounter = parseInt(counter.innerHTML);
-            if (currentCounter < 5) {
-                if (checkSelectedUmgebung()) {
-                    console.log(selectedUmgebung);
-                    console.log(selectedUmgebung.titel);
-                    var newId = createID()
-
-                    new Beziehungen(selectedUmgebung, newCardObj);
-                    selectedUmgebung.addCardObjs(newCardObj);
-                    console.log(selectedUmgebung);
-                    Umgebung.tempListForSaveCards.push(newCardObj);
-                    console.log(newCardObj);
-
-                    Beziehungen.list.forEach(beziehung => {
-                        console.log(beziehung);
-                        console.log("beziehung gefunden");
-                    });
-                    updateAnzeigeCounter()
-                }
-            } else {
-                return
-            }
-        });
-    }
+    // Modal Focus-Management hinzufügen
+    setupModalFocusManagement();
+   
     console.log("index_new.js wurde geladen");
     if (selectUmgebung != null) {
         selectUmgebung.addEventListener("change", function () {
@@ -421,4 +398,32 @@ async function updateDataBase(cardObj, databaseUrl) {
     } catch (error) {
         console.error("Fehler in updateDataBase:", error);
     }
+}
+
+// Neue Funktion für Modal Focus-Management
+function setupModalFocusManagement() {
+    const modals = document.querySelectorAll('.modal');
+    
+    modals.forEach(modal => {
+        // Beim Öffnen des Modals
+        modal.addEventListener('show.bs.modal', function() {
+            // Entferne aria-hidden vor dem Öffnen
+            modal.removeAttribute('aria-hidden');
+        });
+        
+        // Beim Schließen des Modals
+        modal.addEventListener('hide.bs.modal', function() {
+            // Blur alle fokussierten Elemente im Modal
+            const focusedElement = modal.querySelector(':focus');
+            if (focusedElement) {
+                focusedElement.blur();
+            }
+        });
+        
+        // Nach dem Schließen des Modals
+        modal.addEventListener('hidden.bs.modal', function() {
+            // Setze aria-hidden erst nach dem vollständigen Schließen
+            modal.setAttribute('aria-hidden', 'true');
+        });
+    });
 }
