@@ -96,14 +96,34 @@ window.onload = async function () {
             const response = await fetch("bereiche/startSeite.php")
             const responseText = await response.text();
 
-            deakCb(false);
             settingPanel.innerHTML = responseText;
+            deakCb(false);
             var checkA = document.getElementById("checkA");
             deakAktivCb(checkA, true);
 
         });
     }
 }
+
+const startBtnsContainer = document.getElementById("startBtns");
+const buttonsInContainer = startBtnsContainer.querySelectorAll("button");
+
+buttonsInContainer.forEach(button => {
+    button.addEventListener("click", function () {
+        console.log(`Button mit ID ${button.id} wurde geklickt`);
+        
+        // Alle Buttons aktivieren
+        buttonsInContainer.forEach(btn => {
+            btn.disabled = false;
+        });
+        
+        // Nur den geklickten Button deaktivieren
+        button.disabled = true;
+    });
+});
+
+
+
 
 async function createUmgebung() {
     const resultUmgebung = selectObj("../database/selectInfotherminal.php")
