@@ -1,15 +1,4 @@
-<!DOCTYPE html>
-<html lang="de">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adminbereich - Infotherminal Dashboard</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
 
 <body class="bg-light">
     <div class="container-fluid py-4">
@@ -18,7 +7,7 @@
                 <div class="card shadow-sm">
                     <div class="card-header bg-light text-dark border-bottom">
                         <h3 class="card-title mb-0">
-                            <i class="fas fa-cogs me-2"></i>Adminbereich
+                            <i class="fas fa-cogs me-2"></i> Adminbereich
                         </h3>
                         <p class="mb-0 mt-2">Hier können Sie neue Infotherminals hinzufügen oder löschen</p>
                     </div>
@@ -28,7 +17,7 @@
                                 <div class="card h-100">
                                     <div class="card-header bg-success text-white">
                                         <h5 class="card-title mb-0">
-                                            <i class="fas fa-plus me-2"></i>Infotherminals hinzufügen
+                                            <i class="fas fa-plus me-2"></i> Infotherminals hinzufügen
                                         </h5>
                                     </div>
                                     <div class="card-body">

@@ -1,3 +1,4 @@
+const anzeigebereichV = document.getElementById("anzeigebereichV");
 
 class Beziehungen {
     static list = [];
@@ -41,7 +42,10 @@ class Beziehungen {
         console.log("Update wird aufgerufen mit CardObjektID: " + cardObjID);
 
 
-        leereListe(anzeigebereichV);
+        if (anzeigebereichV != null) {
+            leereListe(anzeigebereichV);
+        }
+
         leereListe(anzeigebereicht);
         leereListe(anzeigebereichD);
 
@@ -228,3 +232,4 @@ function erstelleObj(element) {
     });
     return obj;
 }
+

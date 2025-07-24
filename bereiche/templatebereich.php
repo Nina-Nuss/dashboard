@@ -1,15 +1,4 @@
-<!DOCTYPE html>
-<html lang="de">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Templatebereich - Infotherminal Dashboard</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
 
 <body class="bg-light">
     <div class="container-fluid py-4" style="max-height: 90vh; overflow-y: auto;">
@@ -18,7 +7,7 @@
                 <div class="card shadow-sm">
                     <div class="card-header bg-light text-dark border-bottom">
                         <h3 class="card-title mb-0">
-                            <i class="fas fa-layer-group me-2"></i>Templatebereich
+                            <i class="fas fa-layer-group me-2"></i> Templatebereich
                         </h3>
                         <p class="mb-0 mt-2">Hier können Sie neue Schemas erstellen und verwalten</p>
                     </div>
@@ -93,7 +82,7 @@
                     <div class="card-body" id="cardBodyForDelSchema" style="max-height: 400px; overflow-y: auto;">
                         <div class="form-group mb-3">
                             <label for="schemaSelect" class="form-label">
-                                <i class="fas fa-list me-2"></i>Schema auswählen:
+                                <divlass="fas fa-list me-2"></i>Schema auswählen:
                             </label>
                         
                         </div>

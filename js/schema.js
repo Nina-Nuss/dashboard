@@ -220,7 +220,7 @@ class CardObj {
     static async update() {
         var delSchema = document.getElementById("deleteSchema")
         var cardContainer = document.getElementById("cardContainer");
-      
+        uncheckAllCheckboxes();
         if (delSchema != null) {
             delSchema.innerHTML = "";
             cardContainer.innerHTML = "";
@@ -466,5 +466,18 @@ function createBodyCardObj() {
     });
 };
 
+
+function uncheckAllCheckboxes() {
+    const cardContainer = document.getElementById('cardContainer');
+    if (cardContainer) {
+        const checkboxes = cardContainer.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        console.log(`${checkboxes.length} Checkboxes im cardContainer wurden ausgeschaltet`);
+    } else {
+        console.log("cardContainer nicht gefunden");
+    }
+}
 
 

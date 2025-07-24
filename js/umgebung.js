@@ -81,6 +81,7 @@ class Umgebung {
         }
     }
     static async update() {
+        uncheckAllCheckboxes();
         var delInfo = document.getElementById("deleteInfotherminal")
         if (delInfo != null) {
             delInfo.innerHTML = "";

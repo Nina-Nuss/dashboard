@@ -6,9 +6,10 @@
         <div class="col-md-10 pt-3">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">
-                        <i class="fas fa-cogs me-2"></i> Schemas Editieren
-                    </h5>
+                   <h3 class="card-title mb-0">
+                            <i class="fas fa-cogs me-2"></i> Schema Einstellungen
+                        </h3>
+                        <p class="mb-0 mt-2">Hier können die Schemas verwaltet werden</p>
                 </div>
                 <div class="card-body">
                     <form>
@@ -22,7 +23,7 @@
                                 <div class="form-check mb-3">
                                     <input class="form-check-input" type="checkbox" id="checkA" name="checkA">
                                     <label class="form-check-label" for="checkA">
-                                        Aktiv
+                                         Aktiv
                                     </label>
                                 </div>
                                 
@@ -40,7 +41,7 @@
                                 </div>
                                 
                                 <button type="button" class="btn btn-primary shadow-sm">
-                                    <i class="fas fa-plus"></i> Neues Display
+                                    <i class="fas fa-plus"></i>  Neues Display
                                 </button>
                             </div>
                             <div class="col-md-4">
@@ -80,8 +81,3 @@
 <!--  -->
 
 
-</div>
-
-<script>
-
-</script>
