@@ -7,7 +7,7 @@
                         <h3 class="card-title mb-0">
                             <i class="fas fa-layer-group me-2"></i> Templatebereich
                         </h3>
-                        <p class="mb-0 mt-2">Hier können Sie neue Schemas erstellen und verwalten</p>
+                        <p class="mb-0 mt-2">Hier können Sie neue Schemas erstellen und oder löschen</p>
                     </div>
                     <div class="card-body" style="max-height: calc(90vh - 120px); overflow-y: auto;">
                         <div class="row">
