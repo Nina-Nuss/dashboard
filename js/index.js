@@ -356,24 +356,12 @@ function checkAktiv() {
         }
     }
 }
-
-
 function saveCardObj() {
     umgebung.allCardList.forEach(cardObjlist => {
         cardObjlist.forEach(cardObj => {
             console.log(cardObj);
         });
     });
-}
-
-function sucheUmgebung(UmgebungsID) {
-    let umgebung = Umgebung.list.find(umgebung => umgebung.id == UmgebungsID);
-    return umgebung
-}
-
-function lengthListUmgebung() {
-    var length = Umgebung.umgebungsIdList.length
-    return length
 }
 
 async function updateDataBase(cardObj, databaseUrl) {
