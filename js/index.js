@@ -3,9 +3,11 @@ var zeitEingegeben = false
 let pushDelete = false
 let json;
 let selectedCard = "";
-
+var anzeigebereichV = document.getElementById("anzeigebereichV");
 
 window.onload = async function () {
+            
+
 
     var selectUmgebung = document.getElementById("selectUmgebung");
     const deleteBtnForCards = document.getElementById("deleteBtnForCards");
@@ -27,32 +29,9 @@ window.onload = async function () {
         console.error("Fehler beim Erstellen der CardObjekte:", error);
     }
 
-    if (plusBtn != null) {
-        plusBtn.addEventListener("click", function () {
-            let currentCounter = parseInt(counter.innerHTML);
-            if (currentCounter < 5) {
-                if (checkSelectedUmgebung()) {
-                    console.log(selectedUmgebung);
-                    console.log(selectedUmgebung.titel);
-                    var newId = createID()
-
-                    new Beziehungen(selectedUmgebung, newCardObj);
-                    selectedUmgebung.addCardObjs(newCardObj);
-                    console.log(selectedUmgebung);
-                    Umgebung.tempListForSaveCards.push(newCardObj);
-                    console.log(newCardObj);
-
-                    Beziehungen.list.forEach(beziehung => {
-                        console.log(beziehung);
-                        console.log("beziehung gefunden");
-                    });
-                    updateAnzeigeCounter()
-                }
-            } else {
-                return
-            }
-        });
-    }
+    // Modal Focus-Management hinzufügen
+    setupModalFocusManagement();
+   
     console.log("index_new.js wurde geladen");
     if (selectUmgebung != null) {
         selectUmgebung.addEventListener("change", function () {
@@ -115,15 +94,18 @@ window.onload = async function () {
     if (infotherminalBereich !== null) {
         infotherminalBereich.addEventListener("click", async function (event) {
             var settingPanel = document.getElementById("settingsPanel");
+            deakCb(false);
             const response = await fetch("bereiche/startSeite.php")
             const responseText = await response.text();
             settingPanel.innerHTML = responseText;
-            createBodyCardObj();
         });
     }
-
-
 }
+// ...existing code...
+
+
+
+// ...existing code...
 
 
 async function createUmgebung() {
@@ -172,6 +154,9 @@ async function createCardObj() {
     let objList = convertCardObjForDataBase(response)
 
     objList.forEach(cardObj => {
+        if(cardObj.imagePath == null || cardObj.imagePath == "null" || cardObj.imagePath == "") {
+            cardObj.imagePath = "img/bild.png"; // Setze einen Standardwert,
+        }else {
         const cardObjj = new CardObj(
             cardObj.id,
             cardObj.imagePath,
@@ -183,9 +168,9 @@ async function createCardObj() {
             cardObj.endDate,
             cardObj.titel,
             cardObj.beschreibung
-        )
+        )}
     });
-
+    createBodyCardObj();
     console.log(CardObj.list);
 }
 
@@ -241,26 +226,7 @@ async function executeDeleteNull() {
         console.error("Fehler:", error);
     }
 }
-async function deleteCardObjDataBase(cardObjId) {
-    try {
-        const response = await fetch("database/deleteCardObj.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                id: cardObjId
-            })
-        });
-        if (!response.ok) {
-            throw new Error(`Fehler beim Löschen: ${response.statusText}`);
-        }
-        const result = await response.text();
-        console.log(result);
-    } catch (error) {
-        console.error("Fehler:", error);
-    }
-}
+
 // Aufruf der Funktion
 
 async function selectObj(select) {
@@ -378,9 +344,6 @@ function showAllUmgebungen() {
 }
 
 
-
-
-
 function deleteBtn() {
     const deleteBtns = document.querySelectorAll('[id^="deleteBtn"]');
     deleteBtns.forEach(deleteBtn => {
@@ -436,4 +399,32 @@ async function updateDataBase(cardObj, databaseUrl) {
     } catch (error) {
         console.error("Fehler in updateDataBase:", error);
     }
+}
+
+// Neue Funktion für Modal Focus-Management
+function setupModalFocusManagement() {
+    const modals = document.querySelectorAll('.modal');
+    
+    modals.forEach(modal => {
+        // Beim Öffnen des Modals
+        modal.addEventListener('show.bs.modal', function() {
+            // Entferne aria-hidden vor dem Öffnen
+            modal.removeAttribute('aria-hidden');
+        });
+        
+        // Beim Schließen des Modals
+        modal.addEventListener('hide.bs.modal', function() {
+            // Blur alle fokussierten Elemente im Modal
+            const focusedElement = modal.querySelector(':focus');
+            if (focusedElement) {
+                focusedElement.blur();
+            }
+        });
+        
+        // Nach dem Schließen des Modals
+        modal.addEventListener('hidden.bs.modal', function() {
+            // Setze aria-hidden erst nach dem vollständigen Schließen
+            modal.setAttribute('aria-hidden', 'true');
+        });
+    });
 }
