@@ -86,6 +86,7 @@ class Umgebung {
         if (delInfo != null) {
             delInfo.innerHTML = "";
             this.list = [];
+            Beziehungen.update();
             // KEINE neuen Umgebung-Objekte hier erzeugen!
             const result = await readDatabase("selectInfotherminal");
             console.log("result: ", result);
@@ -193,7 +194,6 @@ class Umgebung {
         // DIese Methode wird aufgerufen sobald wir auf Minus (-) klicken
         // Hier benötigen wir die Aktuellen IDS der Datenbank zum löschen
         console.log(this.list);
-
         this.temp_remove.forEach(id => {
             this.list = this.removeFromListViaID(id, this.list);
 

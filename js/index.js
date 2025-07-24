@@ -5,9 +5,8 @@ let json;
 let selectedCard = "";
 var anzeigebereichV = document.getElementById("anzeigebereichV");
 
-window.onload = async function () {
-            
 
+window.onload = async function () {
 
     var selectUmgebung = document.getElementById("selectUmgebung");
     const deleteBtnForCards = document.getElementById("deleteBtnForCards");
@@ -31,7 +30,7 @@ window.onload = async function () {
 
     // Modal Focus-Management hinzufügen
     setupModalFocusManagement();
-   
+
     console.log("index_new.js wurde geladen");
     if (selectUmgebung != null) {
         selectUmgebung.addEventListener("change", function () {
@@ -154,22 +153,24 @@ async function createCardObj() {
     let objList = convertCardObjForDataBase(response)
 
     objList.forEach(cardObj => {
-        if(cardObj.imagePath == null || cardObj.imagePath == "null" || cardObj.imagePath == "") {
+        if (cardObj.imagePath == null || cardObj.imagePath == "null" || cardObj.imagePath == "") {
             cardObj.imagePath = "img/bild.png"; // Setze einen Standardwert,
-        }else {
-        const cardObjj = new CardObj(
-            cardObj.id,
-            cardObj.imagePath,
-            cardObj.selectedTime,
-            cardObj.isAktiv,
-            cardObj.startTime,
-            cardObj.endTime,
-            cardObj.startDate,
-            cardObj.endDate,
-            cardObj.titel,
-            cardObj.beschreibung
-        )}
+        } else {
+            const cardObjj = new CardObj(
+                cardObj.id,
+                cardObj.imagePath,
+                cardObj.selectedTime,
+                cardObj.isAktiv,
+                cardObj.startTime,
+                cardObj.endTime,
+                cardObj.startDate,
+                cardObj.endDate,
+                cardObj.titel,
+                cardObj.beschreibung
+            )
+        }
     });
+
     createBodyCardObj();
     console.log(CardObj.list);
 }
@@ -365,6 +366,27 @@ function deleteBtn() {
     });
 }
 
+function checkAktiv() {
+    if (CardObj.selectedID !== null) {
+        var checkA = document.getElementById("checkA");
+        var obj = findObj(CardObj.list, CardObj.selectedID);
+        if (checkA.checked && obj !== null) {
+            console.log("Checkbox ist aktiviert");
+            obj.isAktiv = true;
+            console.log("Checkbox aktiviert für CardObjektID:", obj.id);
+
+        } else {
+            if (obj === null) {
+                console.warn("Objekt nicht gefunden für ID:", CardObj.selectedID);
+                return;
+            }
+            obj.isAktiv = false;
+            console.log("Checkbox deaktiviert für CardObjektID:", obj.id);
+        }
+    }
+}
+
+
 function saveCardObj() {
     umgebung.allCardList.forEach(cardObjlist => {
         cardObjlist.forEach(cardObj => {
@@ -404,25 +426,25 @@ async function updateDataBase(cardObj, databaseUrl) {
 // Neue Funktion für Modal Focus-Management
 function setupModalFocusManagement() {
     const modals = document.querySelectorAll('.modal');
-    
+
     modals.forEach(modal => {
         // Beim Öffnen des Modals
-        modal.addEventListener('show.bs.modal', function() {
+        modal.addEventListener('show.bs.modal', function () {
             // Entferne aria-hidden vor dem Öffnen
             modal.removeAttribute('aria-hidden');
         });
-        
+
         // Beim Schließen des Modals
-        modal.addEventListener('hide.bs.modal', function() {
+        modal.addEventListener('hide.bs.modal', function () {
             // Blur alle fokussierten Elemente im Modal
             const focusedElement = modal.querySelector(':focus');
             if (focusedElement) {
                 focusedElement.blur();
             }
         });
-        
+
         // Nach dem Schließen des Modals
-        modal.addEventListener('hidden.bs.modal', function() {
+        modal.addEventListener('hidden.bs.modal', function () {
             // Setze aria-hidden erst nach dem vollständigen Schließen
             modal.setAttribute('aria-hidden', 'true');
         });

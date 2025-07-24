@@ -77,6 +77,7 @@ class CardObj {
             </div>
         `;
         document.getElementById(umgebung).innerHTML += body;
+
         // document.getElementById(this.checkAktiv).addEventListener("change", (event) => {
         //     this.aktiv = event.target.checked;
         // });
@@ -88,7 +89,7 @@ class CardObj {
             element.remove();
         }
     }
-  
+
 
     checkboxAktiv() {
         const cbAktiv = document.querySelectorAll('[id^="cbAktiv"]')
@@ -181,10 +182,10 @@ class CardObj {
                     cardObjektID: cardObjId
                 })
             });
-            
+
             const relationResult = await relationResponse.text();
             console.log("Beziehungen gelöscht:", relationResult);
-            
+
             // Dann das Schema löschen
             const response = await fetch("database/deleteCardObj.php", {
                 method: "POST",
@@ -211,7 +212,7 @@ class CardObj {
         uncheckAllCheckboxes();
         if (delSchema != null) {
             console.log("bin in delschema drin");
-            
+
             delSchema.innerHTML = "";
             cardContainer.innerHTML = "";
             this.list = [];
@@ -248,7 +249,8 @@ class CardObj {
 
 window.addEventListener("load", function () {
     const templatebereich = document.getElementById("templateBereich");
-  
+
+
     if (templatebereich !== null) {
         console.log(234);
 
@@ -327,7 +329,7 @@ async function meow(event) {
         console.error("Fehler beim erstellen des CardObj:", error);
     }
     form.reset(); // Formular zurücksetzen
-    
+
 }
 async function sendPicture(formData) {
     try {
@@ -417,12 +419,14 @@ async function createBodyCardObj() {
         console.error("Card container not found");
         return;
     }
-    
+
     cardContainer.innerHTML = ""; // Clear existing content
     CardObj.list.forEach(cardObj => {
         const cardContainer = "cardContainer"
         cardObj.htmlBody(cardContainer);
+
     });
+    deakCb(true);
     console.log(CardObj.list);
     const cbForSelectSchema = document.querySelectorAll('[id^="flexCheck"]')
     const labels = document.querySelectorAll('label[name^="label"]');
@@ -430,24 +434,20 @@ async function createBodyCardObj() {
     console.log(cbForSelectSchema.length);
     // Alle Checkboxen mit ID, die mit "flexCheck" beginnt, auswählen und loopen
     cbForSelectSchema.forEach(checkbox => {
+
         // Hier kannst du mit jeder Checkbox arbeiten
         checkbox.addEventListener('change', function () {
             if (this.checked) {
                 var titel = document.getElementById("websiteName");
-           
-                
+                var checkA = document.getElementById("checkA");
+
                 const id = extractNumberFromString(this.id);
                 CardObj.selectedID = id; // Set the selected ID
-                
                 console.log("Checkbox mit ID " + id + " wurde aktiviert.");
-                
-
-                console.log("Checkbox mit ID " + id + " wurde aktiviert.");
-               
                 var obj = findObj(CardObj.list, id);
-
                 titel.value = obj.titel; // Set the title to the checkbox's title
-                
+                checkA.checked = obj.aktiv; // Set the aktiv checkbox to the cardObjekt's aktiv state
+
                 cbForSelectSchema.forEach(cb => {
                     if (cb !== this) {
                         cb.checked = false;
@@ -458,22 +458,24 @@ async function createBodyCardObj() {
                     if (labelId == CardObj.selectedID) {
                         label.innerHTML = "checked"; // Set the label text to "checked" when checked
                         var label = label;
-                       
+
                     } else {
                         label.innerHTML = ""; // Clear the label text for unchecked checkboxes
                         console.log("Checkbox mit ID " + labelId + " wurde deaktiviert.");
-                       
+
                     }
                 });
             } else {
+                var checkA = document.getElementById("checkA");
                 CardObj.selectedID = null; // Reset the selected ID
                 labels.forEach(label => {
-                   label.innerHTML = ""; // Clear the label text for unchecked checkboxes
+                    label.innerHTML = ""; // Clear the label text for unchecked checkboxes
                 });
+                checkA.checked = false;
 
             }
             Beziehungen.update(CardObj.selectedID);
-        
+
         });
     });
 };
@@ -481,10 +483,12 @@ async function createBodyCardObj() {
 
 function uncheckAllCheckboxes() {
     const cardContainer = document.getElementById('cardContainer');
+    var checkA = document.getElementById("checkA");
     if (cardContainer) {
         const checkboxes = cardContainer.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(checkbox => {
             checkbox.checked = false;
+            checkA.checked = false;
         });
         console.log(`${checkboxes.length} Checkboxes im cardContainer wurden ausgeschaltet`);
     } else {
@@ -498,6 +502,7 @@ function deakCb(aktiv) {
         checkboxes.forEach(checkbox => {
             checkbox.disabled = aktiv;
         });
+        CardObj.selectedID = ""; // Update the checkAllowed state
         console.log(`${checkboxes.length} Checkboxes im cardContainer wurden deaktiviert`);
     } else {
         console.log("cardContainer nicht gefunden");
