@@ -408,6 +408,8 @@ async function insertDatabase(cardObj) {
         console.log(result);
     }
 }
+
+
 async function createBodyCardObj() {
     var cardContainer = document.getElementById("cardContainer");
     if (!cardContainer) {
@@ -430,12 +432,21 @@ async function createBodyCardObj() {
         // Hier kannst du mit jeder Checkbox arbeiten
         checkbox.addEventListener('change', function () {
             if (this.checked) {
-
+                var titel = document.getElementById("websiteName");
+           
+                
                 const id = extractNumberFromString(this.id);
                 CardObj.selectedID = id; // Set the selected ID
+                
                 console.log("Checkbox mit ID " + id + " wurde aktiviert.");
+                
 
-                console.log(this.checked);
+                console.log("Checkbox mit ID " + id + " wurde aktiviert.");
+               
+                var obj = findObj(CardObj.list, id);
+
+                titel.value = obj.titel; // Set the title to the checkbox's title
+                
                 cbForSelectSchema.forEach(cb => {
                     if (cb !== this) {
                         cb.checked = false;
