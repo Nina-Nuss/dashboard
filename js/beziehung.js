@@ -1,4 +1,4 @@
-const anzeigebereichV = document.getElementById("anzeigebereichV");
+
 
 class Beziehungen {
     static list = [];
@@ -34,7 +34,6 @@ class Beziehungen {
             new Beziehungen(element[0], element[1], element[2]);
         });
 
-
         this.temp_remove = [];
         this.temp_list_add = [];
         this.temp_list_remove = [];
@@ -42,22 +41,26 @@ class Beziehungen {
         console.log("Update wird aufgerufen mit CardObjektID: " + cardObjID);
 
 
-        if (anzeigebereichV != null) {
-            leereListe(anzeigebereichV);
-        }
-
+        leereListe(anzeigebereichV);
         leereListe(anzeigebereicht);
         leereListe(anzeigebereichD);
+        leereListe(anzeigebereicht);
+
+
+
 
         this.createList(cardObjID)
         console.log("Temp Liste Add: " + this.temp_add);
         console.log("Temp Liste Remove: " + this.temp_remove);
-
-        this.createListForAnzeige();
+        if(CardObj.selectedID != null) {
+            this.createListForAnzeige();
+        }
+    
     }
 
     static createListForAnzeige() {
         console.log("createListForAnzeige aufgerufen");
+        var anzeigebereichV = document.getElementById("anzeigebereichV");
         // Display items to remove
         if (anzeigebereichD && this.temp_remove.length > 0) {
             this.temp_remove.forEach(umgebungsId => {
@@ -162,7 +165,13 @@ class Beziehungen {
     }
 
     static async remove_generate(id, list, databaseUrl) {
+        if (CardObj.selectedID == null || id === undefined || list === undefined || databaseUrl === undefined) {
+            return;
+
+        }
+        console.log("remove_generate aufgerufen mit ID:", id, "List:", list, "Database URL:", databaseUrl);
         await this.removeFromListLogik(id, list, databaseUrl);
+
         this.update(id);
     }
 
@@ -201,6 +210,8 @@ class Beziehungen {
 }
 const anzeigebereicht = document.getElementById("tabelleAdd");
 const anzeigebereichD = document.getElementById("tabelleDelete");
+
+
 function leereListe(anzeigebereich) {
     if (anzeigebereich != null) {
         anzeigebereich.innerHTML = "";
@@ -209,13 +220,13 @@ function leereListe(anzeigebereich) {
 
 
 window.addEventListener("load", async () => {
-    const anzeigebereichV = document.getElementById("anzeigebereichV");
 
     const relationListe = await Beziehungen.getRelation();
     console.log(relationListe);
     relationListe.forEach(element => {
         new Beziehungen(element[0], element[1], element[2]);
     });
+
 })
 
 function erstelleObj(element) {

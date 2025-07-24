@@ -1,16 +1,12 @@
-<!-- Modal -->
-<link href="../assets/links.html">
-</link>
-<link href="../assets/scripts.html">
-</link>
+
 
 
 <div class="modal fade" id="modal_hinzufuegen" tabindex="-1" role="dialog" aria-labelledby="modalHinzufuegenLabel"
   aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog  modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalHinzufuegenLabel">Hinzufügen</h5>
+        <h5 class="modal-title" id="modalHinzufuegenLabel">Infotherminal Hinzufügen</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -33,7 +29,7 @@
    
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Schließen</button>
-        <button id="addCardToUmgebung" type="button" class="btn btn-primary" onclick="Beziehungen.remove_generate(CardObj.selectedID, Beziehungen.temp_list_add, 'insert_Relation')">Speichern</button>
+        <button id="addCardToUmgebung" type="button" class="btn btn-primary" data-dismiss="modal" onclick="Beziehungen.remove_generate(CardObj.selectedID, Beziehungen.temp_list_add, 'insert_Relation')">Speichern</button>
       </div>
     </div>
   </div>

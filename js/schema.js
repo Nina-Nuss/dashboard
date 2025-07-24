@@ -1,6 +1,6 @@
 class CardObj {
     static idCounter = 0;
-    static selectedID = 0;
+    static selectedID = null;
     static allCardObjekte = [];
     static temp_remove = [];
     static eleListe = []
@@ -86,36 +86,7 @@ class CardObj {
             element.remove();
         }
     }
-    updateObj() {
-        // Checkbox-Status aktualisieren
-        const objSwitch = document.getElementById(this.alwaysOnBtn);
-        const calendarBtn = document.getElementById(this.openModalButtonId);
-        const imageContainer = document.getElementById(this.imagePreviewId);
-        console.log("edfsfdsfdsfdsfsdf");
-        objSwitch.checked = this.aktiv;
-        console.log(this);
-        // Kalender-Button aktualisieren
-        console.log("kalenderbtn: " + calendarBtn.disabled);
-        console.log("switch: " + objSwitch.checked);
-
-        if (this.imageSet == true) {
-            calendarBtn.disabled = false;
-        } else {
-            calendarBtn.disabled = true;
-        }
-
-        if (!imageContainer) {
-            console.warn(`Bild-Container mit ID imagePreview${this.id} nicht gefunden`);
-            return;
-        }
-        if (!this.imagePath || this.imagePath === "") {
-            return;
-        }
-
-        const container = document.createElement("div");
-        container.id = this.imagePreviewId;
-        container.className = "image-container";
-    }
+  
 
     checkboxAktiv() {
         const cbAktiv = document.querySelectorAll('[id^="cbAktiv"]')
@@ -154,9 +125,13 @@ class CardObj {
         }
         console.log(this.temp_remove);
     };
-    static remove_generate() {
-        this.removeFromListLogik();
-        this.update();
+    static async remove_generate() {
+        if(CardObj.selectedID == 0) {
+            return
+        }
+
+        await this.removeFromListLogik();
+        await this.update();
     }
 
     static async removeFromListLogik() {
@@ -164,19 +139,19 @@ class CardObj {
         // Hier benötigen wir die Aktuellen IDS der Datenbank zum löschen
         console.log(this.list);
 
-        this.temp_remove.forEach(id => {
-            this.list = this.removeFromListViaID(id, this.list);
-
-        });
+        // Warte auf alle Löschvorgänge bevor die Liste aktualisiert wird
+        for (const id of this.temp_remove) {
+            this.list = await this.removeFromListViaID(id, this.list);
+        }
         this.temp_remove = []
         console.log(this.list);
     }
 
-    static removeFromListViaID(id, list) {
+    static async removeFromListViaID(id, list) {
         var temp = [];
         console.log(list);
 
-        list.forEach(element => {
+        for (const element of list) {
             if (element.id != id) {
                 //ID muss aus Liste gelöscht werden
                 temp.push(element);
@@ -184,20 +159,32 @@ class CardObj {
             } else {
                 // Verhindere das Löschen der Hauptumgebung (ID 0 - "Alle Schemas")
                 if (element.id != 0) {
-                    this.deleteCardObjDataBase(element.id);
+                    await this.deleteCardObjDataBase(element.id);
                     console.log("Das Element wurde gefunden und wird gelöscht! " + element.id);
                     // Delete muss in der Datenbank nun hier ausgefuehrt werden
                 } else {
                     console.warn("Hauptumgebung (Alle Schemas) kann nicht gelöscht werden!");
                 }
-                return;
+                return temp;
             }
-        });
+        }
         return temp;
     }
 
     static async deleteCardObjDataBase(cardObjId) {
         try {
+            // Erst die Beziehungen löschen
+            await fetch("database/delete_Relation.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    cardObjektID: cardObjId
+                })
+            });
+            
+            // Dann das Schema löschen
             const response = await fetch("database/deleteCardObj.php", {
                 method: "POST",
                 headers: {
@@ -222,6 +209,8 @@ class CardObj {
         var cardContainer = document.getElementById("cardContainer");
         uncheckAllCheckboxes();
         if (delSchema != null) {
+            console.log("bin in delschema drin");
+            
             delSchema.innerHTML = "";
             cardContainer.innerHTML = "";
             this.list = [];
@@ -242,7 +231,12 @@ class CardObj {
                     listInfo[8], // titel
                     listInfo[9]  // beschreibung
                 );
-                delSchema.innerHTML += `<input type="checkbox" id="checkDelSchema${listInfo[0]}" name="${listInfo[8]}" onchange="CardObj.event_remove(${listInfo[0]})"> ${listInfo[8]} - ${listInfo[9]} <br>`
+                delSchema.innerHTML += `<tr class="border-bottom">
+                    <td class="p-2">${listInfo[0]}</td>
+                    <td class="p-2">${listInfo[8]}</td>
+                    <td class="p-2">${listInfo[9]}</td>
+                    <td class="p-2 text-center"><input type="checkbox" name="${listInfo[0]}" id="checkDelSchema${listInfo[0]}" onchange="CardObj.event_remove(${listInfo[0]})"></td>
+                </tr>`;
             });
         }
         createBodyCardObj();
@@ -275,7 +269,12 @@ window.addEventListener("load", function () {
             console.log("deleteSchema: ", delSchema);
 
             CardObj.list.forEach(element => {
-                delSchema.innerHTML += `<input type="checkbox" id="checkDelSchema${element.id}" name="${element.titel}" onchange="CardObj.event_remove(${element.id})"> ${element.titel} <br>`
+                delSchema.innerHTML += `<tr class="border-bottom">
+                    <td class="p-2">${element.id}</td>
+                    <td class="p-2">${element.titel}</td>
+                    <td class="p-2">${element.beschreibung || 'Keine Beschreibung'}</td>
+                    <td class="p-2 text-center"><input type="checkbox" name="${element.id}" id="checkDelSchema${element.id}" onchange="CardObj.event_remove(${element.id})"></td>
+                </tr>`;
             });
           
         
@@ -416,7 +415,7 @@ async function insertDatabase(cardObj) {
         console.log(result);
     }
 }
-function createBodyCardObj() {
+async function createBodyCardObj() {
     var cardContainer = document.getElementById("cardContainer");
     if (!cardContainer) {
         console.error("Card container not found");
@@ -450,18 +449,17 @@ function createBodyCardObj() {
                 });
                 labels.forEach(label => {
                     const labelId = extractNumberFromString(label.getAttribute('name'));
-                    if (labelId == id) {
+                    if (labelId == CardObj.selectedID) {
                         label.innerHTML = "checked"; // Set the label text to "checked" when checked
                     } else {
                         label.innerHTML = ""; // Clear the label text for unchecked checkboxes
                     }
                 });
             } else {
-
-                CardObj.selectedID = 0; // Reset the selected ID
+                CardObj.selectedID = null; // Reset the selected ID
             }
             Beziehungen.update(CardObj.selectedID);
-            Beziehungen.temp_remove = [];
+        
         });
     });
 };

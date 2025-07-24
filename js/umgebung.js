@@ -92,7 +92,12 @@ class Umgebung {
             await result.forEach(listInfo => {
                 // Nur hier neue Umgebung-Objekte erzeugen
                 new Umgebung(listInfo[0], listInfo[1], listInfo[2]);
-                delInfo.innerHTML += `<input type="checkbox" id="checkDelInfo${listInfo[0]}" name="${listInfo[1]}" onchange="Umgebung.event_remove(${listInfo[0]})"> ${listInfo[1]} - ${listInfo[2]} <br>`
+                delInfo.innerHTML += `<tr class="border-bottom">
+                    <td class="p-2">${listInfo[0]}</td>
+                    <td class="p-2">${listInfo[2]}</td>
+                    <td class="p-2">${listInfo[1]}</td>
+                    <td class="p-2 text-center"><input type="checkbox" name="${listInfo[0]}" id="checkDelInfo${listInfo[0]}" onchange="Umgebung.event_remove(${listInfo[0]})"></td>
+                </tr>`;
             });
         }
         console.log(this.list);
@@ -198,6 +203,9 @@ class Umgebung {
     }
 
     static remove_generate() {
+         if(CardObj.selectedID == 0) {
+            return
+        }
         this.removeFromListLogik();
         this.update();
     }
@@ -251,7 +259,12 @@ window.addEventListener("load", function () {
             console.log("deleteInfotherminal: ", delInfo);
 
             Umgebung.list.forEach(element => {
-                delInfo.innerHTML += `<input type="checkbox" id="checkDelInfo${element.id}" name="${element.titel}" onchange="Umgebung.event_remove(${element.id})"> ${element.titel} - ${element.ipAdresse} <br>`
+                delInfo.innerHTML += `<tr class="border-bottom">
+                    <td class="p-2">${element.id}</td>
+                    <td class="p-2">${element.ipAdresse}</td>
+                    <td class="p-2">${element.titel}</td>
+                    <td class="p-2 text-center"><input type="checkbox" name="${element.id}" id="checkDelInfo${element.id}" onchange="Umgebung.event_remove(${element.id})"></td>
+                </tr>`;
             });
         });
     }
@@ -307,15 +320,17 @@ function cutAndCreate(responseText) {
     }
 }
 
-function insert() {
-    fetch("db/insert.php").then(async (response) => {
-        this.responseText = await response.text();
-        var obj = JSON.parse(this.responseText);
-        var anzeigebereichv = document.getElementById("anzeigebereichV")
-        var anzeigebereicht = document.getElementById("tabelle")
-        obj.forEach(o => {
-            anzeigebereichv.innerHTML += o + `<br>`
-        });
-        // RESULT: responseText => [[183,"0","aaa"],[186,"1","bbb"],[187,"2","ccc"],[184,"0","aaa"]]
+
+function uncheckAllTableCheckboxes() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
     });
+    
+    // Reset auch die temp_remove Liste
+    if (Umgebung.temp_remove) {
+        Umgebung.temp_remove = [];
+    }
+    
+    console.log(`${checkboxes.length} Tabellen-Checkboxes wurden ausgeschaltet`);
 }

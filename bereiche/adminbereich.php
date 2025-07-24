@@ -15,7 +15,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="card h-100">
-                                    <div class="card-header bg-success text-white">
+                                    <div class="card-header">
                                         <h5 class="card-title mb-0">
                                             <i class="fas fa-plus me-2"></i> Infotherminals hinzufügen
                                         </h5>
@@ -59,7 +59,7 @@
                             
                             <div class="col-md-6">
                                 <div class="card h-100">
-                                    <div class="card-header bg-danger text-white">
+                                    <div class="card-header">
                                         <h5 class="card-title mb-0">
                                             <i class="fas fa-trash me-2"></i>Infotherminals löschen
                                         </h5>
@@ -72,10 +72,19 @@
                                             
                                         </div>
                                         
-                                        <div class="border rounded p-3 mb-3" style="max-height: 200px; overflow-y: auto; overflow-x: hidden; border-radius: 8px;" id="deleteInfotherminal">
-                                            <!-- Infotherminal-Liste wird hier dynamisch geladen -->
-                                           
-                                        </div>
+                                        <table class="table table-hover position-relative">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>IP-Adresse</th>
+                                                    <th>Name</th>
+                                                    <th>Auswahl</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="deleteInfotherminal" style="max-height: 200px; overflow-y: auto;">
+                                                <!-- Infotherminal-Liste wird hier dynamisch geladen -->
+                                            </tbody>
+                                        </table>
                                         
                                         <button type="button" class="btn btn-danger shadow-sm" onclick="Umgebung.remove_generate()">
                                             <i class="fas fa-trash me-2"></i>Infotherminal löschen
