@@ -28,6 +28,7 @@ class Beziehungen {
 
     static async update(cardObjID) {
         this.list = [];
+         var anzeigebereichV = document.getElementById("anzeigebereichV");
         const relationListe = await Beziehungen.getRelation();
         console.log(relationListe);
         relationListe.forEach(element => {
@@ -40,14 +41,10 @@ class Beziehungen {
         this.temp_list = [];
         console.log("Update wird aufgerufen mit CardObjektID: " + cardObjID);
 
-
         leereListe(anzeigebereichV);
         leereListe(anzeigebereicht);
         leereListe(anzeigebereichD);
         leereListe(anzeigebereicht);
-
-
-
 
         this.createList(cardObjID)
         console.log("Temp Liste Add: " + this.temp_add);

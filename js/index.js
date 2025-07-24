@@ -3,7 +3,7 @@ var zeitEingegeben = false
 let pushDelete = false
 let json;
 let selectedCard = "";
-
+var anzeigebereichV = document.getElementById("anzeigebereichV");
 
 window.onload = async function () {
             
@@ -99,9 +99,12 @@ window.onload = async function () {
             settingPanel.innerHTML = responseText;
         });
     }
-
-
 }
+// ...existing code...
+
+
+
+// ...existing code...
 
 
 async function createUmgebung() {

@@ -203,9 +203,6 @@ class Umgebung {
     }
 
     static remove_generate() {
-         if(CardObj.selectedID == 0) {
-            return
-        }
         this.removeFromListLogik();
         this.update();
     }
@@ -218,7 +215,6 @@ window.addEventListener("load", function () {
     if (adminBereich != null) {
         document.getElementById("adminBereich").addEventListener("click", async function () {
             const settingsPanel = document.getElementById("settingsPanel")
-           
             Umgebung.temp_remove = [];
             await fetch("bereiche/adminbereich.php")
                 .then(response => response.text())
@@ -253,10 +249,10 @@ window.addEventListener("load", function () {
                     .catch(error => {
                         console.error('Fehler beim Hinzufügen:', error);
                     });
+                    form.reset(); // Formular zurücksetzen
             });
             const cardBodyDelInfo = document.getElementById("cardBodyForDelInfo");
             const delInfo = document.getElementById("deleteInfotherminal")
-            console.log("deleteInfotherminal: ", delInfo);
 
             Umgebung.list.forEach(element => {
                 delInfo.innerHTML += `<tr class="border-bottom">

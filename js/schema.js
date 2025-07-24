@@ -5,6 +5,7 @@ class CardObj {
     static temp_remove = [];
     static eleListe = []
     static list = [];
+    static checkAllowed = false; // Variable to control checkbox behavior
     constructor(id, imagePath, selectedTime, aktiv, startTime, endTime, startDate, endDate, titel, beschreibung) {
 
         this.id = id;
@@ -126,10 +127,6 @@ class CardObj {
         console.log(this.temp_remove);
     };
     static async remove_generate() {
-        if(CardObj.selectedID == 0) {
-            return
-        }
-
         await this.removeFromListLogik();
         await this.update();
     }
@@ -173,8 +170,8 @@ class CardObj {
 
     static async deleteCardObjDataBase(cardObjId) {
         try {
-            // Erst die Beziehungen löschen
-            await fetch("database/delete_Relation.php", {
+            // Erst ALLE Beziehungen für dieses Schema löschen
+            const relationResponse = await fetch("database/delete_All_Relations_For_Schema.php", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -183,6 +180,9 @@ class CardObj {
                     cardObjektID: cardObjId
                 })
             });
+            
+            const relationResult = await relationResponse.text();
+            console.log("Beziehungen gelöscht:", relationResult);
             
             // Dann das Schema löschen
             const response = await fetch("database/deleteCardObj.php", {
@@ -198,7 +198,7 @@ class CardObj {
                 throw new Error(`Fehler beim Löschen: ${response.statusText}`);
             }
             const result = await response.text();
-            console.log(result);
+            console.log("Schema gelöscht:", result);
         } catch (error) {
             console.error("Fehler:", error);
         }
@@ -245,10 +245,6 @@ class CardObj {
     }
 }
 
-
-
-
-
 window.addEventListener("load", function () {
     const templatebereich = document.getElementById("templateBereich");
     if (templatebereich !== null) {
@@ -264,9 +260,7 @@ window.addEventListener("load", function () {
                     settingPanel.innerHTML = html;
                 });
 
-
             const delSchema = document.getElementById("deleteSchema")
-            console.log("deleteSchema: ", delSchema);
 
             CardObj.list.forEach(element => {
                 delSchema.innerHTML += `<tr class="border-bottom">
@@ -276,9 +270,6 @@ window.addEventListener("load", function () {
                     <td class="p-2 text-center"><input type="checkbox" name="${element.id}" id="checkDelSchema${element.id}" onchange="CardObj.event_remove(${element.id})"></td>
                 </tr>`;
             });
-          
-        
-           
         });
     }
 
@@ -293,7 +284,6 @@ async function meow(event) {
 
     const titel = formData.get('title');
     const description = formData.get('description');
-
 
     console.log("Selected Time:", selectedTime);
 
@@ -333,6 +323,7 @@ async function meow(event) {
     } catch (error) {
         console.error("Fehler beim erstellen des CardObj:", error);
     }
+    form.reset(); // Formular zurücksetzen
     
 }
 async function sendPicture(formData) {
@@ -421,6 +412,7 @@ async function createBodyCardObj() {
         console.error("Card container not found");
         return;
     }
+    
     cardContainer.innerHTML = ""; // Clear existing content
     CardObj.list.forEach(cardObj => {
         const cardContainer = "cardContainer"
@@ -451,12 +443,20 @@ async function createBodyCardObj() {
                     const labelId = extractNumberFromString(label.getAttribute('name'));
                     if (labelId == CardObj.selectedID) {
                         label.innerHTML = "checked"; // Set the label text to "checked" when checked
+                        var label = label;
+                       
                     } else {
                         label.innerHTML = ""; // Clear the label text for unchecked checkboxes
+                        console.log("Checkbox mit ID " + labelId + " wurde deaktiviert.");
+                       
                     }
                 });
             } else {
                 CardObj.selectedID = null; // Reset the selected ID
+                labels.forEach(label => {
+                   label.innerHTML = ""; // Clear the label text for unchecked checkboxes
+                });
+
             }
             Beziehungen.update(CardObj.selectedID);
         
