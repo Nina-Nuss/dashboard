@@ -94,6 +94,7 @@ window.onload = async function () {
     if (infotherminalBereich !== null) {
         infotherminalBereich.addEventListener("click", async function (event) {
             var settingPanel = document.getElementById("settingsPanel");
+            deakCb(false);
             const response = await fetch("bereiche/startSeite.php")
             const responseText = await response.text();
             settingPanel.innerHTML = responseText;

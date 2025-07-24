@@ -253,7 +253,8 @@ window.addEventListener("load", function () {
         console.log(234);
 
         templatebereich.addEventListener("click", async function (event) {
-            uncheckAllTableCheckboxes();    
+            uncheckAllTableCheckboxes();
+            deakCb(true);
             var settingPanel = document.getElementById("settingsPanel");
 
             await fetch("bereiche/templatebereich.php")
@@ -486,6 +487,18 @@ function uncheckAllCheckboxes() {
             checkbox.checked = false;
         });
         console.log(`${checkboxes.length} Checkboxes im cardContainer wurden ausgeschaltet`);
+    } else {
+        console.log("cardContainer nicht gefunden");
+    }
+}
+function deakCb(aktiv) {
+    const cardContainer = document.getElementById('cardContainer');
+    if (cardContainer) {
+        const checkboxes = cardContainer.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.disabled = aktiv;
+        });
+        console.log(`${checkboxes.length} Checkboxes im cardContainer wurden deaktiviert`);
     } else {
         console.log("cardContainer nicht gefunden");
     }
