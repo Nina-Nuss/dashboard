@@ -23,10 +23,10 @@
                                     <div class="card-body">
                                         <div class="alert alert-info" role="alert">
                                             <h6 class="alert-heading">
-                                                <i class="fas fa-info-circle me-2"></i>Wichtige Hinweise:
+                                                <i class="fas fa-info-circle me-2"></i> Wichtige Hinweise:
                                             </h6>
                                             <ul class="mb-0">
-                                                <li>IP-Adresse soll dem Format "192.168.1.100" entsprechen</li>
+                                                <li>IP-Adresse soll dem Format "00.0.0.000" entsprechen</li>
                                                 <li>Es dürfen keine Leerzeichen vorhanden sein</li>
                                                 <li>Sonderzeichen sind nicht erlaubt</li>
                                             </ul>
@@ -35,22 +35,22 @@
                                         <form id="formID" action="/bereiche/bereitsVorhanden.php" method="post">
                                             <div class="form-group mb-3">
                                                 <label for="infotherminalIp" class="form-label">
-                                                    <i class="fas fa-network-wired me-2"></i>IP-Adresse:
+                                                    <i class="fas fa-network-wired me-2"></i> IP-Adresse:
                                                 </label>
                                                 <input class="form-control" type="text" id="infotherminalIp" 
-                                                       name="infotherminalIp" placeholder="z.B. 192.168.1.100" required>
+                                                       name="infotherminalIp" placeholder="z.B. 10.5.0.100" required>
                                             </div>
                                             
                                             <div class="form-group mb-3">
                                                 <label for="infotherminalName" class="form-label">
-                                                    <i class="fas fa-tag me-2"></i>Name:
+                                                    <i class="fas fa-tag me-2"></i> Name:
                                                 </label>
                                                 <input class="form-control" type="text" id="infotherminalName" 
                                                        name="infotherminalName" placeholder="z.B. Terminal Empfang" required>
                                             </div>
                                             
                                             <button type="submit" class="btn btn-success shadow-sm">
-                                                <i class="fas fa-plus me-2"></i>Hinzufügen
+                                                <i class="fas fa-plus me-2"></i> Hinzufügen
                                             </button>
                                         </form>
                                     </div>
@@ -61,13 +61,13 @@
                                 <div class="card h-100">
                                     <div class="card-header">
                                         <h5 class="card-title mb-0">
-                                            <i class="fas fa-trash me-2"></i>Infotherminals löschen
+                                            <i class="fas fa-trash me-2"></i> Infotherminals löschen
                                         </h5>
                                     </div>
                                     <div class="card-body" >
                                         <div class="form-group mb-3">
                                             <label for="infotherminalSelect" class="form-label">
-                                                <i class="fas fa-list me-2"></i>Infotherminal auswählen:
+                                                <i class="fas fa-list me-2"></i> Infotherminal auswählen:
                                             </label>
                                             
                                         </div>
@@ -87,7 +87,7 @@
                                         </table>
                                         
                                         <button type="button" class="btn btn-danger shadow-sm" onclick="Umgebung.remove_generate()">
-                                            <i class="fas fa-trash me-2"></i>Infotherminal löschen
+                                            <i class="fas fa-trash me-2"></i> Infotherminal löschen
                                         </button>
                                     </div>
                                 </div>

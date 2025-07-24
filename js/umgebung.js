@@ -215,6 +215,7 @@ window.addEventListener("load", function () {
     if (adminBereich != null) {
         document.getElementById("adminBereich").addEventListener("click", async function () {
             const settingsPanel = document.getElementById("settingsPanel")
+            uncheckAllTableCheckboxes()
             Umgebung.temp_remove = [];
             await fetch("bereiche/adminbereich.php")
                 .then(response => response.text())

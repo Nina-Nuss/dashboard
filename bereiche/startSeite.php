@@ -16,7 +16,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="websiteName" class="form-label">Webseite Name:</label>
+                                    <label for="websiteName" class="form-label"> Webseite Name:</label>
                                     <input type="text" class="form-control" id="websiteName" value="Snapbar_Warm" readonly>
                                 </div>
                                 
@@ -54,7 +54,7 @@
                             <div class="col-md-4">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h6 class="mb-0">IP-Adressen Verwaltung</h6>
+                                        <h6 class="mb-0"> IP-Adressen Verwaltung</h6>
                                     </div>
                                     <div class="card-body">
                                         <div class="d-flex mb-3">

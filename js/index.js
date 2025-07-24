@@ -343,9 +343,6 @@ function showAllUmgebungen() {
 }
 
 
-
-
-
 function deleteBtn() {
     const deleteBtns = document.querySelectorAll('[id^="deleteBtn"]');
     deleteBtns.forEach(deleteBtn => {

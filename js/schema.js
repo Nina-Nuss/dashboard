@@ -72,6 +72,7 @@ class CardObj {
                             <small class="text-muted">selectedTime: ${this.selectedTime} ms</small>
                         </div>
                     </div>
+                    
                 </div>
             </div>
         `;
@@ -247,11 +248,12 @@ class CardObj {
 
 window.addEventListener("load", function () {
     const templatebereich = document.getElementById("templateBereich");
+  
     if (templatebereich !== null) {
         console.log(234);
 
         templatebereich.addEventListener("click", async function (event) {
-
+            uncheckAllTableCheckboxes();    
             var settingPanel = document.getElementById("settingsPanel");
 
             await fetch("bereiche/templatebereich.php")
