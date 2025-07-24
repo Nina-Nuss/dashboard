@@ -3,11 +3,7 @@ class Umgebung {
     static id = 1;
     static umgebungsListe = [];
     static allCardList = [];
-    static ipList = [];
-    static nameList = [];
-    static tempListForSaveCards = [];
     static currentSelect = 0;
-    static listDataBase = [];
     check = false;
     static temp_remove = []
     static list = [];

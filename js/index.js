@@ -93,19 +93,17 @@ window.onload = async function () {
     if (infotherminalBereich !== null) {
         infotherminalBereich.addEventListener("click", async function (event) {
             var settingPanel = document.getElementById("settingsPanel");
-            deakCb(false);
             const response = await fetch("bereiche/startSeite.php")
             const responseText = await response.text();
+
+            deakCb(false);
             settingPanel.innerHTML = responseText;
+            var checkA = document.getElementById("checkA");
+            deakAktivCb(checkA, true);
+
         });
     }
 }
-// ...existing code...
-
-
-
-// ...existing code...
-
 
 async function createUmgebung() {
     const resultUmgebung = selectObj("../database/selectInfotherminal.php")
@@ -318,53 +316,6 @@ function saveTempAddDatabase() {
     Umgebung.tempListForSaveCards = []
 }
 
-
-function checkSelectedUmgebung() {
-    if (!selectedUmgebung || selectedUmgebung === "undefined") {
-        console.error("Keine Umgebung ausgewählt!");
-        return false; // Gibt false zurück, um anzuzeigen, dass die Umgebung nicht definiert ist
-    }
-    return true; // Gibt true zurück, wenn `selectedUmgebung` definiert ist
-}
-
-function zeigeUmgebungAn(selectedUmgebung) {
-    console.log(selectedUmgebung.id);
-    Umgebung.list.forEach(umgebung => {
-        if (umgebung.id == selectedUmgebung.id) {
-            document.getElementById("umgebungsBody" + umgebung.id).style.display = "block";
-        } else {
-            document.getElementById("umgebungsBody" + umgebung.id).style.display = "none";
-        }
-    });
-}
-
-function showAllUmgebungen() {
-    document.querySelectorAll('[id^="umgebungsBody"]').forEach(item => {
-        document.getElementById(item.id).style.display = "block";
-    });
-}
-
-
-function deleteBtn() {
-    const deleteBtns = document.querySelectorAll('[id^="deleteBtn"]');
-    deleteBtns.forEach(deleteBtn => {
-        deleteBtn.addEventListener('change', function () {
-            const cardId = this.id.replace('deleteBtn', '');
-            console.log(cardId);
-            const cardObj = findObj(CardObj.allCardObjekte, cardId);
-            const element = document.getElementById(cardObj.id);
-            if (this.checked) {
-                selectedUmgebung.tempListForDeleteCards.push(cardObj);
-                console.log("checkInn");
-                console.log(cardObj.id);
-
-            } else {
-                selectedUmgebung.removeObjFromList(selectedUmgebung.tempListForDeleteCards, cardObj);
-                console.log("checkout");
-            }
-        });
-    });
-}
 
 function checkAktiv() {
     if (CardObj.selectedID !== null) {

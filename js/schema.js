@@ -347,38 +347,7 @@ async function sendPicture(formData) {
         return "";
     }
 }
-async function insertDatabase(cardObj) {
-    // Erstellen eines JSON-Objekts
-    const jsonData = {
-        titel: cardObj.titel,
-        beschreibung: cardObj.beschreibung,
-        imagePath: cardObj.imagePath,
-        selectedTime: cardObj.selectedTime,
-        aktiv: cardObj.aktiv,
-        startTime: cardObj.startTime,
-        endTime: cardObj.endTime,
-        startDate: cardObj.startDate,
-        endDate: cardObj.endDate
-    };
 
-    console.log(jsonData.selectedTime);
-
-    console.log(JSON.stringify(jsonData));
-    // Senden der POST-Anfrage mit JSON-Daten
-    const response = await fetch("/database/insertSchema.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(jsonData)
-    });
-    if (!response.ok) {
-        console.error("Fehler beim Einfügen:", response.statusText);
-    } else {
-        const result = await response.text();
-        console.log(result);
-    }
-}
 async function insertDatabase(cardObj) {
     // Erstellen eines JSON-Objekts
     const jsonData = {
@@ -427,6 +396,7 @@ async function createBodyCardObj() {
 
     });
     deakCb(true);
+
     console.log(CardObj.list);
     const cbForSelectSchema = document.querySelectorAll('[id^="flexCheck"]')
     const labels = document.querySelectorAll('label[name^="label"]');
@@ -440,14 +410,14 @@ async function createBodyCardObj() {
             if (this.checked) {
                 var titel = document.getElementById("websiteName");
                 var checkA = document.getElementById("checkA");
-
                 const id = extractNumberFromString(this.id);
                 CardObj.selectedID = id; // Set the selected ID
                 console.log("Checkbox mit ID " + id + " wurde aktiviert.");
                 var obj = findObj(CardObj.list, id);
+                deakAktivCb(checkA, false);
+
                 titel.value = obj.titel; // Set the title to the checkbox's title
                 checkA.checked = obj.aktiv; // Set the aktiv checkbox to the cardObjekt's aktiv state
-
                 cbForSelectSchema.forEach(cb => {
                     if (cb !== this) {
                         cb.checked = false;
@@ -480,6 +450,17 @@ async function createBodyCardObj() {
     });
 };
 
+function deakAktivCb(checkbox, aktiv) {
+    if (!checkbox) {
+        console.error("Checkbox not found");
+        return;
+    }
+    if (aktiv == true) {
+        checkbox.disabled = aktiv; // Uncheck the checkbox if aktiv is true
+    } else {
+        checkbox.disabled = false; // Otherwise, check the checkbox
+    }
+}
 
 function uncheckAllCheckboxes() {
     const cardContainer = document.getElementById('cardContainer');
@@ -488,7 +469,7 @@ function uncheckAllCheckboxes() {
         const checkboxes = cardContainer.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(checkbox => {
             checkbox.checked = false;
-            checkA.checked = false;
+
         });
         console.log(`${checkboxes.length} Checkboxes im cardContainer wurden ausgeschaltet`);
     } else {
@@ -502,7 +483,7 @@ function deakCb(aktiv) {
         checkboxes.forEach(checkbox => {
             checkbox.disabled = aktiv;
         });
-        CardObj.selectedID = ""; // Update the checkAllowed state
+        CardObj.selectedID = null; // Update the checkAllowed state
         console.log(`${checkboxes.length} Checkboxes im cardContainer wurden deaktiviert`);
     } else {
         console.log("cardContainer nicht gefunden");
