@@ -33,11 +33,8 @@ class CardObj {
         this.modalId = `myModal${this.id}`;
         this.dateRangeInputId = `daterange${this.id}`;
         this.dateRangeContainerId = `selected-daterange${this.id}`;
-        this.modalCloseButtonId = `closeModal${this.id}`;
-        this.daterangeIconId = `daterange-icon${this.id}`;
         this.infoBtn = `infoBtn${this.id}`;
-        this.timerSelectRange = `timerSelect${this.id}`
-        this.alwaysOnBtn = `alwaysOnBtn${this.id}`
+        this.selectedTimerLabel = `selectedTime${this.id}`
         this.cardObjekte = `cardObjekt${this.id}`
         this.infoCard = `showDateInCard${this.id}`
         this.shownInCarousel = `showInCarousel${this.id}`;
@@ -69,7 +66,7 @@ class CardObj {
                             </label>
                         </div>
                         <div>
-                            <small class="text-muted">selectedTime: ${this.selectedTime} ms</small>
+                            <small id="${this.selectedTimerLabel}" class="text-muted">Dauer: ${this.selectedTime[0]} sekunde</small>
                         </div>
                     </div>
                     
@@ -89,8 +86,6 @@ class CardObj {
             element.remove();
         }
     }
-
-
     checkboxAktiv() {
         const cbAktiv = document.querySelectorAll('[id^="cbAktiv"]')
         cbAktiv.forEach(cb => {
@@ -164,6 +159,7 @@ class CardObj {
         return temp;
     }
 
+    
     static async deleteCardObjDataBase(cardObjId) {
         try {
             // Erst ALLE Beziehungen für dieses Schema löschen
@@ -239,21 +235,111 @@ class CardObj {
         console.log(this.list);
 
     }
+
+    static checkAktiv() {
+        if (CardObj.selectedID !== null) {
+            var checkA = document.getElementById("checkA");
+            var obj = findObj(CardObj.list, CardObj.selectedID);
+            if (checkA.checked && obj !== null) {
+                console.log("Checkbox ist aktiviert");
+                obj.aktiv = true;
+                console.log("Checkbox aktiviert für CardObjektID:", obj.id);
+
+            } else {
+                if (obj === null) {
+                    console.warn("Objekt nicht gefunden für ID:", CardObj.selectedID);
+                    return;
+                }
+                obj.aktiv = false;
+                console.log("Checkbox deaktiviert für CardObjektID:", obj.id);
+            }
+        }
+    }
+    static async saveChanges() {
+        if (CardObj.selectedID === null) {
+            alert("Bitte wählen Sie ein Schema aus, um Änderungen zu speichern.");
+            return;
+        }
+        const obj = findObj(CardObj.list, CardObj.selectedID);
+        if (obj === null) {
+            console.warn("Objekt nicht gefunden für ID:", CardObj.selectedID);
+            return;
+        }
+        try {
+            var preCardObj = CardObj.prepareObjForUpdate(obj); // Bereite das Objekt für die Aktualisierung vor
+            await updateDataBase(preCardObj, "updateSchema");
+            alert("Änderungen erfolgreich gespeichert!");
+            CardObj.loadChanges(obj); // Lade die Änderungen für das ausgewählte CardObj
+        } catch (error) {
+            console.error("Fehler beim Speichern der Änderungen:", error);
+            alert("Fehler beim Speichern der Änderungen. Bitte versuchen Sie es erneut.");
+        }
+    }
+
+    static prepareObjForUpdate(obj) {
+        // Hier können Sie das Objekt in den Zustand für die Aktualisierung versetzen
+        var preObj = {
+            id: obj.id,
+            imagePath: obj.imagePath,
+            selectedTime: obj.selectedTime,
+            isAktiv: obj.aktiv,
+            startTime: obj.startTime,
+            endTime: obj.endTime,
+            startDate: obj.startDate,
+            endDate: obj.endDate,
+            titel: obj.titel,
+            beschreibung: obj.beschreibung
+        }; // Erstellen Sie eine Kopie des Objekts
+        preObj.update = true; // Setzen Sie das Update-Flag
+        console.log("CardObjekt vorbereitet für Update:", preObj.id);
+        return preObj;
+    }
+
+    static loadChanges(cardObj) {
+        console.log("loadChanges aufgerufen für CardObjektID:", cardObj.id);
+        var cardtimerLabel = document.getElementById(cardObj.selectedTimerLabel);
+        console.log("CardTimerLabel Element:", cardtimerLabel);
+        console.log("CardObjekt:", cardObj);
+        console.log("CardObjekt selectedTime:", cardObj.selectedTimerLabel);
+        
+        
+        var timerbereich = document.getElementById("timerSelectRange");
+        var titel = document.getElementById("websiteName");
+        titel.value = cardObj.titel; // Set the title to the checkbox's title
+        timerbereich.value = cardObj.selectedTime; // Set the time range
+        var selectedTime = cardObj.selectedTime / 1000; // Convert milliseconds to seconds
+        cardtimerLabel.innerHTML = `Dauer: ${selectedTime} Sekunden`; // Update the label with the selected time
+        var checkA = document.getElementById("checkA");
+        checkA.checked = cardObj.aktiv; // Set the checkbox state
+
+    }
+    static setTimerRange(value) {
+        console.log("Timer Range gesetzt auf:", value);
+        var obj = findObj(CardObj.list, CardObj.selectedID);
+        if (obj === null) {
+            console.warn("Objekt nicht gefunden für ID:", CardObj.selectedID);
+            return;
+        }
+        obj.selectedTime = value;
+        var timerbereich = document.getElementById("timerSelectRange");
+        if (timerbereich) {
+            timerbereich.value = value; // Set the time range
+        } else {
+            console.error("Timer Select Range Element nicht gefunden");
+        }
+    }
+
 }
+
+
 
 window.addEventListener("load", function () {
     const templatebereich = document.getElementById("templateBereich");
-
-
     if (templatebereich !== null) {
-        console.log(234);
-
         templatebereich.addEventListener("click", async function (event) {
             uncheckAllTableCheckboxes();
-
             deakCb(true);
             var settingPanel = document.getElementById("settingsPanel");
-
             await fetch("bereiche/templatebereich.php")
                 .then(response => response.text())
                 .then(html => {
@@ -261,7 +347,6 @@ window.addEventListener("load", function () {
                 });
 
             const delSchema = document.getElementById("deleteSchema")
-
             CardObj.list.forEach(element => {
                 delSchema.innerHTML += `<tr class="border-bottom">
                     <td class="p-2">${element.id}</td>
@@ -356,7 +441,6 @@ async function insertDatabase(cardObj) {
         startDate: cardObj.startDate,
         endDate: cardObj.endDate
     };
-
     console.log(jsonData.selectedTime);
 
     console.log(JSON.stringify(jsonData));
@@ -375,8 +459,6 @@ async function insertDatabase(cardObj) {
         console.log(result);
     }
 }
-
-
 async function createBodyCardObj() {
     var cardContainer = document.getElementById("cardContainer");
     if (!cardContainer) {
@@ -391,11 +473,9 @@ async function createBodyCardObj() {
 
     });
     deakCb(true);
-
     console.log(CardObj.list);
     const cbForSelectSchema = document.querySelectorAll('[id^="flexCheck"]')
     const labels = document.querySelectorAll('label[name^="label"]');
-
     console.log(cbForSelectSchema.length);
     // Alle Checkboxen mit ID, die mit "flexCheck" beginnt, auswählen und loopen
     cbForSelectSchema.forEach(checkbox => {
@@ -403,16 +483,14 @@ async function createBodyCardObj() {
         // Hier kannst du mit jeder Checkbox arbeiten
         checkbox.addEventListener('change', function () {
             if (this.checked) {
-                var titel = document.getElementById("websiteName");
+        
                 var checkA = document.getElementById("checkA");
                 const id = extractNumberFromString(this.id);
                 CardObj.selectedID = id; // Set the selected ID
-                console.log("Checkbox mit ID " + id + " wurde aktiviert.");
                 var obj = findObj(CardObj.list, id);
                 deakAktivCb(checkA, false);
-
-                titel.value = obj.titel; // Set the title to the checkbox's title
-                checkA.checked = obj.aktiv; // Set the aktiv checkbox to the cardObjekt's aktiv state
+                CardObj.loadChanges(obj); // Load changes for the selected CardObj   
+                
                 cbForSelectSchema.forEach(cb => {
                     if (cb !== this) {
                         cb.checked = false;

@@ -49,8 +49,33 @@
                                                 </label>
                                                 <select class="form-select" id="selectedTime" name="selectedTime">
                                                     <option value="3000">3 Sekunden</option>
+                                                    <option value="4000">4 Sekunden</option>
+                                                    <option value="5000">5 Sekunden</option>
+                                                    <option value="6000">6 Sekunden</option>
                                                     <option value="7000">7 Sekunden</option>
+                                                    <option value="8000">8 Sekunden</option>
+                                                    <option value="9000">9 Sekunden</option>
                                                     <option value="10000">10 Sekunden</option>
+                                                    <option value="11000">11 Sekunden</option>
+                                                    <option value="12000">12 Sekunden</option>
+                                                    <option value="13000">13 Sekunden</option>
+                                                    <option value="14000">14 Sekunden</option>
+                                                    <option value="15000">15 Sekunden</option>
+                                                    <option value="16000">16 Sekunden</option>
+                                                    <option value="17000">17 Sekunden</option>
+                                                    <option value="18000">18 Sekunden</option>
+                                                    <option value="19000">19 Sekunden</option>
+                                                    <option value="20000">20 Sekunden</option>
+                                                    <option value="21000">21 Sekunden</option>
+                                                    <option value="22000">22 Sekunden</option>
+                                                    <option value="23000">23 Sekunden</option>
+                                                    <option value="24000">24 Sekunden</option>
+                                                    <option value="25000">25 Sekunden</option>
+                                                    <option value="26000">26 Sekunden</option>
+                                                    <option value="27000">27 Sekunden</option>
+                                                    <option value="28000">28 Sekunden</option>
+                                                    <option value="29000">29 Sekunden</option>
+                                                    <option value="30000">30 Sekunden</option>
                                                 </select>
                                             </div>
 
@@ -65,7 +90,7 @@
                                             </div>
 
                                             <button type="submit" class="btn btn-success shadow-sm" onclick="meow(event)">
-                                                <i class="fas fa-save me-2"></i> Schema erstellen
+                                                <i class="fas fa-plus me-2"></i> Schema hinzufügen
                                             </button>
                                         </form>
                                     </div>

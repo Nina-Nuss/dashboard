@@ -99,10 +99,7 @@ class Umgebung {
             });
         }
         console.log(this.list);
-
-
     }
-
     static removeFromListViaID(id, list) {
         var temp = [];
         console.log(list);

@@ -12,7 +12,7 @@ $titel = $data["titel"];
 $beschreibung = $data["beschreibung"];
 $imagePath = $data["imagePath"];
 $selectedTime = $data["selectedTime"];
-$isAktiv = $data["aktiv"];
+$isAktiv = $data["isAktiv"];
 $startTime = $data["startTime"];
 $endTime = $data["endTime"];
 $startDate = $data["startDate"];
@@ -20,7 +20,7 @@ $endDate = $data["endDate"];
 $id = $data["id"]; // ID muss ebenfalls aus der Anfrage abgerufen werden
 
 // SQL-Abfrage mit Prepared Statement für MSSQL
-$sql = "UPDATE infotherminal_schema
+$sql = "UPDATE schemas
         SET imagePath = ?, selectedTime = ?, isAktiv = ?, startTime = ?, endTime = ?, startDate = ?, endDate = ?, titel = ?, beschreibung = ?
         WHERE id = ?";
 $params = array($imagePath, $selectedTime, $isAktiv, $startTime, $endTime, $startDate, $endDate, $titel, $beschreibung, $id);

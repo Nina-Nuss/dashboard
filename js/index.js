@@ -31,26 +31,6 @@ window.onload = async function () {
     // Modal Focus-Management hinzufügen
     setupModalFocusManagement();
 
-    console.log("index_new.js wurde geladen");
-    if (selectUmgebung != null) {
-        selectUmgebung.addEventListener("change", function () {
-            selectedUmgebung = sucheUmgebung(selectUmgebung.value);
-            console.log(selectedUmgebung);
-            plusBtn.disabled = false;
-            updateAnzeigeCounter()
-            console.log("wächsle umgebung");
-            UmgebungsTitel.innerHTML = selectedUmgebung.titel;
-
-            if (selectedUmgebung.id == 0) {
-                showAllUmgebungen()
-                disableInput(denied)
-            } else {
-                zeigeUmgebungAn(selectedUmgebung)
-                disableInput(denied)
-            }
-        })
-    }
-
     if (deleteBtnForCards != null) {
         deleteBtnForCards.addEventListener('click', function () {
             if (selectedUmgebung.tempListForDeleteCards.length == 0) {
@@ -66,28 +46,8 @@ window.onload = async function () {
 
             selectedUmgebung.tempListForDeleteCards = [];
             checkBoxShow();
-            updateAnzeigeCounter()
-
         });
     }
-
-    if (saveBtn != null) {
-        saveBtn.addEventListener("click", function () {
-            alert("Daten werden gespeichert")
-            saveTempAddDatabase()
-            Umgebung.allCardList.forEach(cardObjlist => {
-                cardObjlist.forEach(cardObj => {
-                    console.log(cardObj);
-                    if (cardObj.update == true) {
-                        console.log(cardObj.update);
-                        cardObj.update = false
-                        updateDataBase(cardObj)
-                    }
-                });
-            });
-        });
-    }
-
     // Hier wird die startseite ausgewählt
     const infotherminalBereich = document.getElementById("infotherminalBereich");
     if (infotherminalBereich !== null) {
@@ -104,7 +64,6 @@ window.onload = async function () {
         });
     }
 }
-
 const startBtnsContainer = document.getElementById("startBtns");
 const buttonsInContainer = startBtnsContainer.querySelectorAll("button");
 
@@ -169,7 +128,6 @@ function getJsonData(key) {
 async function createCardObj() {
     const response = await selectObj("../database/selectSchemas.php")
     let objList = convertCardObjForDataBase(response)
-
     objList.forEach(cardObj => {
         if (cardObj.imagePath == null || cardObj.imagePath == "null" || cardObj.imagePath == "") {
             cardObj.imagePath = "img/bild.png"; // Setze einen Standardwert,
@@ -192,6 +150,8 @@ async function createCardObj() {
     createBodyCardObj();
     console.log(CardObj.list);
 }
+
+
 
 function findObj(list, id) {
     const number = extractNumberFromString(id);
@@ -337,25 +297,6 @@ function saveTempAddDatabase() {
 }
 
 
-function checkAktiv() {
-    if (CardObj.selectedID !== null) {
-        var checkA = document.getElementById("checkA");
-        var obj = findObj(CardObj.list, CardObj.selectedID);
-        if (checkA.checked && obj !== null) {
-            console.log("Checkbox ist aktiviert");
-            obj.isAktiv = true;
-            console.log("Checkbox aktiviert für CardObjektID:", obj.id);
-
-        } else {
-            if (obj === null) {
-                console.warn("Objekt nicht gefunden für ID:", CardObj.selectedID);
-                return;
-            }
-            obj.isAktiv = false;
-            console.log("Checkbox deaktiviert für CardObjektID:", obj.id);
-        }
-    }
-}
 function saveCardObj() {
     umgebung.allCardList.forEach(cardObjlist => {
         cardObjlist.forEach(cardObj => {
@@ -368,9 +309,7 @@ async function updateDataBase(cardObj, databaseUrl) {
     // Erstellen eines FormData-Objekts
     try {
         console.log("updateDataBase wurde aufgerufen");
-        const jsObj = JavaScriptCardObj(cardObj);
-        const createJsObj = JSON.stringify(jsObj)
-        console.log(jsObj);
+        const createJsObj = JSON.stringify(cardObj)
         var result = await fetch(`database/${databaseUrl}.php`, {
             method: "POST",
             body: createJsObj
@@ -424,8 +363,10 @@ function uncheckAllTableCheckboxes() {
     if(CardObj.temp_remove) {
         CardObj.temp_remove = [];
     }
-    
+
 
     
     console.log(`${checkboxes.length} Tabellen-Checkboxes wurden ausgeschaltet`);
 }
+
+
