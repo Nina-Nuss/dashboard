@@ -7,6 +7,7 @@ class Umgebung {
     check = false;
     static temp_remove = []
     static list = [];
+    static ipList = [];
     static eleListe = []
     static responseText = ""
     constructor(id, titel, ipAdresse) {
