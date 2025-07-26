@@ -315,17 +315,3 @@ function cutAndCreate(responseText) {
     }
 }
 
-
-function uncheckAllTableCheckboxes() {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = false;
-    });
-    
-    // Reset auch die temp_remove Liste
-    if (Umgebung.temp_remove) {
-        Umgebung.temp_remove = [];
-    }
-    
-    console.log(`${checkboxes.length} Tabellen-Checkboxes wurden ausgeschaltet`);
-}

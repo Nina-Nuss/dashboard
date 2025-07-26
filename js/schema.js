@@ -156,15 +156,9 @@ class CardObj {
                 temp.push(element);
 
             } else {
-                // Verhindere das Löschen der Hauptumgebung (ID 0 - "Alle Schemas")
-                if (element.id != 0) {
-                    await this.deleteCardObjDataBase(element.id);
-                    console.log("Das Element wurde gefunden und wird gelöscht! " + element.id);
-                    // Delete muss in der Datenbank nun hier ausgefuehrt werden
-                } else {
-                    console.warn("Hauptumgebung (Alle Schemas) kann nicht gelöscht werden!");
-                }
-                return temp;
+                await this.deleteCardObjDataBase(element.id);
+                console.log("Das Element wurde gefunden und wird gelöscht! " + element.id);
+                // Nicht sofort return, sondern weiter iterieren um alle anderen Elemente zu behalten
             }
         }
         return temp;
@@ -256,6 +250,7 @@ window.addEventListener("load", function () {
 
         templatebereich.addEventListener("click", async function (event) {
             uncheckAllTableCheckboxes();
+
             deakCb(true);
             var settingPanel = document.getElementById("settingsPanel");
 
