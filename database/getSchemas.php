@@ -26,7 +26,7 @@ $dateFormat = 'Y-m-d';
 $now = new DateTime('now', new DateTimeZone('Europe/Berlin'));
 
 $nowTime = $now->format('H:i:s');
-$nowDate = $now->format('Y-m-d');
+$nowDateTime = $now->format('Y-m-d H:i:s');
 
 // $clientIP = $_SERVER['REMOTE_ADDR'];
 
@@ -65,13 +65,13 @@ foreach ($images as $image) {
                         $trueTime = checkDateTime($schema[4], $schema[5], $timeFormat, $nowTime);
                     }
                     if(isset($schema[6]) && isset($schema[7])) {
-                        $trueDate = checkDateTime($schema[6], $schema[7], $dateFormat, $nowDate);
-                    } 
-                    // if($trueDate === true && $trueTime === true) {
-                    //     array_push($imagesContainer, $schema);
-                    // } else {
-                    //    continue; // Wenn die Zeit oder das Datum nicht im Bereich ist, überspringe das Schema
-                    // }
+                        $trueDate = checkDateTime($schema[6], $schema[7], $dateFormat, $nowDateTime);
+                    }
+                    if($trueDate === true && $trueTime === true) {
+                        array_push($imagesContainer, $schema);
+                    } else {
+                       continue; // Wenn die Zeit oder das Datum nicht im Bereich ist, überspringe das Schema
+                    }
                     array_push($imagesContainer, $schema);
                 }
             }
@@ -91,7 +91,6 @@ function checkDateTime($start, $end, $format, $now)
     $endTime = createDateTimeFormat($endTime, $format);
     if ($startTime !== null && $endTime !== null) {
         if ($now >= $startTime && $now <= $endTime) {
-           
             return true;
         } else {
   
@@ -120,6 +119,9 @@ function createDateTimeFormat($dateTime, $format)
         return null;
     }
 }
+
+
+
 function getAllImages()
 {
 
