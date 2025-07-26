@@ -66,7 +66,7 @@ class CardObj {
                             </label>
                         </div>
                         <div>
-                            <small id="${this.selectedTimerLabel}" class="text-muted">Dauer: ${this.selectedTime[0]} sekunde</small>
+                            <small id="${this.selectedTimerLabel}" class="text-muted">Dauer: ${this.selectedTime / 1000} sekunde</small>
                         </div>
                     </div>
                     
@@ -124,6 +124,19 @@ class CardObj {
         console.log(this.temp_remove);
     };
     static async remove_generate() {
+        if (this.temp_remove.length == 0) {
+            alert("Bitte wählen Sie mindestens ein Schema aus, um es zu löschen.");
+            return;
+        }
+        
+        // Bestätigungsdialog anzeigen
+        const confirmed = confirm(`Sind Sie sicher, dass Sie ${this.temp_remove.length} Schema(s) löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.`);
+        
+        if (!confirmed) {
+            console.log("Löschvorgang vom Benutzer abgebrochen");
+            return; // Benutzer hat abgebrochen
+        }
+        
         await this.removeFromListLogik();
         await this.update();
     }
@@ -206,6 +219,7 @@ class CardObj {
             delSchema.innerHTML = "";
             cardContainer.innerHTML = "";
             this.list = [];
+            this.temp_remove = [];
             // KEINE neuen Umgebung-Objekte hier erzeugen!
             const result = await readDatabase("selectSchemas");
             console.log("result: ", result);
@@ -260,7 +274,10 @@ class CardObj {
             alert("Bitte wählen Sie ein Schema aus, um Änderungen zu speichern.");
             return;
         }
+        CardObj.checkAktiv();
+
         const obj = findObj(CardObj.list, CardObj.selectedID);
+
         if (obj === null) {
             console.warn("Objekt nicht gefunden für ID:", CardObj.selectedID);
             return;
@@ -278,6 +295,11 @@ class CardObj {
 
     static prepareObjForUpdate(obj) {
         // Hier können Sie das Objekt in den Zustand für die Aktualisierung versetzen
+        CardObj.checkAktiv()
+
+        var timerSelect = document.getElementById("timerSelectRange");
+        obj.selectedTime = timerSelect.value;
+
         var preObj = {
             id: obj.id,
             imagePath: obj.imagePath,
@@ -313,12 +335,6 @@ class CardObj {
     }
     static setTimerRange(value) {
         console.log("Timer Range gesetzt auf:", value);
-        var obj = findObj(CardObj.list, CardObj.selectedID);
-        if (obj === null) {
-            console.warn("Objekt nicht gefunden für ID:", CardObj.selectedID);
-            return;
-        }
-        obj.selectedTime = value;
         var timerbereich = document.getElementById("timerSelectRange");
         if (timerbereich) {
             timerbereich.value = value; // Set the time range
@@ -482,8 +498,8 @@ async function createBodyCardObj() {
         // Hier kannst du mit jeder Checkbox arbeiten
         checkbox.addEventListener('change', function () {
             if (this.checked) {
-            
-                
+
+
                 const id = extractNumberFromString(this.id);
                 CardObj.selectedID = id; // Set the selected ID
                 var obj = findObj(CardObj.list, id);
@@ -511,8 +527,8 @@ async function createBodyCardObj() {
                 var checkA = document.getElementById("checkA");
                 var btn_save_changes = document.getElementById("btn_save_changes");
                 deakAktivCb(true);
-              
-                
+
+
                 CardObj.selectedID = null; // Reset the selected ID
                 labels.forEach(label => {
                     label.innerHTML = ""; // Clear the label text for unchecked checkboxes
@@ -528,7 +544,7 @@ async function createBodyCardObj() {
 
 function deakAktivCb(aktiv) {
     console.log("deakAktivCb aufgerufen mit aktiv:", aktiv);
-    
+
     var timerbereich = document.getElementById("timerSelectRange");
     var titel = document.getElementById("websiteName");
     var checkA = document.getElementById("checkA");
@@ -542,7 +558,7 @@ function deakAktivCb(aktiv) {
         btn_hinzufuegen.disabled = true; // Deaktiviert den Hinzufügen-
         btn_loeschen.disabled = true; // Deaktiviert den Löschen-Button
         btn_save_changes.disabled = true; // Deaktiviert den Speichern-Button
-    }else{
+    } else {
         timerbereich.disabled = false; // Aktiviert den Timerbereich
         titel.disabled = false; // Aktiviert das Titel-Eingabefeld
         checkA.disabled = false; // Aktiviert die Aktiv-Checkbox
@@ -574,7 +590,7 @@ function deakCb(aktiv) {
         const labels = cardContainer.querySelectorAll('label[name^="label"]');
         checkboxes.forEach(checkbox => {
             checkbox.disabled = aktiv;
-            
+
         });
         labels.forEach(label => {
             label.innerHTML = ""; // Clear the label text for unchecked checkboxes

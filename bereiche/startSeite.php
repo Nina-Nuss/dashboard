@@ -16,7 +16,7 @@
                                 <input type="text" class="form-control" id="websiteName" value="Snapbar_Warm" readonly>
 
                                 <div class="form-check mb-3">
-                                    <input class="form-check-input" type="checkbox" id="checkA" name="checkA" onclick="CardObj.checkAktiv()">
+                                    <input class="form-check-input" type="checkbox" id="checkA" name="checkA">
                                     <label class="form-check-label" for="checkA">
                                         Aktiv
                                     </label>

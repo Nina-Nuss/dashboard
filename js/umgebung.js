@@ -83,6 +83,7 @@ class Umgebung {
         if (delInfo != null) {
             delInfo.innerHTML = "";
             this.list = [];
+            this.temp_remove = [];
             Beziehungen.update();
             // KEINE neuen Umgebung-Objekte hier erzeugen!
             const result = await readDatabase("selectInfotherminal");
@@ -187,6 +188,19 @@ class Umgebung {
     }
 
     static remove_generate() {
+        if(this.temp_remove.length == 0) {
+            alert("Bitte wählen Sie mindestens ein Infotherminal aus, um es zu löschen.");
+            return;
+        }
+        
+        // Bestätigungsdialog anzeigen
+        const confirmed = confirm(`Sind Sie sicher, dass Sie ${this.temp_remove.length} Infotherminal(s) löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.`);
+        
+        if (!confirmed) {
+            console.log("Löschvorgang vom Benutzer abgebrochen");
+            return; // Benutzer hat abgebrochen
+        }
+        
         this.removeFromListLogik();
         this.update();
     }

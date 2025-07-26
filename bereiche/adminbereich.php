@@ -20,7 +20,7 @@
                                             <i class="fas fa-plus me-2"></i> Infotherminals hinzufügen
                                         </h5>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body" style="max-height: 400px; overflow-y: auto;">
                                         <div class="alert alert-info" role="alert">
                                             <h6 class="alert-heading">
                                                 <i class="fas fa-info-circle me-2"></i> Wichtige Hinweise:
@@ -65,7 +65,7 @@
                                             <i class="fas fa-trash me-2"></i> Infotherminals löschen
                                         </h5>
                                     </div>
-                                    <div class="card-body" >
+                                    <div class="card-body">
                                         <div class="form-group mb-3">
                                             <label for="infotherminalSelect" class="form-label">
                                                 <i class="fas fa-list me-2"></i> Infotherminal auswählen:
@@ -73,19 +73,21 @@
                                             
                                         </div>
                                         
-                                        <table class="table table-hover position-relative">
-                                            <thead>
-                                                <tr>
-                                                    <th>ID</th>
-                                                    <th>IP-Adresse</th>
-                                                    <th>Name</th>
-                                                    <th>Auswahl</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="deleteInfotherminal" style="max-height: 200px; overflow-y: auto;">
-                                                <!-- Infotherminal-Liste wird hier dynamisch geladen -->
-                                            </tbody>
-                                        </table>
+                                        <div style="max-height: 300px; overflow-y: auto;">
+                                            <table class="table table-hover position-relative">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>IP-Adresse</th>
+                                                        <th>Name</th>
+                                                        <th>Auswahl</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="deleteInfotherminal">
+                                                    <!-- Infotherminal-Liste wird hier dynamisch geladen -->
+                                                </tbody>
+                                            </table>
+                                        </div>
                                         
                                         <button type="button" class="btn btn-danger shadow-sm" onclick="Umgebung.remove_generate()">
                                             <i class="fas fa-trash me-2"></i> löschen

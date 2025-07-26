@@ -2,9 +2,9 @@
 session_start();
 
 
-include("/xampp/htdocs/Infotherminal/dashboard/database/selectInfotherminal.php");
+include("/xampp/htdocs/Infotherminal/database/selectInfotherminal.php");
 // echo "<br>";
-ob_end_clean();
+ob_end_clean(); // Uncomment if you want to clear the output buffer
 
 $ip = $_POST["infotherminalIp"] ?? '';
 $name = $_POST["infotherminalName"] ?? '';
@@ -31,7 +31,7 @@ if (!preg_match($patternIpFormat, $ip)) {
 }
 
 if (isset($ip) && isset($name)) {
-    foreach ($infothermalList1 as $datensatz) {
+    foreach ($infotherminalList1 as $datensatz) {
         if ($datensatz[2] === $ip || $datensatz[1] === $name) {
             echo "IP bereits vorhanden: " . $datensatz[2];
             exit;
