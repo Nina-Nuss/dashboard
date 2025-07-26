@@ -20,14 +20,25 @@
                                     </div>
                                     <div class="card-body" style="max-height: 400px; overflow-y: auto;">
                                         <form action="/schemas/movePic.php">
+                                            <div class="alert alert-info" role="alert">
+                                                <h6 class="alert-heading">
+                                                    <i class="fas fa-info-circle me-2"></i> Wichtige Hinweise:
+                                                </h6>
+                                                <ul class="mb-0">
+                                                    <li>Maximal 50 Schemas</li>
+
+                                                </ul>
+                                            </div>
+
+
                                             <div class="form-group mb-3">
                                                 <label for="img" class="form-label">
                                                     <i class="fas fa-image me-2"></i> Bild auswählen
                                                 </label>
-                                                <input type="file"  id="img" name="img" accept="image/*">
+                                                <input type="file" id="img" name="img" accept="image/*">
                                             </div>
 
-                                        
+
 
                                             <div class="form-group mb-3">
                                                 <label for="title" class="form-label">
@@ -90,7 +101,7 @@
                                             </div>
 
                                             <button type="submit" class="btn btn-success shadow-sm" onclick="meow(event)">
-                                                <i class="fas fa-plus me-2"></i> Schema hinzufügen
+                                                <i class="fas fa-plus me-2"></i> hinzufügen
                                             </button>
                                         </form>
                                     </div>
@@ -122,12 +133,12 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="deleteSchema" style="max-height: 300px; overflow-y: auto;">
-        
+
                                             </tbody>
                                         </table>
 
                                         <button type="button" class="btn btn-danger shadow-sm" id="deleteBtnForSchemas" onclick="CardObj.remove_generate()">
-                                            <i class="fas fa-trash me-2"></i> Schema löschen
+                                            <i class="fas fa-trash me-2"></i> löschen
                                         </button>
                                     </div>
                                 </div>

@@ -26,6 +26,7 @@
                                                 <i class="fas fa-info-circle me-2"></i> Wichtige Hinweise:
                                             </h6>
                                             <ul class="mb-0">
+                                                <li>Maximal 50 Infotherminals</li>
                                                 <li>IP-Adresse soll dem Format "00.0.0.000" entsprechen</li>
                                                 <li>Es dürfen keine Leerzeichen vorhanden sein</li>
                                                 <li>Sonderzeichen sind nicht erlaubt</li>
@@ -87,7 +88,7 @@
                                         </table>
                                         
                                         <button type="button" class="btn btn-danger shadow-sm" onclick="Umgebung.remove_generate()">
-                                            <i class="fas fa-trash me-2"></i> Infotherminal löschen
+                                            <i class="fas fa-trash me-2"></i> löschen
                                         </button>
                                     </div>
                                 </div>

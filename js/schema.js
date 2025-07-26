@@ -53,7 +53,7 @@ class CardObj {
             <div class="card-deck p-1 h-50">
                 <div class="card" id="${this.cardObjekte}">
                     <div class="card-header p-1">
-                        <small class="text-muted">Datum: ${this.startDate} - ${this.endDate} Uhrzeit: ${this.startTime} - ${this.endTime}</small>
+                        <small class="text-muted">Uhrzeit: ${this.startTime} - ${this.endTime}</small>
                     </div>
                     <img class="card-img-top" src="/schemas/uploads/${this.imagePath}" alt="Card image cap">
                     <div class="card-body p-2 h-50">
@@ -302,11 +302,7 @@ class CardObj {
         var titel = document.getElementById("websiteName");
         var checkA = document.getElementById("checkA");
 
-        console.log("CardTimerLabel Element:", cardtimerLabel);
-        console.log("CardObjekt:", cardObj);
-        console.log("CardObjekt selectedTime:", cardObj.selectedTimerLabel);
-
-
+        checkA.checked = cardObj.aktiv; // Set the checkbox state
         titel.value = cardObj.titel; // Set the title to the checkbox's title
         timerbereich.value = cardObj.selectedTime; // Set the time range
         var selectedTime = cardObj.selectedTime / 1000; // Convert milliseconds to seconds
@@ -341,7 +337,6 @@ window.addEventListener("load", function () {
         templatebereich.addEventListener("click", async function (event) {
             uncheckAllTableCheckboxes();
             deakCb(true);
-            deakAktivCb(true);
 
             var settingPanel = document.getElementById("settingsPanel");
             await fetch("bereiche/templatebereich.php")
@@ -503,7 +498,7 @@ async function createBodyCardObj() {
                 labels.forEach(label => {
                     const labelId = extractNumberFromString(label.getAttribute('name'));
                     if (labelId == CardObj.selectedID) {
-                        label.innerHTML = "checked"; // Set the label text to "checked" when checked
+                        label.innerHTML = "Ausgewählt"; // Set the label text to "checked" when checked
                         var label = label;
 
                     } else {
@@ -576,8 +571,13 @@ function deakCb(aktiv) {
 
     if (cardContainer) {
         const checkboxes = cardContainer.querySelectorAll('input[type="checkbox"]');
+        const labels = cardContainer.querySelectorAll('label[name^="label"]');
         checkboxes.forEach(checkbox => {
             checkbox.disabled = aktiv;
+            
+        });
+        labels.forEach(label => {
+            label.innerHTML = ""; // Clear the label text for unchecked checkboxes
         });
         CardObj.selectedID = null; // Update the checkAllowed state
         console.log(`${checkboxes.length} Checkboxes im cardContainer wurden deaktiviert`);

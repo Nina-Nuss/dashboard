@@ -81,6 +81,18 @@ buttonsInContainer.forEach(button => {
     });
 });
 
+function checkAnzahl(){
+    const anzahlInfo = Umgebung.list.length;
+    const anzahlCardObj = CardObj.list.length;
+    console.log("Anzahl der Umgebungen:", anzahlInfo);
+    console.log("Anzahl der CardObjekte:", anzahlCardObj);
+    if (anzahlInfo > 0) {
+        document.getElementById("selectUmgebung").disabled = false;
+    } else {
+        document.getElementById("selectUmgebung").disabled = true;
+    }
+
+}
 
 
 
@@ -104,17 +116,7 @@ async function readDatabase(databaseUrl) {
     return listUmgebung;
 }
 
-// Funktion zum Überprüfen, ob eine Checkbox oder switch aktiviert ist
-function checkTrue(check) {
-    var isChecked = document.getElementById(check).checked;
-    if (isChecked) {
-        console.log("Checkbox ist aktiviert");
-        return true;
-    } else {
-        console.log("Checkbox ist deaktiviert");
-        return false;
-    }
-}
+
 console.log("index_new.js wurde geladen");
 function saveToLocalStorage(key, jsonData) {
     const jsonString = JSON.stringify(jsonData, null, 2); // Formatierung für bessere Lesbarkeit

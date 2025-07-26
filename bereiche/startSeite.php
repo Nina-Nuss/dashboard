@@ -1,32 +1,27 @@
-
-
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-10 pt-3">
             <div class="card">
                 <div class="card-header">
-                   <h3 class="card-title mb-0">
-                            <i class="fas fa-cogs me-2"></i> Schema Einstellungen
-                        </h3>
-                        <p class="mb-0 mt-2">Hier können die Schemas verwaltet werden</p>
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-cogs me-2"></i> Schema Einstellungen
+                    </h3>
+                    <p class="mb-0 mt-2">Hier können die Schemas verwaltet werden</p>
                 </div>
                 <div class="card-body">
                     <form>
                         <div class="row">
                             <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="websiteName" class="form-label"> Webseite Name:</label>
-                                    <input type="text" class="form-control" id="websiteName" value="Snapbar_Warm" readonly>
-                                </div>
-                                
+                                <label for="websiteName" class="form-label"> Webseite Name:</label>
+                                <input type="text" class="form-control" id="websiteName" value="Snapbar_Warm" readonly>
+
                                 <div class="form-check mb-3">
                                     <input class="form-check-input" type="checkbox" id="checkA" name="checkA" onclick="CardObj.checkAktiv()">
                                     <label class="form-check-label" for="checkA">
-                                         Aktiv
+                                        Aktiv
                                     </label>
                                 </div>
-                                
+
                                 <div class="form-group mb-3">
                                     <label for="timerSelectRange" class="form-label">Dauer:</label>
                                     <select class="form-select form-control" id="timerSelectRange" onchange="CardObj.setTimerRange(this.value)">
@@ -58,12 +53,12 @@
                                         <option value="28000">28 Sekunden</option>
                                         <option value="29000">29 Sekunden</option>
                                         <option value="30000">30 Sekunden</option>
-                                        
+
                                     </select>
                                 </div>
 
-                                <button id="btn_save_changes" type="button"  onclick="CardObj.saveChanges()" class="btn btn-success shadow-sm">
-                                    <i class="fas fa-save"></i>  Save
+                                <button id="btn_save_changes" type="button" onclick="CardObj.saveChanges()" class="btn btn-success shadow-sm">
+                                    <i class="fas fa-save"></i> Speichern
                                 </button>
                             </div>
                             <div class="col-md-4">
@@ -72,7 +67,7 @@
                                 <!-- Modal hinzufügen -->
                                 <!-- Modal löschen -->
                             </div>
-                            
+
                             <div class="col-md-4">
                                 <div class="card">
                                     <div class="card-header">
@@ -101,5 +96,3 @@
     </div>
 </div>
 <!--  -->
-
-
