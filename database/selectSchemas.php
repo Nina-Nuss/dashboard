@@ -30,8 +30,8 @@ while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
             (bool)$row["isAktiv"],
             $row["startTime"],
             $row["endTime"],
-            $row["startDate"],
-            $row["endDate"],
+            $row["startDateTime"],
+            $row["endDateTime"],
             $row["titel"],
             $row["beschreibung"],
         ));

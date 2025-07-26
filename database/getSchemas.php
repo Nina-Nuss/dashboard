@@ -60,7 +60,7 @@ foreach ($images as $image) {
         if ($schema[1] == $image && $schema[3] == true) {
             foreach ($relationList as $relation) {
                 if ($relation[1] == $id && $relation[2] == $schema[0]) {
-                    // Konvertiere stdClass zu DateTime
+                  
                     if (isset($schema[4]) && isset($schema[5])) {
                         $trueTime = checkDateTime($schema[4], $schema[5], $timeFormat, $nowTime);
                     }
@@ -70,9 +70,9 @@ foreach ($images as $image) {
                     if($trueDate === true && $trueTime === true) {
                         array_push($imagesContainer, $schema);
                     } else {
-                       continue; // Wenn die Zeit oder das Datum nicht im Bereich ist, überspringe das Schema
+                        array_push($imagesContainer, $schema);
+                        continue; // Wenn die Zeit oder das Datum nicht im Bereich ist, überspringe das Schema
                     }
-                    array_push($imagesContainer, $schema);
                 }
             }
         }
@@ -93,7 +93,7 @@ function checkDateTime($start, $end, $format, $now)
         if ($now >= $startTime && $now <= $endTime) {
             return true;
         } else {
-  
+
             return false;
         }
     } else {

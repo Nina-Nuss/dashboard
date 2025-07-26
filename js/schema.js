@@ -453,8 +453,8 @@ async function insertDatabase(cardObj) {
         aktiv: cardObj.aktiv,
         startTime: cardObj.startTime,
         endTime: cardObj.endTime,
-        startDate: cardObj.startDate,
-        endDate: cardObj.endDate
+        startDateTime: cardObj.startDate,
+        endDateTime: cardObj.endDate
     };
     console.log(jsonData.selectedTime);
 
