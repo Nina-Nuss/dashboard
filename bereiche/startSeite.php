@@ -28,7 +28,7 @@
                                 </div>
                                 
                                 <div class="form-group mb-3">
-                                    <label for="timerSelectRange" class="form-label">Timer Bereich:</label>
+                                    <label for="timerSelectRange" class="form-label">Dauer:</label>
                                     <select class="form-select form-control" id="timerSelectRange" onchange="CardObj.setTimerRange(this.value)">
                                         <option value="3000">3 Sekunden</option>
                                         <option value="4000">4 Sekunden</option>
@@ -62,7 +62,7 @@
                                     </select>
                                 </div>
 
-                                <button type="button" onclick="CardObj.saveChanges()" class="btn btn-success shadow-sm">
+                                <button id="btn_save_changes" type="button"  onclick="CardObj.saveChanges()" class="btn btn-success shadow-sm">
                                     <i class="fas fa-save"></i>  Save
                                 </button>
                             </div>
@@ -80,10 +80,10 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="d-flex mb-3">
-                                            <button type="button" data-toggle="modal" data-target="#modal_hinzufuegen" class="btn btn-success btn-sm me-2">
+                                            <button id="btn_hinzufuegen" type="button" data-toggle="modal" data-target="#modal_hinzufuegen" class="btn btn-success btn-sm me-2">
                                                 <i class="fas fa-plus"></i> Hinzufügen
                                             </button>
-                                            <button type="button" data-toggle="modal" class="btn btn-danger btn-sm" data-target="#modal_loeschen">
+                                            <button id="btn_loeschen" type="button" data-toggle="modal" class="btn btn-danger btn-sm" data-target="#modal_loeschen">
                                                 <i class="fas fa-trash"></i> Löschen
                                             </button>
                                         </div>

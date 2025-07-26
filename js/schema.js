@@ -159,7 +159,7 @@ class CardObj {
         return temp;
     }
 
-    
+
     static async deleteCardObjDataBase(cardObjId) {
         try {
             // Erst ALLE Beziehungen für dieses Schema löschen
@@ -298,18 +298,20 @@ class CardObj {
     static loadChanges(cardObj) {
         console.log("loadChanges aufgerufen für CardObjektID:", cardObj.id);
         var cardtimerLabel = document.getElementById(cardObj.selectedTimerLabel);
+        var timerbereich = document.getElementById("timerSelectRange");
+        var titel = document.getElementById("websiteName");
+        var checkA = document.getElementById("checkA");
+
         console.log("CardTimerLabel Element:", cardtimerLabel);
         console.log("CardObjekt:", cardObj);
         console.log("CardObjekt selectedTime:", cardObj.selectedTimerLabel);
-        
-        
-        var timerbereich = document.getElementById("timerSelectRange");
-        var titel = document.getElementById("websiteName");
+
+
         titel.value = cardObj.titel; // Set the title to the checkbox's title
         timerbereich.value = cardObj.selectedTime; // Set the time range
         var selectedTime = cardObj.selectedTime / 1000; // Convert milliseconds to seconds
         cardtimerLabel.innerHTML = `Dauer: ${selectedTime} Sekunden`; // Update the label with the selected time
-        var checkA = document.getElementById("checkA");
+
         checkA.checked = cardObj.aktiv; // Set the checkbox state
 
     }
@@ -339,6 +341,8 @@ window.addEventListener("load", function () {
         templatebereich.addEventListener("click", async function (event) {
             uncheckAllTableCheckboxes();
             deakCb(true);
+            deakAktivCb(true);
+
             var settingPanel = document.getElementById("settingsPanel");
             await fetch("bereiche/templatebereich.php")
                 .then(response => response.text())
@@ -483,14 +487,14 @@ async function createBodyCardObj() {
         // Hier kannst du mit jeder Checkbox arbeiten
         checkbox.addEventListener('change', function () {
             if (this.checked) {
-        
-                var checkA = document.getElementById("checkA");
+            
+                
                 const id = extractNumberFromString(this.id);
                 CardObj.selectedID = id; // Set the selected ID
                 var obj = findObj(CardObj.list, id);
-                deakAktivCb(checkA, false);
+                deakAktivCb(false);
                 CardObj.loadChanges(obj); // Load changes for the selected CardObj   
-                
+
                 cbForSelectSchema.forEach(cb => {
                     if (cb !== this) {
                         cb.checked = false;
@@ -510,6 +514,10 @@ async function createBodyCardObj() {
                 });
             } else {
                 var checkA = document.getElementById("checkA");
+                var btn_save_changes = document.getElementById("btn_save_changes");
+                deakAktivCb(true);
+              
+                
                 CardObj.selectedID = null; // Reset the selected ID
                 labels.forEach(label => {
                     label.innerHTML = ""; // Clear the label text for unchecked checkboxes
@@ -523,15 +531,29 @@ async function createBodyCardObj() {
     });
 };
 
-function deakAktivCb(checkbox, aktiv) {
-    if (!checkbox) {
-        console.error("Checkbox not found");
-        return;
-    }
+function deakAktivCb(aktiv) {
+    console.log("deakAktivCb aufgerufen mit aktiv:", aktiv);
+    
+    var timerbereich = document.getElementById("timerSelectRange");
+    var titel = document.getElementById("websiteName");
+    var checkA = document.getElementById("checkA");
+    var btn_hinzufuegen = document.getElementById("btn_hinzufuegen");
+    var btn_loeschen = document.getElementById("btn_loeschen");
+    var btn_save_changes = document.getElementById("btn_save_changes");
     if (aktiv == true) {
-        checkbox.disabled = aktiv; // Uncheck the checkbox if aktiv is true
-    } else {
-        checkbox.disabled = false; // Otherwise, check the checkbox
+        timerbereich.disabled = true; // Deaktiviert den Timerbereich
+        titel.disabled = true; // Deaktiviert das Titel-Eingabefeld
+        checkA.disabled = true; // Deaktiviert die Aktiv-Checkbox
+        btn_hinzufuegen.disabled = true; // Deaktiviert den Hinzufügen-
+        btn_loeschen.disabled = true; // Deaktiviert den Löschen-Button
+        btn_save_changes.disabled = true; // Deaktiviert den Speichern-Button
+    }else{
+        timerbereich.disabled = false; // Aktiviert den Timerbereich
+        titel.disabled = false; // Aktiviert das Titel-Eingabefeld
+        checkA.disabled = false; // Aktiviert die Aktiv-Checkbox
+        btn_hinzufuegen.disabled = false; // Aktiviert den Hinzufügen-Button
+        btn_loeschen.disabled = false; // Aktiviert den Löschen-Button
+        btn_save_changes.disabled = false; // Aktiviert den Speichern-Button
     }
 }
 
@@ -551,6 +573,7 @@ function uncheckAllCheckboxes() {
 }
 function deakCb(aktiv) {
     const cardContainer = document.getElementById('cardContainer');
+
     if (cardContainer) {
         const checkboxes = cardContainer.querySelectorAll('input[type="checkbox"]');
         checkboxes.forEach(checkbox => {
@@ -562,5 +585,4 @@ function deakCb(aktiv) {
         console.log("cardContainer nicht gefunden");
     }
 }
-
 
