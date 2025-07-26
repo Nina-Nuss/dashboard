@@ -110,10 +110,8 @@
 
 <script>
     const params = new URLSearchParams(window.location.search);
-
     const ort = params.get('ip');
     console.log('IP-Adresse:', ort); // IP-Adresse aus der URL holen
-
     const foo = params.get('foo'); // weitere Variable aus der URL holen (optional)
     const container = document.getElementById('container');
     if (ort && container != null) {

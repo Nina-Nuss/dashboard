@@ -102,27 +102,17 @@ class Umgebung {
 
 
     }
-   
+
     static removeFromListViaID(id, list) {
         var temp = [];
         console.log(list);
-        
-       
         list.forEach(element => {
             if (element.id != id) {
                 //ID muss aus Liste gelöscht werden
                 temp.push(element);
-
             } else {
-                // Verhindere das Löschen der Hauptumgebung (ID 0 - "Alle Schemas")
-               if (element.id != 0) {
-                    this.deletee(element.id, "deleteInfotherminal");
-                    console.log("Das Element wurde gefunden und wird gelöscht! " + element.id);
-                    // Delete muss in der Datenbank nun hier ausgefuehrt werden
-                } else {
-                    console.warn("Hauptumgebung (Alle Schemas) kann nicht gelöscht werden!");
-                }
-                return;
+                this.deletee(element.id, "deleteInfotherminal");
+                console.log("Das Element wurde gefunden und wird gelöscht! " + element.id);
             }
         });
         return temp;
@@ -248,7 +238,7 @@ window.addEventListener("load", function () {
                     .catch(error => {
                         console.error('Fehler beim Hinzufügen:', error);
                     });
-                    form.reset(); // Formular zurücksetzen
+                form.reset(); // Formular zurücksetzen
             });
             const cardBodyDelInfo = document.getElementById("cardBodyForDelInfo");
             const delInfo = document.getElementById("deleteInfotherminal")
