@@ -10,11 +10,13 @@ $clientIP = $_SERVER['REMOTE_ADDR'];
 echo "Die IP-Adresse des Clients ist: " . $clientIP;
 
 
-// echo "ip adresse: " . $clientIP . "<br>";
+
+
+$clientIP = "192.168.31.210";
 
 $listePics = array();
 
-foreach ($infothermalList1 as $datensatz) {
+foreach ($infotherminalList1 as $datensatz) {
     // Überprüfen, ob die IP-Adresse im Datensatz vorhanden ist und nicht null ist
     if (isset($datensatz[2]) && $clientIP === $datensatz[2] && $datensatz[2] !== null) {
         $idDatensatz = $datensatz[0];

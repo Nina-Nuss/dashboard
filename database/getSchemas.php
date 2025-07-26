@@ -16,7 +16,7 @@ $input = json_decode(file_get_contents("php://input"), true);
 $ipGefunden = false;
 
 $schemaList = json_decode($schemaList); //Schemas
-$infothermalList = json_decode($infothermalList); //Infoterminals
+$infotherminalList = json_decode($infotherminalList); //Infoterminals
 $relationList = json_decode($beziehungsList); //Beziehungen
 
 
@@ -30,11 +30,11 @@ $nowDate = $now->format('Y-m-d');
 
 // $clientIP = $_SERVER['REMOTE_ADDR'];
 
-$ip = $input['ip'] ?? 'begegnungshaus';
+$ip = $input['ip'] ?? 'empfang';
 
 $therminal = array();
 
-foreach ($infothermalList as $infotherminal) {
+foreach ($infotherminalList as $infotherminal) {
     if ($ip == $infotherminal[1]) {
         $ip = $infotherminal[2];
         $id = $infotherminal[0];
@@ -120,9 +120,6 @@ function createDateTimeFormat($dateTime, $format)
         return null;
     }
 }
-
-
-
 function getAllImages()
 {
 
