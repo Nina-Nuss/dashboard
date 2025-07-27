@@ -234,8 +234,10 @@ class CardObj {
                     listInfo[5], // endTime
                     listInfo[6], // startDate
                     listInfo[7], // endDate
-                    listInfo[8], // titel
-                    listInfo[9]  // beschreibung
+                    listInfo[8], // startAktiv
+                    listInfo[9], // endAktiv
+                    listInfo[10], // titel
+                    listInfo[11]  // beschreibung
                 );
                 delSchema.innerHTML += `<tr class="border-bottom">
                     <td class="p-2">${listInfo[0]}</td>
@@ -407,6 +409,8 @@ async function meow(event) {
             serverImageName, // Nur Bildname, kein Pfad
             selectedTime,
             aktiv,
+            "",
+            "",
             "",
             "",
             "",

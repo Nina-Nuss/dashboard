@@ -19,7 +19,6 @@ $schemaList = json_decode($schemaList); //Schemas
 $infotherminalList = json_decode($infotherminalList); //Infoterminals
 $relationList = json_decode($beziehungsList); //Beziehungen
 
-
 $timeFormat = 'H:i:s';
 $dateFormat = 'Y-m-d H:i:s';
 
@@ -44,12 +43,10 @@ foreach ($infotherminalList as $infotherminal) {
         array_push($therminal, $id, $ip);
     }
 }
-
 if (!$ipGefunden) {
     // echo "<br>IP nicht gefunden, Standardwert wird verwendet: " . $ip . "<br>";
     return json_encode([]); // Rückgabe eines leeren Arrays, wenn die IP nicht gefunden wurde
 }
-
 $images = getAllImages();
 
 $imagesContainer = array();
@@ -62,8 +59,8 @@ foreach ($images as $image) {
                 if ($relation[1] == $id && $relation[2] == $schema[0]) {
                     $timeIsBetween = checkTime($schema[4], $schema[5], $timeFormat, $nowTime, $schema);
                     $dateIsBetween = checkTime($schema[6], $schema[7], $dateFormat, $nowDateTime, $schema);
-                    echo $timeIsBetween . " von: " . $schema[4] . " bis: " . $schema[5] . "<br>";
-                    echo $dateIsBetween . " von: " . $schema[6] . " bis: " . $schema[7] . "<br>";
+                    // echo $timeIsBetween . " von: " . $schema[4] . " bis: " . $schema[5] . "<br>";
+                    // echo $dateIsBetween . " von: " . $schema[6] . " bis: " . $schema[7] . "<br>";
                     // if ($dateIsBetween === true) {
                     //     if ($timeIsBetween === true) {
                     //         array_push($imagesContainer, $schema);
@@ -79,7 +76,6 @@ foreach ($images as $image) {
         }
     }
 };
-
 
 function checkTime($start, $end, $format,   $time, $schema)
 {

@@ -18,11 +18,13 @@ if (is_array($data)) {
     $endTime = $data["endTime"];
     $startDate = $data["startDateTime"];
     $endDate = $data["endDateTime"];
+    $timeAktiv = $data["timeAktiv"];
+    $dateAktiv = $data["dateAktiv"];
     $titel = $data["titel"];
     $beschreibung = $data["beschreibung"];
     // SQL-Abfrage mit Prepared Statement
-    $sql = "INSERT INTO schemas (imagePath, selectedTime, isAktiv, startTime, endTime, startDateTime, endDateTime, titel, beschreibung) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    $params = array( $imagePath, $selectedTime, $aktiv, $startTime, $endTime, $startDate, $endDate, $titel, $beschreibung);
+    $sql = "INSERT INTO schemas (imagePath, selectedTime, isAktiv, startTime, endTime, startDateTime, endDateTime, timeAktiv, dateAktiv, titel, beschreibung) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $params = array( $imagePath, $selectedTime, $aktiv, $startTime, $endTime, $startDate, $endDate, $timeAktiv, $dateAktiv, $titel, $beschreibung);
     $stmt = sqlsrv_prepare($conn, $sql, $params);
 
     if ($stmt) {

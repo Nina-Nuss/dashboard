@@ -143,6 +143,8 @@ async function createCardObj() {
                 cardObj.endTime,
                 cardObj.startDate,
                 cardObj.endDate,
+                cardObj.timeAktiv,
+                cardObj.dateAktiv,
                 cardObj.titel,
                 cardObj.beschreibung
             )

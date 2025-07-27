@@ -1,4 +1,5 @@
 <?php
+<?php
 
 include("connection.php");
 
@@ -17,13 +18,15 @@ $startTime = $data["startTime"];
 $endTime = $data["endTime"];
 $startDate = $data["startDate"];
 $endDate = $data["endDate"];
+$timeAktiv = $data["timeAktiv"] ?? false;  // ✅ Neu hinzugefügt
+$dateAktiv = $data["dateAktiv"] ?? false;  // ✅ Neu hinzugefügt
 $id = $data["id"]; // ID muss ebenfalls aus der Anfrage abgerufen werden
 
-// SQL-Abfrage mit Prepared Statement für MSSQL
+// SQL-Abfrage mit Prepared Statement für MSSQL - erweitert um timeAktiv und dateAktiv
 $sql = "UPDATE schemas
-        SET imagePath = ?, selectedTime = ?, isAktiv = ?, startTime = ?, endTime = ?, startDate = ?, endDate = ?, titel = ?, beschreibung = ?
+        SET imagePath = ?, selectedTime = ?, isAktiv = ?, startTime = ?, endTime = ?, startDate = ?, endDate = ?, titel = ?, beschreibung = ?, timeAktiv = ?, dateAktiv = ?
         WHERE id = ?";
-$params = array($imagePath, $selectedTime, $isAktiv, $startTime, $endTime, $startDate, $endDate, $titel, $beschreibung, $id);
+$params = array($imagePath, $selectedTime, $isAktiv, $startTime, $endTime, $startDate, $endDate, $titel, $beschreibung, $timeaktiv, $dateaktiv, $id);
 $stmt = sqlsrv_prepare($conn, $sql, $params);
 
 if ($stmt) {
