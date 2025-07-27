@@ -62,10 +62,47 @@
                                 </button>
                             </div>
                             <div class="col-md-4">
-                                <!-- Modal Error Log -->
-                                <!-- Modal Datum Von -->
-                                <!-- Modal hinzufügen -->
-                                <!-- Modal löschen -->
+                                <!-- <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-header py-2">
+                                        <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Datum & Uhrzeit wählen</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <form class="row g-3" action="/action_page.php">
+                                            <div class="col-12 mb-2">
+                                                <label for="dateInput1" class="form-label">Datum von:</label>
+                                                <input type="date" class="form-control" id="dateInput1" name="dateInput1">
+                                            </div>
+                                            <div class="col-12 mb-2">
+                                                <label for="dateInput2" class="form-label">Datum bis:</label>
+                                                <input type="date" class="form-control" id="dateInput2" name="dateInput2">
+                                            </div>
+                                            <div class="col-12 mb-2">
+                                                <label for="timeInput1" class="form-label">Uhrzeit von:</label>
+                                                <input type="time" class="form-control" id="timeInput1" name="timeInput1">
+                                            </div>
+                                            <div class="col-12 mb-2">
+                                                <label for="timeInput2" class="form-label">Uhrzeit 2:</label>
+                                                <input type="time" class="form-control" id="timeInput2" name="timeInput2">
+                                            </div>
+                                            <div class="col-12">
+                                                <button type="submit" class="btn btn-light w-100"><i class="fas fa-save me-1"></i>Speichern</button>
+                                            </div>
+
+                                        </form>
+                                        <hr>
+                                        <form action="">
+                                            <div class="col-12 mb-2">
+                                                <label for="onlyTimeInput" class="form-label">Nur Uhrzeit:</label>
+                                                <input type="time" class="form-control" id="onlyTimeInput" name="onlyTimeInput">
+                                            </div>
+                                            <div class="col-12">
+                                                <button type="submit" class="btn btn-light w-100"><i class="fas fa-save me-1"></i>Speichern</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div> -->
                             </div>
 
                             <div class="col-md-4">

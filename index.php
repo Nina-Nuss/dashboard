@@ -31,8 +31,8 @@
                             style="background-color: rgba(255, 255, 255, 0.952);">Video</button>
                     </div>
                 </div>
-               
- <div id="settingsPanel">
+
+                <div id="settingsPanel">
                 </div>
                 <hr />
 
@@ -43,7 +43,7 @@
 </div>
 </div>
 </div>
-</div>  
+</div>
 </body>
 <?php include 'assets/scripts.html'; ?>
 
