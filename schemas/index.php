@@ -6,13 +6,13 @@ require("../database/selectSchemas.php");
 
 // echo "<h1>------------</h1>";
 
-$clientIP = $_SERVER['REMOTE_ADDR'];
-echo "Die IP-Adresse des Clients ist: " . $clientIP;
+// $clientIP = $_SERVER['REMOTE_ADDR'];
+// echo "Die IP-Adresse des Clients ist: " . $clientIP;
 
 
 
 
-$clientIP = "192.168.31.210";
+$clientIP = "123.3.3.12";
 
 $listePics = array();
 

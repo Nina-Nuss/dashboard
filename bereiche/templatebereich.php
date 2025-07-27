@@ -121,7 +121,7 @@
                                     <div class="card-body" id="cardBodyForDelSchema">
                                         <div class="form-group mb-3">
                                             <label for="schemaSelect" class="form-label">
-                                                <divlass="fas fa-list me-2"></i> Schema auswählen:
+                                                <div class="fas fa-list me-2"></div> Schema auswählen:
                                             </label>
 
                                         </div>
