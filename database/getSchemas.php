@@ -54,8 +54,6 @@ $imagesContainer = array();
 $timeIsBetween = false;
 $dateIsBetween = false;
 
-$timeIsValid = false;  // Default: gültig wenn nicht aktiv
-$dateIsValid = false;  // Default: gültig wenn nicht aktiv
 
 
 foreach ($images as $image) {
@@ -68,8 +66,8 @@ foreach ($images as $image) {
                     $timeIsActive = filter_var($schema[8], FILTER_VALIDATE_BOOLEAN);
                     $dateIsActive = filter_var($schema[9], FILTER_VALIDATE_BOOLEAN);
 
-                    $timeIsValid = true;
-                    $dateIsValid = true;
+                    $timeIsValid = false;
+                    $dateIsValid = false;
 
                     if ($dateIsActive) {
                         // Wenn Zeit auch aktiv ist, müssen beide stimmen
