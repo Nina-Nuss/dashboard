@@ -143,8 +143,12 @@ function createDateTimeFormat($dateTime, $format)
         return null;
     }
     // Für Zeit-Format: Leerzeichen entfernen ist ok
-    if ($format === 'H:i:s') {
+    if ($format === 'H:i:s' || $format === 'H:i') {
         $dateTime = str_replace(' ', '', $dateTime);
+    }
+    // Unterstütze auch das ISO-Format mit T
+    if ($format === 'Y-m-d H:i' && strpos($dateTime, 'T') !== false) {
+        $format = 'Y-m-d\TH:i';
     }
     $dateObj = DateTime::createFromFormat($format, $dateTime);
     if ($dateObj === false) {
@@ -154,11 +158,9 @@ function createDateTimeFormat($dateTime, $format)
 }
 function getAllImages()
 {
-
     $ordner = "../schemas/uploads";
     $array = array();
     // Prüfen, ob der Ordner existiert
-
     if (is_dir($ordner)) {
         // Alle Dateien und Ordner einlesen
         $dateien = scandir($ordner);
