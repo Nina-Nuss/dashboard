@@ -19,13 +19,13 @@ $schemaList = json_decode($schemaList); //Schemas
 $infotherminalList = json_decode($infotherminalList); //Infoterminals
 $relationList = json_decode($beziehungsList); //Beziehungen
 
-$timeFormat = 'H:i:s';
-$dateFormat = 'Y-m-d H:i:s';
+$timeFormat = 'H:i';
+$dateFormat = 'Y-m-d H:i';
 
 $now = new DateTime('now', new DateTimeZone('Europe/Berlin'));
 
-$nowTime = $now->format('H:i:s');
-$nowDateTime = $now->format('Y-m-d H:i:s');
+$nowTime = $now->format('H:i');
+$nowDateTime = $now->format('Y-m-d H:i');
 
 // $clientIP = $_SERVER['REMOTE_ADDR'];
 
@@ -51,40 +51,73 @@ $images = getAllImages();
 
 $imagesContainer = array();
 
+$timeIsBetween = false;
+$dateIsBetween = false;
+
+$timeIsValid = false;  // Default: gültig wenn nicht aktiv
+$dateIsValid = false;  // Default: gültig wenn nicht aktiv
+
+
 foreach ($images as $image) {
     // echo "<br>" . "gesuchtes Bild: " . $image . "<br>";
     foreach ($schemaList as $schema) {
         if ($schema[1] == $image && $schema[3] == true) {
             foreach ($relationList as $relation) {
                 if ($relation[1] == $id && $relation[2] == $schema[0]) {
-                    $timeIsBetween = checkTime($schema[4], $schema[5], $timeFormat, $nowTime, $schema);
-                    $dateIsBetween = checkTime($schema[6], $schema[7], $dateFormat, $nowDateTime, $schema);
-                    // echo $timeIsBetween . " von: " . $schema[4] . " bis: " . $schema[5] . "<br>";
-                    // echo $dateIsBetween . " von: " . $schema[6] . " bis: " . $schema[7] . "<br>";
-                    // if ($dateIsBetween === true) {
-                    //     if ($timeIsBetween === true) {
-                    //         array_push($imagesContainer, $schema);
-                    //         continue 2; // Skip to the next image if both time and date are valid
-                    //     }
-                    // }
-                    // if ($timeIsBetween === true) {
-                    //     array_push($imagesContainer, $schema);
-                    // }
-                    array_push($imagesContainer, $schema);
+                    // ✅ Variablen pro Schema initialisieren
+                    $timeIsActive = filter_var($schema[8], FILTER_VALIDATE_BOOLEAN);
+                    $dateIsActive = filter_var($schema[9], FILTER_VALIDATE_BOOLEAN);
+
+                    $timeIsValid = true;
+                    $dateIsValid = true;
+
+                    if ($dateIsActive) {
+                        // Wenn Zeit auch aktiv ist, müssen beide stimmen
+                        if ($timeIsActive) {
+                            $timeIsValid = checkTime($schema[4], $schema[5], $timeFormat, $nowTime);
+                            $dateIsValid = checkTime($schema[6], $schema[7], $dateFormat, $nowDateTime);
+                            if ($timeIsValid && $dateIsValid) {
+                                array_push($imagesContainer, $schema);
+                            }
+                        } else {
+                            // Nur Datum zählt
+                            $dateIsValid = checkTime($schema[6], $schema[7], $dateFormat, $nowDateTime);
+                            if ($dateIsValid) {
+                                array_push($imagesContainer, $schema);
+                            }
+                        }
+                    } else {
+                        // Wenn Datum nicht aktiv, prüfe nur Zeit
+                        if ($timeIsActive) {
+                            $timeIsValid = checkTime($schema[4], $schema[5], $timeFormat, $nowTime);
+                            if ($timeIsValid) {
+                                array_push($imagesContainer, $schema);
+                            }
+                        } else {
+                            // Weder Zeit noch Datum aktiv: immer anzeigen
+                            array_push($imagesContainer, $schema);
+                        }
+                    }
                 }
             }
         }
     }
 };
 
-function checkTime($start, $end, $format,   $time, $schema)
+
+function checkTime($start, $end, $format, $time)
 {
-    if (isset($start) && isset($end)) {
-        $timeIsBetween = checkDateTime($start, $end, $format, $time);
-        return $timeIsBetween;
-    } else {
+    echo "  → Prüfe: '$start' bis '$end' (Format: $format), Jetzt: '$time'<br>";
+    // Prüfe auf leere, NULL oder 'NULL' Werte
+    $startTrim = trim($start);
+    $endTrim = trim($end);
+    if (empty($startTrim) || empty($endTrim) || $startTrim === 'NULL' || $endTrim === 'NULL' || $startTrim === null || $endTrim === null) {
+        echo "  → Leere/NULL Start/End-Werte gefunden → INVALID<br>";
         return false;
     }
+    $result = checkDateTime($startTrim, $endTrim, $format, $time);
+    echo "  → Ergebnis: " . ($result ? 'VALID' : 'INVALID') . "<br>";
+    return $result;
 }
 
 $imageList = json_encode($imagesContainer);
@@ -93,9 +126,6 @@ echo $imageList;
 
 function checkDateTime($start, $end, $format, $now)
 {
-    if (empty(trim($start)) || empty(trim($end))) {
-        return true;
-    }
     $startTime = createDateTimeFormat($start, $format);
     $endTime = createDateTimeFormat($end, $format);
     $nowTime = createDateTimeFormat($now, $format);
@@ -108,20 +138,19 @@ function checkDateTime($start, $end, $format, $now)
 
 function createDateTimeFormat($dateTime, $format)
 {
-    $dateTime = str_replace(' ', '', $dateTime);
-
     $dateTime = trim($dateTime);
-
-    if (empty($dateTime)) {
+    if (empty($dateTime) || $dateTime === 'NULL' || $dateTime === null || $dateTime === 'null') {
         return null;
     }
-    $dateObj = DateTime::createFromFormat($format, $dateTime);
-    
-    if ($dateObj === false) {
-        return null; // Ungültiges Format
+    // Für Zeit-Format: Leerzeichen entfernen ist ok
+    if ($format === 'H:i:s') {
+        $dateTime = str_replace(' ', '', $dateTime);
     }
-    
-    return $dateObj; // DateTime-Objekt zurückgeben, nicht String!
+    $dateObj = DateTime::createFromFormat($format, $dateTime);
+    if ($dateObj === false) {
+        return null;
+    }
+    return $dateObj;
 }
 function getAllImages()
 {
