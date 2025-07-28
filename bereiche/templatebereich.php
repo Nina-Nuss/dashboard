@@ -1,6 +1,6 @@
 <body class="bg-light">
-    <div class="container-fluid py-4" style="max-height: 90vh; overflow-y: auto;">
-        <div class="row">
+    <div class="container-fluid py-4">
+        <div class="row ">
             <div class="col-12">
                 <div class="card shadow-sm">
                     <div class="card-header bg-light text-dark border-bottom">
@@ -18,9 +18,9 @@
                                             <i class="fas fa-plus me-2"></i> Schemas erstellen
                                         </h5>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body" style="max-height: 400px; overflow-y: auto;">
                                         <form action="/schemas/movePic.php">
-                                            <div style="max-height: 400px; overflow-y: auto;">
+                                            <div>
                                                 <div class="alert alert-info" role="alert">
                                                     <h6 class="alert-heading">
                                                         <i class="fas fa-info-circle me-2"></i> Wichtige Hinweise:
@@ -158,6 +158,7 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 <script>
 
 </script>

@@ -1,6 +1,6 @@
-<div class="container-fluid">
+<div class="container-fluid py-4 " style="max-height: 90vh; overflow-y: auto;">
     <div class="row">
-        <div class="col-12 pt-3">
+        <div class="col-12">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title mb-0">
