@@ -1,5 +1,4 @@
 <?php
-<?php
 
 include("connection.php");
 
@@ -16,17 +15,28 @@ $selectedTime = $data["selectedTime"];
 $isAktiv = $data["isAktiv"];
 $startTime = $data["startTime"];
 $endTime = $data["endTime"];
-$startDate = $data["startDate"];
-$endDate = $data["endDate"];
+$startDateTime = $data["startDateTime"];
+$endDateTime = $data["endDateTime"];
 $timeAktiv = $data["timeAktiv"] ?? false;  // ✅ Neu hinzugefügt
 $dateAktiv = $data["dateAktiv"] ?? false;  // ✅ Neu hinzugefügt
 $id = $data["id"]; // ID muss ebenfalls aus der Anfrage abgerufen werden
 
+// ✅ Validierung für DateTime-Felder
+function validateDateTime($value) {
+    if (empty($value) || $value === 'NULL' || $value === 'null' || trim($value) === '') {
+        return null;
+    }
+    return $value;
+}
+
+$startDateTime = validateDateTime($startDateTime);
+$endDateTime = validateDateTime($endDateTime);
+
 // SQL-Abfrage mit Prepared Statement für MSSQL - erweitert um timeAktiv und dateAktiv
 $sql = "UPDATE schemas
-        SET imagePath = ?, selectedTime = ?, isAktiv = ?, startTime = ?, endTime = ?, startDate = ?, endDate = ?, titel = ?, beschreibung = ?, timeAktiv = ?, dateAktiv = ?
+        SET imagePath = ?, selectedTime = ?, isAktiv = ?, startTime = ?, endTime = ?, startDateTime = ?, endDateTime = ?, titel = ?, beschreibung = ?, timeAktiv = ?, dateAktiv = ?
         WHERE id = ?";
-$params = array($imagePath, $selectedTime, $isAktiv, $startTime, $endTime, $startDate, $endDate, $titel, $beschreibung, $timeaktiv, $dateaktiv, $id);
+$params = array($imagePath, $selectedTime, $isAktiv, $startTime, $endTime, $startDateTime, $endDateTime, $titel, $beschreibung, $timeAktiv, $dateAktiv, $id);
 $stmt = sqlsrv_prepare($conn, $sql, $params);
 
 if ($stmt) {

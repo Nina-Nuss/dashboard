@@ -22,7 +22,7 @@
                                     </div>
 
                                     <div class="form-check mb-3">
-                                        <input class="form-check-input" type="checkbox" id="checkA" name="checkA">
+                                        <input class="form-check-input" type="checkbox" id="checkA" name="checkA" onchange="CardObj.checkAktiv()">
                                         <label class="form-check-label" for="checkA">
                                             Aktiv
                                         </label>

@@ -57,7 +57,6 @@ window.onload = async function () {
 
             settingPanel.innerHTML = responseText;
             deakCb(false);
-            var checkA = document.getElementById("checkA");
             deakAktivCb(true);
             Umgebung.erstelleSelector();
 

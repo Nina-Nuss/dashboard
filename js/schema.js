@@ -266,8 +266,8 @@ class CardObj {
                 );
                 delSchema.innerHTML += `<tr class="border-bottom">
                     <td class="p-2">${listInfo[0]}</td>
-                    <td class="p-2">${listInfo[8]}</td>
-                    <td class="p-2">${listInfo[9]}</td>
+                    <td class="p-2">${listInfo[10]}</td>
+                    <td class="p-2">${listInfo[11]}</td>
                     <td class="p-2 text-center"><input type="checkbox" name="${listInfo[0]}" id="checkDelSchema${listInfo[0]}" onchange="CardObj.event_remove(${listInfo[0]})"></td>
                 </tr>`;
             });
@@ -334,8 +334,10 @@ class CardObj {
             isAktiv: obj.aktiv,
             startTime: obj.startTime,
             endTime: obj.endTime,
-            startDate: obj.startDate,
-            endDate: obj.endDate,
+            startDateTime: obj.startDate,
+            endDateTime: obj.endDate,
+            timeAktiv: obj.timeAktiv,
+            dateAktiv: obj.dateAktiv,
             titel: obj.titel,
             beschreibung: obj.beschreibung
         }; // Erstellen Sie eine Kopie des Objekts
@@ -483,7 +485,9 @@ async function insertDatabase(cardObj) {
         startTime: cardObj.startTime,
         endTime: cardObj.endTime,
         startDateTime: cardObj.startDate,
-        endDateTime: cardObj.endDate
+        endDateTime: cardObj.endDate,
+        timeAktiv: cardObj.timeAktiv,
+        dateAktiv: cardObj.dateAktiv
     };
     console.log(jsonData.selectedTime);
 
@@ -555,7 +559,6 @@ async function createBodyCardObj() {
                 var checkA = document.getElementById("checkA");
                 var btn_save_changes = document.getElementById("btn_save_changes");
                 deakAktivCb(true);
-
 
                 CardObj.selectedID = null; // Reset the selected ID
                 labels.forEach(label => {
