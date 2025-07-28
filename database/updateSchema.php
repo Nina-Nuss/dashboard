@@ -17,20 +17,9 @@ $startTime = $data["startTime"];
 $endTime = $data["endTime"];
 $startDateTime = $data["startDateTime"];
 $endDateTime = $data["endDateTime"];
-$timeAktiv = $data["timeAktiv"] ?? false;  // ✅ Neu hinzugefügt
-$dateAktiv = $data["dateAktiv"] ?? false;  // ✅ Neu hinzugefügt
+$timeAktiv = $data["timeAktiv"] ?? false;  
+$dateAktiv = $data["dateAktiv"] ?? false; 
 $id = $data["id"]; // ID muss ebenfalls aus der Anfrage abgerufen werden
-
-// ✅ Validierung für DateTime-Felder
-function validateDateTime($value) {
-    if (empty($value) || $value === 'NULL' || $value === 'null' || trim($value) === '') {
-        return null;
-    }
-    return $value;
-}
-
-$startDateTime = validateDateTime($startDateTime);
-$endDateTime = validateDateTime($endDateTime);
 
 // SQL-Abfrage mit Prepared Statement für MSSQL - erweitert um timeAktiv und dateAktiv
 $sql = "UPDATE schemas

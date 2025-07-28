@@ -3,8 +3,6 @@
 // MSSQL Verbindungsparameter
 $serverName = "FIS-BW-03\\SQLEXPRESS"; 
 
-
-
 $connectionOptions = array(
     "Database" => "infotherminal",      // Hier den Datenbanknamen eintragen!
     "CharacterSet" => "UTF-8",

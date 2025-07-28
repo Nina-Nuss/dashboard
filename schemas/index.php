@@ -8,10 +8,6 @@ require("../database/selectSchemas.php");
 
 // $clientIP = $_SERVER['REMOTE_ADDR'];
 // echo "Die IP-Adresse des Clients ist: " . $clientIP;
-
-
-
-
 $clientIP = "00.0.0.066";
 
 $listePics = array();
@@ -23,13 +19,11 @@ foreach ($infotherminalList1 as $datensatz) {
         echo "<h3>Gefundenes Bild:</h3>";
         // echo $idDatensatz;
         // Wenn die IP-Adresse übereinstimmt, führe die folgenden Aktionen aus
-        foreach ($schemalist1 as $datensatz2) {
-            
+        foreach ($schemalist1 as $datensatz2) {            
             if($idDatensatz === $datensatz2[6]) {
                 // echo "<h3>Gefundenes Bild:</h3>";
                 // Wenn die infotherminal_id übereinstimmt, füge das Bild zur Liste hinzu
                 // echo $idDatensatz . "<br>"  . $datensatz2[1];
-
                 array_push($listePics, array(
                     $datensatz2[1], // imagePath
                 ));
@@ -39,13 +33,8 @@ foreach ($infotherminalList1 as $datensatz) {
         // echo "Gefundene IP: " . $datensatz[2] . "<br>";
         // echo "Titel: " . $datensatz[1] . "<br>";
         // echo "<h4>------------</h4>";
-      
-
         echo json_encode($listePics);
-
         header("Location: ../anzeigeTherminal/index.php?ip=" . urlencode($datensatz[1]));
-        
     };
 }
-
 ?>

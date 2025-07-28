@@ -105,16 +105,16 @@ foreach ($images as $image) {
 
 function checkTime($start, $end, $format, $time)
 {
-    echo "  → Prüfe: '$start' bis '$end' (Format: $format), Jetzt: '$time'<br>";
+    // echo "  → Prüfe: '$start' bis '$end' (Format: $format), Jetzt: '$time'<br>";
     // Prüfe auf leere, NULL oder 'NULL' Werte
     $startTrim = trim($start);
     $endTrim = trim($end);
     if (empty($startTrim) || empty($endTrim) || $startTrim === 'NULL' || $endTrim === 'NULL' || $startTrim === null || $endTrim === null) {
-        echo "  → Leere/NULL Start/End-Werte gefunden → INVALID<br>";
+        // echo "  → Leere/NULL Start/End-Werte gefunden → INVALID<br>";
         return false;
     }
     $result = checkDateTime($startTrim, $endTrim, $format, $time);
-    echo "  → Ergebnis: " . ($result ? 'VALID' : 'INVALID') . "<br>";
+    // echo "  → Ergebnis: " . ($result ? 'VALID' : 'INVALID') . "<br>";
     return $result;
 }
 
