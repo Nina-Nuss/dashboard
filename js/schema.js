@@ -58,7 +58,7 @@ class CardObj {
                         <small class="text-muted">Uhrzeit: ${this.startTime} - ${this.endTime}</small>
                     </div>
                     <img class="card-img-top" src="/schemas/uploads/${this.imagePath}" alt="Card image cap">
-                    <div class="card-body p-2 h-50">
+                    <div class="card-body p-2">
                         <h5 class="card-title m-0">${this.titel}</h5>
                         <p class="card-text m-0">${this.beschreibung}</p>
                         <div class="form-check">
@@ -96,6 +96,29 @@ class CardObj {
             });
         });
     }
+
+
+    // zeigeCardObjInUmgebungAn(){
+    //      document.getElementById("cardContainer").innerHTML = "";
+    //     const selector = document.createElement("select");
+    //     selector.id = "selectUmgebung";
+    //     selector.className = "form-select";
+    //     selector.innerHTML = `<option value="">Bitte wählen Sie eine Umgebung</option>`;
+    //     Umgebung.list.forEach(umgebung => {
+    //         selector.innerHTML += `<option value="${umgebung.id}">${umgebung.titel}</option>`;
+    //     });
+    //     selector.addEventListener("change", (event) => {
+    //         const selectedId = event.target.value;
+    //         Beziehungen.list.forEach(beziehung => {
+    //             if (beziehung.cardObjektID == Umg.selectedID && beziehung.umgebungID == selectedId) {
+    //                 // Hier kannst du die Logik hinzufügen, um die Beziehung anzuzeigen
+    //                 console.log(`Beziehung gefunden: CardObjektID ${CardObj.selectedID}, UmgebungID ${selectedId}`);
+    //             }
+    //         });
+    //     });
+    //     document.getElementById("rowForCards").appendChild(selector);
+    //     this.htmlBody("cardContainer");
+    // }
 
     static event_remove(id) {
         var element = document.getElementById(`checkDelSchema${id}`);
@@ -500,7 +523,6 @@ async function createBodyCardObj() {
     console.log(cbForSelectSchema.length);
     // Alle Checkboxen mit ID, die mit "flexCheck" beginnt, auswählen und loopen
     cbForSelectSchema.forEach(checkbox => {
-
         // Hier kannst du mit jeder Checkbox arbeiten
         checkbox.addEventListener('change', function () {
             if (this.checked) {
@@ -546,6 +568,8 @@ async function createBodyCardObj() {
 
         });
     });
+
+   
 };
 
 function deakAktivCb(aktiv) {
