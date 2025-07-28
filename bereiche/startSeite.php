@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-10 pt-3">
+        <div class="col-12 pt-3">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title mb-0">
@@ -9,127 +9,111 @@
                     <p class="mb-0 mt-2">Hier können die Schemas verwaltet werden</p>
                 </div>
                 <div class="card-body">
-                    <form>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label for="websiteName" class="form-label"> Webseite Name:</label>
-                                <input type="text" class="form-control" id="websiteName" value="Snapbar_Warm" readonly>
-
-                                <div class="form-check mb-3">
-                                    <input class="form-check-input" type="checkbox" id="checkA" name="checkA">
-                                    <label class="form-check-label" for="checkA">
-                                        Aktiv
-                                    </label>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h6 class="mb-0"><i class="fas fa-cog me-2"></i> Schema Eigenschaften</h6>
                                 </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="websiteName" class="form-label">Webseite Name:</label>
+                                        <input type="text" class="form-control" id="websiteName" value="Snapbar_Warm" readonly>
+                                    </div>
 
-                                <div class="form-group mb-3">
-                                    <label for="timerSelectRange" class="form-label">Dauer:</label>
-                                    <select class="form-select form-control" id="timerSelectRange" onchange="CardObj.setTimerRange(this.value)">
-                                        <option value="3000">3 Sekunden</option>
-                                        <option value="4000">4 Sekunden</option>
-                                        <option value="5000">5 Sekunden</option>
-                                        <option value="6000">6 Sekunden</option>
-                                        <option value="7000">7 Sekunden</option>
-                                        <option value="8000">8 Sekunden</option>
-                                        <option value="9000">9 Sekunden</option>
-                                        <option value="10000">10 Sekunden</option>
-                                        <option value="11000">11 Sekunden</option>
-                                        <option value="12000">12 Sekunden</option>
-                                        <option value="13000">13 Sekunden</option>
-                                        <option value="14000">14 Sekunden</option>
-                                        <option value="15000">15 Sekunden</option>
-                                        <option value="16000">16 Sekunden</option>
-                                        <option value="17000">17 Sekunden</option>
-                                        <option value="18000">18 Sekunden</option>
-                                        <option value="19000">19 Sekunden</option>
-                                        <option value="20000">20 Sekunden</option>
-                                        <option value="21000">21 Sekunden</option>
-                                        <option value="22000">22 Sekunden</option>
-                                        <option value="23000">23 Sekunden</option>
-                                        <option value="24000">24 Sekunden</option>
-                                        <option value="25000">25 Sekunden</option>
-                                        <option value="26000">26 Sekunden</option>
-                                        <option value="27000">27 Sekunden</option>
-                                        <option value="28000">28 Sekunden</option>
-                                        <option value="29000">29 Sekunden</option>
-                                        <option value="30000">30 Sekunden</option>
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="checkA" name="checkA">
+                                        <label class="form-check-label" for="checkA">
+                                            Aktiv
+                                        </label>
+                                    </div>
 
-                                    </select>
+                                    <div class="form-group mb-3">
+                                        <label for="timerSelectRange" class="form-label">Dauer:</label>
+                                        <select class="form-select form-control" id="timerSelectRange" onchange="CardObj.setTimerRange(this.value)">
+                                            <option value="3000">3 Sekunden</option>
+                                            <option value="4000">4 Sekunden</option>
+                                            <option value="5000">5 Sekunden</option>
+                                            <option value="6000">6 Sekunden</option>
+                                            <option value="7000">7 Sekunden</option>
+                                            <option value="8000">8 Sekunden</option>
+                                            <option value="9000">9 Sekunden</option>
+                                            <option value="10000">10 Sekunden</option>
+                                            <option value="11000">11 Sekunden</option>
+                                            <option value="12000">12 Sekunden</option>
+                                            <option value="13000">13 Sekunden</option>
+                                            <option value="14000">14 Sekunden</option>
+                                            <option value="15000">15 Sekunden</option>
+                                            <option value="16000">16 Sekunden</option>
+                                            <option value="17000">17 Sekunden</option>
+                                            <option value="18000">18 Sekunden</option>
+                                            <option value="19000">19 Sekunden</option>
+                                            <option value="20000">20 Sekunden</option>
+                                            <option value="21000">21 Sekunden</option>
+                                            <option value="22000">22 Sekunden</option>
+                                            <option value="23000">23 Sekunden</option>
+                                            <option value="24000">24 Sekunden</option>
+                                            <option value="25000">25 Sekunden</option>
+                                            <option value="26000">26 Sekunden</option>
+                                            <option value="27000">27 Sekunden</option>
+                                            <option value="28000">28 Sekunden</option>
+                                            <option value="29000">29 Sekunden</option>
+                                            <option value="30000">30 Sekunden</option>
+                                        </select>
+                                    </div>
+
+                                    <button id="btn_save_changes" type="button" onclick="CardObj.saveChanges()" class="btn btn-success shadow-sm w-100">
+                                        <i class="fas fa-save"></i> Speichern
+                                    </button>
                                 </div>
-
-                                <button id="btn_save_changes" type="button" onclick="CardObj.saveChanges()" class="btn btn-success shadow-sm">
-                                    <i class="fas fa-save"></i> Speichern
-                                </button>
                             </div>
-                            <div class="col-md-4">
-                                <!-- <div class="col-md-4">
-                                <div class="card">
-                                    <div class="card-header py-2">
-                                        <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Datum & Uhrzeit wählen</h5>
-                                    </div>
-                                    <div class="card-body">
-                                        <form class="row g-3" action="/action_page.php">
-                                            <div class="col-12 mb-2">
-                                                <label for="dateInput1" class="form-label">Datum von:</label>
-                                                <input type="date" class="form-control" id="dateInput1" name="dateInput1">
-                                            </div>
-                                            <div class="col-12 mb-2">
-                                                <label for="dateInput2" class="form-label">Datum bis:</label>
-                                                <input type="date" class="form-control" id="dateInput2" name="dateInput2">
-                                            </div>
-                                            <div class="col-12 mb-2">
-                                                <label for="timeInput1" class="form-label">Uhrzeit von:</label>
-                                                <input type="time" class="form-control" id="timeInput1" name="timeInput1">
-                                            </div>
-                                            <div class="col-12 mb-2">
-                                                <label for="timeInput2" class="form-label">Uhrzeit 2:</label>
-                                                <input type="time" class="form-control" id="timeInput2" name="timeInput2">
-                                            </div>
-                                            <div class="col-12">
-                                                <button type="submit" class="btn btn-light w-100"><i class="fas fa-save me-1"></i>Speichern</button>
-                                            </div>
+                        </div>
 
-                                        </form>
-                                        <hr>
-                                        <form action="">
-                                            <div class="col-12 mb-2">
-                                                <label for="onlyTimeInput" class="form-label">Nur Uhrzeit:</label>
-                                                <input type="time" class="form-control" id="onlyTimeInput" name="onlyTimeInput">
-                                            </div>
-                                            <div class="col-12">
-                                                <button type="submit" class="btn btn-light w-100"><i class="fas fa-save me-1"></i>Speichern</button>
-                                            </div>
-                                        </form>
-                                    </div>
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h6 class="mb-0"><i class="fas fa-desktop me-2"></i> Infotherminal Anzeigen</h6>
                                 </div>
-                            </div> -->
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h6 class="mb-0"> IP-Adressen Verwaltung</h6>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label for="infotherminalSelect" class="form-label">Infotherminal wählen:</label>
+                                        <select class="form-select" id="infotherminalSelect">
+                                            <option value="">-- Bitte wählen --</option>
+                                        </select>
                                     </div>
-                                    <div class="card-body">
-                                        <div class="d-flex mb-3">
-                                            <button id="btn_hinzufuegen" type="button" data-toggle="modal" data-target="#modal_hinzufuegen" class="btn btn-success btn-sm me-2">
-                                                <i class="fas fa-plus"></i> Hinzufügen
-                                            </button>
-                                            <button id="btn_loeschen" type="button" data-toggle="modal" class="btn btn-danger btn-sm" data-target="#modal_loeschen">
-                                                <i class="fas fa-trash"></i> Löschen
-                                            </button>
-                                        </div>
-                                        <div class="border rounded p-2" style="max-height: 200px; overflow-y: auto; overflow-x: hidden; border-radius: 8px;" id="anzeigebereichV">
-                                            <!-- IP Adressen werden hier angezeigt -->
-                                        </div>
+                                    <button id="openTerminalBtn" class="btn btn-primary w-100" disabled>
+                                        <i class="fas fa-external-link-alt me-1"></i> Anzeige öffnen
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <h6 class="mb-0"><i class="fas fa-network-wired me-2"></i> IP-Adressen Verwaltung</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="d-flex mb-3">
+                                        <button id="btn_hinzufuegen" type="button" data-toggle="modal" data-target="#modal_hinzufuegen" class="btn btn-success btn-sm me-2">
+                                            <i class="fas fa-plus"></i> Hinzufügen
+                                        </button>
+                                        <button id="btn_loeschen" type="button" data-toggle="modal" class="btn btn-danger btn-sm" data-target="#modal_loeschen">
+                                            <i class="fas fa-trash"></i> Löschen
+                                        </button>
+                                    </div>
+                                    <div class="border rounded p-2" style="max-height: 200px; overflow-y: auto; overflow-x: hidden; border-radius: 8px;" id="anzeigebereichV">
+                                        <!-- IP Adressen werden hier angezeigt -->
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
 <!--  -->

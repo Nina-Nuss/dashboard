@@ -12,7 +12,7 @@ require("../database/selectSchemas.php");
 
 
 
-$clientIP = "123.3.3.12";
+$clientIP = "00.0.0.066";
 
 $listePics = array();
 

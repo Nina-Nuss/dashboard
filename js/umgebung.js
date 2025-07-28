@@ -58,14 +58,7 @@ class Umgebung {
         var length = this.cardObjList.length
         return length
     }
-    static loadAllCardObj() {
-        Umgebung.allCardList.forEach(cardList => {
-            cardList.forEach(cardObj => {
-                cardObj.htmlUmgebungsBody(cardObj.umgebung);
 
-            });
-        });
-    }
     static showCardObjList() {
         this.cardObjList.forEach(cardObj => {
             console.log(cardObj);
@@ -79,25 +72,43 @@ class Umgebung {
     }
     static async update() {
         uncheckAllCheckboxes();
-        var delInfo = document.getElementById("deleteInfotherminal")
+        const delInfo = document.getElementById("deleteInfotherminal");
+        const selector = document.getElementById('infotherminalSelect');
+
         if (delInfo != null) {
-            delInfo.innerHTML = "";
+            // Performance: String-Building statt innerHTML +=
+            let tableContent = "";
+            let selectorOptions = '<option value="">-- Bitte wählen --</option>';
+
             this.list = [];
             this.temp_remove = [];
             Beziehungen.update();
-            // KEINE neuen Umgebung-Objekte hier erzeugen!
+
             const result = await readDatabase("selectInfotherminal");
             console.log("result: ", result);
-            await result.forEach(listInfo => {
-                // Nur hier neue Umgebung-Objekte erzeugen
+
+            // Performance: Normale forEach statt await forEach
+            result.forEach(listInfo => {
+                // Neue Umgebung-Objekte erzeugen
                 new Umgebung(listInfo[0], listInfo[1], listInfo[2]);
-                delInfo.innerHTML += `<tr class="border-bottom">
+
+                // Tabellencontent sammeln
+                tableContent += `<tr class="border-bottom">
                     <td class="p-2">${listInfo[0]}</td>
                     <td class="p-2">${listInfo[2]}</td>
                     <td class="p-2">${listInfo[1]}</td>
                     <td class="p-2 text-center"><input type="checkbox" name="${listInfo[0]}" id="checkDelInfo${listInfo[0]}" onchange="Umgebung.event_remove(${listInfo[0]})"></td>
                 </tr>`;
+
+                // Selector-Optionen sammeln
+                selectorOptions += `<option value="${listInfo[1]}">${listInfo[1]}</option>`;
             });
+
+            // DOM nur einmal aktualisieren (bessere Performance)
+            delInfo.innerHTML = tableContent;
+            if (selector) {
+                selector.innerHTML = selectorOptions;
+            }
         }
         console.log(this.list);
     }
@@ -187,23 +198,90 @@ class Umgebung {
         console.log(this.list);
     }
 
-    static remove_generate() {
-        if(this.temp_remove.length == 0) {
+    static async remove_generate() {
+        if (this.temp_remove.length == 0) {
             alert("Bitte wählen Sie mindestens ein Infotherminal aus, um es zu löschen.");
             return;
         }
-        
-        // Bestätigungsdialog anzeigen
-        const confirmed = confirm(`Sind Sie sicher, dass Sie ${this.temp_remove.length} Infotherminal(s) löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.`);
-        
+
+        // Bessere Bestätigungsdialog mit Namen der zu löschenden Terminals
+        const terminalsToDelete = this.list
+            .filter(terminal => this.temp_remove.includes(terminal.id))
+            .map(terminal => terminal.titel)
+            .join(', ');
+
+        const confirmed = confirm(
+            `Sind Sie sicher, dass Sie folgende ${this.temp_remove.length} Infotherminal(s) löschen möchten?\n\n` +
+            `${terminalsToDelete}\n\n` +
+            `Diese Aktion kann nicht rückgängig gemacht werden.`
+        );
+
         if (!confirmed) {
             console.log("Löschvorgang vom Benutzer abgebrochen");
-            return; // Benutzer hat abgebrochen
+            return;
         }
-        
-        this.removeFromListLogik();
-        this.update();
+
+        try {
+            // Loading-State anzeigen
+            const deleteButton = document.querySelector('[onclick*="remove_generate"]');
+            if (deleteButton) {
+                deleteButton.disabled = true;
+                deleteButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Lösche...';
+            }
+
+            await this.removeFromListLogik();
+            await this.update();
+
+            // Erfolgreiche Löschung anzeigen
+            alert(`${this.temp_remove.length} Infotherminal(s) wurden erfolgreich gelöscht.`);
+
+        } catch (error) {
+            console.error("Fehler beim Löschen:", error);
+            alert("Fehler beim Löschen der Infotherminals. Bitte versuchen Sie es erneut.");
+        } finally {
+            // Button zurücksetzen
+            const deleteButton = document.querySelector('[onclick*="remove_generate"]');
+            if (deleteButton) {
+                deleteButton.disabled = false;
+                deleteButton.innerHTML = '<i class="fas fa-trash"></i> Löschen';
+            }
+        }
     }
+
+    static erstelleSelector() {
+        const selector = document.getElementById('infotherminalSelect');
+        const button = document.getElementById('openTerminalBtn');
+
+        // Selector nur einmal befüllen und Event-Listener nur einmal hinzufügen
+
+        // Selector leeren
+        selector.innerHTML = '<option value="">-- Bitte wählen --</option>';
+
+        // Event-Listener nur einmal hinzufügen (außerhalb der forEach-Schleife)
+        button.addEventListener('click', function () {
+            const selectedTerminal = selector.value;
+            if (selectedTerminal !== '') {
+                const url = `http://localhost:3000/anzeigeTherminal/index.php?ip=${encodeURIComponent(selectedTerminal)}`;
+                window.open(url, '_blank');
+            }
+        });
+
+        // Change-Event nur einmal hinzufügen
+        selector.addEventListener('change', function () {
+            button.disabled = this.value === '';
+        });
+
+        Umgebung.list.forEach(element => {
+            console.log(element);
+            
+            // Selector Option hinzufügen
+            const option = document.createElement("option");
+            option.value = element.titel;
+            option.textContent = element.titel;
+            selector.appendChild(option);
+        });
+    }
+
 }
 
 console.log("Umgebung.js loaded");
@@ -254,13 +332,18 @@ window.addEventListener("load", function () {
             const cardBodyDelInfo = document.getElementById("cardBodyForDelInfo");
             const delInfo = document.getElementById("deleteInfotherminal")
 
+            // Umgebungen durchgehen und sowohl Tabelle als auch Selector befüllen
             Umgebung.list.forEach(element => {
+                // Tabelle befüllen
                 delInfo.innerHTML += `<tr class="border-bottom">
-                    <td class="p-2">${element.id}</td>
-                    <td class="p-2">${element.ipAdresse}</td>
-                    <td class="p-2">${element.titel}</td>
-                    <td class="p-2 text-center"><input type="checkbox" name="${element.id}" id="checkDelInfo${element.id}" onchange="Umgebung.event_remove(${element.id})"></td>
-                </tr>`;
+                        <td class="p-2">${element.id}</td>
+                        <td class="p-2">${element.ipAdresse}</td>
+                        <td class="p-2">${element.titel}</td>
+                        <td class="p-2 text-center"><input type="checkbox" name="${element.id}" id="checkDelInfo${element.id}" onchange="Umgebung.event_remove(${element.id})"></td>
+                    </tr>`;
+
+                // Selector Option hinzufügen
+
             });
         });
     }
@@ -269,8 +352,6 @@ window.addEventListener("load", function () {
 function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-
-// Wait for DOM to be loaded
 
 function select() {
     getCuttedList = []
@@ -315,4 +396,7 @@ function cutAndCreate(responseText) {
         // new Umgebung(inZeile[0], inZeile[1], inZeile[2])
     }
 }
+
+
+
 

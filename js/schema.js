@@ -6,7 +6,7 @@ class CardObj {
     static eleListe = []
     static list = [];
     static checkAllowed = false; // Variable to control checkbox behavior
-    constructor(id, imagePath, selectedTime, aktiv, startTime, endTime, startDate, endDate, titel, beschreibung) {
+    constructor(id, imagePath, selectedTime, aktiv, startTime, endTime, startDate, endDate, timeAktiv, dateAktiv, titel, beschreibung) {
 
         this.id = id;
         this.update = false;
@@ -17,6 +17,8 @@ class CardObj {
         this.startDate = startDate //Startdatum des Zeitplans
         this.endDate = endDate //Enddatum des Zeitplans
         this.selectedTime = selectedTime // Der aktuelle ausgewählte Wert
+        this.timeAktiv = timeAktiv //True or false
+        this.dateAktiv = dateAktiv //True or false
         this.aktiv = aktiv //true or false
         this.titel = titel //Der Titel des Objektes
         this.beschreibung = beschreibung //Die Beschreibung des Objektes

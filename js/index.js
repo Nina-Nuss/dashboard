@@ -19,7 +19,6 @@ window.onload = async function () {
     let counter = document.getElementById("counter");
     const saveBtn = document.getElementById("saveBtn")
     console.log("window.onload von index.js läuft!");
-    // executeDeleteNull();
 
     createUmgebung()
     try {
@@ -60,6 +59,7 @@ window.onload = async function () {
             deakCb(false);
             var checkA = document.getElementById("checkA");
             deakAktivCb(true);
+            Umgebung.erstelleSelector();
 
         });
     }
@@ -186,28 +186,14 @@ function convertCardObjForDataBase(cardObjListe) {
             endTime: cardObj[5],
             startDate: cardObj[6],
             endDate: cardObj[7],
-            titel: cardObj[8],
-            beschreibung: cardObj[9]
+            timeAktiv: cardObj[8], //True or false
+            dateAktiv: cardObj[9], //True or false
+            titel: cardObj[10],
+            beschreibung: cardObj[11]
         };
         objListe.push(obj)
     });
     return objListe
-}
-async function executeDeleteNull() {
-    try {
-        const response = await fetch("database/deleteNull.php", {
-            method: "GET"
-        });
-
-        if (!response.ok) {
-            throw new Error(`Fehler beim Ausführen der Anfrage: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        console.log("Erfolgreich ausgeführt:", data);
-    } catch (error) {
-        console.error("Fehler:", error);
-    }
 }
 
 // Aufruf der Funktion
@@ -264,34 +250,6 @@ async function createJsonFile(jsonData) {
         console.error("Fehler beim Speichern der JSON-Daten:", error);
     }
 }
-function disableInput(container) {
-    if (selectUmgebung.value == 0) {
-        console.log("readonly wurde aufgerufen");
-        container.style.pointerEvents = "none"; // Deaktiviert alle Interaktionen
-        container.style.opacity = "0.7"; // Optional: Reduziert die Sichtbarkeit
-    } else {
-        console.log("readonly wurde deaktiviert");
-        container.style.pointerEvents = "auto"; // Aktiviert alle Interaktionen
-        container.style.opacity = "1"; // Optional: Setzt die Sichtbarkeit zurück
-    }
-}
-
-function createID() {
-    const cardObjIDList = CardObj.list
-        .map(cardObj => parseInt(cardObj.id)) // Konvertiere alle IDs in Zahlen
-        .filter(id => !isNaN(id)); // Entferne ungültige Werte (NaN)
-    console.log("Gefilterte ID-Liste:", cardObjIDList);
-    console.log(cardObjIDList)
-    if (cardObjIDList.length === 0) {
-        console.error("Die Liste ist leer. Es gibt keine gültigen IDs.");
-        return 1; // Standardwert, falls keine IDs vorhanden sind
-    }
-    const groessteZahl = Math.max(...cardObjIDList);
-    return groessteZahl + 1;
-}
-
-
-
 function saveTempAddDatabase() {
     Umgebung.tempListForSaveCards.forEach(cardObj => {
         insertDatabase(cardObj)
@@ -299,7 +257,6 @@ function saveTempAddDatabase() {
     });
     Umgebung.tempListForSaveCards = []
 }
-
 
 function saveCardObj() {
     umgebung.allCardList.forEach(cardObjlist => {

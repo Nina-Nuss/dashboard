@@ -27,7 +27,7 @@
                                             </h6>
                                             <ul class="mb-0">
                                                 <li>Maximal 50 Infotherminals</li>
-                                                <li>IP-Adresse soll dem Format "00.0.0.000" entsprechen</li>
+                                                <li>IP-Adresse soll dem Format "00.0.00.000" entsprechen</li>
                                                 <li>Es dürfen keine Leerzeichen vorhanden sein</li>
                                                 <li>Sonderzeichen sind nicht erlaubt</li>
                                             </ul>
