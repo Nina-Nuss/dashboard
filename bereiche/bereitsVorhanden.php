@@ -11,7 +11,9 @@ $name = $_POST["infotherminalName"] ?? '';
 
 $patternIp = '/^[A-Za-z0-9._@-]+$/';
 
-$patternIpFormat = '/^\d{2}\.\d{1}\.\d{2}\.\d{3}$/';
+// ...existing code...
+$patternIpFormat = '/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/';
+// ...existing code...
 
 $ip = $_POST["infotherminalIp"] ?? '';
 $name = $_POST["infotherminalName"] ?? '';

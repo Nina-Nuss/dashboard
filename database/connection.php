@@ -1,15 +1,18 @@
 <?php
 
 // MSSQL Verbindungsparameter
-$serverName = "FIS-BW-03\\SQLEXPRESS"; 
+$serverName = "10.1.6.3"; 
 
+// ...existing code...
 $connectionOptions = array(
-    "Database" => "infotherminal",      // Hier den Datenbanknamen eintragen!
+    "Database" => "nina_infotherminal",      // Hier den Datenbanknamen eintragen!
     "CharacterSet" => "UTF-8",
     "TrustServerCertificate" => true,  // Entspricht "Serverzertifikat vertrauen"
-    "Encrypt" => true                  // Entspricht "Verschlüsselung: Obligatorisch"
-    // KEIN "Authentication" hier!
+    "Encrypt" => true,                 // Entspricht "Verschlüsselung: Obligatorisch"
+    "UID" => "sa",                     // SQL Server Authentication Benutzername
+    "PWD" => "A%00000p&"               // SQL Server Authentication Passwort
 );
+// ...existing code...
 
 // Verbindung herstellen
 global $conn;
