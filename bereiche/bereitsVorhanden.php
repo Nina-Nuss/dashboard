@@ -27,6 +27,7 @@ if (!preg_match($patternIp, $ip) || !preg_match($patternIp, $name)) {
     echo "ungültiges Zeichen";
     exit;
 }
+
 if (!preg_match($patternIpFormat, $ip)) {
     echo "IP-Adresse entspricht nicht dem Format 00.0.0.000!";
     exit;

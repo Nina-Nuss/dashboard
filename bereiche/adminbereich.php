@@ -9,7 +9,7 @@
                         <h3 class="card-title mb-0">
                             <i class="fas fa-cogs me-2"></i> Adminbereich
                         </h3>
-                        <p class="mb-0 mt-2">Hier können Sie neue Infotherminals hinzufügen oder löschen</p>
+                        <p class="mb-0 mt-2">Hier können Sie neue Infoterminals hinzufügen oder löschen</p>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -17,7 +17,7 @@
                                 <div class="card h-100">
                                     <div class="card-header">
                                         <h5 class="card-title mb-0">
-                                            <i class="fas fa-plus me-2"></i> Infotherminals hinzufügen
+                                            <i class="fas fa-plus me-2"></i> Infoterminals hinzufügen
                                         </h5>
                                     </div>
                                     <div class="card-body" style="max-height: 400px; overflow-y: auto;">
@@ -26,8 +26,8 @@
                                                 <i class="fas fa-info-circle me-2"></i> Wichtige Hinweise:
                                             </h6>
                                             <ul class="mb-0">
-                                                <li>Maximal 50 Infotherminals</li>
-                                                <li>IP-Adresse soll dem Format "00.0.00.000" entsprechen</li>
+                                                <li>Maximal 50 Infoterminals</li>
+                                                <li>IP-Adresse soll dem Format "000.000.000.000" entsprechen</li>
                                                 <li>Es dürfen keine Leerzeichen vorhanden sein</li>
                                                 <li>Sonderzeichen sind nicht erlaubt</li>
                                             </ul>
@@ -62,13 +62,13 @@
                                 <div class="card h-100">
                                     <div class="card-header">
                                         <h5 class="card-title mb-0">
-                                            <i class="fas fa-trash me-2"></i> Infotherminals löschen
+                                            <i class="fas fa-trash me-2"></i> Infoterminals löschen
                                         </h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group mb-3">
                                             <label for="infotherminalSelect" class="form-label">
-                                                <i class="fas fa-list me-2"></i> Infotherminal auswählen:
+                                                <i class="fas fa-list me-2"></i> Infoterminal auswählen:
                                             </label>
                                             
                                         </div>

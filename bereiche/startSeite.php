@@ -72,11 +72,11 @@
                         <div class="col-md-4">
                             <div class="card h-100">
                                 <div class="card-header">
-                                    <h6 class="mb-0"><i class="fas fa-desktop me-2"></i> Infotherminal Anzeigen</h6>
+                                    <h6 class="mb-0"><i class="fas fa-desktop me-2"></i> Infoterminal Anzeigen</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-3">
-                                        <label for="infotherminalSelect" class="form-label">Infotherminal wählen:</label>
+                                        <label for="infotherminalSelect" class="form-label">Infoterminal wählen:</label>
                                         <select class="form-select" id="infotherminalSelect">
                                             <option value="">-- Bitte wählen --</option>
                                         </select>

@@ -26,9 +26,9 @@
 
     header,
     footer {
-     display: flex;
+        display: flex;
         flex-direction: column;
-       
+
     }
 
     .iframe-container {
@@ -36,7 +36,7 @@
         justify-content: center;
         align-items: center;
         width: 70vw;
-        height: 480px;
+        height: 800px;
         border: 1px solid black;
         margin: 0;
         box-sizing: border-box;
@@ -66,7 +66,7 @@
             justify-content: center;
             align-items: center;
             width: 70vw;
-            height: 750px;
+            height: 770px;
             border: 1px solid black;
             margin: 0;
             box-sizing: border-box;
@@ -82,7 +82,7 @@
             justify-content: center;
             align-items: center;
             width: 70vw;
-            height: 1700px;
+            height: 1970px;
             border: 1px solid black;
             margin: 0;
             box-sizing: border-box;

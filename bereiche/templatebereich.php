@@ -27,7 +27,7 @@
                                                     </h6>
                                                     <ul class="mb-0">
                                                         <li>Maximal 50 Schemas</li>
-
+                                                        <li>Es sind jpg, png und gif Dateien erlaubt</li>
                                                     </ul>
                                                 </div>
 
