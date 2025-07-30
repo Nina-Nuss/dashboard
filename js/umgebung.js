@@ -261,7 +261,7 @@ class Umgebung {
         button.addEventListener('click', function () {
             const selectedTerminal = selector.value;
             if (selectedTerminal !== '') {
-                const url = `http://localhost:3000/anzeigeTherminal/index.php?ip=${encodeURIComponent(selectedTerminal)}`;
+                const url = `./anzeigeTherminal/index.php?ip=${encodeURIComponent(selectedTerminal)}`;
                 window.open(url, '_blank');
             }
         });
