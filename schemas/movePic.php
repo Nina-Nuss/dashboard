@@ -10,7 +10,7 @@
             $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
             $randomName = uniqid('file_', true) . '.' . $fileExtension;
             // Zielordner für die hochgeladene Datei
-            $uploadFolder = 'uploads/';
+            $uploadFolder = $_SERVER['DOCUMENT_ROOT'] . '/uploads/';
             if (!is_dir($uploadFolder)) {
                 mkdir($uploadFolder, 0777, true); // Ordner erstellen, falls nicht vorhanden
             }
@@ -20,11 +20,10 @@
             if (move_uploaded_file($fileTmpPath, $destPath)) {
                 echo $destPath; // Absoluter Pfad
             } else {
-                echo "Fehler: Datei konnte nicht verschoben werden.";
+                 echo "Fehler: Keine Datei hochgeladen oder Fehler beim Upload." .  $uploadFolder;
             }
         } else {
-            echo "Fehler: Keine Datei hochgeladen oder Fehler beim Upload.";
-        
+            echo "Fehler: Keine Datei hochgeladen oder Fehler beim Upload." .  $uploadFolder;
         }
     }
     

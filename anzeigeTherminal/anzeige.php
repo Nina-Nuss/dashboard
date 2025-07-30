@@ -67,9 +67,10 @@
                 for (const element of data) {
                     console.log(element[1]);
                     // Hier könntest du das Bild anzeigen
-
+                    console.log('Displaying image:', element[1]);
+                    
                     const img = document.createElement('img');
-                    img.src = "../schemas/uploads/" + element[1];
+                    img.src = "/uploads/" + element[1];
                     img.className = "fullscreen";
                     img.alt = "Image";
                     document.body.innerHTML = ''; // Clear the body content

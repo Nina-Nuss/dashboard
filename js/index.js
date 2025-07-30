@@ -69,18 +69,18 @@ const buttonsInContainer = startBtnsContainer.querySelectorAll("button");
 buttonsInContainer.forEach(button => {
     button.addEventListener("click", function () {
         console.log(`Button mit ID ${button.id} wurde geklickt`);
-        
+
         // Alle Buttons aktivieren
         buttonsInContainer.forEach(btn => {
             btn.disabled = false;
         });
-        
+
         // Nur den geklickten Button deaktivieren
         button.disabled = true;
     });
 });
 
-function checkAnzahl(){
+function checkAnzahl() {
     const anzahlInfo = Umgebung.list.length;
     const anzahlCardObj = CardObj.list.length;
     console.log("Anzahl der Umgebungen:", anzahlInfo);
@@ -315,17 +315,17 @@ function uncheckAllTableCheckboxes() {
     checkboxes.forEach(checkbox => {
         checkbox.checked = false;
     });
-    
+
     // Reset auch die temp_remove Liste
     if (Umgebung.temp_remove) {
         Umgebung.temp_remove = [];
     }
-    if(CardObj.temp_remove) {
+    if (CardObj.temp_remove) {
         CardObj.temp_remove = [];
     }
 
 
-    
+
     console.log(`${checkboxes.length} Tabellen-Checkboxes wurden ausgeschaltet`);
 }
 

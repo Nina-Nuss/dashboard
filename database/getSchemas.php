@@ -2,6 +2,9 @@
 
 // include("../cardObjNew/database/selectCardObj.php");
 //                 imagePath: item[1],
+
+use Dom\Document;
+
 ob_start();
 
 // Pfad zum gewünschten Ordner
@@ -156,7 +159,7 @@ function createDateTimeFormat($dateTime, $format)
 }
 function getAllImages()
 {
-    $ordner = "../schemas/uploads";
+    $ordner =  $_SERVER["DOCUMENT_ROOT"] . "/uploads";
     $array = array();
     // Prüfen, ob der Ordner existiert
     if (is_dir($ordner)) {
