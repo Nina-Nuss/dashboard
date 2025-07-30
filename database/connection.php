@@ -5,7 +5,7 @@ $serverName = "10.1.6.3";
 
 // ...existing code...
 $connectionOptions = array(
-    "Database" => "nina_infotherminal",      // Hier den Datenbanknamen eintragen!
+    "Database" => "dbTerminal",      // Hier den Datenbanknamen eintragen!
     "CharacterSet" => "UTF-8",
     "TrustServerCertificate" => true,  // Entspricht "Serverzertifikat vertrauen"
     "Encrypt" => true,                 // Entspricht "Verschlüsselung: Obligatorisch"

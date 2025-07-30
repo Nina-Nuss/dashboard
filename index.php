@@ -1,8 +1,8 @@
-<?php include 'assets/links.html'; ?>
-<?php include 'header/header.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/assets/links.html'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/header/header.php'; ?>
 
-<?php include 'modal/hinzufuegen.html'; ?>
-<?php include 'modal/loeschen.html'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/modal/hinzufuegen.html'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/modal/loeschen.html'; ?>
 
 
 <div id="content">
@@ -45,6 +45,7 @@
 </div>
 </div>
 </body>
-<?php include 'assets/scripts.html'; ?>
+
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/assets/scripts.html'; ?>
 
 </html>

@@ -94,7 +94,7 @@
 
 
 <header class="pl-3">
-    <?php include '..\header\header.php'; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . '/header/header.php'; ?>
 </header>
 
 <body>
@@ -104,7 +104,7 @@
 </body>
 
 <footer class="pr-3">
-    <?php include '..\liveTicker\liveTicker.php'; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . '/liveTicker/liveTicker.php'; ?>
 </footer>
 
 

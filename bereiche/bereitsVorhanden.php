@@ -2,7 +2,7 @@
 session_start();
 
 
-include("/xampp/htdocs/Infotherminal/database/selectInfotherminal.php");
+include $_SERVER['DOCUMENT_ROOT'] . "/database/selectInfotherminal.php";
 // echo "<br>";
 ob_end_clean(); // Uncomment if you want to clear the output buffer
 
