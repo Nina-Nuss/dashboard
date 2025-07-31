@@ -57,7 +57,7 @@ class CardObj {
                     <div class="card-header p-1">
                         <small class="text-muted">Uhrzeit: ${this.startTime} - ${this.endTime}</small>
                     </div>
-                    <img class="card-img-top" src="/uploads/${this.imagePath}" alt="Card image cap">
+                    <img class="card-img-top" src="../uploads/${this.imagePath}" alt="Card image cap">
                     <div class="card-body p-2">
                         <h5 class="card-title m-0">${this.titel}</h5>
                         <p class="card-text m-0">${this.beschreibung}</p>

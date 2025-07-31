@@ -6,7 +6,10 @@ let selectedCard = "";
 var anzeigebereichV = document.getElementById("anzeigebereichV");
 
 
+
 window.onload = async function () {
+    
+
 
     var selectUmgebung = document.getElementById("selectUmgebung");
     const deleteBtnForCards = document.getElementById("deleteBtnForCards");
@@ -20,6 +23,10 @@ window.onload = async function () {
     const saveBtn = document.getElementById("saveBtn")
     console.log("window.onload von index.js läuft!");
 
+
+    const systemPath = await getSystemPath()
+    console.log("System Path:", systemPath);
+    
     createUmgebung()
     try {
         await createCardObj()
@@ -79,6 +86,23 @@ buttonsInContainer.forEach(button => {
         button.disabled = true;
     });
 });
+
+
+async function getSystemPath() {
+    let path = null;
+    try {
+        const response = await fetch("../php/getSystemPath.php");
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        path = await response.text();
+        console.log("System Path erhalten:", path);
+    } catch (error) {
+        console.error("Fehler beim Abrufen des Systempfads:", error);
+        path = "/html_infoterminal/"; // Fallback-Pfad
+    }
+    return path;
+}
 
 function checkAnzahl() {
     const anzahlInfo = Umgebung.list.length;
