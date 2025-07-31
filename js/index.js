@@ -186,6 +186,7 @@ async function createCardObj() {
 
 
 
+
 function findObj(list, id) {
     const number = extractNumberFromString(id);
     if (!Array.isArray(list)) {

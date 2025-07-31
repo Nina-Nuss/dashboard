@@ -12,7 +12,7 @@ if ($result === false) {
 }
 
 // Pfad zu den Bildern
-$path = "/uploads";
+$path =  $_SERVER['DOCUMENT_ROOT'] . "/uploads";
 $absolutePath = realpath($path);
 
 if (!$absolutePath || !is_dir($absolutePath)) {
@@ -50,7 +50,7 @@ function deleteFileFromPath($imagePath)
 
 
 while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
-    if (isset($row['id']) && $row['id'] !== null && fileExist($row['imagePath'])) {
+    if (isset($row['id']) && $row['id'] !== null) {
         array_push($schemaList1, array(
             $row["id"],
             $row["imagePath"],
@@ -66,36 +66,33 @@ while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
             $row["beschreibung"],
         ));
     } else {
+        // $deleteRelationsSql = "DELETE FROM infotherminal_schema WHERE fk_schema_id = ?";
+        // $relParams = array($row['id']);
+        // $relStmt = sqlsrv_prepare($conn, $deleteRelationsSql, $relParams);
 
-       
+        // if ($relStmt) {
+        //     sqlsrv_execute($relStmt);
+        //     sqlsrv_free_stmt($relStmt);
+        // }
+        // $deleteSql = "DELETE FROM schemas WHERE id = ?";
+        // $params = array($row['id']);
+        // $deleteStmt = sqlsrv_prepare($conn, $deleteSql, $params);
 
-        $deleteRelationsSql = "DELETE FROM infotherminal_schema WHERE fk_schema_id = ?";
-        $relParams = array($row['id']);
-        $relStmt = sqlsrv_prepare($conn, $deleteRelationsSql, $relParams);
-
-        if ($relStmt) {
-            sqlsrv_execute($relStmt);
-            sqlsrv_free_stmt($relStmt);
-        }
-        $deleteSql = "DELETE FROM schemas WHERE id = ?";
-        $params = array($row['id']);
-        $deleteStmt = sqlsrv_prepare($conn, $deleteSql, $params);
-
-        if ($deleteStmt) {
-            if (sqlsrv_execute($deleteStmt)) {
-                // echo "Datensatz mit ID " . $row['id'] . " gelöscht (Bild nicht gefunden)<br>";
-            } else {
-                echo "Fehler beim Löschen von ID " . $row['id'] . ": ";
-                print_r(sqlsrv_errors());
-            }
-            sqlsrv_free_stmt($deleteStmt);
-        }
+        // if ($deleteStmt) {
+        //     if (sqlsrv_execute($deleteStmt)) {
+        //         // echo "Datensatz mit ID " . $row['id'] . " gelöscht (Bild nicht gefunden)<br>";
+        //     } else {
+        //         echo "Fehler beim Löschen von ID " . $row['id'] . ": ";
+        //         print_r(sqlsrv_errors());
+        //     }
+        //     sqlsrv_free_stmt($deleteStmt);
+        // }
     }
 }
 
 $uploadFolder = scandir($_SERVER['DOCUMENT_ROOT'] . '/uploads/');
 foreach ($uploadFolder as $file) {
-    if(!in_array($file, ['.', '..']) && !in_array($file, array_column($schemaList1, 1))) {
+    if (!in_array($file, ['.', '..']) && !in_array($file, array_column($schemaList1, 1))) {
         $filePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $file;
         if (file_exists($filePath)) {
             unlink($filePath);
