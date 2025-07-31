@@ -161,7 +161,7 @@ class Umgebung {
             const prepare = "?idDelete=" + idDelete;
             console.log(prepare);
 
-            const response = await fetch(`../database/${databaseUrl}.php` + prepare);
+            const response = await fetch(`/database/${databaseUrl}.php` + prepare);
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -294,7 +294,7 @@ window.addEventListener("load", function () {
             uncheckAllTableCheckboxes()
             deakCb(true);
             Umgebung.temp_remove = [];
-            await fetch("../bereiche/adminbereich.php")
+            await fetch("/bereiche/adminbereich.php")
                 .then(response => response.text())
                 .then(html => {
                     settingsPanel.innerHTML = html;

@@ -4,6 +4,7 @@ ob_start();
 require("database/selectInfotherminal.php");
 require("database/selectSchemas.php");
 
+
 // echo "<h1>------------</h1>";
 
 $clientIP = $_SERVER['REMOTE_ADDR'];

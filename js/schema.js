@@ -201,7 +201,7 @@ class CardObj {
     static async deleteCardObjDataBase(cardObjId) {
         try {
             // Erst ALLE Beziehungen für dieses Schema löschen
-            const relationResponse = await fetch("../database/delete_All_Relations_For_Schema.php", {
+            const relationResponse = await fetch("/database/delete_All_Relations_For_Schema.php", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -215,7 +215,7 @@ class CardObj {
             console.log("Beziehungen gelöscht:", relationResult);
 
             // Dann das Schema löschen
-            const response = await fetch("../database/deleteCardObj.php", {
+            const response = await fetch("/database/deleteCardObj.php", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -388,7 +388,7 @@ window.addEventListener("load", function () {
             
 
             var settingPanel = document.getElementById("settingsPanel");
-            await fetch("../bereiche/templatebereich.php")
+            await fetch("/bereiche/templatebereich.php")
                 .then(response => response.text())
                 .then(html => {
                     settingPanel.innerHTML = html;
@@ -463,7 +463,7 @@ async function meow(event) {
 }
 async function sendPicture(formData) {
     try {
-        const response = await fetch("../movePic.php", {
+        const response = await fetch("/movePic.php", {
             method: 'POST',
             body: formData
         });
@@ -497,7 +497,7 @@ async function insertDatabase(cardObj) {
 
     console.log(JSON.stringify(jsonData));
     // Senden der POST-Anfrage mit JSON-Daten
-    const response = await fetch("../database/insertSchema.php", {
+    const response = await fetch("/database/insertSchema.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

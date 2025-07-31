@@ -15,7 +15,7 @@ class Beziehungen {
         Beziehungen.list.push(this);
     }
     static async getRelation() {
-        const response = await fetch('../database/selectRelation.php', {
+        const response = await fetch('/database/selectRelation.php', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -174,7 +174,7 @@ class Beziehungen {
 
     static async addToDatabaseViaID(cardObjektID, umgebungsID, databaseUrl) {
         console.log("addToDatabaseViaID aufgerufen mit UmgebungsID:", umgebungsID, "CardObjektID:", cardObjektID);
-        await fetch(`../database/${databaseUrl}.php`, {
+        await fetch(`/database/${databaseUrl}.php`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

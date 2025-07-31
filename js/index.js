@@ -8,7 +8,6 @@ var anzeigebereichV = document.getElementById("anzeigebereichV");
 
 
 window.onload = async function () {
-    
 
 
     var selectUmgebung = document.getElementById("selectUmgebung");
@@ -59,7 +58,7 @@ window.onload = async function () {
     if (infotherminalBereich !== null) {
         infotherminalBereich.addEventListener("click", async function (event) {
             var settingPanel = document.getElementById("settingsPanel");
-            const response = await fetch("../bereiche/startSeite.php")
+            const response = await fetch("/bereiche/startSeite.php")
             const responseText = await response.text();
 
             settingPanel.innerHTML = responseText;
@@ -91,7 +90,7 @@ buttonsInContainer.forEach(button => {
 async function getSystemPath() {
     let path = null;
     try {
-        const response = await fetch("../php/getSystemPath.php");
+        const response = await fetch("/php/getSystemPath.php");
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -103,6 +102,7 @@ async function getSystemPath() {
     }
     return path;
 }
+
 
 function checkAnzahl() {
     const anzahlInfo = Umgebung.list.length;
@@ -247,7 +247,7 @@ async function selectObj(select) {
 async function getImagePath(formID, ob) {
     const form = document.getElementById(formID);
     const formData = new FormData(form);
-    const response = await fetch('../test.php', {
+    const response = await fetch('/test.php', {
         method: 'POST',
         body: formData,
     })
@@ -266,7 +266,7 @@ async function createJsonFile(jsonData) {
 
     }
     try {
-        const response = await fetch("../json/sendToJson.php", {
+        const response = await fetch("/json/sendToJson.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
