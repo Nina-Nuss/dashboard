@@ -62,6 +62,9 @@
                                         </select>
                                     </div>
 
+
+
+
                                     <button id="btn_save_changes" type="button" onclick="CardObj.saveChanges()" class="btn btn-success shadow-sm w-100">
                                         <i class="fas fa-save"></i> Speichern
                                     </button>
@@ -70,7 +73,71 @@
                         </div>
 
                         <div class="col-md-4">
-                            <div class="card h-100">
+                            <div class="card h-65">
+                                <div class="card-header">
+                                    <h6 class="mb-0"><i class="fas fa-desktop me-2"></i> Zeit Einstellen</h6>
+                                </div>
+                                <p class="d-flex justify-content-between">
+                                    <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">Zeitspanne</a>
+                                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Uhrzeit</button>
+                                </p>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="collapse multi-collapse" id="multiCollapseExample1">
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                    <div class="mb-3">
+                                                        <label for="startDate" class="form-label">Start Date:</label>
+                                                        <input type="date" class="form-control" id="startDate" name="startDate">
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label for="endDate" class="form-label">End Date:</label>
+                                                        <input type="date" class="form-control" id="endDate" name="endDate">
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div class="mb-3">
+                                                        <label for="startTimeDate" class="form-label">Start Time:</label>
+                                                        <input type="time" class="form-control" id="startTimeDate" name="startTimeDate">
+                                                    </div>
+
+
+                                                    <div class="mb-3">
+                                                        <label for="endTimeDate" class="form-label">End Time:</label>
+                                                        <input type="time" class="form-control" id="endTimeDate" name="endTimeDate">
+
+
+                                                    </div>
+
+
+                                                </div>
+
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="collapse multi-collapse" id="multiCollapseExample2">
+
+
+                                            <div class="mb-3">
+                                                <label for="startTimeDate" class="form-label">Start Time:</label>
+                                                <input type="time" class="form-control" id="startTimeDate" name="startTimeDate">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="endTimeDate" class="form-label">End Time:</label>
+                                                <input type="time" class="form-control" id="endTimeDate" name="endTimeDate">
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="card h-35">
                                 <div class="card-header">
                                     <h6 class="mb-0"><i class="fas fa-desktop me-2"></i> Infoterminal Anzeigen</h6>
                                 </div>
@@ -86,6 +153,8 @@
                                     </button>
                                 </div>
                             </div>
+
+
                         </div>
 
                         <div class="col-md-4">

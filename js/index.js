@@ -119,6 +119,8 @@ function checkAnzahl() {
 
 
 
+
+
 async function createUmgebung() {
     const resultUmgebung = selectObj("../database/selectInfotherminal.php")
     const data = await resultUmgebung
