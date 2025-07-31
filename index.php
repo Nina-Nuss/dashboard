@@ -1,51 +1,40 @@
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/assets/links.html'; ?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/header/header.php'; ?>
+<?php
+ob_start();
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/modal/hinzufuegen.html'; ?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/modal/loeschen.html'; ?>
+require("database/selectInfotherminal.php");
+require("database/selectSchemas.php");
+
+// echo "<h1>------------</h1>";
+
+$clientIP = $_SERVER['REMOTE_ADDR'];
+echo "Die IP-Adresse des Clients ist: " . $clientIP;
 
 
-<div id="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div id="rowForCards" class="col-md-2 text-center">
-                <!-- Card Objecte -->
-                <div id="dokumente">
-                    <h2 id="titelUmgebung"></h2>
-                    <div id="umgebungsContainer">
-                        <div id="cardContainer" class="cardContainer"></div>
-                    </div>
-                </div>
-                <!-- Card Objecte -->
-            </div>
-            <div class="col-md-10 text-center pt-2">
-                <div class="col-md-12 mx-auto pl-auto bg-gray-100 ">
-                    <div class="d-flex justify-content-center" id="startBtns" style="margin-right: 10vh;">
-                        <button id="infotherminalBereich" type="button" class="btn  text-dark start-btn  pt-0"
-                            style="background-color: rgba(255, 255, 255, 0.952); border-color: #006c99; border-radius: 8px;">Infoterminal</button>
-                        <button id="templateBereich" type="button" class="btn  text-dark  start-btn" style="border-color: #006c99; border-radius: 8px;"
-                            style="background-color: rgba(255, 255, 255, 0.952);">Templates</button>
-                        <button id="adminBereich" type="button" class="btn   text-dark start-btn" style="border-color: #006c99; border-radius: 8px;"
-                            style="background-color: rgba(255, 255, 255, 0.952);">Administation</button>
-                        <button type="button" class="btn   text-dark start-btn" style="border-color: #006c99; border-radius: 8px;"
-                            style="background-color: rgba(255, 255, 255, 0.952);">Video</button>
-                    </div>
-                </div>
+$listePics = array();
 
-                <div id="settingsPanel">
-                </div>
-                <hr />
-
-            </div>
-
-        </div>
-    </div>
-</div>
-</div>
-</div>
-</div>
-</body>
-
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/assets/scripts.html'; ?>
-
-</html>
+foreach ($infotherminalList1 as $datensatz) {
+    // Überprüfen, ob die IP-Adresse im Datensatz vorhanden ist und nicht null ist
+    if (isset($datensatz[2]) && $clientIP === $datensatz[2] && $datensatz[2] !== null) {
+        $idDatensatz = $datensatz[0];
+        echo "<h3>Gefundenes Bild:</h3>";
+        // echo $idDatensatz;
+        // Wenn die IP-Adresse übereinstimmt, führe die folgenden Aktionen aus
+        foreach ($schemalist1 as $datensatz2) {            
+            if($idDatensatz === $datensatz2[6]) {
+                // echo "<h3>Gefundenes Bild:</h3>";
+                // Wenn die infotherminal_id übereinstimmt, füge das Bild zur Liste hinzu
+                // echo $idDatensatz . "<br>"  . $datensatz2[1];
+                array_push($listePics, array(
+                    $datensatz2[1], // imagePath
+                ));
+            }
+        }
+        // echo "<h4>------------</h4>";
+        // echo "Gefundene IP: " . $datensatz[2] . "<br>";
+        // echo "Titel: " . $datensatz[1] . "<br>";
+        // echo "<h4>------------</h4>";
+        echo json_encode($listePics);
+        header("Location: ../anzeigeTherminal/index.php?ip=" . urlencode($datensatz[1]));
+    };
+}
+?>

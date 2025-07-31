@@ -11,7 +11,7 @@ if ($result === false) {
 }
 
 // Pfad zu den Bildern
-$path = "../schemas/uploads";
+$path = "../uploads";
 $absolutePath = realpath($path);
 
 if (!$absolutePath || !is_dir($absolutePath)) {

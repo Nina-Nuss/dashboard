@@ -59,7 +59,7 @@ window.onload = async function () {
     if (infotherminalBereich !== null) {
         infotherminalBereich.addEventListener("click", async function (event) {
             var settingPanel = document.getElementById("settingsPanel");
-            const response = await fetch("bereiche/startSeite.php")
+            const response = await fetch("../bereiche/startSeite.php")
             const responseText = await response.text();
 
             settingPanel.innerHTML = responseText;
@@ -151,8 +151,14 @@ function getJsonData(key) {
     return obj
 }
 async function createCardObj() {
+    console.log("createCardObj wurde aufgerufen");
+    
     const response = await selectObj("../database/selectSchemas.php")
+    console.log(response);
+    
     let objList = convertCardObjForDataBase(response)
+    console.log(objList);
+    
     objList.forEach(cardObj => {
         if (cardObj.imagePath == null || cardObj.imagePath == "null" || cardObj.imagePath == "") {
             cardObj.imagePath = "img/bild.png"; // Setze einen Standardwert,
@@ -241,7 +247,7 @@ async function selectObj(select) {
 async function getImagePath(formID, ob) {
     const form = document.getElementById(formID);
     const formData = new FormData(form);
-    const response = await fetch('test.php', {
+    const response = await fetch('../test.php', {
         method: 'POST',
         body: formData,
     })
@@ -260,7 +266,7 @@ async function createJsonFile(jsonData) {
 
     }
     try {
-        const response = await fetch("json/sendToJson.php", {
+        const response = await fetch("../json/sendToJson.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
