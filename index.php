@@ -1,6 +1,6 @@
 <?php
 ob_start();
-
+include $_SERVER['DOCUMENT_ROOT'] . '/database/deleteFileFolder.php'; 
 require("database/selectInfotherminal.php");
 require("database/selectSchemas.php");
 
