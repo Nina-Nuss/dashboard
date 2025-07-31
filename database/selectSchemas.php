@@ -23,7 +23,8 @@ if (!$absolutePath || !is_dir($absolutePath)) {
 $schemaList1 = [];
 
 if (!function_exists('fileExist')) {
-    function fileExist($imagePath) {
+    function fileExist($imagePath)
+    {
         $uploadFolder = $_SERVER['DOCUMENT_ROOT'] . '/uploads/';
         if (empty($imagePath) || $imagePath === 'null') {
             return false;
@@ -31,6 +32,20 @@ if (!function_exists('fileExist')) {
         $fullPath = $uploadFolder . basename($imagePath);
         return file_exists($fullPath);
     }
+}
+
+function deleteFileFromPath($imagePath)
+{
+    $uploadFolder = $_SERVER['DOCUMENT_ROOT'] . '/uploads/';
+    if (empty($imagePath) || $imagePath === 'null') {
+        return false;
+    }
+    $fullPath = $uploadFolder . basename($imagePath);
+    if (file_exists($fullPath)) {
+        unlink($fullPath);
+        return true;
+    }
+    return false;
 }
 
 
@@ -50,11 +65,22 @@ while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
             $row["titel"],
             $row["beschreibung"],
         ));
-    }else{
+    } else {
+
+       
+
+        $deleteRelationsSql = "DELETE FROM infotherminal_schema WHERE fk_schema_id = ?";
+        $relParams = array($row['id']);
+        $relStmt = sqlsrv_prepare($conn, $deleteRelationsSql, $relParams);
+
+        if ($relStmt) {
+            sqlsrv_execute($relStmt);
+            sqlsrv_free_stmt($relStmt);
+        }
         $deleteSql = "DELETE FROM schemas WHERE id = ?";
         $params = array($row['id']);
         $deleteStmt = sqlsrv_prepare($conn, $deleteSql, $params);
-        
+
         if ($deleteStmt) {
             if (sqlsrv_execute($deleteStmt)) {
                 // echo "Datensatz mit ID " . $row['id'] . " gelöscht (Bild nicht gefunden)<br>";
@@ -64,12 +90,21 @@ while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
             }
             sqlsrv_free_stmt($deleteStmt);
         }
-        
     }
 }
 
-
-
+$uploadFolder = scandir($_SERVER['DOCUMENT_ROOT'] . '/uploads/');
+foreach ($uploadFolder as $file) {
+    if(!in_array($file, ['.', '..']) && !in_array($file, array_column($schemaList1, 1))) {
+        $filePath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $file;
+        if (file_exists($filePath)) {
+            unlink($filePath);
+            // echo "Datei gelöscht: " . $file . "<br>";
+        } else {
+            // echo "Datei nicht gefunden: " . $file . "<br>";
+        }
+    }
+}
 
 
 sqlsrv_free_stmt($result);
