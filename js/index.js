@@ -25,6 +25,8 @@ window.onload = async function () {
 
     const systemPath = await getSystemPath()
     console.log("System Path:", systemPath);
+    console.log(typeof systemPath);
+
 
     createUmgebung()
     try {
@@ -60,7 +62,7 @@ window.onload = async function () {
             var settingPanel = document.getElementById("settingsPanel");
             const response = await fetch("/bereiche/startSeite.php")
             const responseText = await response.text();
-            
+
             settingPanel.innerHTML = responseText;
             deakCb(false);
             deakAktivCb(true);
@@ -69,22 +71,32 @@ window.onload = async function () {
         });
     }
 }
-const startBtnsContainer = document.getElementById("startBtns");
-const buttonsInContainer = startBtnsContainer.querySelectorAll("button");
 
-buttonsInContainer.forEach(button => {
-    button.addEventListener("click", function () {
-        console.log(`Button mit ID ${button.id} wurde geklickt`);
+try {
+    const startBtnsContainer = document.getElementById("startBtns");
+    const buttonsInContainer = startBtnsContainer.querySelectorAll("button");
 
-        // Alle Buttons aktivieren
-        buttonsInContainer.forEach(btn => {
-            btn.disabled = false;
+    buttonsInContainer.forEach(button => {
+        button.addEventListener("click", function () {
+            console.log(`Button mit ID ${button.id} wurde geklickt`);
+
+            // Alle Buttons aktivieren
+            buttonsInContainer.forEach(btn => {
+                btn.disabled = false;
+            });
+
+            // Nur den geklickten Button deaktivieren
+            button.disabled = true;
         });
-
-        // Nur den geklickten Button deaktivieren
-        button.disabled = true;
     });
-});
+
+} catch (error) {
+    console.error("Fehler beim Laden der Seite:", error);
+}
+
+
+
+
 
 
 async function getSystemPath() {
@@ -378,5 +390,5 @@ function uncheckAllTableCheckboxes() {
 
 document.addEventListener('DOMContentLoaded', function () {
     // Für den Button mit der ID "delDateTimeRange"
-   
+
 });

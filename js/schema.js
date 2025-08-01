@@ -619,6 +619,7 @@ async function insertDatabase(cardObj) {
     }
 }
 async function createBodyCardObj() {
+    
     var cardContainer = document.getElementById("cardContainer");
     if (!cardContainer) {
         console.error("Card container not found");

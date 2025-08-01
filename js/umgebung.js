@@ -72,10 +72,12 @@ class Umgebung {
     }
     static async update() {
         uncheckAllCheckboxes();
-        const delInfo = document.getElementById("deleteInfotherminal");
+        var delInfo = document.getElementById("deleteInfotherminal");
         const selector = document.getElementById('infotherminalSelect');
 
         if (delInfo != null) {
+
+
             // Performance: String-Building statt innerHTML +=
             let tableContent = "";
             let selectorOptions = '<option value="">-- Bitte wählen --</option>';
@@ -273,7 +275,7 @@ class Umgebung {
 
         Umgebung.list.forEach(element => {
             console.log(element);
-            
+
             // Selector Option hinzufügen
             const option = document.createElement("option");
             option.value = element.titel;
@@ -284,69 +286,88 @@ class Umgebung {
 
 }
 
-console.log("Umgebung.js loaded");
 
-window.addEventListener("load", function () {
-    var adminBereich = document.getElementById("adminBereich")
-    if (adminBereich != null) {
-        document.getElementById("adminBereich").addEventListener("click", async function () {
-            const settingsPanel = document.getElementById("settingsPanel")
-            uncheckAllTableCheckboxes()
-            deakCb(true);
-            Umgebung.temp_remove = [];
-            await fetch("/bereiche/adminbereich.php")
+window.addEventListener("load", async function () {
+
+    const settingsPanel = document.getElementById("settingsPanel")
+    uncheckAllTableCheckboxes()
+    deakCb(true);
+    Umgebung.temp_remove = [];
+
+    // Sende POST-Request zu php/sendingToPage.php
+    const adminBereich = document.getElementById("adminBereich");
+
+    adminBereich.addEventListener('click', async function () {
+        await fetch('/php/sendingToPage.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'action=adminbereich'
+
+        }).then(response => response.text()).then(result => {
+            window.location.href = '/bereiche/adminbereich.php';
+            // Hier können Sie die Antwort verarbeiten
+        }).catch(error => {
+            console.error("Fehler beim Senden der Anfrage:", error);
+        });
+
+    });
+    Umgebung.update();
+    var formID = document.getElementById('formID');
+    if (formID) {
+        formID.addEventListener('submit', function (event) {
+            event.preventDefault(); // Standard-Submit verhindern
+            const form = event.target;
+            const formData = new FormData(form);
+            console.log(form);
+            console.log(formData);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
+            })
                 .then(response => response.text())
-                .then(html => {
-                    settingsPanel.innerHTML = html;
-                });
-            document.getElementById('formID').addEventListener('submit', function (event) {
-                event.preventDefault(); // Standard-Submit verhindern
+                .then(result => {
+                    // Optional: Rückmeldung anzeigen
 
-                const form = event.target;
-                const formData = new FormData(form);
-                console.log(form);
-                console.log(formData);
-
-                fetch(form.action, {
-                    method: 'POST',
-                    body: formData
+                    alert(result); // Hier können Sie eine Erfolgsmeldung anzeigen
+                    // z.B. Erfolgsmeldung anzeigen oder UI aktualisieren
+                    if (result.includes("Datensatz erfolgreich eingefügt")) {
+                        Umgebung.update();
+                        document.querySelectorAll(".addInfotherminal input[type='text']").forEach(input => {
+                            input.value = ""; // Eingabefelder leeren
+                        });
+                    }
                 })
-                    .then(response => response.text())
-                    .then(result => {
-                        // Optional: Rückmeldung anzeigen
+                .catch(error => {
+                    console.error('Fehler beim Hinzufügen:', error);
+                });
+            form.reset(); // Formular zurücksetzen
+        });
+    }
+    console.log("Umgebung.js loaded");
+    const cardBodyDelInfo = document.getElementById("cardBodyForDelInfo");
+    const delInfo = document.getElementById("deleteInfotherminal")
 
-                        alert(result); // Hier können Sie eine Erfolgsmeldung anzeigen
-                        // z.B. Erfolgsmeldung anzeigen oder UI aktualisieren
-                        if (result.includes("Datensatz erfolgreich eingefügt")) {
-                            Umgebung.update();
-                            document.querySelectorAll(".addInfotherminal input[type='text']").forEach(input => {
-                                input.value = ""; // Eingabefelder leeren
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Fehler beim Hinzufügen:', error);
-                    });
-                form.reset(); // Formular zurücksetzen
-            });
-            const cardBodyDelInfo = document.getElementById("cardBodyForDelInfo");
-            const delInfo = document.getElementById("deleteInfotherminal")
+    console.log("infoterminal löschen wurde aufgerufen");
 
-            // Umgebungen durchgehen und sowohl Tabelle als auch Selector befüllen
-            Umgebung.list.forEach(element => {
-                // Tabelle befüllen
-                delInfo.innerHTML += `<tr class="border-bottom">
+    // Umgebungen durchgehen und sowohl Tabelle als auch Selector befüllen
+    Umgebung.list.forEach(element => {
+        // Tabelle befüllen+
+        console.log(element);
+
+        delInfo.innerHTML += `<tr class="border-bottom">
                         <td class="p-2">${element.id}</td>
                         <td class="p-2">${element.ipAdresse}</td>
                         <td class="p-2">${element.titel}</td>
                         <td class="p-2 text-center"><input type="checkbox" name="${element.id}" id="checkDelInfo${element.id}" onchange="Umgebung.event_remove(${element.id})"></td>
                     </tr>`;
 
-                // Selector Option hinzufügen
+        // Selector Option hinzufügen
 
-            });
-        });
-    }
+    });
+
 });
 
 function wait(ms) {

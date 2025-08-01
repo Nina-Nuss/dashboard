@@ -1,7 +1,12 @@
-
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/assets/links.html'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/header/header.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/assets/scripts.html'; ?>
+<html>
 
 <body class="bg-light">
+  
     <div class="container-fluid py-4">
+          <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/selectPanel.php'; ?>
         <div class="row">
             <div class="col-12">
                 <div class="card shadow-sm">
@@ -32,24 +37,24 @@
                                                 <li>Sonderzeichen sind nicht erlaubt</li>
                                             </ul>
                                         </div>
-                                        
+
                                         <form id="formID" action="/bereiche/bereitsVorhanden.php" method="post">
                                             <div class="form-group mb-3">
                                                 <label for="infotherminalIp" class="form-label">
                                                     <i class="fas fa-network-wired me-2"></i> IP-Adresse:
                                                 </label>
-                                                <input class="form-control" type="text" id="infotherminalIp" 
-                                                       name="infotherminalIp" placeholder="z.B. 10.5.0.100" required>
+                                                <input class="form-control" type="text" id="infotherminalIp"
+                                                    name="infotherminalIp" placeholder="z.B. 10.5.0.100" required>
                                             </div>
-                                            
+
                                             <div class="form-group mb-3">
                                                 <label for="infotherminalName" class="form-label">
                                                     <i class="fas fa-tag me-2"></i> Name:
                                                 </label>
-                                                <input class="form-control" type="text" id="infotherminalName" 
-                                                       name="infotherminalName" placeholder="z.B. Terminal Empfang" required>
+                                                <input class="form-control" type="text" id="infotherminalName"
+                                                    name="infotherminalName" placeholder="z.B. Terminal Empfang" required>
                                             </div>
-                                            
+
                                             <button type="submit" class="btn btn-success shadow-sm">
                                                 <i class="fas fa-plus me-2"></i> Hinzufügen
                                             </button>
@@ -57,7 +62,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="col-md-6">
                                 <div class="card h-100">
                                     <div class="card-header">
@@ -70,9 +75,9 @@
                                             <label for="infotherminalSelect" class="form-label">
                                                 <i class="fas fa-list me-2"></i> Infoterminal auswählen:
                                             </label>
-                                            
+
                                         </div>
-                                        
+
                                         <div style="max-height: 300px; overflow-y: auto;">
                                             <table class="table table-hover position-relative">
                                                 <thead>
@@ -88,7 +93,7 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        
+
                                         <button type="button" class="btn btn-danger shadow-sm" onclick="Umgebung.remove_generate()">
                                             <i class="fas fa-trash me-2"></i> löschen
                                         </button>
@@ -105,4 +110,5 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
