@@ -25,7 +25,7 @@ window.onload = async function () {
 
     const systemPath = await getSystemPath()
     console.log("System Path:", systemPath);
-    
+
     createUmgebung()
     try {
         await createCardObj()
@@ -60,7 +60,7 @@ window.onload = async function () {
             var settingPanel = document.getElementById("settingsPanel");
             const response = await fetch("/bereiche/startSeite.php")
             const responseText = await response.text();
-
+            
             settingPanel.innerHTML = responseText;
             deakCb(false);
             deakAktivCb(true);
@@ -154,13 +154,13 @@ function getJsonData(key) {
 }
 async function createCardObj() {
     console.log("createCardObj wurde aufgerufen");
-    
+
     const response = await selectObj("../database/selectSchemas.php")
     console.log(response);
-    
+
     let objList = convertCardObjForDataBase(response)
     console.log(objList);
-    
+
     objList.forEach(cardObj => {
         if (cardObj.imagePath == null || cardObj.imagePath == "null" || cardObj.imagePath == "") {
             cardObj.imagePath = "img/bild.png"; // Setze einen Standardwert,
@@ -184,6 +184,19 @@ async function createCardObj() {
 
     createBodyCardObj();
     console.log(CardObj.list);
+}
+
+function showDateTime(type) {
+    const zeitspannePanel = document.getElementById("zeitspannePanel");
+    const uhrzeitPanel = document.getElementById("uhrzeitPanel");
+
+    if (type === 'zeitspanne') {
+        zeitspannePanel.style.display = "block";
+        uhrzeitPanel.style.display = "none";
+    } else if (type === 'uhrzeit') {
+        zeitspannePanel.style.display = "none";
+        uhrzeitPanel.style.display = "block";
+    }
 }
 
 
@@ -303,7 +316,7 @@ async function updateDataBase(cardObj, databaseUrl) {
     try {
         console.log("updateDataBase wurde aufgerufen");
         const createJsObj = JSON.stringify(cardObj)
-        var result = await fetch(`database/${databaseUrl}.php`, {
+        var result = await fetch(`/database/${databaseUrl}.php`, {
             method: "POST",
             body: createJsObj
         });
@@ -363,3 +376,7 @@ function uncheckAllTableCheckboxes() {
 }
 
 
+document.addEventListener('DOMContentLoaded', function () {
+    // Für den Button mit der ID "delDateTimeRange"
+   
+});

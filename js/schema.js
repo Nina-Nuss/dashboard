@@ -153,15 +153,15 @@ class CardObj {
             alert("Bitte wählen Sie mindestens ein Schema aus, um es zu löschen.");
             return;
         }
-        
+
         // Bestätigungsdialog anzeigen
         const confirmed = confirm(`Sind Sie sicher, dass Sie ${this.temp_remove.length} Schema(s) löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.`);
-        
+
         if (!confirmed) {
             console.log("Löschvorgang vom Benutzer abgebrochen");
             return; // Benutzer hat abgebrochen
         }
-        
+
         await this.removeFromListLogik();
         await this.update();
     }
@@ -310,10 +310,13 @@ class CardObj {
             return;
         }
         try {
+            CardObj.DateTimeHandler(obj); // Aktualisiere die Datums- und Zeitfelder
             var preCardObj = CardObj.prepareObjForUpdate(obj); // Bereite das Objekt für die Aktualisierung vor
             await updateDataBase(preCardObj, "updateSchema");
             alert("Änderungen erfolgreich gespeichert!");
             CardObj.loadChanges(obj); // Lade die Änderungen für das ausgewählte CardObj
+
+
         } catch (error) {
             console.error("Fehler beim Speichern der Änderungen:", error);
             alert("Fehler beim Speichern der Änderungen. Bitte versuchen Sie es erneut.");
@@ -372,6 +375,71 @@ class CardObj {
         }
     }
 
+
+    static DateTimeHandler(cardObj) {
+        console.log("DateTimeHandler aufgerufen für CardObjektID:", cardObj.id);
+        var startDate = document.getElementById("startDate");
+        var endDate = document.getElementById("endDate");
+        var startTime = document.getElementById("startTimeDate");
+        var endTime = document.getElementById("endTimeDate");
+
+        var startTimeRange = document.getElementById("startTimeRange");
+        var endTimeRange = document.getElementById("endTimeRange");
+
+        console.log("Start Date:", startDate.value);
+        console.log("End Date:", endDate.value);
+        console.log("Start Time:", startTime.value);
+        console.log("End Time:", endTime.value);
+        console.log("Start Time Range:", startTimeRange.value);
+        console.log("End Time Range:", endTimeRange.value);
+
+        // Set the values from the cardObj
+        if (startDate.value && endDate.value && startTime.value && endTime.value) {
+            cardObj.startDate = startDate.value;
+            cardObj.endDate = endDate.value;
+            cardObj.startTime = startTime.value;
+            cardObj.endTime = endTime.value;
+            cardObj.dateAktiv = true;
+            console.log("datum uhrzeit wurde gesetzt");
+        } else {
+            console.log("Datum und Uhrzeit wurden nicht gespeichert, da die Eingabe Felder nicht alle ausgefüllt sind.");
+        }
+        if (startTimeRange.value && endTimeRange.value) {
+            cardObj.startTime = startTimeRange.value;
+            cardObj.endTime = endTimeRange.value;
+            cardObj.timeAktiv = true;
+            console.log("Zeitbereich wurde gesetzt");
+            
+        }else {
+            console.log("Zeitbereich wurde nicht gespeichert, da die Eingabe Felder nicht alle ausgefüllt sind.");
+        }
+         
+       
+    }
+
+    static deleteDateTimeRange(objID) {
+        var btnDelDateTime = document.getElementById('delDateTimeRange');
+        var startDate = document.getElementById("startDate");
+        var endDate = document.getElementById("endDate");
+        var startTime = document.getElementById("startTimeDate");
+        var endTime = document.getElementById("endTimeDate");
+        if (btnDelDateTime && objID !== null) {
+            startDate.value = '';
+            endDate.value = '';
+            startTime.value = '';
+            endTime.value = '';
+        }
+    }
+    static deleteTimeRange(objID) {
+        var btnDelTime = document.getElementById('delTimeRange');
+        var startTimeRange = document.getElementById("startTimeRange");
+        var endTimeRange = document.getElementById("endTimeRange");
+        if (btnDelTime && objID !== null) {
+            startTimeRange.value = '';
+            endTimeRange.value = '';
+        }
+    }
+
 }
 
 
@@ -385,7 +453,7 @@ window.addEventListener("load", function () {
             var imagePath = await getSystemPath();
             console.log("Image Path:", imagePath);
             console.log("./bereiche/templatebereich.php");
-            
+
 
             var settingPanel = document.getElementById("settingsPanel");
             await fetch("/bereiche/templatebereich.php")
@@ -534,14 +602,12 @@ async function createBodyCardObj() {
         // Hier kannst du mit jeder Checkbox arbeiten
         checkbox.addEventListener('change', function () {
             if (this.checked) {
-
-
                 const id = extractNumberFromString(this.id);
                 CardObj.selectedID = id; // Set the selected ID
                 var obj = findObj(CardObj.list, id);
                 deakAktivCb(false);
-                CardObj.loadChanges(obj); // Load changes for the selected CardObj   
-
+                CardObj.loadChanges(obj); // Load changes for the selected CardObj
+                // CardObj.DateTimeHandler(obj);
                 cbForSelectSchema.forEach(cb => {
                     if (cb !== this) {
                         cb.checked = false;
@@ -573,10 +639,11 @@ async function createBodyCardObj() {
             }
             Beziehungen.update(CardObj.selectedID);
 
+
         });
     });
 
-   
+
 };
 
 function deakAktivCb(aktiv) {
