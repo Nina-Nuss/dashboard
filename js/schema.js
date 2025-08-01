@@ -570,7 +570,7 @@ async function meow(event) {
 }
 async function sendPicture(formData) {
     try {
-        const response = await fetch("/movePic.php", {
+        const response = await fetch("/php/movePic.php", {
             method: 'POST',
             body: formData
         });
@@ -694,6 +694,10 @@ function deakAktivCb(aktiv) {
     var btn_hinzufuegen = document.getElementById("btn_hinzufuegen");
     var btn_loeschen = document.getElementById("btn_loeschen");
     var btn_save_changes = document.getElementById("btn_save_changes");
+    var btnShowZeitraum = document.getElementById("btnShowZeitraum");
+    var btnShowUhrzeit = document.getElementById("btnShowUhrzeit");
+    var panelForDateTime = document.getElementById("panelForDateTime");
+
     if (aktiv == true) {
         timerbereich.disabled = true; // Deaktiviert den Timerbereich
         titel.disabled = true; // Deaktiviert das Titel-Eingabefeld
@@ -701,6 +705,9 @@ function deakAktivCb(aktiv) {
         btn_hinzufuegen.disabled = true; // Deaktiviert den Hinzufügen-
         btn_loeschen.disabled = true; // Deaktiviert den Löschen-Button
         btn_save_changes.disabled = true; // Deaktiviert den Speichern-Button
+        btnShowZeitraum.disabled = true; // Deaktiviert den Löschen-Button für Datum und Uhrzeit
+        btnShowUhrzeit.disabled = true; // Deaktiviert den Löschen-Button für Zeit
+        panelForDateTime.style.display = "none"; // Versteckt das Panel für Datum und Uhrzeit
     } else {
         timerbereich.disabled = false; // Aktiviert den Timerbereich
         titel.disabled = false; // Aktiviert das Titel-Eingabefeld
@@ -708,6 +715,9 @@ function deakAktivCb(aktiv) {
         btn_hinzufuegen.disabled = false; // Aktiviert den Hinzufügen-Button
         btn_loeschen.disabled = false; // Aktiviert den Löschen-Button
         btn_save_changes.disabled = false; // Aktiviert den Speichern-Button
+        btnShowZeitraum.disabled = false; // Aktiviert den Löschen-Button für Datum und Uhrzeit
+        btnShowUhrzeit.disabled = false; // Aktiviert den Löschen-Button für Zeit
+        panelForDateTime.style.display = "block"; // Zeigt das Panel für Datum und Uhrzeit an
     }
 }
 

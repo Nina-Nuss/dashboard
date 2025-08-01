@@ -75,51 +75,53 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <div id="zeitspannePanel" class="border rounded-3 shadow-sm p-3 mb-3 bg-light" style="display:none;">
-                                            <div class="row g-2">
-                                                <div class="col-6">
-                                                    <label for="startDate" class="form-label small">Startdatum</label>
-                                                    <input type="date" class="form-control form-control-sm" id="startDate" name="startDate">
+                                        <div id="panelForDateTime">
+                                            <div id="zeitspannePanel" class="border rounded-3 shadow-sm p-3 mb-3 bg-light" style="display:none;">
+                                                <div class="row g-2">
+                                                    <div class="col-6">
+                                                        <label for="startDate" class="form-label small">Startdatum</label>
+                                                        <input type="date" class="form-control form-control-sm" id="startDate" name="startDate">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="endDate" class="form-label small">Enddatum</label>
+                                                        <input type="date" class="form-control form-control-sm" id="endDate" name="endDate">
+                                                    </div>
                                                 </div>
-                                                <div class="col-6">
-                                                    <label for="endDate" class="form-label small">Enddatum</label>
-                                                    <input type="date" class="form-control form-control-sm" id="endDate" name="endDate">
+                                                <div class="row g-2 mt-1">
+                                                    <div class="col-6">
+                                                        <label for="startTimeDate" class="form-label small">Startzeit</label>
+                                                        <input type="time" class="form-control form-control-sm" id="startTimeDate" name="startTimeDate">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="endTimeDate" class="form-label small">Endzeit</label>
+                                                        <input type="time" class="form-control form-control-sm" id="endTimeDate" name="endTimeDate">
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="row g-2 mt-1">
-                                                <div class="col-6">
-                                                    <label for="startTimeDate" class="form-label small">Startzeit</label>
-                                                    <input type="time" class="form-control form-control-sm" id="startTimeDate" name="startTimeDate">
-                                                </div>
-                                                <div class="col-6">
-                                                    <label for="endTimeDate" class="form-label small">Endzeit</label>
-                                                    <input type="time" class="form-control form-control-sm" id="endTimeDate" name="endTimeDate">
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-12 text-end mt-2">
-                                                    <button id="delDateTimeRange" class="btn btn-outline-danger btn-sm px-3" onclick="CardObj.deleteDateTimeRange(CardObj.selectedID)">
-                                                        <i class="fas fa-trash-alt"></i> Zeitspanne löschen
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div id="uhrzeitPanel" class="border rounded-3 shadow-sm p-3 bg-light" style="display:none;">
-                                            <div class="row g-2">
-                                                <div class="col-6">
-                                                    <label for="startTimeRange" class="form-label small">Startzeit</label>
-                                                    <input type="time" class="form-control form-control-sm" id="startTimeRange" name="startTimeRange">
-                                                </div>
-                                                <div class="col-6">
-                                                    <label for="endTimeRange" class="form-label small">Endzeit</label>
-                                                    <input type="time" class="form-control form-control-sm" id="endTimeRange" name="endTimeRange">
+                                                <div class="row">
+                                                    <div class="col-12 text-end mt-2">
+                                                        <button id="delDateTimeRange" class="btn btn-outline-danger btn-sm px-3" onclick="CardObj.deleteDateTimeRange(CardObj.selectedID)">
+                                                            <i class="fas fa-trash-alt"></i> Zeitspanne löschen
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-12 text-end mt-2">
-                                                    <button id="delTimeRange" class="btn btn-outline-danger btn-sm px-3" onclick="CardObj.deleteTimeRange(CardObj.selectedID)">
-                                                        <i class="fas fa-trash-alt"></i> Uhrzeit löschen
-                                                    </button>
+                                            <div id="uhrzeitPanel" class="border rounded-3 shadow-sm p-3 bg-light" style="display:none;">
+                                                <div class="row g-2">
+                                                    <div class="col-6">
+                                                        <label for="startTimeRange" class="form-label small">Startzeit</label>
+                                                        <input type="time" class="form-control form-control-sm" id="startTimeRange" name="startTimeRange">
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <label for="endTimeRange" class="form-label small">Endzeit</label>
+                                                        <input type="time" class="form-control form-control-sm" id="endTimeRange" name="endTimeRange">
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 text-end mt-2">
+                                                        <button id="delTimeRange" class="btn btn-outline-danger btn-sm px-3" onclick="CardObj.deleteTimeRange(CardObj.selectedID)">
+                                                            <i class="fas fa-trash-alt"></i> Uhrzeit löschen
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
