@@ -51,6 +51,7 @@ class CardObj {
 
     }
     htmlBody(umgebung) {
+        
         const body = `
             <div class="card-deck p-1 h-50">
                 <div class="card" id="${this.cardObjekte}">
@@ -71,7 +72,9 @@ class CardObj {
                             <small id="${this.selectedTimerLabel}" class="text-muted">Dauer: ${this.selectedTime / 1000} sekunde</small>
                         </div>
                     </div>
-                    
+                    <div class="card-footer p-1">
+                            <small class="text-muted">Datum: ${this.startDate}  -  ${this.endDate}</small>
+                    </div>
                 </div>
             </div>
         `;
@@ -356,10 +359,43 @@ class CardObj {
         var titel = document.getElementById("websiteName");
         var checkA = document.getElementById("checkA");
 
+
+        var startDate = document.getElementById("startDate");
+        var endDate = document.getElementById("endDate");
+        var startTimeDate = document.getElementById("startTimeDate");
+        var endTimeDate = document.getElementById("endTimeDate");
+
+        var startTimeRange = document.getElementById("startTimeRange");
+        var endTimeRange = document.getElementById("endTimeRange");
+
         checkA.checked = cardObj.aktiv; // Set the checkbox state
         titel.value = cardObj.titel; // Set the title to the checkbox's title
         timerbereich.value = cardObj.selectedTime; // Set the time range
         var selectedTime = cardObj.selectedTime / 1000; // Convert milliseconds to seconds
+
+
+        var startTimeSplit = cardObj.startDate.split(" ")[1];
+        var startDateSplit = cardObj.startDate.split(" ")[0];
+
+        var endTimeSplit = cardObj.endDate.split(" ")[1];
+        var endDateSplit = cardObj.endDate.split(" ")[0];
+
+        endDate.value = endDateSplit;
+        endTimeDate.value = endTimeSplit;
+
+        startDate.value = startDateSplit;
+        startTimeDate.value = startTimeSplit;
+
+        startTimeRange.value = cardObj.startTime;
+        endTimeRange.value = cardObj.endTime;
+        // startTimeRange.value = cardObj.startTime;
+        // endTimeRange.value = cardObj.endTime;
+
+        // startDate.value = startDate;
+        // startTimeDate.value = startTime; // Set the end date
+        // endDate.value = cardObj.endDate;
+
+    
         cardtimerLabel.innerHTML = `Dauer: ${selectedTime} Sekunden`; // Update the label with the selected time
 
         checkA.checked = cardObj.aktiv; // Set the checkbox state
@@ -395,26 +431,29 @@ class CardObj {
 
         // Set the values from the cardObj
         if (startDate.value && endDate.value && startTime.value && endTime.value) {
-            cardObj.startDate = startDate.value;
-            cardObj.endDate = endDate.value;
-            cardObj.startTime = startTime.value;
-            cardObj.endTime = endTime.value;
+            cardObj.startDate = startDate.value + " " + startTime.value;
+            cardObj.endDate = endDate.value + " " + endTime.value;
             cardObj.dateAktiv = true;
             console.log("datum uhrzeit wurde gesetzt");
         } else {
-            console.log("Datum und Uhrzeit wurden nicht gespeichert, da die Eingabe Felder nicht alle ausgefüllt sind.");
+            cardObj.startDate = "";
+            cardObj.endDate = "";
+            cardObj.dateAktiv = false;
         }
         if (startTimeRange.value && endTimeRange.value) {
             cardObj.startTime = startTimeRange.value;
             cardObj.endTime = endTimeRange.value;
             cardObj.timeAktiv = true;
             console.log("Zeitbereich wurde gesetzt");
-            
-        }else {
+
+        } else {
+            cardObj.startTime = "";
+            cardObj.endTime = "";
+            cardObj.timeAktiv = false;
             console.log("Zeitbereich wurde nicht gespeichert, da die Eingabe Felder nicht alle ausgefüllt sind.");
         }
-         
-       
+
+
     }
 
     static deleteDateTimeRange(objID) {

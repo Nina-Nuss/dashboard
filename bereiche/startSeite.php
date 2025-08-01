@@ -68,10 +68,10 @@
                                             <label class="form-label fw-bold mb-2">Zeit-Einstellungen</label>
                                             <div class="btn-group w-100 mb-3" role="group">
                                                 <button class="btn btn-outline-primary" type="button" id="btnShowZeitraum" onclick="showDateTime('zeitspanne')">
-                                                    <i class="bi bi-calendar-range me-1"></i> Zeitspanne
+                                                    <i class="bi bi-calendar-range me-1"></i> Datum & Uhrzeit
                                                 </button>
                                                 <button class="btn btn-outline-primary" type="button" id="btnShowUhrzeit" onclick="showDateTime('uhrzeit')">
-                                                    <i class="bi bi-clock me-1"></i> Uhrzeit
+                                                    <i class="bi bi-clock me-1"></i> Täglich
                                                 </button>
                                             </div>
                                         </div>
