@@ -17,7 +17,7 @@ window.onload = async function () {
     let counter = document.getElementById("counter");
     const saveBtn = document.getElementById("saveBtn")
     console.log("window.onload von index.js läuft!");
-
+    deakNavbarbtns();
     try {
         await CardObj.createCardObj()
     } catch (error) {
@@ -57,27 +57,32 @@ window.onload = async function () {
     }
 }
 
-try {
-    const startBtnsContainer = document.getElementById("startBtns");
-    const buttonsInContainer = startBtnsContainer.querySelectorAll("button");
 
-    buttonsInContainer.forEach(button => {
-        button.addEventListener("click", function () {
-            console.log(`Button mit ID ${button.id} wurde geklickt`);
+function deakNavbarbtns() {
+    try {
+        const startBtnsContainer = document.getElementById("startBtns");
+        const buttonsInContainer = startBtnsContainer.querySelectorAll("button");
 
-            // Alle Buttons aktivieren
-            buttonsInContainer.forEach(btn => {
-                btn.disabled = false;
+        buttonsInContainer.forEach(button => {
+            button.addEventListener("click", function () {
+                console.log(`Button mit ID ${button.id} wurde geklickt`);
+
+                // Alle Buttons aktivieren
+                buttonsInContainer.forEach(btn => {
+                    btn.disabled = false;
+                });
+
+                // Nur den geklickten Button deaktivieren
+                button.disabled = true;
             });
-
-            // Nur den geklickten Button deaktivieren
-            button.disabled = true;
         });
-    });
 
-} catch (error) {
-    console.error("Fehler beim Laden der Seite:", error);
+    } catch (error) {
+        console.error("Fehler beim Laden der Seite:", error);
+    }
+
 }
+
 
 
 
@@ -114,7 +119,7 @@ function checkAnzahl() {
 
 }
 
-function homeSeite() { 
+function homeSeite() {
     window.location.href = '/dashboard/index.php';
 }
 

@@ -74,37 +74,33 @@ class Umgebung {
         deaktivereCbx(true);
         var delInfo = document.getElementById("deleteInfotherminal");
         const selector = document.getElementById('infotherminalSelect');
-
-        // Performance: String-Building statt innerHTML +=
-        let tableContent = "";
+        let delInfoRows = ""; // String für Tabellenzeilen
         let selectorOptions = '<option value="">-- Bitte wählen --</option>';
-
         this.list = [];
         this.temp_remove = [];
-        Beziehungen.update();
 
         const result = await readDatabase("selectInfotherminal");
-        console.log("result: ", result);
 
+        console.log("result: ", result);
         // Performance: Normale forEach statt await forEach
         result.forEach(listInfo => {
             // Neue Umgebung-Objekte erzeugen
             new Umgebung(listInfo[0], listInfo[1], listInfo[2]);
-
             // Tabellencontent sammeln
-            tableContent += `<tr class="border-bottom">
+            delInfoRows += `<tr class="border-bottom">
                     <td class="p-2">${listInfo[0]}</td>
                     <td class="p-2">${listInfo[2]}</td>
                     <td class="p-2">${listInfo[1]}</td>
                     <td class="p-2 text-center"><input type="checkbox" name="${listInfo[0]}" id="checkDelInfo${listInfo[0]}" onchange="Umgebung.event_remove(${listInfo[0]})"></td>
                 </tr>`;
-
             // Selector-Optionen sammeln
             selectorOptions += `<option value="${listInfo[1]}">${listInfo[1]}</option>`;
         });
+        if (delInfo) {
+            delInfo.innerHTML = delInfoRows;
+        }
 
         // DOM nur einmal aktualisieren (bessere Performance)
-     
         if (selector) {
             selector.innerHTML = selectorOptions;
         }
@@ -201,49 +197,8 @@ class Umgebung {
             alert("Bitte wählen Sie mindestens ein Infotherminal aus, um es zu löschen.");
             return;
         }
-
-        // Bessere Bestätigungsdialog mit Namen der zu löschenden Terminals
-        const terminalsToDelete = this.list
-            .filter(terminal => this.temp_remove.includes(terminal.id))
-            .map(terminal => terminal.titel)
-            .join(', ');
-
-        const confirmed = confirm(
-            `Sind Sie sicher, dass Sie folgende ${this.temp_remove.length} Infotherminal(s) löschen möchten?\n\n` +
-            `${terminalsToDelete}\n\n` +
-            `Diese Aktion kann nicht rückgängig gemacht werden.`
-        );
-
-        if (!confirmed) {
-            console.log("Löschvorgang vom Benutzer abgebrochen");
-            return;
-        }
-
-        try {
-            // Loading-State anzeigen
-            const deleteButton = document.querySelector('[onclick*="remove_generate"]');
-            if (deleteButton) {
-                deleteButton.disabled = true;
-                deleteButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Lösche...';
-            }
-
-            await this.removeFromListLogik();
-            await this.update();
-
-            // Erfolgreiche Löschung anzeigen
-            alert(`${this.temp_remove.length} Infotherminal(s) wurden erfolgreich gelöscht.`);
-
-        } catch (error) {
-            console.error("Fehler beim Löschen:", error);
-            alert("Fehler beim Löschen der Infotherminals. Bitte versuchen Sie es erneut.");
-        } finally {
-            // Button zurücksetzen
-            const deleteButton = document.querySelector('[onclick*="remove_generate"]');
-            if (deleteButton) {
-                deleteButton.disabled = false;
-                deleteButton.innerHTML = '<i class="fas fa-trash"></i> Löschen';
-            }
-        }
+        await this.removeFromListLogik();
+        await this.update();
     }
 
     static erstelleSelector() {
@@ -264,7 +219,7 @@ class Umgebung {
             }
         });
 
-        // Change-Event nur einmal hinzufügen
+        // // Change-Event nur einmal hinzufügen
         selector.addEventListener('change', function () {
             button.disabled = this.value === '';
         });
@@ -284,7 +239,7 @@ class Umgebung {
         const data = await resultUmgebung
         Umgebung.list = [];
         data.forEach(umgebung => {
-            var umgebungObj = new Umgebung(umgebung[0], umgebung[1], umgebung[2]);
+            new Umgebung(umgebung[0], umgebung[1], umgebung[2]);
         })
         var selectedUmgebung = Umgebung.list[1];
     }
@@ -298,7 +253,6 @@ window.addEventListener("load", async function () {
     uncheckAllTableCheckboxes()
     deaktivereCbx(true);
     Umgebung.temp_remove = [];
-
     // Sende POST-Request zu php/sendingToPage.php
     try {
         const adminBereich = document.getElementById("adminBereich");
@@ -356,69 +310,14 @@ window.addEventListener("load", async function () {
             form.reset(); // Formular zurücksetzen
         });
     }
-    console.log("Umgebung.js loaded");
-    const cardBodyDelInfo = document.getElementById("cardBodyForDelInfo");
-    const delInfo = document.getElementById("deleteInfotherminal")
-
-    console.log("infoterminal löschen wurde aufgerufen");
-
-    // Umgebungen durchgehen und sowohl Tabelle als auch Selector befüllen
-    Umgebung.list.forEach(element => {
-        // Tabelle befüllen+
-        console.log(element);
-
-        delInfo.innerHTML += `<tr class="border-bottom">
-                        <td class="p-2">${element.id}</td>
-                        <td class="p-2">${element.ipAdresse}</td>
-                        <td class="p-2">${element.titel}</td>
-                        <td class="p-2 text-center"><input type="checkbox" name="${element.id}" id="checkDelInfo${element.id}" onchange="Umgebung.event_remove(${element.id})"></td>
-                    </tr>`;
-
-        // Selector Option hinzufügen
-
-    });
-
 });
 
 function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function select() {
-    getCuttedList = []
 
-    // Versuche verschiedene Pfade
-    const possiblePaths = [
-        "database/selectInfotherminal.php",
-        "./database/selectInfotherminal.php",
-        "/database/selectInfotherminal.php",
-        "selectInfotherminal.php"
-    ];
-    async function tryFetch(paths, index = 0) {
-        if (index >= paths.length) {
-            console.error("Keine gültigen Pfade für selectInfotherminal.php gefunden");
-            return;
-        }
-        try {
-            console.log(`Versuche Pfad: ${paths[index]}`);
-            const response = await fetch(paths[index]);
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const responseText = await response.text();
-            console.log("Select Response:", responseText);
-            cutAndCreate(responseText);
-            Umgebung.update();
-        } catch (error) {
-            console.warn(`Pfad ${paths[index]} fehlgeschlagen:`, error.message);
-            // Versuche nächsten Pfad
-            await tryFetch(paths, index + 1);
-        }
-    }
-    tryFetch(possiblePaths);
-}
 function cutAndCreate(responseText) {
     var obj = responseText.split("],[");
     for (let i = 0; i < obj.length; i++) {

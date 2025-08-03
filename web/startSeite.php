@@ -163,7 +163,7 @@
                                                     <option value="">-- Bitte wählen --</option>
                                                 </select>
                                             </div>
-                                            <button id="openTerminalBtn" class="btn btn-primary w-100" disabled>
+                                            <button id="openTerminalBtn" class="btn btn-primary w-100">
                                                 <i class="fas fa-external-link-alt me-1"></i> Anzeige öffnen
                                             </button>
                                         </div>
