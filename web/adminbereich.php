@@ -5,8 +5,11 @@
 
 <body class="bg-light">
   
-    <div class="container-fluid py-3">
-          <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/selectPanel.php'; ?>
+    <div class="container-fluid py-2">
+        <div class="col-md-12 text-center pt-2">
+                <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/selectPanel.php'; ?>
+        </div>
+    
         <div class="row">
             <div class="col-12">
                 <div class="card shadow-sm">
@@ -38,7 +41,7 @@
                                             </ul>
                                         </div>
 
-                                        <form id="formID" action="/bereiche/bereitsVorhanden.php" method="post">
+                                        <form id="formID" action="/web/bereitsVorhanden.php" method="post">
                                             <div class="form-group mb-3">
                                                 <label for="infotherminalIp" class="form-label">
                                                     <i class="fas fa-network-wired me-2"></i> IP-Adresse:

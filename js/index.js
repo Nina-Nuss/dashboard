@@ -59,7 +59,7 @@ window.onload = async function () {
     const infotherminalBereich = document.getElementById("infotherminalBereich");
     if (infotherminalBereich !== null) {
         infotherminalBereich.addEventListener("click", async function (event) {
-            window.location.href = '/bereiche/startSeite.php';
+            window.location.href = '/web/startSeite.php';
             deakCb(false);
             deakAktivCb(true);
             Umgebung.erstelleSelector();
@@ -125,8 +125,9 @@ function checkAnzahl() {
 
 }
 
-
-
+function homeSeite() { 
+    window.location.href = '/dashboard/index.php';
+}
 
 
 async function createUmgebung() {

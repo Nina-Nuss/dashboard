@@ -5,7 +5,7 @@
 $postData = $_POST;
 
 // Zielseite festlegen
-$targetPage = "/bereiche/adminbereich.php";
+$targetPage = "/web/adminbereich.php";
 
 // Daten an die Zielseite senden
 if (!empty($postData)) {

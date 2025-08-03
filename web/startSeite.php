@@ -8,16 +8,7 @@
 <div class="container-fluid py-2 " style="max-height: 90vh; overflow-y: auto;">
         
     <div class="row">
-        <div id="rowForCards" class="col-md-2 text-center">
-            <!-- Card Objecte -->
-            <div id="dokumente">
-                <h2 id="titelUmgebung"></h2>
-                <div id="umgebungsContainer">
-                    <div id="cardContainer" class="cardContainer"></div>
-                </div>
-            </div>
-            <!-- Card Objecte -->
-        </div>
+       <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/sidebar.php'; ?>
         <div class="col-md-10 text-center">
           <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/selectPanel.php'; ?>
            

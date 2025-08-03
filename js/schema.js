@@ -493,7 +493,7 @@ window.addEventListener("load", async function () {
     const templatebereich = document.getElementById("templateBereich");
     if (templatebereich !== null) {
         templatebereich.addEventListener("click", async function (event) {
-            window.location.href = '/bereiche/templatebereich.php';
+            window.location.href = '/web/templatebereich.php';
         });
     }
 });
