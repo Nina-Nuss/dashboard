@@ -71,46 +71,42 @@ class Umgebung {
         }
     }
     static async update() {
-        uncheckAllCheckboxes();
+        deaktivereCbx(true);
         var delInfo = document.getElementById("deleteInfotherminal");
         const selector = document.getElementById('infotherminalSelect');
 
-        if (delInfo != null) {
+        // Performance: String-Building statt innerHTML +=
+        let tableContent = "";
+        let selectorOptions = '<option value="">-- Bitte wählen --</option>';
 
+        this.list = [];
+        this.temp_remove = [];
+        Beziehungen.update();
 
-            // Performance: String-Building statt innerHTML +=
-            let tableContent = "";
-            let selectorOptions = '<option value="">-- Bitte wählen --</option>';
+        const result = await readDatabase("selectInfotherminal");
+        console.log("result: ", result);
 
-            this.list = [];
-            this.temp_remove = [];
-            Beziehungen.update();
+        // Performance: Normale forEach statt await forEach
+        result.forEach(listInfo => {
+            // Neue Umgebung-Objekte erzeugen
+            new Umgebung(listInfo[0], listInfo[1], listInfo[2]);
 
-            const result = await readDatabase("selectInfotherminal");
-            console.log("result: ", result);
-
-            // Performance: Normale forEach statt await forEach
-            result.forEach(listInfo => {
-                // Neue Umgebung-Objekte erzeugen
-                new Umgebung(listInfo[0], listInfo[1], listInfo[2]);
-
-                // Tabellencontent sammeln
-                tableContent += `<tr class="border-bottom">
+            // Tabellencontent sammeln
+            tableContent += `<tr class="border-bottom">
                     <td class="p-2">${listInfo[0]}</td>
                     <td class="p-2">${listInfo[2]}</td>
                     <td class="p-2">${listInfo[1]}</td>
                     <td class="p-2 text-center"><input type="checkbox" name="${listInfo[0]}" id="checkDelInfo${listInfo[0]}" onchange="Umgebung.event_remove(${listInfo[0]})"></td>
                 </tr>`;
 
-                // Selector-Optionen sammeln
-                selectorOptions += `<option value="${listInfo[1]}">${listInfo[1]}</option>`;
-            });
+            // Selector-Optionen sammeln
+            selectorOptions += `<option value="${listInfo[1]}">${listInfo[1]}</option>`;
+        });
 
-            // DOM nur einmal aktualisieren (bessere Performance)
-            delInfo.innerHTML = tableContent;
-            if (selector) {
-                selector.innerHTML = selectorOptions;
-            }
+        // DOM nur einmal aktualisieren (bessere Performance)
+     
+        if (selector) {
+            selector.innerHTML = selectorOptions;
         }
         console.log(this.list);
     }
@@ -283,6 +279,15 @@ class Umgebung {
             selector.appendChild(option);
         });
     }
+    static async createUmgebung() {
+        const resultUmgebung = selectObj("../database/selectInfotherminal.php")
+        const data = await resultUmgebung
+        Umgebung.list = [];
+        data.forEach(umgebung => {
+            var umgebungObj = new Umgebung(umgebung[0], umgebung[1], umgebung[2]);
+        })
+        var selectedUmgebung = Umgebung.list[1];
+    }
 
 }
 
@@ -291,7 +296,7 @@ window.addEventListener("load", async function () {
 
     const settingsPanel = document.getElementById("settingsPanel")
     uncheckAllTableCheckboxes()
-    deakCb(true);
+    deaktivereCbx(true);
     Umgebung.temp_remove = [];
 
     // Sende POST-Request zu php/sendingToPage.php
@@ -422,7 +427,6 @@ function cutAndCreate(responseText) {
         // new Umgebung(inZeile[0], inZeile[1], inZeile[2])
     }
 }
-
 
 
 

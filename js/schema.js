@@ -239,51 +239,61 @@ class CardObj {
 
     static async update() {
         var delSchema = document.getElementById("deleteSchema")
-        var cardContainer = document.getElementById("cardContainer");
-        uncheckAllCheckboxes();
-        deakCb(true);
-
-        if(window.location.href.includes("templatebereich.php")) {
-            deakCb(false);
-        }
+        console.log("bin in delschema drin");
         if (delSchema != null) {
-            console.log("bin in delschema drin");
-
             delSchema.innerHTML = "";
-            cardContainer.innerHTML = "";
-            this.list = [];
-            this.temp_remove = [];
-            // KEINE neuen Umgebung-Objekte hier erzeugen!
-            const result = await readDatabase("selectSchemas");
-            console.log("result: ", result);
-            await result.forEach(listInfo => {
-                // Nur hier neue Umgebung-Objekte erzeugen - alle Datenbankfelder verwenden
-                new CardObj(
-                    listInfo[0], // id
-                    listInfo[1], // imagePath
-                    listInfo[2], // selectedTime
-                    listInfo[3], // isAktiv
-                    listInfo[4], // startTime
-                    listInfo[5], // endTime
-                    listInfo[6], // startDate
-                    listInfo[7], // endDate
-                    listInfo[8], // startAktiv
-                    listInfo[9], // endAktiv
-                    listInfo[10], // titel
-                    listInfo[11]  // beschreibung
-                );
-                delSchema.innerHTML += `<tr class="border-bottom">
-                    <td class="p-2">${listInfo[0]}</td>
-                    <td class="p-2">${listInfo[10]}</td>
-                    <td class="p-2">${listInfo[11]}</td>
-                    <td class="p-2 text-center"><input type="checkbox" name="${listInfo[0]}" id="checkDelSchema${listInfo[0]}" onchange="CardObj.event_remove(${listInfo[0]})"></td>
-                </tr>`;
-            });
         }
-        createBodyCardObj();
+        this.list = [];
+        this.temp_remove = [];
+        CardObj.createCardObj();
+        if (window.location.href.includes("templatebereich.php") ||
+            window.location.href.includes("startSeite.php") ||
+            window.location.href.includes("adminbereich.php")) {
+            console.log("deakCb aufgerufen");
+            deaktivereCbx(true);
+        }
         console.log(this.list);
 
     }
+    static async createCardObj() {
+        console.log("createCardObj wurde aufgerufen");
+        var delSchema = document.getElementById("deleteSchema")
+        const response = await await readDatabase("selectSchemas");
+        console.log(response);
+        let objList = convertCardObjForDataBase(response)
+        objList.forEach(cardObj => {
+            if (cardObj.imagePath == null || cardObj.imagePath == "null" || cardObj.imagePath == "") {
+                cardObj.imagePath = "img/bild.png"; // Setze einen Standardwert,
+            } else {
+                new CardObj(
+                    cardObj.id,
+                    cardObj.imagePath,
+                    cardObj.selectedTime,
+                    cardObj.isAktiv,
+                    cardObj.startTime,
+                    cardObj.endTime,
+                    cardObj.startDate,
+                    cardObj.endDate,
+                    cardObj.timeAktiv,
+                    cardObj.dateAktiv,
+                    cardObj.titel,
+                    cardObj.beschreibung
+                )
+                if (delSchema != null) {
+                    delSchema.innerHTML += `<tr class="border-bottom">
+                    <td class="p-2">${cardObj.id}</td>
+                    <td class="p-2">${cardObj.titel}</td>
+                    <td class="p-2">${cardObj.beschreibung}</td>
+                    <td class="p-2 text-center"><input type="checkbox" name="${cardObj.id}" id="checkDelSchema${cardObj.id}" onchange="CardObj.event_remove(${cardObj.id})"></td>
+                </tr>`;
+                }
+            }
+        });
+        createBodyCardObj();
+        deakAktivCb(true);
+        console.log(CardObj.list);
+    }
+
 
     static checkAktiv() {
         if (CardObj.selectedID !== null) {
@@ -485,11 +495,7 @@ class CardObj {
     }
 
 }
-
-
-
 window.addEventListener("load", async function () {
-    await CardObj.update();
     const templatebereich = document.getElementById("templateBereich");
     if (templatebereich !== null) {
         templatebereich.addEventListener("click", async function (event) {
@@ -498,40 +504,17 @@ window.addEventListener("load", async function () {
     }
 });
 
-
-async function ladeSettingsFortemplate() {
-    uncheckAllTableCheckboxes();
-    deakCb(true);
-    var imagePath = await getSystemPath();
-    console.log("Image Path:", imagePath);
-
-    const delSchema = document.getElementById("deleteSchema")
-    CardObj.list.forEach(element => {
-        delSchema.innerHTML += `<tr class="border-bottom">
-                    <td class="p-2">${element.id}</td>
-                    <td class="p-2">${element.titel}</td>
-                    <td class="p-2">${element.beschreibung || 'Keine Beschreibung'}</td>
-                    <td class="p-2 text-center"><input type="checkbox" name="${element.id}" id="checkDelSchema${element.id}" onchange="CardObj.event_remove(${element.id})"></td>
-                </tr>`;
-    });
-
-}
-
-
-
 async function meow(event) {
     event.preventDefault(); // Verhindert das Standardverhalten des Formulars
     const form = event.target.form;
     const formData = new FormData(form);
     const selectedTime = String(formData.get('selectedTime')); // Wert als Zahl
     const aktiv = formData.get('aktiv'); // Wert der ausgewählten Option
-
     const titel = formData.get('title');
     const description = formData.get('description');
-
     console.log("Selected Time:", selectedTime);
-
     const imgFile = formData.get("img");
+
     const localImageName = imgFile && imgFile.name ? imgFile.name : "";
     if (localImageName === "" || localImageName === null || selectedTime === null || aktiv === null || titel === "" || description === "") {
         alert("Bitte füllen Sie alle Felder aus inkl Bild.");
@@ -565,7 +548,7 @@ async function meow(event) {
         await insertDatabase(obj1);
         alert("Schema erfolgreich erstellt!");
         await CardObj.update();
-        createBodyCardObj();
+
     } catch (error) {
         console.error("Fehler beim erstellen des CardObj:", error);
     }
@@ -622,21 +605,18 @@ async function insertDatabase(cardObj) {
         console.log(result);
     }
 }
-async function createBodyCardObj() {
-
+function createBodyCardObj() {
     var cardContainer = document.getElementById("cardContainer");
     if (!cardContainer) {
         console.error("Card container not found");
         return;
     }
-
     cardContainer.innerHTML = ""; // Clear existing content
     CardObj.list.forEach(cardObj => {
         const cardContainer = "cardContainer"
         cardObj.htmlBody(cardContainer);
 
     });
-
     console.log(CardObj.list);
     const cbForSelectSchema = document.querySelectorAll('[id^="flexCheck"]')
     const labels = document.querySelectorAll('label[name^="label"]');
@@ -693,6 +673,7 @@ async function createBodyCardObj() {
 function deakAktivCb(aktiv) {
     console.log("deakAktivCb aufgerufen mit aktiv:", aktiv);
 
+
     var timerbereich = document.getElementById("timerSelectRange");
     var titel = document.getElementById("websiteName");
     var checkA = document.getElementById("checkA");
@@ -703,6 +684,10 @@ function deakAktivCb(aktiv) {
     var btnShowUhrzeit = document.getElementById("btnShowUhrzeit");
     var panelForDateTime = document.getElementById("panelForDateTime");
 
+    if (!timerbereich || !titel || !checkA || !btn_hinzufuegen || !btn_loeschen || !btn_save_changes || !btnShowZeitraum || !btnShowUhrzeit || !panelForDateTime) {
+        console.error("Ein oder mehrere erforderliche Elemente wurden nicht gefunden.");
+        return;
+    }
     if (aktiv == true) {
         timerbereich.disabled = true; // Deaktiviert den Timerbereich
         titel.disabled = true; // Deaktiviert das Titel-Eingabefeld
@@ -726,23 +711,8 @@ function deakAktivCb(aktiv) {
     }
 }
 
-function uncheckAllCheckboxes() {
+function deaktivereCbx(aktiv) {
     const cardContainer = document.getElementById('cardContainer');
-    var checkA = document.getElementById("checkA");
-    if (cardContainer) {
-        const checkboxes = cardContainer.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = false;
-
-        });
-        console.log(`${checkboxes.length} Checkboxes im cardContainer wurden ausgeschaltet`);
-    } else {
-        console.log("cardContainer nicht gefunden");
-    }
-}
-function deakCb(aktiv) {
-    const cardContainer = document.getElementById('cardContainer');
-
     if (cardContainer) {
         const checkboxes = cardContainer.querySelectorAll('input[type="checkbox"]');
         const labels = cardContainer.querySelectorAll('label[name^="label"]');
@@ -755,6 +725,7 @@ function deakCb(aktiv) {
         });
         CardObj.selectedID = null; // Update the checkAllowed state
         console.log(`${checkboxes.length} Checkboxes im cardContainer wurden deaktiviert`);
+
     } else {
         console.log("cardContainer nicht gefunden");
     }

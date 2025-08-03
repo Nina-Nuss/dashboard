@@ -8,33 +8,22 @@ var anzeigebereichV = document.getElementById("anzeigebereichV");
 
 
 window.onload = async function () {
-
-
     var selectUmgebung = document.getElementById("selectUmgebung");
     const deleteBtnForCards = document.getElementById("deleteBtnForCards");
     const UmgebungsTitel = document.getElementById("titelUmgebung")
     // const ersteAuswahl = selectUmgebung.querySelector('option');
     const denied = document.getElementById("umgebungsContainer");
-
     const plusBtn = document.getElementById("plusBtn");
-
     let counter = document.getElementById("counter");
     const saveBtn = document.getElementById("saveBtn")
     console.log("window.onload von index.js läuft!");
 
-
-    const systemPath = await getSystemPath()
-    console.log("System Path:", systemPath);
-    console.log(typeof systemPath);
-
-
-    createUmgebung()
     try {
-        await createCardObj()
+        await CardObj.createCardObj()
     } catch (error) {
         console.error("Fehler beim Erstellen der CardObjekte:", error);
     }
-
+    await Umgebung.createUmgebung();
     // Modal Focus-Management hinzufügen
     setupModalFocusManagement();
 
@@ -60,7 +49,7 @@ window.onload = async function () {
     if (infotherminalBereich !== null) {
         infotherminalBereich.addEventListener("click", async function (event) {
             window.location.href = '/web/startSeite.php';
-            deakCb(false);
+            deaktivereCbx(false);
             deakAktivCb(true);
             Umgebung.erstelleSelector();
 
@@ -130,15 +119,7 @@ function homeSeite() {
 }
 
 
-async function createUmgebung() {
-    const resultUmgebung = selectObj("../database/selectInfotherminal.php")
-    const data = await resultUmgebung
-    Umgebung.list = [];
-    data.forEach(umgebung => {
-        var umgebungObj = new Umgebung(umgebung[0], umgebung[1], umgebung[2]);
-    })
-    var selectedUmgebung = Umgebung.list[1];
-}
+
 
 function extractNumberFromString(str) {
     const match = str.match(/\d+$/);
@@ -161,39 +142,7 @@ function getJsonData(key) {
     const obj = JSON.parse(jsonData);
     return obj
 }
-async function createCardObj() {
-    console.log("createCardObj wurde aufgerufen");
 
-    const response = await selectObj("../database/selectSchemas.php")
-    console.log(response);
-
-    let objList = convertCardObjForDataBase(response)
-    console.log(objList);
-
-    objList.forEach(cardObj => {
-        if (cardObj.imagePath == null || cardObj.imagePath == "null" || cardObj.imagePath == "") {
-            cardObj.imagePath = "img/bild.png"; // Setze einen Standardwert,
-        } else {
-            const cardObjj = new CardObj(
-                cardObj.id,
-                cardObj.imagePath,
-                cardObj.selectedTime,
-                cardObj.isAktiv,
-                cardObj.startTime,
-                cardObj.endTime,
-                cardObj.startDate,
-                cardObj.endDate,
-                cardObj.timeAktiv,
-                cardObj.dateAktiv,
-                cardObj.titel,
-                cardObj.beschreibung
-            )
-        }
-    });
-
-    createBodyCardObj();
-    console.log(CardObj.list);
-}
 
 function showDateTime(type) {
     const zeitspannePanel = document.getElementById("zeitspannePanel");
