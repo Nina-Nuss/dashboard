@@ -32,7 +32,7 @@ window.onload = async function () {
     const infotherminalBereich = document.getElementById("infotherminalBereich");
     if (infotherminalBereich !== null) {
         infotherminalBereich.addEventListener("click", async function (event) {
-            window.location.href = '/web/startSeite.php';
+            window.location.href = 'startSeite.php';
             deaktivereCbx(true);
             deakAktivCb(true);
             Umgebung.erstelleSelector();
@@ -104,7 +104,7 @@ function checkAnzahl() {
 }
 
 function homeSeite() {
-    window.location.href = '/dashboard/index.php';
+    window.location.href = 'index.php';
 }
 
 function extractNumberFromString(str) {

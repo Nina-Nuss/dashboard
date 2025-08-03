@@ -256,7 +256,7 @@ window.addEventListener("load", async function () {
                 body: 'action=adminbereich'
 
             }).then(response => response.text()).then(result => {
-                window.location.href = '/web/adminbereich.php';
+                window.location.href = 'adminbereich.php';
                 // Hier können Sie die Antwort verarbeiten
             }).catch(error => {
                 console.error("Fehler beim Senden der Anfrage:", error);
