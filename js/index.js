@@ -17,39 +17,23 @@ window.onload = async function () {
     let counter = document.getElementById("counter");
     const saveBtn = document.getElementById("saveBtn")
     console.log("window.onload von index.js läuft!");
-    deakNavbarbtns();
+   
     try {
-        await CardObj.createCardObj()
+        await CardObj.update();
+        await Umgebung.update();
     } catch (error) {
-        console.error("Fehler beim Erstellen der CardObjekte:", error);
+        console.error("Fehler beim Erstellen der CardObjekte oder umgebungen:", error);
     }
-    await Umgebung.createUmgebung();
+
     // Modal Focus-Management hinzufügen
     setupModalFocusManagement();
 
-    if (deleteBtnForCards != null) {
-        deleteBtnForCards.addEventListener('click', function () {
-            if (selectedUmgebung.tempListForDeleteCards.length == 0) {
-                alert("wähle ein Object aus")
-                return
-            }
-            selectedUmgebung.tempListForDeleteCards.forEach(cardObj => {
-                cardObj.removeHtmlElement();
-                selectedUmgebung.removeObjFromList(selectedUmgebung.cardObjList, cardObj);
-                selectedUmgebung.removeObjFromList(selectedUmgebung.listAnzeige, cardObj);
-                deleteCardObjDataBase(cardObj.id)
-            });
-
-            selectedUmgebung.tempListForDeleteCards = [];
-            checkBoxShow();
-        });
-    }
     // Hier wird die startseite ausgewählt
     const infotherminalBereich = document.getElementById("infotherminalBereich");
     if (infotherminalBereich !== null) {
         infotherminalBereich.addEventListener("click", async function (event) {
             window.location.href = '/web/startSeite.php';
-            deaktivereCbx(false);
+            deaktivereCbx(true);
             deakAktivCb(true);
             Umgebung.erstelleSelector();
 
@@ -122,9 +106,6 @@ function checkAnzahl() {
 function homeSeite() {
     window.location.href = '/dashboard/index.php';
 }
-
-
-
 
 function extractNumberFromString(str) {
     const match = str.match(/\d+$/);

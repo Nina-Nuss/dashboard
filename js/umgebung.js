@@ -71,7 +71,6 @@ class Umgebung {
         }
     }
     static async update() {
-        deaktivereCbx(true);
         var delInfo = document.getElementById("deleteInfotherminal");
         const selector = document.getElementById('infotherminalSelect');
         let delInfoRows = ""; // String für Tabellenzeilen
@@ -214,7 +213,7 @@ class Umgebung {
         button.addEventListener('click', function () {
             const selectedTerminal = selector.value;
             if (selectedTerminal !== '') {
-                const url = `../anzeigeTherminal/index.php?ip=${encodeURIComponent(selectedTerminal)}`;
+                const url = `/anzeigeTherminal/index.php?ip=${encodeURIComponent(selectedTerminal)}`;
                 window.open(url, '_blank');
             }
         });
@@ -234,15 +233,6 @@ class Umgebung {
             selector.appendChild(option);
         });
     }
-    static async createUmgebung() {
-        const resultUmgebung = selectObj("../database/selectInfotherminal.php")
-        const data = await resultUmgebung
-        Umgebung.list = [];
-        data.forEach(umgebung => {
-            new Umgebung(umgebung[0], umgebung[1], umgebung[2]);
-        })
-        var selectedUmgebung = Umgebung.list[1];
-    }
 
 }
 
@@ -250,9 +240,9 @@ class Umgebung {
 window.addEventListener("load", async function () {
 
     const settingsPanel = document.getElementById("settingsPanel")
-    uncheckAllTableCheckboxes()
-    deaktivereCbx(true);
+ 
     Umgebung.temp_remove = [];
+    Umgebung.update();
     // Sende POST-Request zu php/sendingToPage.php
     try {
         const adminBereich = document.getElementById("adminBereich");
@@ -277,7 +267,7 @@ window.addEventListener("load", async function () {
         console.error("Fehler beim Senden der Anfrage:", error);
     }
 
-    Umgebung.update();
+  
     var formID = document.getElementById('formID');
     if (formID) {
         formID.addEventListener('submit', function (event) {

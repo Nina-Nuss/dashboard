@@ -245,11 +245,9 @@ class CardObj {
         }
         this.list = [];
         this.temp_remove = [];
-        CardObj.createCardObj();
+        await CardObj.createCardObj();
         if (window.location.href.includes("templatebereich.php") ||
-            window.location.href.includes("startSeite.php") ||
             window.location.href.includes("adminbereich.php")) {
-            console.log("deakCb aufgerufen");
             deaktivereCbx(true);
         }
         console.log(this.list);
@@ -684,8 +682,7 @@ function deakAktivCb(aktiv) {
     var btnShowUhrzeit = document.getElementById("btnShowUhrzeit");
     var panelForDateTime = document.getElementById("panelForDateTime");
 
-    if (!timerbereich || !titel || !checkA || !btn_hinzufuegen || !btn_loeschen || !btn_save_changes || !btnShowZeitraum || !btnShowUhrzeit || !panelForDateTime) {
-        console.error("Ein oder mehrere erforderliche Elemente wurden nicht gefunden.");
+    if (window.location.href.includes("templatebereich.php")){
         return;
     }
     if (aktiv == true) {
@@ -716,6 +713,8 @@ function deaktivereCbx(aktiv) {
     if (cardContainer) {
         const checkboxes = cardContainer.querySelectorAll('input[type="checkbox"]');
         const labels = cardContainer.querySelectorAll('label[name^="label"]');
+        console.log(`Checkboxes gefunden: ${checkboxes.length}, Labels gefunden: ${labels.length}`);
+
         checkboxes.forEach(checkbox => {
             checkbox.disabled = aktiv;
 
