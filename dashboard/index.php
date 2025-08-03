@@ -1,5 +1,5 @@
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/assets/links.html'; ?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/header/header.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/header.php'; ?>
 
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/modal/hinzufuegen.html'; ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/modal/loeschen.html'; ?>
@@ -20,10 +20,6 @@
             </div>
             <div class="col-md-10 text-center pt-2">
                 <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/selectPanel.php'; ?>
-                <div id="settingsPanel">
-                </div>
-                <hr />
-
             </div>
 
         </div>

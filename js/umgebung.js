@@ -295,24 +295,29 @@ window.addEventListener("load", async function () {
     Umgebung.temp_remove = [];
 
     // Sende POST-Request zu php/sendingToPage.php
-    const adminBereich = document.getElementById("adminBereich");
+    try {
+        const adminBereich = document.getElementById("adminBereich");
 
-    adminBereich.addEventListener('click', async function () {
-        await fetch('/php/sendingToPage.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: 'action=adminbereich'
+        adminBereich.addEventListener('click', async function () {
+            await fetch('/php/sendingToPage.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'action=adminbereich'
 
-        }).then(response => response.text()).then(result => {
-            window.location.href = '/bereiche/adminbereich.php';
-            // Hier können Sie die Antwort verarbeiten
-        }).catch(error => {
-            console.error("Fehler beim Senden der Anfrage:", error);
+            }).then(response => response.text()).then(result => {
+                window.location.href = '/bereiche/adminbereich.php';
+                // Hier können Sie die Antwort verarbeiten
+            }).catch(error => {
+                console.error("Fehler beim Senden der Anfrage:", error);
+            });
+
         });
+    } catch (error) {
+        console.error("Fehler beim Senden der Anfrage:", error);
+    }
 
-    });
     Umgebung.update();
     var formID = document.getElementById('formID');
     if (formID) {

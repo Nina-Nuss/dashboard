@@ -208,6 +208,12 @@ label {
 
 }
 
+#rowForCards {
+    overflow: auto;
+    height: 100%;
+    scroll-behavior: smooth;
+}
+
 .clock {
     text-align: center;
 }

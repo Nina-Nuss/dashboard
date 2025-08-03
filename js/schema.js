@@ -51,7 +51,7 @@ class CardObj {
 
     }
     htmlBody(umgebung) {
-        
+
         const body = `
             <div class="card-deck p-1 h-50">
                 <div class="card" id="${this.cardObjekte}">
@@ -241,6 +241,11 @@ class CardObj {
         var delSchema = document.getElementById("deleteSchema")
         var cardContainer = document.getElementById("cardContainer");
         uncheckAllCheckboxes();
+        deakCb(true);
+
+        if(window.location.href.includes("templatebereich.php")) {
+            deakCb(false);
+        }
         if (delSchema != null) {
             console.log("bin in delschema drin");
 
@@ -395,7 +400,7 @@ class CardObj {
         // startTimeDate.value = startTime; // Set the end date
         // endDate.value = cardObj.endDate;
 
-    
+
         cardtimerLabel.innerHTML = `Dauer: ${selectedTime} Sekunden`; // Update the label with the selected time
 
         checkA.checked = cardObj.aktiv; // Set the checkbox state
@@ -483,37 +488,36 @@ class CardObj {
 
 
 
-window.addEventListener("load", function () {
+window.addEventListener("load", async function () {
+    await CardObj.update();
     const templatebereich = document.getElementById("templateBereich");
     if (templatebereich !== null) {
         templatebereich.addEventListener("click", async function (event) {
-            uncheckAllTableCheckboxes();
-            deakCb(true);
-            var imagePath = await getSystemPath();
-            console.log("Image Path:", imagePath);
-            console.log("./bereiche/templatebereich.php");
+            window.location.href = '/bereiche/templatebereich.php';
+        });
+    }
+});
 
 
-            var settingPanel = document.getElementById("settingsPanel");
-            await fetch("/bereiche/templatebereich.php")
-                .then(response => response.text())
-                .then(html => {
-                    settingPanel.innerHTML = html;
-                });
+async function ladeSettingsFortemplate() {
+    uncheckAllTableCheckboxes();
+    deakCb(true);
+    var imagePath = await getSystemPath();
+    console.log("Image Path:", imagePath);
 
-            const delSchema = document.getElementById("deleteSchema")
-            CardObj.list.forEach(element => {
-                delSchema.innerHTML += `<tr class="border-bottom">
+    const delSchema = document.getElementById("deleteSchema")
+    CardObj.list.forEach(element => {
+        delSchema.innerHTML += `<tr class="border-bottom">
                     <td class="p-2">${element.id}</td>
                     <td class="p-2">${element.titel}</td>
                     <td class="p-2">${element.beschreibung || 'Keine Beschreibung'}</td>
                     <td class="p-2 text-center"><input type="checkbox" name="${element.id}" id="checkDelSchema${element.id}" onchange="CardObj.event_remove(${element.id})"></td>
                 </tr>`;
-            });
-        });
-    }
+    });
 
-});
+}
+
+
 
 async function meow(event) {
     event.preventDefault(); // Verhindert das Standardverhalten des Formulars
@@ -619,7 +623,7 @@ async function insertDatabase(cardObj) {
     }
 }
 async function createBodyCardObj() {
-    
+
     var cardContainer = document.getElementById("cardContainer");
     if (!cardContainer) {
         console.error("Card container not found");
@@ -632,7 +636,7 @@ async function createBodyCardObj() {
         cardObj.htmlBody(cardContainer);
 
     });
-    deakCb(true);
+
     console.log(CardObj.list);
     const cbForSelectSchema = document.querySelectorAll('[id^="flexCheck"]')
     const labels = document.querySelectorAll('label[name^="label"]');

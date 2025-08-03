@@ -59,11 +59,7 @@ window.onload = async function () {
     const infotherminalBereich = document.getElementById("infotherminalBereich");
     if (infotherminalBereich !== null) {
         infotherminalBereich.addEventListener("click", async function (event) {
-            var settingPanel = document.getElementById("settingsPanel");
-            const response = await fetch("/bereiche/startSeite.php")
-            const responseText = await response.text();
-
-            settingPanel.innerHTML = responseText;
+            window.location.href = '/bereiche/startSeite.php';
             deakCb(false);
             deakAktivCb(true);
             Umgebung.erstelleSelector();
