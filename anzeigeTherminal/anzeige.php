@@ -18,7 +18,7 @@
         padding: 0;
     }
 
-  
+
 
     .fullscreen {
         width: 100vw;
@@ -94,8 +94,21 @@
             console.error('Fetch failed:', error);
         }
     }
-    timerRefresh(0.025); // Alle 15 Sekunden neu laden
-    carousel(); // Initial call to set the first image
+    async function statReload() {
+        const loadTime = await createTimeIntervalForReloadPage();
+        console.log("Reload-Intervall:", loadTime);
+        timerRefresh(loadTime); // Alle 15 Sekunden neu laden
+        carousel(); // Initial call to set the first image  
+    }
+    async function createTimeIntervalForReloadPage() {
+        const json = await fetch("/config/config.json");
+        const result = await json.json();
+        console.log("Konfiguration für Reload-Intervall:", result);
+
+        return result.default;
+    }
+
+    statReload();
 
     function timerRefresh(time) {
         setTimeout(() => {

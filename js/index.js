@@ -13,6 +13,7 @@ window.onload = async function () {
     const ipAdress = await getSystemPath();
     console.log("IP-Adresse:", ipAdress);
 
+    
     try {
         await CardObj.update();
     } catch (error) {
@@ -61,6 +62,8 @@ function erstelleNavigation() {
         window.location.href = 'startSeite.php';
     });
 }
+
+
 
 
 async function getSystemPath() {
