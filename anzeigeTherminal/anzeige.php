@@ -18,13 +18,14 @@
         padding: 0;
     }
 
-    img.fullscreen {
+  
+
+    .fullscreen {
         width: 100vw;
         height: 100vh;
         display: block;
         object-fit: contain;
     }
-
 </style>
 
 <body>
@@ -62,19 +63,28 @@
                 return;
             }
             console.log('Received data:', data);
-         
+
             while (true) {
                 for (const element of data) {
-                    console.log(element[1]);
-                    // Hier könntest du das Bild anzeigen
-                    console.log('Displaying image:', element[1]);
-                    
-                    const img = document.createElement('img');
-                    img.src = "/uploads/" + element[1];
-                    img.className = "fullscreen";
-                    img.alt = "Image";
-                    document.body.innerHTML = ''; // Clear the body content
-                    document.body.appendChild(img); // Add the new image to the body
+                    if (element[1].includes('img_')) {
+                        const img = document.createElement('img');
+                        img.src = "/uploads/img/" + element[1];
+                        img.className = "fullscreen";
+                        img.alt = "Image";
+                        document.body.innerHTML = ''; // Clear the body content
+                        document.body.appendChild(img); // Add the new image to the body
+                    } else if (element[1].includes('video_')) {
+                        const video = document.createElement('video');
+                        video.src = "/uploads/video/" + element[1];
+                        video.className = "fullscreen";
+                        video.controls = true; // Video Controls hinzufügen
+                        video.autoplay = true; // Video automatisch starten
+                        video.muted = true; // Meistens erforderlich für Autoplay in Browsern
+                        document.body.innerHTML = ''; // Clear the body content
+                        document.body.appendChild(video); // Add the new video to the body
+                        await sleep(element[2]); // 5 Sekunden warten, bevor das nächste Video angezeigt wird
+                        continue;
+                    }
                     await sleep(element[2]); // 5 Sekunden warten, bevor das nächste Bild angezeigt wird
 
                 }
@@ -90,7 +100,7 @@
     function timerRefresh(time) {
         setTimeout(() => {
             location.reload();
-        }, 10000 * 60 * time); 
+        }, 10000 * 60 * time);
     }
 </script>
 <?php

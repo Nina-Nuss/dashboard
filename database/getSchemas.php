@@ -1,9 +1,5 @@
 <?php
 
-// include("../cardObjNew/database/selectCardObj.php");
-//                 imagePath: item[1],
-
-use Dom\Document;
 
 ob_start();
 
@@ -13,6 +9,9 @@ include("selectInfotherminal.php");
 include("selectRelation.php");
 
 ob_end_clean(); // Puffer leeren, um vorherige Ausgaben zu entfernen
+
+
+
 
 $input = json_decode(file_get_contents("php://input"), true);
 
@@ -32,7 +31,7 @@ $nowDateTime = $now->format('Y-m-d H:i');
 
 // $clientIP = $_SERVER['REMOTE_ADDR'];
 
-$ip = $input['ip'] ?? 'empfang';
+$ip = $input['ip'] ?? 'nina';
 
 $therminal = array();
 
@@ -47,10 +46,11 @@ foreach ($infotherminalList as $infotherminal) {
     }
 }
 if (!$ipGefunden) {
-    // echo "<br>IP nicht gefunden, Standardwert wird verwendet: " . $ip . "<br>";
     return json_encode([]); // Rückgabe eines leeren Arrays, wenn die IP nicht gefunden wurde
 }
-$images = getAllImages();
+$images = getAllImagesAndVideos();
+
+
 
 $imagesContainer = array();
 
@@ -58,9 +58,9 @@ $timeIsBetween = false;
 $dateIsBetween = false;
 
 
-
 foreach ($images as $image) {
     // echo "<br>" . "gesuchtes Bild: " . $image . "<br>";
+
     foreach ($schemaList as $schema) {
         if ($schema[1] == $image && $schema[3] == true) {
             foreach ($relationList as $relation) {
@@ -157,23 +157,33 @@ function createDateTimeFormat($dateTime, $format)
     }
     return $dateObj;
 }
-function getAllImages()
-{
-    $ordner =  $_SERVER["DOCUMENT_ROOT"] . "/uploads";
-    $array = array();
-    // Prüfen, ob der Ordner existiert
-    if (is_dir($ordner)) {
-        // Alle Dateien und Ordner einlesen
-        $dateien = scandir($ordner);
 
-        // Nur Dateinamen (keine . und ..) ausgeben
-        foreach ($dateien as $datei) {
+
+function getAllImagesAndVideos()
+{
+    $ordnerImages = $_SERVER["DOCUMENT_ROOT"] . "/uploads/img/";
+    $ordnerVideos = $_SERVER["DOCUMENT_ROOT"] . "/uploads/video/";
+    $array = array();
+
+    // Bilder-Ordner durchsuchen
+    if (is_dir($ordnerImages)) {
+        $dateienImages = scandir($ordnerImages);
+        foreach ($dateienImages as $datei) {
             if ($datei !== "." && $datei !== "..") {
                 array_push($array, $datei);
             }
         }
-    } else {
-        echo "Ordner nicht gefunden.";
-    };
+    }
+
+    // Video-Ordner durchsuchen
+    if (is_dir($ordnerVideos)) {
+        $dateienVideos = scandir($ordnerVideos);
+        foreach ($dateienVideos as $datei) {
+            if ($datei !== "." && $datei !== "..") {
+                array_push($array, $datei);
+            }
+        }
+    }
+
     return $array;
 }

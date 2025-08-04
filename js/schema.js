@@ -57,12 +57,12 @@ class CardObj {
         if (this.imagePath.includes('img_')) {
             // Für Standard-Bilder (z.B. img/bild.png)
             imageSrc = `../uploads/img/${this.imagePath}`;
-            placeHolder = `<img src="${imageSrc}" alt="Image preview">`;
+            placeHolder = `<img  class="card-img-top" src="${imageSrc}" alt="Image preview">`;
         } else if (this.imagePath.includes('video_')) {
             // Für Videos - zeige ein Video-Element oder Platzhalter
             imageSrc = `../uploads/video/${this.imagePath}`;
             placeHolder = `<video controls>
-                <source src="${imageSrc}" type="video/mp4">
+                <source  class="card-img-top" src="${imageSrc}" type="video/mp4">
                 Your browser does not support the video tag.
             </video>`;
         } else {

@@ -7,7 +7,6 @@ class Beziehungen {
     static temp_add = [];
     static temp_list_add = [];
     static temp_list_remove = [];
-
     constructor(id, umgebungsID, cardObjektID) {
         this.id = id;
         this.umgebungsID = umgebungsID;
@@ -24,8 +23,6 @@ class Beziehungen {
         var relationlistee = await response.json();
         return relationlistee;
     }
-
-
     static async update(cardObjID) {
         Beziehungen.list = [];
 

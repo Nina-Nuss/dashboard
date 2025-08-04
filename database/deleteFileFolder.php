@@ -97,7 +97,7 @@ foreach ($dateienVideo as $imagePath) {
 
     if (!in_array($imagePath, $videoListPath)) {
         // Datei ist nicht mehr referenziert → löschen
-        $fullPath = $uploadFolder . $imagePath;
+        $fullPath = $uploadFolder2 . $imagePath;
         if (unlink($fullPath)) {
             // echo "Verwaiste Datei gelöscht: $imagePath<br>";
         } else {

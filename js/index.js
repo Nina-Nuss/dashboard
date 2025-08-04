@@ -9,6 +9,10 @@ var anzeigebereichV = document.getElementById("anzeigebereichV");
 
 window.onload = async function () {
     console.log("window.onload von index.js läuft!");
+
+    const ipAdress = await getSystemPath();
+    console.log("IP-Adresse:", ipAdress);
+
     try {
         await CardObj.update();
     } catch (error) {

@@ -1,11 +1,13 @@
 <?php
 
+// Server-IP (nicht Client-IP) ermitteln
+$serverIP = $_SERVER['SERVER_ADDR'] ?? gethostname();
 
-$GetPath = $_SERVER['DOCUMENT_ROOT'];
-$getPath2 = __DIR__ . '/';
-
-
-
-echo json_encode($GetPath);
-
+// Prüfen ob IPv4
+if (filter_var($serverIP, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+    echo json_encode($serverIP);
+} else {
+    exit;
+}
 ?>
+
