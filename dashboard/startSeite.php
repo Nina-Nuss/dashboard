@@ -8,7 +8,7 @@
 <div class="container-fluid py-2 " style="max-height: 90vh; overflow-y: auto;">
         
     <div class="row">
-       <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/sidebar.php'; ?>
+         <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/sidebar.php'; ?>
         <div class="col-md-10 text-center">
           <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/selectPanel.php'; ?>
            
@@ -16,7 +16,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title mb-0">
-                                <i class="fas fa-cogs me-2"></i> Schema Einstellungen
+                                <i class="fas fa-cogs me-2"></i> Infoseite Einstellungen
                             </h3>
                             <p class="mb-0 mt-2">Hier können die Infoseiten verwaltet werden</p>
                         </div>
@@ -25,7 +25,7 @@
                                 <div class="col-md-6">
                                     <div class="card h-100">
                                         <div class="card-header">
-                                            <h6 class="mb-0"><i class="fas fa-cog me-2"></i> Schema Eigenschaften</h6>
+                                            <h6 class="mb-0"><i class="fas fa-cog me-2"></i> Infoseite Eigenschaften</h6>
                                         </div>
                                         <div class="d-flex justify-content-between">
                                             <div class="card-body w-25">
