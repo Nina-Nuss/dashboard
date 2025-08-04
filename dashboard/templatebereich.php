@@ -12,11 +12,11 @@
             <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/sidebar.php'; ?>
             <div class="col-10 ">
                 <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/selectPanel.php'; ?>
-                <div class="pt-2"></div>
+                <div class="pt-3"></div>
                 <div class="card  shadow-sm text-center ">
                     <div class="card-header bg-light text-dark border-bottom">
                         <h3 class="card-title mb-0">
-                            <i class="fas fa-layer-group me-2"></i> Infoseiten erstellen
+                            <i class="fas fa-layer-group me-2"></i> Infoseiten-Neuauflage/Löschen
                         </h3>
                         <p class="mb-0 mt-2">Hier können Sie neue Infoseiten erstellen und oder löschen</p>
                     </div>
@@ -26,7 +26,7 @@
                                 <div class="card h-100">
                                     <div class="card-header">
                                         <h5 class="card-title mb-0">
-                                            <i class="fas fa-plus me-2"></i> Infoseiten erstellen
+                                            <i class="fas fa-plus me-2"></i> Infoseiten NEU erstellen
                                         </h5>
                                     </div>
                                     <div class="card-body" style="max-height: 400px; overflow-y: auto;">
@@ -130,7 +130,7 @@
                                 <div class="card h-100">
                                     <div class="card-header">
                                         <h5 class="card-title mb-0">
-                                            <i class="fas fa-trash me-2"></i> Infoseiten löschen
+                                            <i class="fas fa-trash me-2"></i> Infoseiten LÖSCHEN
                                         </h5>
                                     </div>
                                     <div class="card-body" id="cardBodyForDelSchema">

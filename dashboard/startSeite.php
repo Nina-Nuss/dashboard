@@ -13,11 +13,11 @@
         <div class="col-md-10 text-center">
             <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/selectPanel.php'; ?>
 
-    <div class="pt-2"></div>
+    <div class="pt-3"></div>
             <div class="card">
                 <div class="card-header text-center">
                     <h3 class="card-title mb-0">
-                        <i class="fas fa-cogs me-2"></i> Infoseite einstellen
+                        <i class="fas fa-cogs me-2"></i> Infoseite-Konfiguration
                     </h3>
                     <p class="mb-0 mt-2">Hier können die Infoseiten verwaltet werden</p>
                 </div>
@@ -78,7 +78,7 @@
                                     </div>
                                     <div class="card-body w-25">
                                         <div class="mb-2">
-                                            <label class="form-label fw-bold mb-2">Zeit-Einstellungen</label>
+                                            <label class="form-label fw-bold mb-2">Zeit-Konfigurieren</label>
                                             <div class="btn-group w-100 mb-3" role="group">
                                                 <button class="btn btn-outline-primary" type="button" id="btnShowZeitraum" onclick="showDateTime('zeitspanne')">
                                                     <i class="bi bi-calendar-range me-1"></i> Datum & Uhrzeit
@@ -92,21 +92,21 @@
                                             <div id="zeitspannePanel" class="border rounded-3 shadow-sm p-3 mb-3 bg-light" style="display:none;">
                                                 <div class="row g-2">
                                                     <div class="col-6">
-                                                        <label for="startDate" class="form-label small">Startdatum</label>
+                                                        <label for="startDate" class="form-label small">Von Datum</label>
                                                         <input type="date" class="form-control form-control-sm" id="startDate" name="startDate">
                                                     </div>
                                                     <div class="col-6">
-                                                        <label for="endDate" class="form-label small">Enddatum</label>
+                                                        <label for="endDate" class="form-label small">Bis Datum</label>
                                                         <input type="date" class="form-control form-control-sm" id="endDate" name="endDate">
                                                     </div>
                                                 </div>
                                                 <div class="row g-2 mt-1">
                                                     <div class="col-6">
-                                                        <label for="startTimeDate" class="form-label small">Startzeit</label>
+                                                        <label for="startTimeDate" class="form-label small">Von Zeit</label>
                                                         <input type="time" class="form-control form-control-sm" id="startTimeDate" name="startTimeDate">
                                                     </div>
                                                     <div class="col-6">
-                                                        <label for="endTimeDate" class="form-label small">Endzeit</label>
+                                                        <label for="endTimeDate" class="form-label small">Bis Zeit</label>
                                                         <input type="time" class="form-control form-control-sm" id="endTimeDate" name="endTimeDate">
                                                     </div>
                                                 </div>
@@ -121,11 +121,11 @@
                                             <div id="uhrzeitPanel" class="border rounded-3 shadow-sm p-3 bg-light" style="display:none;">
                                                 <div class="row g-2">
                                                     <div class="col-6">
-                                                        <label for="startTimeRange" class="form-label small">Startzeit</label>
+                                                        <label for="startTimeRange" class="form-label small">Von Zeit</label>
                                                         <input type="time" class="form-control form-control-sm" id="startTimeRange" name="startTimeRange">
                                                     </div>
                                                     <div class="col-6">
-                                                        <label for="endTimeRange" class="form-label small">Endzeit</label>
+                                                        <label for="endTimeRange" class="form-label small">Bis Zeit</label>
                                                         <input type="time" class="form-control form-control-sm" id="endTimeRange" name="endTimeRange">
                                                     </div>
                                                 </div>
@@ -155,7 +155,7 @@
 
                             <div class="card h-35">
                                 <div class="card-header">
-                                    <h6 class="mb-0"><i class="fas fa-desktop me-2"></i> Infoterminal Anzeigen</h6>
+                                    <h6 class="mb-0"><i class="fas fa-desktop me-2"></i> Infoseite öffnen(Testanzeige)</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="mb-3">
