@@ -94,14 +94,8 @@
             console.error('Fetch failed:', error);
         }
     }
-    timerRefresh(0.025); // Alle 15 Sekunden neu laden
+    timerRefresh(refreshTime); // Alle 15 Sekunden neu laden
     carousel(); // Initial call to set the first image
-
-    function timerRefresh(time) {
-        setTimeout(() => {
-            location.reload();
-        }, 10000 * 60 * time);
-    }
 </script>
 <?php
 

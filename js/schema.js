@@ -61,10 +61,10 @@ class CardObj {
         } else if (this.imagePath.includes('video_')) {
             // Für Videos - zeige ein Video-Element oder Platzhalter
             imageSrc = `../uploads/video/${this.imagePath}`;
-            placeHolder = `<video controls>
-                <source  class="card-img-top" src="${imageSrc}" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>`;
+            placeHolder = `<video controls autoplay muted>
+        <source class="card-img-top" src="${imageSrc}" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>`;
         } else {
             // Für hochgeladene Bilder (z.B. file_abc123.jpg)
             imageSrc = `../uploads/${this.imagePath}`;
@@ -83,11 +83,10 @@ class CardObj {
                     <p class="card-text m-0">${this.beschreibung}</p>
                     <div class="form-check">
                         <input class="form-check-input single-active-checkbox" type="checkbox" value="" id="flexCheck${this.id}">
-                        <label class="form-check-label" name="label${this.id}" for="flexCheck${this.id}">
-                            
-                        </label>
+                        <label class="form-check-label" name="label${this.id}" for="flexCheck${this.id}"></label>
+                        
                     </div>
-                    <div>
+                    <div class="form-check">
                         <small id="${this.selectedTimerLabel}" class="text-muted">Dauer: ${this.selectedTime / 1000} sekunde</small>
                     </div>
                 </div>
@@ -507,19 +506,7 @@ class CardObj {
 
 }
 window.addEventListener("load", async function () {
-    if (document.getElementById('img') !== null) {
-        document.getElementById('img').addEventListener('change', function (event) {
-            const [file] = event.target.files;
-            const preview = document.getElementById('imgPreview');
-            if (file) {
-                preview.src = URL.createObjectURL(file);
-                preview.style.display = 'block';
-            } else {
-                preview.src = '#';
-                preview.style.display = 'none';
-            }
-        });
-    }
+    imgVideoPreview();
     const templatebereich = document.getElementById("templateBereich");
     if (templatebereich !== null) {
         templatebereich.addEventListener("click", async function (event) {
@@ -527,6 +514,42 @@ window.addEventListener("load", async function () {
         });
     }
 });
+
+function imgVideoPreview() {
+    if (document.getElementById('img') !== null) {
+        document.getElementById('img').addEventListener('change', function (event) {
+            const [file] = event.target.files;
+            const imgPreview = document.getElementById('imgPreview');
+            const videoPreview = document.getElementById('videoPreview');
+            // Beide Vorschauen verstecken
+            if (imgPreview) {
+                imgPreview.style.display = 'none';
+                imgPreview.src = '#';
+            }
+            if (videoPreview) {
+                videoPreview.style.display = 'none';
+                videoPreview.src = '#';
+            }
+            if (file) {
+                const objectURL = URL.createObjectURL(file);
+                if (file.type.startsWith('image/')) {
+                    // Bild-Vorschau anzeigen
+                    if (imgPreview) {
+                        imgPreview.src = objectURL;
+                        imgPreview.style.display = 'block';
+                    }
+                } else if (file.type.startsWith('video/')) {
+                    // Video-Vorschau anzeigen
+                    if (videoPreview) {
+                        videoPreview.src = objectURL;
+                        videoPreview.style.display = 'block';
+                        videoPreview.load(); // Video neu laden
+                    }
+                }
+            }
+        });
+    }
+}
 
 async function meow(event) {
     event.preventDefault(); // Verhindert das Standardverhalten des Formulars
@@ -589,10 +612,10 @@ async function sendPicture(formData) {
         console.log("Bildname vom Server:", imageName);
 
         // Falls der Server einen Pfad zurückgibt, extrahiere nur den Dateinamen
-        if(imageName.includes('uploads/img/')) {
+        if (imageName.includes('uploads/img/')) {
             imageName = imageName.split('/').pop(); // Extrahiere nur den Dateinamen
-            
-        }else if(imageName.includes('uploads/video/')) {
+
+        } else if (imageName.includes('uploads/video/')) {
             imageName = imageName.split('/').pop(); // Extrahiere nur den Dateinamen
         }
         return imageName;

@@ -4,12 +4,12 @@
 <html>
 
 <body class="bg-light">
-  
+
     <div class="container-fluid py-2">
         <div class="col-md-12 text-center pt-2">
-                <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/selectPanel.php'; ?>
+            <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/selectPanel.php'; ?>
         </div>
-    
+
         <div class="row">
             <div class="col-12">
                 <div class="card shadow-sm">
@@ -21,7 +21,7 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="card h-100">
                                     <div class="card-header">
                                         <h5 class="card-title mb-0">
@@ -101,11 +101,34 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-2">
+                                <div class="card h-100">
+                                    <div class="card-header">
+                                        <h5 class="card-title mb-0">
+                                            <i class="fas fa-cogs me-2"></i> Einstellungen
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <label for="refreshSelect" class="form-label">
+                                            <i class="fas fa-clock me-2"></i> Refresh-Zeit:
+                                        </label>
+                                        <select id="refreshSelect" class="form-select" style="padding: 5px;">
+                                            <option value="0.025">15 Sekunden</option>
+                                            <option value="0.1">1 Minute</option>
+                                            <option value="0.5">5 Minuten</option>
+                                            <option value="1">10 Minuten</option>
+                                            <option value="0">Nie</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
     <!-- Bootstrap JS -->

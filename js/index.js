@@ -310,7 +310,23 @@ function uncheckAllTableCheckboxes() {
 }
 
 
-document.addEventListener('DOMContentLoaded', function () {
-    // Für den Button mit der ID "delDateTimeRange"
+let refreshTimer;
+let refreshTime = 0.025;
 
+// Selector Event
+document.getElementById('refreshSelect').addEventListener('change', function() {
+    refreshTime = parseFloat(this.value);
+    if (refreshTimer) clearTimeout(refreshTimer);
+    if (refreshTime > 0) timerRefresh(refreshTime);
 });
+
+function timerRefresh(time) {
+    if (time === 0) return;
+    refreshTimer = setTimeout(() => {
+        location.reload();
+    }, 10000 * 60 * time);
+}
+
+// Start
+timerRefresh(refreshTime);
+carousel();
