@@ -78,9 +78,7 @@
                                             <label for="infotherminalSelect" class="form-label">
                                                 <i class="fas fa-list me-2"></i> Infoterminal auswählen:
                                             </label>
-
                                         </div>
-
                                         <div style="max-height: 300px; overflow-y: auto;">
                                             <table class="table table-hover position-relative">
                                                 <thead>

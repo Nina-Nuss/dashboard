@@ -156,7 +156,7 @@ class Umgebung {
             const prepare = "?idDelete=" + idDelete;
             console.log(prepare);
 
-            const response = await fetch(`/database/${databaseUrl}.php` + prepare);
+            const response = await fetch(`../database/${databaseUrl}.php` + prepare);
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);

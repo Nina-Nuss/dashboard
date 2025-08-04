@@ -8,9 +8,9 @@
 
 <body class="bg-light">
     <div class="container-fluid py-2">
-           
+
         <div class="row ">
-              <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/sidebar.php'; ?>
+            <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/sidebar.php'; ?>
 
             <div class="col-10 ">
                 <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/selectPanel.php'; ?>
@@ -50,6 +50,7 @@
                                                         <i class="fas fa-image me-2"></i> Bild auswählen
                                                     </label>
                                                     <input type="file" id="img" name="img" accept="image/*">
+                                                    <img id="imgPreview" src="#" alt="Bildvorschau" style="display:none; max-width:100%; max-height:200px; margin-top:10px;">
                                                 </div>
 
 

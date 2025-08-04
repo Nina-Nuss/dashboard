@@ -204,7 +204,7 @@ class CardObj {
     static async deleteCardObjDataBase(cardObjId) {
         try {
             // Erst ALLE Beziehungen für dieses Schema löschen
-            const relationResponse = await fetch("/database/delete_All_Relations_For_Schema.php", {
+            const relationResponse = await fetch("../database/delete_All_Relations_For_Schema.php", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -218,7 +218,7 @@ class CardObj {
             console.log("Beziehungen gelöscht:", relationResult);
 
             // Dann das Schema löschen
-            const response = await fetch("/database/deleteCardObj.php", {
+            const response = await fetch("../database/deleteCardObj.php", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -493,6 +493,19 @@ class CardObj {
 
 }
 window.addEventListener("load", async function () {
+    if (document.getElementById('img') !== null) {
+        document.getElementById('img').addEventListener('change', function (event) {
+            const [file] = event.target.files;
+            const preview = document.getElementById('imgPreview');
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
+            } else {
+                preview.src = '#';
+                preview.style.display = 'none';
+            }
+        });
+    }
     const templatebereich = document.getElementById("templateBereich");
     if (templatebereich !== null) {
         templatebereich.addEventListener("click", async function (event) {
@@ -560,13 +573,13 @@ async function sendPicture(formData) {
         });
         let imageName = await response.text();
         console.log("Bildname vom Server:", imageName);
-    
+
         // Falls der Server einen Pfad zurückgibt, extrahiere nur den Dateinamen
         imageName = imageName.split('/').pop();
         return imageName;
     } catch (error) {
         console.error('Error:', error);
-        
+
         return "";
     }
 }
@@ -590,7 +603,7 @@ async function insertDatabase(cardObj) {
 
     console.log(JSON.stringify(jsonData));
     // Senden der POST-Anfrage mit JSON-Daten
-    const response = await fetch("/database/insertSchema.php", {
+    const response = await fetch("../database/insertSchema.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -682,7 +695,7 @@ function deakAktivCb(aktiv) {
     var btnShowUhrzeit = document.getElementById("btnShowUhrzeit");
     var panelForDateTime = document.getElementById("panelForDateTime");
 
-    if (window.location.href.includes("templatebereich.php")){
+    if (window.location.href.includes("templatebereich.php")) {
         return;
     }
     if (aktiv == true) {

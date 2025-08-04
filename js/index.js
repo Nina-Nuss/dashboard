@@ -62,7 +62,7 @@ function erstelleNavigation() {
 async function getSystemPath() {
     let path = null;
     try {
-        const response = await fetch("/php/getSystemPath.php");
+        const response = await fetch("../php/getSystemPath.php");
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -99,7 +99,7 @@ function extractNumberFromString(str) {
 }
 
 async function readDatabase(databaseUrl) {
-    const listUmgebung = await selectObj(`/database/${databaseUrl}.php`)
+    const listUmgebung = await selectObj(`../database/${databaseUrl}.php`)
     return listUmgebung;
 }
 
