@@ -49,7 +49,7 @@
                                                     <label for="img" class="form-label">
                                                         <i class="fas fa-image me-2"></i> Bild auswählen
                                                     </label>
-                                                    <input type="file" id="img" name="img" accept="image/*">
+                                                    <input type="file" id="img" name="img" accept="image/*,video/*">
                                                     <img id="imgPreview" src="#" alt="Bildvorschau" style="display:none; max-width:100%; max-height:200px; margin-top:10px;">
                                                 </div>
 

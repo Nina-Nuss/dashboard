@@ -51,39 +51,53 @@ class CardObj {
 
     }
     htmlBody(umgebung) {
+        // Bestimme den korrekten Bildpfad basierend auf dem imagePath
+        let imageSrc = "";
+        let placeHolder = "";
+        if (this.imagePath.includes('img_')) {
+            // Für Standard-Bilder (z.B. img/bild.png)
+            imageSrc = `../uploads/img/${this.imagePath}`;
+            placeHolder = `<img src="${imageSrc}" alt="Image preview">`;
+        } else if (this.imagePath.includes('video_')) {
+            // Für Videos - zeige ein Video-Element oder Platzhalter
+            imageSrc = `../uploads/video/${this.imagePath}`;
+            placeHolder = `<video controls>
+                <source src="${imageSrc}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>`;
+        } else {
+            // Für hochgeladene Bilder (z.B. file_abc123.jpg)
+            imageSrc = `../uploads/${this.imagePath}`;
+            placeHolder = `<img src="${imageSrc}" alt="Image preview">`;
+        }
 
         const body = `
-            <div class="card-deck p-1 h-50">
-                <div class="card" id="${this.cardObjekte}">
-                    <div class="card-header p-1">
-                        <small class="text-muted">Uhrzeit: ${this.startTime} - ${this.endTime}</small>
+        <div class="card-deck p-1 h-50">
+            <div class="card" id="${this.cardObjekte}">
+                <div class="card-header p-1">
+                    <small class="text-muted">Uhrzeit: ${this.startTime} - ${this.endTime}</small>
+                </div>
+                ${placeHolder}
+                <div class="card-body p-2">
+                    <h5 class="card-title m-0">${this.titel}</h5>
+                    <p class="card-text m-0">${this.beschreibung}</p>
+                    <div class="form-check">
+                        <input class="form-check-input single-active-checkbox" type="checkbox" value="" id="flexCheck${this.id}">
+                        <label class="form-check-label" name="label${this.id}" for="flexCheck${this.id}">
+                            
+                        </label>
                     </div>
-                    <img class="card-img-top" src="../uploads/${this.imagePath}" alt="Card image cap">
-                    <div class="card-body p-2">
-                        <h5 class="card-title m-0">${this.titel}</h5>
-                        <p class="card-text m-0">${this.beschreibung}</p>
-                        <div class="form-check">
-                            <input class="form-check-input single-active-checkbox" type="checkbox" value="" id="flexCheck${this.id}"}>
-                            <label class="form-check-label" name="label${this.id}" for="flexCheck${this.id}">
-                                
-                            </label>
-                        </div>
-                        <div>
-                            <small id="${this.selectedTimerLabel}" class="text-muted">Dauer: ${this.selectedTime / 1000} sekunde</small>
-                        </div>
-                    </div>
-                    <div class="card-footer p-1">
-                            <small class="text-muted">Datum: ${this.startDate}  -  ${this.endDate}</small>
+                    <div>
+                        <small id="${this.selectedTimerLabel}" class="text-muted">Dauer: ${this.selectedTime / 1000} sekunde</small>
                     </div>
                 </div>
+                <div class="card-footer p-1">
+                        <small class="text-muted">Datum: ${this.startDate}  -  ${this.endDate}</small>
+                </div>
             </div>
-        `;
+        </div>
+    `;
         document.getElementById(umgebung).innerHTML += body;
-
-        // document.getElementById(this.checkAktiv).addEventListener("change", (event) => {
-        //     this.aktiv = event.target.checked;
-        // });
-
     }
     removeHtmlElement() {
         const element = document.getElementById(this.cardObjekte);
@@ -575,7 +589,12 @@ async function sendPicture(formData) {
         console.log("Bildname vom Server:", imageName);
 
         // Falls der Server einen Pfad zurückgibt, extrahiere nur den Dateinamen
-        imageName = imageName.split('/').pop();
+        if(imageName.includes('uploads/img/')) {
+            imageName = imageName.split('/').pop(); // Extrahiere nur den Dateinamen
+            
+        }else if(imageName.includes('uploads/video/')) {
+            imageName = imageName.split('/').pop(); // Extrahiere nur den Dateinamen
+        }
         return imageName;
     } catch (error) {
         console.error('Error:', error);

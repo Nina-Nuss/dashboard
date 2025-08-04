@@ -3,9 +3,11 @@
 include("connection.php");
 
 $imageListPath = [];
+$videoListPath = [];
 $idList = [];
 global $uploadFolder;
-$uploadFolder = $_SERVER['DOCUMENT_ROOT'] . '/uploads/';
+$uploadFolder = $_SERVER['DOCUMENT_ROOT'] . '/uploads/img/';
+$uploadFolder2 = $_SERVER['DOCUMENT_ROOT'] . '/uploads/video/';
 
 // SQL-Abfrage mit Prepared Statement - alle Schemas mit Bildpfaden abrufen
 $sql = "SELECT id, imagePath FROM schemas WHERE imagePath IS NOT NULL";
@@ -18,9 +20,17 @@ if ($stmt) {
         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
             $id = $row['id'];
             $imagePath = $row['imagePath'];
-            $fullPath = $uploadFolder . $imagePath;
+          
 
-            array_push($imageListPath, $imagePath);
+       
+            // Füge den Bildpfad und die ID zur Liste hinzu
+            if (strpos($imagePath, 'img_') !== false) {
+                $fullPath = $uploadFolder . $imagePath;
+               array_push($imageListPath, $imagePath);
+            } elseif (strpos($imagePath, 'video_') !== false) {
+                $fullPath = $uploadFolder2 . $imagePath;
+                array_push($videoListPath, $imagePath);
+            }
             array_push($idList, $id);
 
             if (!file_exists($fullPath)) {
@@ -64,12 +74,28 @@ if ($stmt) {
 }
 
 // Jetzt noch alle physisch vorhandenen Dateien prüfen, ob sie verwaist sind
-$dateien = scandir($uploadFolder);
+$dateienImg = scandir($uploadFolder);
+$dateienVideo = scandir($uploadFolder2);
 
-foreach ($dateien as $imagePath) {
+foreach ($dateienImg as $imagePath) {
     if ($imagePath === '.' || $imagePath === '..') continue;
 
     if (!in_array($imagePath, $imageListPath)) {
+        // Datei ist nicht mehr referenziert → löschen
+        $fullPath = $uploadFolder . $imagePath;
+        if (unlink($fullPath)) {
+            // echo "Verwaiste Datei gelöscht: $imagePath<br>";
+        } else {
+            // echo "Fehler beim Löschen von: $imagePath<br>";
+        }
+    }
+}
+
+
+foreach ($dateienVideo as $imagePath) {
+    if ($imagePath === '.' || $imagePath === '..') continue;
+
+    if (!in_array($imagePath, $videoListPath)) {
         // Datei ist nicht mehr referenziert → löschen
         $fullPath = $uploadFolder . $imagePath;
         if (unlink($fullPath)) {
