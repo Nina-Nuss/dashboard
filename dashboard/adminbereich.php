@@ -13,7 +13,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="card shadow-sm">
-                    <div class="card-header bg-light text-dark border-bottom">
+                    <div class="card-header bg-light text-dark border-bottom text-center">
                         <h3 class="card-title mb-0">
                             <i class="fas fa-cogs me-2"></i> Adminbereich
                         </h3>

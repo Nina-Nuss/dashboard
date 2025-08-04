@@ -8,14 +8,12 @@
 
 <body class="bg-light">
     <div class="container-fluid py-2">
-
         <div class="row ">
             <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/sidebar.php'; ?>
-
             <div class="col-10 ">
                 <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/selectPanel.php'; ?>
                 <div class="pt-2"></div>
-                <div class="card  shadow-sm ">
+                <div class="card  shadow-sm text-center ">
                     <div class="card-header bg-light text-dark border-bottom">
                         <h3 class="card-title mb-0">
                             <i class="fas fa-layer-group me-2"></i> Infoseiten erstellen
