@@ -41,7 +41,7 @@
                                             </ul>
                                         </div>
 
-                                        <form id="formID" action="/web/bereitsVorhanden.php" method="post">
+                                        <form id="formID" action="bereitsVorhanden.php" method="post">
                                             <div class="form-group mb-3">
                                                 <label for="infotherminalIp" class="form-label">
                                                     <i class="fas fa-network-wired me-2"></i> IP-Adresse:

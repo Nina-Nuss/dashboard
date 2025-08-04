@@ -18,7 +18,7 @@
                             <h3 class="card-title mb-0">
                                 <i class="fas fa-cogs me-2"></i> Schema Einstellungen
                             </h3>
-                            <p class="mb-0 mt-2">Hier können die Schemas verwaltet werden</p>
+                            <p class="mb-0 mt-2">Hier können die Infoseiten verwaltet werden</p>
                         </div>
                         <div class="card-body">
                             <div class="row d-flex justify-content-between">

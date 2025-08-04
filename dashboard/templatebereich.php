@@ -20,7 +20,7 @@
                         <h3 class="card-title mb-0">
                             <i class="fas fa-layer-group me-2"></i> Templatebereich
                         </h3>
-                        <p class="mb-0 mt-2">Hier können Sie neue Schemas erstellen und oder löschen</p>
+                        <p class="mb-0 mt-2">Hier können Sie neue Infoseiten erstellen und oder löschen</p>
                     </div>
                     <div class="card-body" style="max-height: calc(90vh - 120px); overflow-y: auto;">
                         <div class="row">
@@ -28,18 +28,18 @@
                                 <div class="card h-100">
                                     <div class="card-header">
                                         <h5 class="card-title mb-0">
-                                            <i class="fas fa-plus me-2"></i> Schemas erstellen
+                                            <i class="fas fa-plus me-2"></i> Infoseiten erstellen
                                         </h5>
                                     </div>
                                     <div class="card-body" style="max-height: 400px; overflow-y: auto;">
-                                        <form action="/schemas/movePic.php">
+                                        <form action="../php/movePic.php" method="post" enctype="multipart/form-data">
                                             <div>
                                                 <div class="alert alert-info" role="alert">
                                                     <h6 class="alert-heading">
                                                         <i class="fas fa-info-circle me-2"></i> Wichtige Hinweise:
                                                     </h6>
                                                     <ul class="mb-0">
-                                                        <li>Maximal 50 Schemas</li>
+                                                        <li>Maximal 50 Infoseiten</li>
                                                         <li>Es sind jpg, png und gif Dateien erlaubt</li>
                                                     </ul>
                                                 </div>
@@ -51,7 +51,6 @@
                                                     </label>
                                                     <input type="file" id="img" name="img" accept="image/*">
                                                 </div>
-
 
 
                                                 <div class="form-group mb-3">
@@ -128,7 +127,7 @@
                                 <div class="card h-100">
                                     <div class="card-header">
                                         <h5 class="card-title mb-0">
-                                            <i class="fas fa-trash me-2"></i> Schemas löschen
+                                            <i class="fas fa-trash me-2"></i> Infoseiten löschen
                                         </h5>
                                     </div>
                                     <div class="card-body" id="cardBodyForDelSchema">

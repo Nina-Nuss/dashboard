@@ -74,9 +74,11 @@ class Umgebung {
         var delInfo = document.getElementById("deleteInfotherminal");
         const selector = document.getElementById('infotherminalSelect');
         let delInfoRows = ""; // String für Tabellenzeilen
+
         let selectorOptions = '<option value="">-- Bitte wählen --</option>';
         this.list = [];
         this.temp_remove = [];
+        console.log("Update wird aufgerufen von Umgebung.js");
 
         const result = await readDatabase("selectInfotherminal");
 
@@ -201,9 +203,14 @@ class Umgebung {
     }
 
     static erstelleSelector() {
+
         const selector = document.getElementById('infotherminalSelect');
         const button = document.getElementById('openTerminalBtn');
 
+        if (!selector || !button) {
+            console.error("Selector oder Button nicht gefunden.");
+            return;
+        }
         // Selector nur einmal befüllen und Event-Listener nur einmal hinzufügen
 
         // Selector leeren
@@ -211,16 +218,13 @@ class Umgebung {
 
         // Event-Listener nur einmal hinzufügen (außerhalb der forEach-Schleife)
         button.addEventListener('click', function () {
+            console.log("Button zum Öffnen des Terminals wurde geklickt");
+
             const selectedTerminal = selector.value;
             if (selectedTerminal !== '') {
-                const url = `/anzeigeTherminal/index.php?ip=${encodeURIComponent(selectedTerminal)}`;
+                const url = `../anzeigeTherminal/index.php?ip=${encodeURIComponent(selectedTerminal)}`;
                 window.open(url, '_blank');
             }
-        });
-
-        // // Change-Event nur einmal hinzufügen
-        selector.addEventListener('change', function () {
-            button.disabled = this.value === '';
         });
 
         Umgebung.list.forEach(element => {
@@ -238,36 +242,19 @@ class Umgebung {
 
 
 window.addEventListener("load", async function () {
-
-    const settingsPanel = document.getElementById("settingsPanel")
- 
     Umgebung.temp_remove = [];
-    Umgebung.update();
     // Sende POST-Request zu php/sendingToPage.php
     try {
         const adminBereich = document.getElementById("adminBereich");
-
+        console.log("DSFDSFDSFFSDDSF");
         adminBereich.addEventListener('click', async function () {
-            await fetch('/php/sendingToPage.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: 'action=adminbereich'
-
-            }).then(response => response.text()).then(result => {
-                window.location.href = 'adminbereich.php';
-                // Hier können Sie die Antwort verarbeiten
-            }).catch(error => {
-                console.error("Fehler beim Senden der Anfrage:", error);
-            });
-
+            window.location.href = 'adminbereich.php';
         });
     } catch (error) {
         console.error("Fehler beim Senden der Anfrage:", error);
     }
 
-  
+    Umgebung.erstelleSelector();
     var formID = document.getElementById('formID');
     if (formID) {
         formID.addEventListener('submit', function (event) {

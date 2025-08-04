@@ -236,7 +236,6 @@ class CardObj {
             console.error("Fehler:", error);
         }
     }
-
     static async update() {
         var delSchema = document.getElementById("deleteSchema")
         console.log("bin in delschema drin");
@@ -514,7 +513,7 @@ async function meow(event) {
     const imgFile = formData.get("img");
 
     const localImageName = imgFile && imgFile.name ? imgFile.name : "";
-    if (localImageName === "" || localImageName === null || selectedTime === null || aktiv === null || titel === "" || description === "") {
+    if (localImageName === "" || localImageName === null || selectedTime === null || aktiv === null || titel === "") {
         alert("Bitte füllen Sie alle Felder aus inkl Bild.");
         return;
     }
@@ -523,6 +522,7 @@ async function meow(event) {
     // CardObj mit dem vom Server erhaltenen Bildnamen erstellen
     if (serverImageName === "") {
         console.error("Bild konnte nicht hochgeladen werden.");
+        alert("Fehler beim Hochladen des Bildes. Bitte versuchen Sie es erneut. Bitte keine ungültigen Zeichen verwenden.");
         return;
     }
     try {
@@ -542,7 +542,6 @@ async function meow(event) {
             description
         )
         console.log(obj1.selectedTime);
-
         await insertDatabase(obj1);
         alert("Schema erfolgreich erstellt!");
         await CardObj.update();
@@ -560,12 +559,14 @@ async function sendPicture(formData) {
             body: formData
         });
         let imageName = await response.text();
+        console.log("Bildname vom Server:", imageName);
+    
         // Falls der Server einen Pfad zurückgibt, extrahiere nur den Dateinamen
         imageName = imageName.split('/').pop();
-
         return imageName;
     } catch (error) {
         console.error('Error:', error);
+        
         return "";
     }
 }
@@ -670,7 +671,6 @@ function createBodyCardObj() {
 
 function deakAktivCb(aktiv) {
     console.log("deakAktivCb aufgerufen mit aktiv:", aktiv);
-
 
     var timerbereich = document.getElementById("timerSelectRange");
     var titel = document.getElementById("websiteName");

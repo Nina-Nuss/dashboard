@@ -8,37 +8,22 @@ var anzeigebereichV = document.getElementById("anzeigebereichV");
 
 
 window.onload = async function () {
-    var selectUmgebung = document.getElementById("selectUmgebung");
-    const deleteBtnForCards = document.getElementById("deleteBtnForCards");
-    const UmgebungsTitel = document.getElementById("titelUmgebung")
-    // const ersteAuswahl = selectUmgebung.querySelector('option');
-    const denied = document.getElementById("umgebungsContainer");
-    const plusBtn = document.getElementById("plusBtn");
-    let counter = document.getElementById("counter");
-    const saveBtn = document.getElementById("saveBtn")
     console.log("window.onload von index.js läuft!");
-   
     try {
         await CardObj.update();
-        await Umgebung.update();
     } catch (error) {
         console.error("Fehler beim Erstellen der CardObjekte oder umgebungen:", error);
     }
+    try {
+        await Umgebung.update();
 
+    } catch (error) {
+        console.error("Fehler beim Aktualisieren der Umgebung:", error);
+    }
     // Modal Focus-Management hinzufügen
     setupModalFocusManagement();
-
     // Hier wird die startseite ausgewählt
-    const infotherminalBereich = document.getElementById("infotherminalBereich");
-    if (infotherminalBereich !== null) {
-        infotherminalBereich.addEventListener("click", async function (event) {
-            window.location.href = 'startSeite.php';
-            deaktivereCbx(true);
-            deakAktivCb(true);
-            Umgebung.erstelleSelector();
-
-        });
-    }
+    erstelleNavigation();
 }
 
 
@@ -66,11 +51,12 @@ function deakNavbarbtns() {
     }
 
 }
-
-
-
-
-
+function erstelleNavigation() {
+    const infoterminalBereich = document.getElementById("infotherminalBereich");
+    infoterminalBereich.addEventListener("click", async function (event) {
+        window.location.href = 'startSeite.php';
+    });
+}
 
 
 async function getSystemPath() {
