@@ -79,6 +79,8 @@
                         video.className = "fullscreen";
                         video.controls = true; // Video Controls hinzufügen
                         video.autoplay = true; // Video automatisch starten
+                        video.loop = true; // Video in einer Schleife abspielen
+                        video.playsInline = true; // Für mobile Geräte
                         video.muted = true; // Meistens erforderlich für Autoplay in Browsern
                         document.body.innerHTML = ''; // Clear the body content
                         document.body.appendChild(video); // Add the new video to the body
@@ -95,17 +97,12 @@
         }
     }
     async function statReload() {
-        const loadTime = await createTimeIntervalForReloadPage();
+        const loadTime = await fetch("/config/config.json");
         console.log("Reload-Intervall:", loadTime);
-        timerRefresh(loadTime); // Alle 15 Sekunden neu laden
-        carousel(); // Initial call to set the first image  
-    }
-    async function createTimeIntervalForReloadPage() {
-        const json = await fetch("/config/config.json");
-        const result = await json.json();
-        console.log("Konfiguration für Reload-Intervall:", result);
-
-        return result.default;
+        const config = await loadTime.json();
+        console.log("Reload-Intervall:", config.default);
+        timerRefresh(config.default); // Alle 15 Sekunden neu laden
+        carousel(); // Initial call to set the first image
     }
 
     statReload();

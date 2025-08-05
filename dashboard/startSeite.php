@@ -31,7 +31,7 @@
                                 <div class="d-flex justify-content-between">
                                     <div class="card-body w-25">
                                         <div class="mb-3">
-                                            <label for="websiteName" class="form-label">Webseite Name:</label>
+                                            <label for="websiteName" class="form-label">Infoseite Name: </label>
                                             <input type="text" class="form-control" id="websiteName" value="Snapbar_Warm" readonly>
                                         </div>
 

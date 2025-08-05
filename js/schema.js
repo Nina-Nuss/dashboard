@@ -54,21 +54,27 @@ class CardObj {
         // Bestimme den korrekten Bildpfad basierend auf dem imagePath
         let imageSrc = "";
         let placeHolder = "";
-        if (this.imagePath.includes('img_')) {
-            // Für Standard-Bilder (z.B. img/bild.png)
+        // Dateiendung ermitteln
+        const ext = this.imagePath.split('.').pop().toLowerCase();
+        const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        const videoExts = ['mp4', 'avi', 'mov', 'wmv', 'flv', 'webm'];
+
+        if (imageExts.includes(ext)) {
+            // Bild
             imageSrc = `../uploads/img/${this.imagePath}`;
-            placeHolder = `<img  class="card-img-top" src="${imageSrc}" alt="Image preview">`;
-        } else if (this.imagePath.includes('video_')) {
-            // Für Videos - zeige ein Video-Element oder Platzhalter
+            placeHolder = `<img class="card-img-top" src="${imageSrc}" alt="Image preview" onerror="this.src='../img/bild.png'">`;
+        } else if (videoExts.includes(ext)) {
+            // Video
             imageSrc = `../uploads/video/${this.imagePath}`;
-            placeHolder = `<video controls autoplay muted>
-        <source class="card-img-top" src="${imageSrc}" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>`;
+            placeHolder = `
+          <video class="card-img-top" autoplay muted loop playsinline>
+            <source src="${imageSrc}" type="video/${ext}">
+            Ihr Browser unterstützt das Video-Tag nicht.
+          </video>`;
         } else {
-            // Für hochgeladene Bilder (z.B. file_abc123.jpg)
+            // Fallback (unbekannter Typ)
             imageSrc = `../uploads/${this.imagePath}`;
-            placeHolder = `<img src="${imageSrc}" alt="Image preview">`;
+            placeHolder = `<img class="card-img-top" src="${imageSrc}" alt="Image preview" onerror="this.src='../img/bild.png'">`;
         }
 
         const body = `
