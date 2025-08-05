@@ -52,29 +52,25 @@ class CardObj {
     }
     htmlBody(umgebung) {
         // Bestimme den korrekten Bildpfad basierend auf dem imagePath
-        let imageSrc = "";
-        let placeHolder = "";
-        // Dateiendung ermitteln
         const ext = this.imagePath.split('.').pop().toLowerCase();
         const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-        const videoExts = ['mp4', 'avi', 'mov', 'wmv', 'flv', 'webm'];
+        const videoExts = ['mp4', 'webm']; // nur Formate, die der Browser direkt kann
+
+        let placeHolder;
+        let src = `/uploads/${imageExts.includes(ext) ? 'img' : 'video'}/${this.imagePath}`;
 
         if (imageExts.includes(ext)) {
-            // Bild
-            imageSrc = `../uploads/img/${this.imagePath}`;
-            placeHolder = `<img class="card-img-top" src="${imageSrc}" alt="Image preview" onerror="this.src='../img/bild.png'">`;
-        } else if (videoExts.includes(ext)) {
-            // Video
-            imageSrc = `../uploads/video/${this.imagePath}`;
+            placeHolder = `<img class="card-img-top" src="${src}" alt="Bild" onerror="this.src='/img/bild.png'">`;
+        }
+        else if (videoExts.includes(ext)) {
             placeHolder = `
-          <video class="card-img-top" autoplay muted loop playsinline>
-            <source src="${imageSrc}" type="video/${ext}">
-            Ihr Browser unterstützt das Video-Tag nicht.
-          </video>`;
-        } else {
-            // Fallback (unbekannter Typ)
-            imageSrc = `../uploads/${this.imagePath}`;
-            placeHolder = `<img class="card-img-top" src="${imageSrc}" alt="Image preview" onerror="this.src='../img/bild.png'">`;
+    <video class="w-100" autoplay muted loop>
+      <source src="${src}">
+      Ihr Browser unterstützt das Video-Tag nicht.
+    </video>`;
+        }
+        else {
+            placeHolder = `<img class="card-img-top" src="/img/bild.png" alt="Fallback">`;
         }
 
         const body = `
@@ -84,7 +80,7 @@ class CardObj {
                     <small class="text-muted">Uhrzeit: ${this.startTime} - ${this.endTime}</small>
                 </div>
                 ${placeHolder}
-                <div class="card-body p-2">
+                <div class="card-body pt-1 pb-1">
                     <h5 class="card-title m-0">${this.titel}</h5>
                     <p class="card-text m-0">${this.beschreibung}</p>
                     <div class="form-check">

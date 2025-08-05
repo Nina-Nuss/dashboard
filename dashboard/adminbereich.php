@@ -113,11 +113,7 @@
                                             <i class="fas fa-clock me-2"></i> Refresh-Zeit:
                                         </label>
                                         <select id="refreshSelect" class="form-select" style="padding: 5px;">
-                                            <option value="0.025">15 Sekunden</option>
-                                            <option value="0.1">1 Minute</option>
-                                            <option value="0.5">5 Minuten</option>
-                                            <option value="1">10 Minuten</option>
-                                            <option value="0">Nie</option>
+                                            <!-- Optionen werden per JS aus config.json befüllt -->
                                         </select>
                                     </div>
                                 </div>

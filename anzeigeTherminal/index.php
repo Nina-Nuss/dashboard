@@ -15,7 +15,6 @@
     body {
         height: 100%;
         margin: 0;
-        padding: 0;
     }
 
     body {
@@ -24,25 +23,19 @@
         height: 100vh;
     }
 
-    header,
-    footer {
-        display: flex;
-        flex-direction: column;
-
-    }
-
-    .iframe-container {
+    main {
+        flex: 1 1 auto;
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 70vw;
-        height: 800px;
-        border: 1px solid black;
-        margin: 0;
-        box-sizing: border-box;
-        /* <- verhinder Überlauf */
     }
 
+    .iframe-container {
+        width: 70vw;
+        height: 100%;
+        border: 1px solid black;
+        box-sizing: border-box;
+    }
 
     .iframe-container iframe {
         width: 100%;
@@ -51,80 +44,37 @@
         object-fit: cover;
         display: block;
     }
-
-    /* 
-    @media screen and (max-width: 1920px) {
-        .iframe-container {
-            border: 8px solid pink;
-        }
-    } */
-
-
-    @media screen and (max-width: 1920px) {
-        .iframe-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 70vw;
-            height: 770px;
-            border: 1px solid black;
-            margin: 0;
-            box-sizing: border-box;
-            /* <- verhinder Überlauf */
-        }
-
-
-    }
-
-    @media screen and (min-width: 3840px) {
-        .iframe-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 70vw;
-            height: 1970px;
-            border: 1px solid black;
-            margin: 0;
-            box-sizing: border-box;
-            /* <- verhinder Überlauf */
-        }
-    }
 </style>
 </head>
 
-
-<header class="pl-3">
-    <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/header.php'; ?>
-</header>
-
 <body>
-    <div style="display: flex; justify-content: center;">
+    <header class="pl-3">
+        <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/header.php'; ?>
+    </header>
+    <main>
         <div class="iframe-container" id="container"></div>
-    </div>
-</body>
+    </main>
+    <footer class="pr-3">
+        <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/footer.php'; ?>
+    </footer>
 
-<footer class="pr-3">
-    <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/footer.php'; ?>
-</footer>
-
-
-<script>
-    const params = new URLSearchParams(window.location.search);
-    const ort = params.get('ip');
-    console.log('IP-Adresse:', ort); // IP-Adresse aus der URL holen
-    const foo = params.get('foo'); // weitere Variable aus der URL holen (optional)
-    const container = document.getElementById('container');
-    if (ort && container != null) {
-        const iframe = document.createElement('iframe');
-        // Variablen als Query-Parameter anhängen
-        let data = `anzeige.php?ip=${encodeURIComponent(ort)}`;
-        // Wenn du weitere Variablen hast, einfach anhängen:
-        // data += `&foo=${encodeURIComponent(foo)}`;
-        iframe.src = data;
-        container.appendChild(iframe);
-    } else {
-        container.innerHTML = '<p class="text-danger">No IP address provided.</p>';
-    }
-</script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const ort = params.get('ip');
+        console.log('IP-Adresse:', ort); // IP-Adresse aus der URL holen
+        const foo = params.get('foo'); // weitere Variable aus der URL holen (optional)
+        const container = document.getElementById('container');
+        if (ort && container != null) {
+            const iframe = document.createElement('iframe');
+            // Variablen als Query-Parameter anhängen
+            let data = `anzeige.php?ip=${encodeURIComponent(ort)}`;
+            // Wenn du weitere Variablen hast, einfach anhängen:
+            // data += `&foo=${encodeURIComponent(foo)}`;
+            iframe.src = data;
+            container.appendChild(iframe);
+        } else {
+            container.innerHTML = '<p class="text-danger">No IP address provided.</p>';
+        }
+    </script>
 
 </html>

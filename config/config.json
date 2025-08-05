@@ -1,38 +1,36 @@
 {
-  "intervals": [
-    {
-      "name": "15 Sekunden",
-      "value": 0.025
-    },
-    {
-      "name": "1 Minute",
-      "value": 0.1
-    },
-    {
-      "name": "5 Minuten",
-      "value": 0.5
-    },
-    {
-      "name": "10 Minuten",
-      "value": 1
-    },
-    {
-      "name": "Nie",
-      "value": 0
-    }
-  ],
-  "default": 0.025,
-  
-  
-  "maxCountInfoPagesAndInfoTerminals": [
-    {
-      "infoPages": "InfoPages",
-      "value": 50
-    },
-    {
-      "infoTerminals": "InfoTerminals",
-      "value": 50
-    }
-  ],
-  "defaultMaxCount": 50
+    "intervals": [
+        {
+            "name": "15 Sekunden",
+            "value": 0.025
+        },
+        {
+            "name": "1 Minute",
+            "value": 0.1
+        },
+        {
+            "name": "5 Minuten",
+            "value": 0.5
+        },
+        {
+            "name": "10 Minuten",
+            "value": 1
+        },
+        {
+            "name": "Nie",
+            "value": 0
+        }
+    ],
+    "default": 1,
+    "maxCountInfoPagesAndInfoTerminals": [
+        {
+            "infoPages": "InfoPages",
+            "value": 50
+        },
+        {
+            "infoTerminals": "InfoTerminals",
+            "value": 50
+        }
+    ],
+    "defaultMaxCount": 50
 }

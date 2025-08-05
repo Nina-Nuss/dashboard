@@ -306,3 +306,48 @@ function cutAndCreate(responseText) {
 
 
 
+document.addEventListener('DOMContentLoaded', async () => {
+    const select = document.getElementById('refreshSelect');
+    if (!select) return;  // Nur auf der Admin-Seite ausführen
+
+    // Config laden
+    try {
+        const res = await fetch('/config/config.json');
+        if (!res.ok) throw new Error(`Config nicht gefunden (Status ${res.status})`);
+        const cfg = await res.json();
+
+        // Dropdown befüllen
+        cfg.intervals.forEach(i => {
+            const opt = document.createElement('option');
+            opt.value = i.value;
+            opt.textContent = i.name;
+            select.append(opt);
+        });
+        select.value = cfg.default;
+    } catch (err) {
+        console.error('Fehler beim Laden der Config:', err);
+        return;
+    }
+
+    // Änderung speichern
+    select.addEventListener('change', async () => {
+        const newDefault = parseFloat(select.value);
+        try {
+            const res = await fetch('/config/config.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ default: newDefault })
+            });
+            if (!res.ok) throw new Error(`Speichern fehlgeschlagen (Status ${res.status})`);
+            const result = await res.json();
+            if (result.success) {
+                alert('Default-Intervall gespeichert');
+            } else {
+                alert('Fehler: ' + result.error);
+            }
+        } catch (err) {
+            console.error('Fehler beim Speichern der Config:', err);
+            alert('Speicher-Fehler');
+        }
+    });
+});
