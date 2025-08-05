@@ -20,11 +20,11 @@
     body {
         display: flex;
         flex-direction: column;
-        height: 100vh;
+        height: 100vh; /* Höhe des Viewports */
     }
 
     main {
-        flex: 1 1 auto;
+
         display: flex;
         justify-content: center;
         align-items: center;
