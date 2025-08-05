@@ -26,23 +26,17 @@ class CardObj {
 
         //HTMLOBJEKTE-------------------------
         this.deleteBtn = `deleteBtn${this.id}`
-        this.imagePreviewId = `imagePreview${this.id}`;
+       
         this.imageInputId = `imageInput${this.id}`;
         this.modalImageId = `modalImageID${this.id}`;
         this.checkAktiv = `activCheck${this.id}`;
-        this.timePlanCheckboxId = `timeCheck${this.id}`;
-        this.openModalButtonId = `openModal${this.id}`;
-        this.modalId = `myModal${this.id}`;
         this.dateRangeInputId = `daterange${this.id}`;
         this.dateRangeContainerId = `selected-daterange${this.id}`;
         this.infoBtn = `infoBtn${this.id}`;
         this.selectedTimerLabel = `selectedTime${this.id}`
         this.cardObjekte = `cardObjekt${this.id}`
-        this.infoCard = `showDateInCard${this.id}`
-        this.shownInCarousel = `showInCarousel${this.id}`;
-        this.closeBtn = `closeBtn${this.id}`
-        this.sumbitBtnID = `submit${this.id}`;
-        this.formID = `formID${this.id}`
+        this.infoCard = `infoCard${this.id}`
+
         this.checkSelect = `checkSelect${this.id}`
 
         //-------------------------------------    
@@ -116,27 +110,7 @@ class CardObj {
     }
 
 
-    // zeigeCardObjInUmgebungAn(){
-    //      document.getElementById("cardContainer").innerHTML = "";
-    //     const selector = document.createElement("select");
-    //     selector.id = "selectUmgebung";
-    //     selector.className = "form-select";
-    //     selector.innerHTML = `<option value="">Bitte wählen Sie eine Umgebung</option>`;
-    //     Umgebung.list.forEach(umgebung => {
-    //         selector.innerHTML += `<option value="${umgebung.id}">${umgebung.titel}</option>`;
-    //     });
-    //     selector.addEventListener("change", (event) => {
-    //         const selectedId = event.target.value;
-    //         Beziehungen.list.forEach(beziehung => {
-    //             if (beziehung.cardObjektID == Umg.selectedID && beziehung.umgebungID == selectedId) {
-    //                 // Hier kannst du die Logik hinzufügen, um die Beziehung anzuzeigen
-    //                 console.log(`Beziehung gefunden: CardObjektID ${CardObj.selectedID}, UmgebungID ${selectedId}`);
-    //             }
-    //         });
-    //     });
-    //     document.getElementById("rowForCards").appendChild(selector);
-    //     this.htmlBody("cardContainer");
-    // }
+
 
     static event_remove(id) {
         var element = document.getElementById(`checkDelSchema${id}`);

@@ -9,7 +9,6 @@
         <div class="col-md-12 text-center pt-2">
             <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/selectPanel.php'; ?>
         </div>
-
         <div class="row">
             <div class="col-12">
                 <div class="card shadow-sm">
@@ -65,7 +64,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="col-md-6">
                                 <div class="card h-100">
                                     <div class="card-header">
@@ -109,12 +107,30 @@
                                         </h5>
                                     </div>
                                     <div class="card-body">
-                                        <label for="refreshSelect" class="form-label">
-                                            <i class="fas fa-clock me-2"></i> Refresh-Zeit:
-                                        </label>
-                                        <select id="refreshSelect" class="form-select" style="padding: 5px;">
-                                            <!-- Optionen werden per JS aus config.json befüllt -->
-                                        </select>
+                                        <div class="form-group mb-3">
+                                            <label for="refreshSelect" class="form-label">
+                                                <i class="fas fa-clock me-2"></i> Refresh-Zeit:
+                                            </label>
+                                            <select id="refreshSelect" class="form-select" style="padding: 5px;">
+                                                <!-- Optionen werden per JS aus config.json befüllt -->
+                                            </select>
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label for="cardCounterLimit" class="form-label">
+                                                <i class="fas fa-hashtag me-2"></i> Infoseite-Zeit:
+                                            </label>
+                                            <select id="cardCounterLimit" class="form-select" style="padding: 5px;">
+                                                <!-- Optionen werden per JS aus config.json befüllt -->
+                                            </select>
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label for="infoCounterLimit" class="form-label">
+                                                <i class="fas fa-hashtag me-2"></i> Infoterminal-Limit:
+                                            </label>
+                                            <select id="infoCounterLimit" class="form-select" style="padding: 5px;">
+                                                <!-- Optionen werden per JS aus config.json befüllt -->
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

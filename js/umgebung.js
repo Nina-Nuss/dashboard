@@ -308,35 +308,67 @@ function cutAndCreate(responseText) {
 
 document.addEventListener('DOMContentLoaded', async () => {
     const select = document.getElementById('refreshSelect');
-    if (!select) return;  // Nur auf der Admin-Seite ausführen
+    console.log(select);
 
+    const infoCounterLimit = document.getElementById('infoCounterLimit');
+    const cardCounterLimit = document.getElementById('cardCounterLimit');
+    if (!select) return;  // Nur auf der Admin-Seite ausführen
     // Config laden
     try {
+        console.log("Config wird geladen");
+        console.log("select: ", select);
+
         const res = await fetch('/config/config.json');
         if (!res.ok) throw new Error(`Config nicht gefunden (Status ${res.status})`);
         const cfg = await res.json();
 
+        console.log("Config geladen:", cfg);
+        console.log("cfg.intervals: ", cfg.intervals);
+        console.log("cfg.maxCountForInfoPages: ", cfg.maxCountForInfoPages);
+        console.log("cfg.maxCountForInfoTerminals: ", cfg.maxCountForInfoTerminals);
+
         // Dropdown befüllen
-        cfg.intervals.forEach(i => {
-            const opt = document.createElement('option');
-            opt.value = i.value;
-            opt.textContent = i.name;
-            select.append(opt);
-        });
-        select.value = cfg.default;
+        createList(cfg.intervals, select);
+        createList(cfg.maxCountForInfoPages, infoCounterLimit);
+        createList(cfg.maxCountForInfoTerminals, cardCounterLimit);
+
+       
+        
+        saveList(select, cfg.default);
+        saveList(infoCounterLimit, cfg.defaultMaxCountForInfoPages);
+        saveList(cardCounterLimit, cfg.defaultMaxCountForInfoTerminals);
+
+      
+
+
     } catch (err) {
         console.error('Fehler beim Laden der Config:', err);
         return;
     }
 
-    // Änderung speichern
+});
+
+function createList(cfg, select) {
+    cfg.forEach(i => {
+        const opt = document.createElement('option');
+        opt.value = i.value;
+        opt.textContent = i.name;
+        select.append(opt);
+        console.log(`Option hinzugefügt: ${i.name} (${i.value})`);
+
+    });
+}
+
+function saveList(select, defaultValue) {
+    defaultValue = parseFloat(defaultValue);
+
     select.addEventListener('change', async () => {
         const newDefault = parseFloat(select.value);
         try {
             const res = await fetch('/config/config.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ default: newDefault })
+                body: JSON.stringify({ defaultValue: newDefault })
             });
             if (!res.ok) throw new Error(`Speichern fehlgeschlagen (Status ${res.status})`);
             const result = await res.json();
@@ -350,4 +382,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             alert('Speicher-Fehler');
         }
     });
-});
+
+
+}
