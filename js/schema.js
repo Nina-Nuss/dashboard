@@ -449,27 +449,27 @@ class CardObj {
 
         // Zusätzliche Prüfung, ob Start kleiner als End ist
         // Zusätzliche Prüfung, ob Start kleiner als End ist
-        
-        
-        if (!startDate.value && startTime.value) {
-            startDate.value = getTodayDate();
-            console.log("Startdatum wurde auf den heutigen Tag gesetzt, da nur Startzeit eingegeben wurde:", startDate.value);
-        }
 
-        if (!endDate.value && endTime.value) {
-            endDate.value = getTodayDate();
-            console.log("Enddatum wurde auf den heutigen Tag gesetzt, da nur Endzeit eingegeben wurde:", endDate.value);
-        }
 
-        if (!startDate.value) {
-            startDate.value = getTodayDate();
-            console.log("Startdatum wurde auf den heutigen Tag gesetzt:", startDate.value);
-        }
+        // if (!startDate.value && startTime.value) {
+        //     startDate.value = getTodayDate();
+        //     console.log("Startdatum wurde auf den heutigen Tag gesetzt, da nur Startzeit eingegeben wurde:", startDate.value);
+        // }
 
-        if (!endDate.value) {
-            endDate.value = getTodayDate();
-            console.log("Enddatum wurde auf den heutigen Tag gesetzt:", endDate.value);
-        }
+        // if (!endDate.value && endTime.value) {
+        //     endDate.value = getTodayDate();
+        //     console.log("Enddatum wurde auf den heutigen Tag gesetzt, da nur Endzeit eingegeben wurde:", endDate.value);
+        // }
+
+        // if (!startDate.value) {
+        //     startDate.value = getTodayDate();
+        //     console.log("Startdatum wurde auf den heutigen Tag gesetzt:", startDate.value);
+        // }
+
+        // if (!endDate.value) {
+        //     endDate.value = getTodayDate();
+        //     console.log("Enddatum wurde auf den heutigen Tag gesetzt:", endDate.value);
+        // }
 
         // Set the values from the cardObj
         // Zusätzliche Prüfung, ob Start kleiner als End ist
@@ -482,6 +482,7 @@ class CardObj {
             if (startDateTime >= endDateTime) {
                 alert("Das Startdatum und die Startzeit müssen vor dem Enddatum und der Endzeit liegen.");
                 console.error("Ungültige Eingabe: Startzeitpunkt ist größer oder gleich dem Endzeitpunkt.");
+                return;
             } else {
                 cardObj.startDate = startDate.value + " " + startTime.value;
                 cardObj.endDate = endDate.value + " " + endTime.value;
@@ -489,31 +490,69 @@ class CardObj {
                 console.log("Datum und Uhrzeit wurden gesetzt");
             }
         } else if (startDate.value && endDate.value) {
+            console.log("Startdatum:", startDate.value);
+            console.log("Enddatum:", endDate.value);
+
             const startDateOnly = new Date(startDate.value);
             const endDateOnly = new Date(endDate.value);
-
+            console.log("Startdatum:", startDateOnly
+            );
+            console.log("Enddatum:", endDateOnly
+            );
+            
             if (startDateOnly >= endDateOnly) {
-                alert("Das Startdatum muss vor dem Enddatum liegen.");
+                alert("Der Beginn muss vor dem letzten Tag liegen.");
                 console.error("Ungültige Eingabe: Startdatum ist größer oder gleich dem Enddatum.");
+                CardObj.deleteDateTimeRange();
+                return;
             } else {
                 cardObj.startDate = startDate.value;
                 cardObj.endDate = endDate.value;
                 cardObj.dateAktiv = true;
                 console.log("Datum wurde gesetzt");
             }
-        } else if (startDate.value) {
-            cardObj.startDate = startDate.value;
-            cardObj.endDate = "9999-12-31"; // Setze ein Standard-Enddatum
+
+        } else if (startTime.value && endTime.value) {
+            alert("Bitte geben Sie ein Start- und Enddatum ein, wenn Sie eine Start- und Endzeit angeben.");
+            console.error("Ungültige Eingabe: Start- und Endzeit ohne Datum angegeben.");
+            dateTimefelderLeeren()
+            return;
+
+        } else if (startTime.value && endDate.value) {
+            alert("Bitte geben Sie ein Start- und Enddatum ein, wenn Sie eine Start- und Endzeit angeben.");
+            console.error("Ungültige Eingabe: Startzeit ohne Startdatum angegeben.");
+            dateTimefelderLeeren()
+            return;
+
+        }
+        else if (endTime.value && startDate.value) {
+            alert("Bitte geben Sie ein Start- und Enddatum ein, wenn Sie eine Start- und Endzeit angeben.");
+            console.error("Ungültige Eingabe: Endzeit ohne Enddatum angegeben.");
+            dateTimefelderLeeren()
+            return;
+        }
+        else if (startDate.value && startTime.value) {
+            cardObj.startDate = startDate.value + " " + startTime.value;
+            cardObj.endDate = "9999-12-31 23:59"; // Setze ein Standard-Enddatum
             cardObj.dateAktiv = true;
-        } else if (endDate.value) {
-            cardObj.endDate = endDate.value;
-            cardObj.startDate = "1970-01-01"; // Setze ein Standard-Startdatum
+            console.log("Startdatum und Startzeit wurden gesetzt");
+          
+        } else if (endDate.value && endTime.value) {
+            cardObj.endDate = endDate.value + " " + endTime.value;
+            cardObj.startDate = "1970-01-01 00:00"; // Setze ein Standard-Startdatum
             cardObj.dateAktiv = true;
             console.log("Enddatum wurde gesetzt");
+        } else {
+            cardObj.startDate = "";
+            cardObj.endDate = "";
+            cardObj.dateAktiv = false;
+            alert("Datum wurde nicht gespeichert, da die Eingabefelder nicht alle ausgefüllt sind.");
         }
 
 
-        
+
+
+
         // Zeitbereich prüfen
         if (startTimeRange.value && endTimeRange.value) {
             const startTimeOnly = combineDateTime("1970-01-01", startTimeRange.value);
@@ -554,10 +593,10 @@ class CardObj {
         var startTime = document.getElementById("startTimeDate");
         var endTime = document.getElementById("endTimeDate");
         if (btnDelDateTime && objID !== null) {
-            startDate.value = '';
-            endDate.value = '';
-            startTime.value = '';
-            endTime.value = '';
+            startDate.value = "";
+            endDate.value = "";
+            startTime.value = "";
+            endTime.value = "";
         }
     }
     static deleteTimeRange(objID) {
@@ -584,6 +623,8 @@ window.addEventListener("load", async function () {
 function combineDateTime(date, time) {
     return new Date(`${date}T${time}`);
 }
+
+
 
 function getTodayDate() {
     const today = new Date();
