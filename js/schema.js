@@ -26,7 +26,7 @@ class CardObj {
 
         //HTMLOBJEKTE-------------------------
         this.deleteBtn = `deleteBtn${this.id}`
-       
+
         this.imageInputId = `imageInput${this.id}`;
         this.modalImageId = `modalImageID${this.id}`;
         this.checkAktiv = `activCheck${this.id}`;
@@ -318,9 +318,9 @@ class CardObj {
             var preCardObj = CardObj.prepareObjForUpdate(obj); // Bereite das Objekt für die Aktualisierung vor
             await updateDataBase(preCardObj, "updateSchema");
             alert("Änderungen erfolgreich gespeichert!");
+
+
             CardObj.loadChanges(obj); // Lade die Änderungen für das ausgewählte CardObj
-
-
         } catch (error) {
             console.error("Fehler beim Speichern der Änderungen:", error);
             alert("Fehler beim Speichern der Änderungen. Bitte versuchen Sie es erneut.");
@@ -330,6 +330,22 @@ class CardObj {
     static prepareObjForUpdate(obj) {
         // Hier können Sie das Objekt in den Zustand für die Aktualisierung versetzen
         CardObj.checkAktiv()
+        var selectSekunden = parseInt(document.getElementById("selectSekunden").value) || 0; // Falls leer, wird 0 verwendet
+        var selectMinuten = parseInt(document.getElementById("selectMinuten").value) || 0; // Falls leer, wird 0 verwendet
+        var selectStunden = parseInt(document.getElementById("selectStunden").value) || 0; // Falls leer, wird 0 verwendet
+
+        console.log("Selected Stunden: ", selectStunden);
+        console.log("Selected Minuten: ", selectMinuten);
+        console.log("Selected Sekunden: ", selectSekunden);
+
+        if (selectMinuten || selectSekunden || selectStunden) {
+            obj.selectedTime = (selectMinuten * 60 + selectSekunden + selectStunden * 3600) * 1000; // Minuten, Sekunden und Stunden in Millisekunden umrechnen
+            console.log("Selected Time in Millisekunden: ", obj.selectedTime);
+        } else {
+            obj.selectedTime = 0; // Setze auf 0, wenn keine Eingabe vorhanden ist
+            console.log("Keine Zeit ausgewählt, setze auf 0");
+        }
+
 
         var timerSelect = document.getElementById("timerSelectRange");
         obj.selectedTime = timerSelect.value;
@@ -430,30 +446,104 @@ class CardObj {
         console.log("Start Time Range:", startTimeRange.value);
         console.log("End Time Range:", endTimeRange.value);
 
+
+        // Zusätzliche Prüfung, ob Start kleiner als End ist
+        // Zusätzliche Prüfung, ob Start kleiner als End ist
+        
+        
+        if (!startDate.value && startTime.value) {
+            startDate.value = getTodayDate();
+            console.log("Startdatum wurde auf den heutigen Tag gesetzt, da nur Startzeit eingegeben wurde:", startDate.value);
+        }
+
+        if (!endDate.value && endTime.value) {
+            endDate.value = getTodayDate();
+            console.log("Enddatum wurde auf den heutigen Tag gesetzt, da nur Endzeit eingegeben wurde:", endDate.value);
+        }
+
+        if (!startDate.value) {
+            startDate.value = getTodayDate();
+            console.log("Startdatum wurde auf den heutigen Tag gesetzt:", startDate.value);
+        }
+
+        if (!endDate.value) {
+            endDate.value = getTodayDate();
+            console.log("Enddatum wurde auf den heutigen Tag gesetzt:", endDate.value);
+        }
+
+        // Set the values from the cardObj
+        // Zusätzliche Prüfung, ob Start kleiner als End ist
+
         // Set the values from the cardObj
         if (startDate.value && endDate.value && startTime.value && endTime.value) {
-            cardObj.startDate = startDate.value + " " + startTime.value;
-            cardObj.endDate = endDate.value + " " + endTime.value;
-            cardObj.dateAktiv = true;
-            console.log("datum uhrzeit wurde gesetzt");
-        } else {
-            cardObj.startDate = "";
-            cardObj.endDate = "";
-            cardObj.dateAktiv = false;
-        }
-        if (startTimeRange.value && endTimeRange.value) {
-            cardObj.startTime = startTimeRange.value;
-            cardObj.endTime = endTimeRange.value;
-            cardObj.timeAktiv = true;
-            console.log("Zeitbereich wurde gesetzt");
+            const startDateTime = combineDateTime(startDate.value, startTime.value);
+            const endDateTime = combineDateTime(endDate.value, endTime.value);
 
+            if (startDateTime >= endDateTime) {
+                alert("Das Startdatum und die Startzeit müssen vor dem Enddatum und der Endzeit liegen.");
+                console.error("Ungültige Eingabe: Startzeitpunkt ist größer oder gleich dem Endzeitpunkt.");
+            } else {
+                cardObj.startDate = startDate.value + " " + startTime.value;
+                cardObj.endDate = endDate.value + " " + endTime.value;
+                cardObj.dateAktiv = true;
+                console.log("Datum und Uhrzeit wurden gesetzt");
+            }
+        } else if (startDate.value && endDate.value) {
+            const startDateOnly = new Date(startDate.value);
+            const endDateOnly = new Date(endDate.value);
+
+            if (startDateOnly >= endDateOnly) {
+                alert("Das Startdatum muss vor dem Enddatum liegen.");
+                console.error("Ungültige Eingabe: Startdatum ist größer oder gleich dem Enddatum.");
+            } else {
+                cardObj.startDate = startDate.value;
+                cardObj.endDate = endDate.value;
+                cardObj.dateAktiv = true;
+                console.log("Datum wurde gesetzt");
+            }
+        } else if (startDate.value) {
+            cardObj.startDate = startDate.value;
+            cardObj.endDate = "9999-12-31"; // Setze ein Standard-Enddatum
+            cardObj.dateAktiv = true;
+        } else if (endDate.value) {
+            cardObj.endDate = endDate.value;
+            cardObj.startDate = "1970-01-01"; // Setze ein Standard-Startdatum
+            cardObj.dateAktiv = true;
+            console.log("Enddatum wurde gesetzt");
+        }
+
+
+        
+        // Zeitbereich prüfen
+        if (startTimeRange.value && endTimeRange.value) {
+            const startTimeOnly = combineDateTime("1970-01-01", startTimeRange.value);
+            const endTimeOnly = combineDateTime("1970-01-01", endTimeRange.value);
+
+            if (startTimeOnly >= endTimeOnly) {
+                alert("Die Startzeit muss vor der Endzeit liegen.");
+                console.error("Ungültige Eingabe: Startzeit ist größer oder gleich der Endzeit.");
+            } else {
+                cardObj.startTime = startTimeRange.value;
+                cardObj.endTime = endTimeRange.value;
+                cardObj.timeAktiv = true;
+                console.log("Zeitbereich wurde gesetzt");
+            }
+        } else if (startTimeRange.value) {
+            cardObj.startTime = startTimeRange.value;
+            cardObj.endTime = "23:59"; // Setze einen Standardwert, wenn nur Startzeit gesetzt ist
+            cardObj.timeAktiv = true;
+            console.log("Startzeit wurde gesetzt");
+        } else if (endTimeRange.value) {
+            cardObj.endTime = endTimeRange.value;
+            cardObj.startTime = "00:00"; // Setze einen Standardwert, wenn nur Endzeit gesetzt ist
+            cardObj.timeAktiv = true;
+            console.log("Endzeit wurde gesetzt");
         } else {
             cardObj.startTime = "";
             cardObj.endTime = "";
             cardObj.timeAktiv = false;
-            console.log("Zeitbereich wurde nicht gespeichert, da die Eingabe Felder nicht alle ausgefüllt sind.");
+            alert("Zeitbereich wurde nicht gespeichert, da die Eingabefelder nicht alle ausgefüllt sind.");
         }
-
 
     }
 
@@ -490,6 +580,18 @@ window.addEventListener("load", async function () {
         });
     }
 });
+
+function combineDateTime(date, time) {
+    return new Date(`${date}T${time}`);
+}
+
+function getTodayDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // Monat von 0-11, daher +1
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
 
 function imgVideoPreview() {
     if (document.getElementById('img') !== null) {

@@ -13,7 +13,7 @@
         <div class="col-md-10 text-center">
             <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/selectPanel.php'; ?>
 
-    <div class="pt-3"></div>
+            <div class="pt-3"></div>
             <div class="card">
                 <div class="card-header text-center">
                     <h3 class="card-title mb-0">
@@ -75,11 +75,28 @@
                                                 <option value="30000">30 Sekunden</option>
                                             </select>
                                         </div>
+
+                                        <div class="form-group mb-2">
+                                            <div class="d-flex align-items-center mt-4 p-2 justify-content-between">
+                                                <div class="d-flex align-items-center">
+                                                    <label for="selectSekunden" class="me-2">Sekunden:</label>
+                                                    <input type="text" id="selectSekunden" class="form-control" maxlength="2" style="width: 50px;">
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <label for="selectMinuten" class="me-2">Minuten:</label>
+                                                    <input type="text" id="selectMinuten" class="form-control" maxlength="2" style="width: 50px;">
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <label for="selectStunden" class="me-2">Stunden:</label>
+                                                    <input type="text" id="selectStunden" class="form-control" maxlength="1" style="width: 50px;">
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="card-body w-25">
                                         <div class="mb-2">
                                             <label class="form-label fw-bold mb-2">Zeit-Konfigurieren</label>
-                                            <div class="btn-group w-100 mb-3" role="group">
+                                            <div class="btn-group w-100" role="group">
                                                 <button class="btn btn-outline-primary" type="button" id="btnShowZeitraum" onclick="showDateTime('zeitspanne')">
                                                     <i class="bi bi-calendar-range me-1"></i> Datum & Uhrzeit
                                                 </button>
