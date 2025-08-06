@@ -66,101 +66,8 @@ class Beziehungen {
                     <td>${obj.id}</td>
                     <td>${obj.ipAdresse}</td>
                     <td>${obj.titel}</td>
-<<<<<<< HEAD
-                    <td><input type="checkbox" name="${obj.id}" id="checkAdd${obj.id}" onchange="Beziehungen.event_remove( ${obj.id})"></td>
-=======
                     <td><input type="checkbox" name="${obj.id}" id="checkDel${obj.id}" onchange="Beziehungen.event_remove(${obj.id})"></td>
->>>>>>> beta
                 </tr>`;
-
-<<<<<<< HEAD
-
-
-            if (anzeigebereicht != null) {
-                Umgebung.list.forEach(umgebung => {
-                    const istInTempList = this.temp_list.some(beziehung => beziehung.umgebungsID == umgebung.id);
-                    if (!istInTempList && !this.temp_list_add.includes(umgebung.id)) {
-                        this.temp_list_add.push(umgebung.id);
-                        anzeigebereicht.innerHTML += `<tr>
-                            <td>${umgebung.id}</td>
-                            <td>${umgebung.ipAdresse}</td>
-                            <td>${umgebung.titel}</td>
-                            <td><input type="checkbox" name="${umgebung.id}" id="checkAdd${umgebung.id}" onchange="Beziehungen.event_remove( ${umgebung.id})"></td>
-                        </tr>`;
-                    }
-                });
-            }
-        }
-    }
-
-
-    static removeFromListViaID(id, list) {
-        var temp = [];
-        list.forEach(element => {
-            if (element.umgebungsID != id) {
-                temp.push(element);
-            } else {
-                if (element.umgebungsID != 0) {
-                    // this.deletee(element.umgebungsID, "deleteInfotherminal");
-                    console.log("Das Element wurde gefunden und wird gelöscht! " + element.umgebungsID);
-                } else {
-                    console.warn("Hauptumgebung (Alle Schemas) kann nicht gelöscht werden!");
-                }
-                return;
-            }
-        });
-        return temp;
-    }
-
-    static event_remove(id) {
-        
-        var element = document.getElementById(`checkAdd${id}`);
-        if (element.checked && !this.temp_list_remove.includes(id)) {
-            this.list.forEach(checkID => {
-                if (checkID.id == id) {
-                    checkID.check = true;
-                }
-            });
-            this.temp_list_remove.push(id);
-        } else {
-            this.temp_list_remove.forEach(checkID => {
-                if (checkID.id == id) {
-                    checkID.check = false;
-                }
-            });
-            this.temp_list_remove = this.temp_list_remove.filter(idd => id != idd);
-        }
-        console.log(this.temp_list_remove);
-    }
-    
-
-
-    static async deletee(idDelete, databaseUrl) {
-        console.log("deletee wurde aufgerufen");
-        try {
-            const prepare = "?idDelete=" + idDelete;
-            const response = await fetch(`/database/${databaseUrl}.php` + prepare);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const responseText = await response.text();
-            try {
-                const jsonResponse = JSON.parse(responseText);
-                return jsonResponse;
-            } catch (jsonError) {
-                return { message: responseText };
-            }
-        } catch (error) {
-            return { error: error.message };
-        }
-    }
-
-    static removeFromListLogik() {
-        this.temp_list_remove.forEach(id => {
-            this.list = this.removeFromListViaID(id, this.list);
-        });
-        this.temp_list_remove = [];
-        this.temp_list = [];
 
                 }
             });
@@ -217,8 +124,10 @@ class Beziehungen {
                 Beziehungen.temp_add.push(umgebung.id);
             }
         });
-        console.log("Temp Remove:", this.temp_remove);
-        console.log("Temp Add:", this.temp_add);
+        console.log("Temp Remove:", Beziehungen.temp_remove);
+        console.log("Temp Add:", Beziehungen.temp_add);
+        console.log("Beziehungen Temp Add:",  Umgebung.list);
+        
     }
 
     static event_remove(id) {
@@ -330,4 +239,3 @@ function erstelleObj(element) {
     });
     return obj;
 }
-
