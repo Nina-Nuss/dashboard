@@ -239,4 +239,3 @@ function erstelleObj(element) {
     });
     return obj;
 }
-
