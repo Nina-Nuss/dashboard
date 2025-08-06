@@ -1,6 +1,7 @@
 <?php
-
+include("checkJson.php");
 include("connection.php");
+
 
 $file = file_get_contents('php://input');
 
@@ -9,20 +10,29 @@ $data = json_decode($file, true);
 
 echo json_encode($data);
 
+
+echo "<br>";
+echo $_SESSION['schemalistLength'];
+echo "<br>";
+echo $_SESSION['defaultMaxCountForInfoPages'];
+echo "<br>";
+
 // Überprüfen, ob die Daten korrekt abgerufen wurden
-if (is_array($data)) {
+if (is_array($data) && $_SESSION['schemalistLength'] < $_SESSION['defaultMaxCountForInfoPages']) {
     $imagePath = $data["imagePath"];
     $selectedTime = $data["selectedTime"];
     $aktiv = $data["aktiv"];
     $startTime = $data["startTime"];
     $endTime = $data["endTime"];
-    $startDate = $data["startDate"];
-    $endDate = $data["endDate"];
+    $startDate = $data["startDateTime"];
+    $endDate = $data["endDateTime"];
+    $timeAktiv = $data["timeAktiv"];
+    $dateAktiv = $data["dateAktiv"];
     $titel = $data["titel"];
     $beschreibung = $data["beschreibung"];
     // SQL-Abfrage mit Prepared Statement
-    $sql = "INSERT INTO schemas (imagePath, selectedTime, isAktiv, startTime, endTime, startDate, endDate, titel, beschreibung) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    $params = array( $imagePath, $selectedTime, $aktiv, $startTime, $endTime, $startDate, $endDate, $titel, $beschreibung);
+    $sql = "INSERT INTO schemas (imagePath, selectedTime, isAktiv, startTime, endTime, startDateTime, endDateTime, timeAktiv, dateAktiv, titel, beschreibung) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $params = array( $imagePath, $selectedTime, $aktiv, $startTime, $endTime, $startDate, $endDate, $timeAktiv, $dateAktiv, $titel, $beschreibung);
     $stmt = sqlsrv_prepare($conn, $sql, $params);
 
     if ($stmt) {

@@ -7,7 +7,6 @@ class Beziehungen {
     static temp_add = [];
     static temp_list_add = [];
     static temp_list_remove = [];
-
     constructor(id, umgebungsID, cardObjektID) {
         this.id = id;
         this.umgebungsID = umgebungsID;
@@ -15,7 +14,7 @@ class Beziehungen {
         Beziehungen.list.push(this);
     }
     static async getRelation() {
-        const response = await fetch('database/selectRelation.php', {
+        const response = await fetch('../database/selectRelation.php', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -24,11 +23,9 @@ class Beziehungen {
         var relationlistee = await response.json();
         return relationlistee;
     }
-
-
     static async update(cardObjID) {
-        this.list = [];
-         var anzeigebereichV = document.getElementById("anzeigebereichV");
+        Beziehungen.list = [];
+
         const relationListe = await Beziehungen.getRelation();
         console.log(relationListe);
         relationListe.forEach(element => {
@@ -41,23 +38,25 @@ class Beziehungen {
         this.temp_list = [];
         console.log("Update wird aufgerufen mit CardObjektID: " + cardObjID);
 
-        leereListe(anzeigebereichV);
-        leereListe(anzeigebereicht);
-        leereListe(anzeigebereichD);
-        leereListe(anzeigebereicht);
-
         this.createList(cardObjID)
         console.log("Temp Liste Add: " + this.temp_add);
         console.log("Temp Liste Remove: " + this.temp_remove);
-        if(CardObj.selectedID != null) {
+        if (CardObj.selectedID != null) {
             this.createListForAnzeige();
         }
-    
+
     }
 
     static createListForAnzeige() {
-        console.log("createListForAnzeige aufgerufen");
+
         var anzeigebereichV = document.getElementById("anzeigebereichV");
+        var  anzeigebereicht = document.getElementById("tabelleAdd");
+        var anzeigebereichD = document.getElementById("tabelleDelete");
+
+        anzeigebereichV.innerHTML = "";
+        anzeigebereicht.innerHTML = "";
+        anzeigebereichD.innerHTML = "";
+
         // Display items to remove
         if (anzeigebereichD && this.temp_remove.length > 0) {
             this.temp_remove.forEach(umgebungsId => {
@@ -203,24 +202,23 @@ class Beziehungen {
     static createList(cardObjID) {
         console.log("createList aufgerufen mit CardObjektID: " + cardObjID);
         // Clear arrays first
-        this.temp_remove = [];
-        this.temp_add = [];
+        Beziehungen.temp_remove = [];
+        Beziehungen.temp_add = [];
 
-        this.list.forEach(ele => {
+        Beziehungen.list.forEach(ele => {
             if (ele.cardObjektID == cardObjID) {
                 console.log(`Beziehung gefunden: ${ele.id} mit CardObjektID: ${ele.cardObjektID}`);
-                this.temp_remove.push(ele.umgebungsID);
+                Beziehungen.temp_remove.push(ele.umgebungsID);
             }
         });
         // Find available umgebungsIDs (not connected to this cardObjID)
         Umgebung.list.forEach(umgebung => {
-            if (!this.temp_remove.includes(umgebung.id)) {
-                this.temp_add.push(umgebung.id);
+            if (!Beziehungen.temp_remove.includes(umgebung.id)) {
+                Beziehungen.temp_add.push(umgebung.id);
             }
         });
         console.log("Temp Remove:", this.temp_remove);
         console.log("Temp Add:", this.temp_add);
->>>>>>> beta
     }
 
     static event_remove(id) {
@@ -268,7 +266,7 @@ class Beziehungen {
 
     static async addToDatabaseViaID(cardObjektID, umgebungsID, databaseUrl) {
         console.log("addToDatabaseViaID aufgerufen mit UmgebungsID:", umgebungsID, "CardObjektID:", cardObjektID);
-        await fetch(`/database/${databaseUrl}.php`, {
+        await fetch(`../database/${databaseUrl}.php`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -299,8 +297,6 @@ class Beziehungen {
     }
 
 }
-const anzeigebereicht = document.getElementById("tabelleAdd");
-const anzeigebereichD = document.getElementById("tabelleDelete");
 
 
 function leereListe(anzeigebereich) {

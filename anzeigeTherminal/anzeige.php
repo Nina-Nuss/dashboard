@@ -18,13 +18,14 @@
         padding: 0;
     }
 
-    img.fullscreen {
+
+
+    .fullscreen {
         width: 100vw;
         height: 100vh;
         display: block;
         object-fit: contain;
     }
-
 </style>
 
 <body>
@@ -62,18 +63,30 @@
                 return;
             }
             console.log('Received data:', data);
-         
+
             while (true) {
                 for (const element of data) {
-                    console.log(element[1]);
-                    // Hier könntest du das Bild anzeigen
-
-                    const img = document.createElement('img');
-                    img.src = "../schemas/uploads/" + element[1];
-                    img.className = "fullscreen";
-                    img.alt = "Image";
-                    document.body.innerHTML = ''; // Clear the body content
-                    document.body.appendChild(img); // Add the new image to the body
+                    if (element[1].includes('img_')) {
+                        const img = document.createElement('img');
+                        img.src = "/uploads/img/" + element[1];
+                        img.className = "fullscreen";
+                        img.alt = "Image";
+                        document.body.innerHTML = ''; // Clear the body content
+                        document.body.appendChild(img); // Add the new image to the body
+                    } else if (element[1].includes('video_')) {
+                        const video = document.createElement('video');
+                        video.src = "/uploads/video/" + element[1];
+                        video.className = "fullscreen";
+                        video.controls = true; // Video Controls hinzufügen
+                        video.autoplay = true; // Video automatisch starten
+                        video.loop = true; // Video in einer Schleife abspielen
+                        video.playsInline = true; // Für mobile Geräte
+                        video.muted = true; // Meistens erforderlich für Autoplay in Browsern
+                        document.body.innerHTML = ''; // Clear the body content
+                        document.body.appendChild(video); // Add the new video to the body
+                        await sleep(element[2]); // 5 Sekunden warten, bevor das nächste Video angezeigt wird
+                        continue;
+                    }
                     await sleep(element[2]); // 5 Sekunden warten, bevor das nächste Bild angezeigt wird
 
                 }
@@ -83,13 +96,21 @@
             console.error('Fetch failed:', error);
         }
     }
-    timerRefresh(0.1);
-    carousel(); // Initial call to set the first image
+    async function statReload() {
+        const loadTime = await fetch("/config/config.json");
+        console.log("Reload-Intervall:", loadTime);
+        const config = await loadTime.json();
+        console.log("Reload-Intervall:", config.default);
+        timerRefresh(config.default); // Alle 15 Sekunden neu laden
+        carousel(); // Initial call to set the first image
+    }
+
+    statReload();
 
     function timerRefresh(time) {
         setTimeout(() => {
             location.reload();
-        }, 4000 * 60 * time); // Alle 5 Minuten neu laden
+        }, 10000 * 60 * time);
     }
 </script>
 <?php

@@ -26,9 +26,10 @@
 
     header,
     footer {
-     display: flex;
+        display: flex;
         flex-direction: column;
-       
+        padding: 0%;
+
     }
 
     .iframe-container {
@@ -36,9 +37,9 @@
         justify-content: center;
         align-items: center;
         width: 70vw;
-        height: 480px;
-        border: 1px solid black;
-        margin: 0;
+        height: 800px;
+        /* border: 1px solid black; */
+        margin: 1px;
         box-sizing: border-box;
         /* <- verhinder Überlauf */
     }
@@ -66,9 +67,9 @@
             justify-content: center;
             align-items: center;
             width: 70vw;
-            height: 750px;
-            border: 1px solid black;
-            margin: 0;
+            height: 795px;
+            /* border: 1px solid black; */
+            margin: 1px;
             box-sizing: border-box;
             /* <- verhinder Überlauf */
         }
@@ -82,9 +83,9 @@
             justify-content: center;
             align-items: center;
             width: 70vw;
-            height: 1700px;
-            border: 1px solid black;
-            margin: 0;
+            height: 1600px;
+            /* border: 1px solid black; */
+            margin: 1px;
             box-sizing: border-box;
             /* <- verhinder Überlauf */
         }
@@ -94,7 +95,7 @@
 
 
 <header class="pl-3">
-    <?php include '..\header\header.php'; ?>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/header.php'; ?>
 </header>
 
 <body>
@@ -103,17 +104,15 @@
     </div>
 </body>
 
-<footer class="pr-3">
-    <?php include '..\liveTicker\liveTicker.php'; ?>
+<footer>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/footer.php'; ?>
 </footer>
 
 
 <script>
     const params = new URLSearchParams(window.location.search);
-
     const ort = params.get('ip');
     console.log('IP-Adresse:', ort); // IP-Adresse aus der URL holen
-
     const foo = params.get('foo'); // weitere Variable aus der URL holen (optional)
     const container = document.getElementById('container');
     if (ort && container != null) {

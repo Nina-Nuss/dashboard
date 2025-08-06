@@ -20,6 +20,8 @@
     ],
     "bitoAI.codeCompletion.enableAutoCompletion": false,
     "fiveServer.php.executable": "C:\\xampp\\php\\php.exe",
-    "fiveServer.php.ini": "C:\\xampp\\php\\php.ini"
+    "fiveServer.php.ini": "C:\\xampp\\php\\php.ini",
+    "php.version": "C:\\xampp\\php\\php.exe",
+    "php.debug.executablePath": "C:\\xampp\\php\\php.exe"
 }
 

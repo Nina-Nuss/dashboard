@@ -12,18 +12,20 @@ $titel = $data["titel"];
 $beschreibung = $data["beschreibung"];
 $imagePath = $data["imagePath"];
 $selectedTime = $data["selectedTime"];
-$isAktiv = $data["aktiv"];
+$isAktiv = $data["isAktiv"];
 $startTime = $data["startTime"];
 $endTime = $data["endTime"];
-$startDate = $data["startDate"];
-$endDate = $data["endDate"];
+$startDateTime = $data["startDateTime"];
+$endDateTime = $data["endDateTime"];
+$timeAktiv = $data["timeAktiv"] ?? false;  
+$dateAktiv = $data["dateAktiv"] ?? false; 
 $id = $data["id"]; // ID muss ebenfalls aus der Anfrage abgerufen werden
 
-// SQL-Abfrage mit Prepared Statement für MSSQL
-$sql = "UPDATE infotherminal_schema
-        SET imagePath = ?, selectedTime = ?, isAktiv = ?, startTime = ?, endTime = ?, startDate = ?, endDate = ?, titel = ?, beschreibung = ?
+// SQL-Abfrage mit Prepared Statement für MSSQL - erweitert um timeAktiv und dateAktiv
+$sql = "UPDATE schemas
+        SET imagePath = ?, selectedTime = ?, isAktiv = ?, startTime = ?, endTime = ?, startDateTime = ?, endDateTime = ?, titel = ?, beschreibung = ?, timeAktiv = ?, dateAktiv = ?
         WHERE id = ?";
-$params = array($imagePath, $selectedTime, $isAktiv, $startTime, $endTime, $startDate, $endDate, $titel, $beschreibung, $id);
+$params = array($imagePath, $selectedTime, $isAktiv, $startTime, $endTime, $startDateTime, $endDateTime, $titel, $beschreibung, $timeAktiv, $dateAktiv, $id);
 $stmt = sqlsrv_prepare($conn, $sql, $params);
 
 if ($stmt) {

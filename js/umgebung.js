@@ -3,14 +3,11 @@ class Umgebung {
     static id = 1;
     static umgebungsListe = [];
     static allCardList = [];
-    static ipList = [];
-    static nameList = [];
-    static tempListForSaveCards = [];
     static currentSelect = 0;
-    static listDataBase = [];
     check = false;
     static temp_remove = []
     static list = [];
+    static ipList = [];
     static eleListe = []
     static responseText = ""
     constructor(id, titel, ipAdresse) {
@@ -61,14 +58,7 @@ class Umgebung {
         var length = this.cardObjList.length
         return length
     }
-    static loadAllCardObj() {
-        Umgebung.allCardList.forEach(cardList => {
-            cardList.forEach(cardObj => {
-                cardObj.htmlUmgebungsBody(cardObj.umgebung);
 
-            });
-        });
-    }
     static showCardObjList() {
         this.cardObjList.forEach(cardObj => {
             console.log(cardObj);
@@ -81,50 +71,52 @@ class Umgebung {
         }
     }
     static async update() {
-        uncheckAllCheckboxes();
-        var delInfo = document.getElementById("deleteInfotherminal")
-        if (delInfo != null) {
-            delInfo.innerHTML = "";
-            this.list = [];
-            // KEINE neuen Umgebung-Objekte hier erzeugen!
-            const result = await readDatabase("selectInfotherminal");
-            console.log("result: ", result);
-            await result.forEach(listInfo => {
-                // Nur hier neue Umgebung-Objekte erzeugen
-                new Umgebung(listInfo[0], listInfo[1], listInfo[2]);
-                delInfo.innerHTML += `<tr class="border-bottom">
+        var delInfo = document.getElementById("deleteInfotherminal");
+        const selector = document.getElementById('infotherminalSelect');
+        let delInfoRows = ""; // String für Tabellenzeilen
+
+        let selectorOptions = '<option value="">-- Bitte wählen --</option>';
+        this.list = [];
+        this.temp_remove = [];
+        console.log("Update wird aufgerufen von Umgebung.js");
+
+        const result = await readDatabase("selectInfotherminal");
+
+        console.log("result: ", result);
+        // Performance: Normale forEach statt await forEach
+        result.forEach(listInfo => {
+            // Neue Umgebung-Objekte erzeugen
+            new Umgebung(listInfo[0], listInfo[1], listInfo[2]);
+            // Tabellencontent sammeln
+            delInfoRows += `<tr class="border-bottom">
                     <td class="p-2">${listInfo[0]}</td>
                     <td class="p-2">${listInfo[2]}</td>
                     <td class="p-2">${listInfo[1]}</td>
                     <td class="p-2 text-center"><input type="checkbox" name="${listInfo[0]}" id="checkDelInfo${listInfo[0]}" onchange="Umgebung.event_remove(${listInfo[0]})"></td>
                 </tr>`;
-            });
+            // Selector-Optionen sammeln
+            selectorOptions += `<option value="${listInfo[1]}">${listInfo[1]}</option>`;
+        });
+        if (delInfo) {
+            delInfo.innerHTML = delInfoRows;
+        }
+
+        // DOM nur einmal aktualisieren (bessere Performance)
+        if (selector) {
+            selector.innerHTML = selectorOptions;
         }
         console.log(this.list);
-
-
     }
-   
     static removeFromListViaID(id, list) {
         var temp = [];
         console.log(list);
-        
-       
         list.forEach(element => {
             if (element.id != id) {
                 //ID muss aus Liste gelöscht werden
                 temp.push(element);
-
             } else {
-                // Verhindere das Löschen der Hauptumgebung (ID 0 - "Alle Schemas")
-               if (element.id != 0) {
-                    this.deletee(element.id, "deleteInfotherminal");
-                    console.log("Das Element wurde gefunden und wird gelöscht! " + element.id);
-                    // Delete muss in der Datenbank nun hier ausgefuehrt werden
-                } else {
-                    console.warn("Hauptumgebung (Alle Schemas) kann nicht gelöscht werden!");
-                }
-                return;
+                this.deletee(element.id, "deleteInfotherminal");
+                console.log("Das Element wurde gefunden und wird gelöscht! " + element.id);
             }
         });
         return temp;
@@ -164,7 +156,7 @@ class Umgebung {
             const prepare = "?idDelete=" + idDelete;
             console.log(prepare);
 
-            const response = await fetch(`/database/${databaseUrl}.php` + prepare);
+            const response = await fetch(`../database/${databaseUrl}.php` + prepare);
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -193,7 +185,6 @@ class Umgebung {
         // DIese Methode wird aufgerufen sobald wir auf Minus (-) klicken
         // Hier benötigen wir die Aktuellen IDS der Datenbank zum löschen
         console.log(this.list);
-
         this.temp_remove.forEach(id => {
             this.list = this.removeFromListViaID(id, this.list);
 
@@ -202,68 +193,98 @@ class Umgebung {
         console.log(this.list);
     }
 
-    static remove_generate() {
-        this.removeFromListLogik();
-        this.update();
+    static async remove_generate() {
+        if (this.temp_remove.length == 0) {
+            alert("Bitte wählen Sie mindestens ein Infotherminal aus, um es zu löschen.");
+            return;
+        }
+        await this.removeFromListLogik();
+        await this.update();
     }
+
+    static erstelleSelector() {
+
+        const selector = document.getElementById('infotherminalSelect');
+        const button = document.getElementById('openTerminalBtn');
+
+        if (!selector || !button) {
+            console.error("Selector oder Button nicht gefunden.");
+            return;
+        }
+        // Selector nur einmal befüllen und Event-Listener nur einmal hinzufügen
+
+        // Selector leeren
+        selector.innerHTML = '<option value="">-- Bitte wählen --</option>';
+
+        // Event-Listener nur einmal hinzufügen (außerhalb der forEach-Schleife)
+        button.addEventListener('click', function () {
+            console.log("Button zum Öffnen des Terminals wurde geklickt");
+
+            const selectedTerminal = selector.value;
+            if (selectedTerminal !== '') {
+                const url = `../anzeigeTherminal/index.php?ip=${encodeURIComponent(selectedTerminal)}`;
+                window.open(url, '_blank');
+            }
+        });
+
+        Umgebung.list.forEach(element => {
+            console.log(element);
+
+            // Selector Option hinzufügen
+            const option = document.createElement("option");
+            option.value = element.titel;
+            option.textContent = element.titel;
+            selector.appendChild(option);
+        });
+    }
+
 }
 
-console.log("Umgebung.js loaded");
 
-window.addEventListener("load", function () {
-    var adminBereich = document.getElementById("adminBereich")
-    if (adminBereich != null) {
-        document.getElementById("adminBereich").addEventListener("click", async function () {
-            const settingsPanel = document.getElementById("settingsPanel")
-            uncheckAllTableCheckboxes()
-            deakCb(true);
-            Umgebung.temp_remove = [];
-            await fetch("bereiche/adminbereich.php")
+window.addEventListener("load", async function () {
+    Umgebung.temp_remove = [];
+    // Sende POST-Request zu php/sendingToPage.php
+    try {
+        const adminBereich = document.getElementById("adminBereich");
+        console.log("DSFDSFDSFFSDDSF");
+        adminBereich.addEventListener('click', async function () {
+            window.location.href = 'adminbereich.php';
+        });
+    } catch (error) {
+        console.error("Fehler beim Senden der Anfrage:", error);
+    }
+
+    Umgebung.erstelleSelector();
+    var formID = document.getElementById('formID');
+    if (formID) {
+        formID.addEventListener('submit', function (event) {
+            event.preventDefault(); // Standard-Submit verhindern
+            const form = event.target;
+            const formData = new FormData(form);
+            console.log(form);
+            console.log(formData);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
+            })
                 .then(response => response.text())
-                .then(html => {
-                    settingsPanel.innerHTML = html;
-                });
-            document.getElementById('formID').addEventListener('submit', function (event) {
-                event.preventDefault(); // Standard-Submit verhindern
+                .then(result => {
+                    // Optional: Rückmeldung anzeigen
 
-                const form = event.target;
-                const formData = new FormData(form);
-                console.log(form);
-                console.log(formData);
-
-                fetch(form.action, {
-                    method: 'POST',
-                    body: formData
+                    alert(result); // Hier können Sie eine Erfolgsmeldung anzeigen
+                    // z.B. Erfolgsmeldung anzeigen oder UI aktualisieren
+                    if (result.includes("Datensatz erfolgreich eingefügt")) {
+                        Umgebung.update();
+                        document.querySelectorAll(".addInfotherminal input[type='text']").forEach(input => {
+                            input.value = ""; // Eingabefelder leeren
+                        });
+                    }
                 })
-                    .then(response => response.text())
-                    .then(result => {
-                        // Optional: Rückmeldung anzeigen
-
-                        alert(result); // Hier können Sie eine Erfolgsmeldung anzeigen
-                        // z.B. Erfolgsmeldung anzeigen oder UI aktualisieren
-                        if (result.includes("Datensatz erfolgreich eingefügt")) {
-                            Umgebung.update();
-                            document.querySelectorAll(".addInfotherminal input[type='text']").forEach(input => {
-                                input.value = ""; // Eingabefelder leeren
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Fehler beim Hinzufügen:', error);
-                    });
-                    form.reset(); // Formular zurücksetzen
-            });
-            const cardBodyDelInfo = document.getElementById("cardBodyForDelInfo");
-            const delInfo = document.getElementById("deleteInfotherminal")
-
-            Umgebung.list.forEach(element => {
-                delInfo.innerHTML += `<tr class="border-bottom">
-                    <td class="p-2">${element.id}</td>
-                    <td class="p-2">${element.ipAdresse}</td>
-                    <td class="p-2">${element.titel}</td>
-                    <td class="p-2 text-center"><input type="checkbox" name="${element.id}" id="checkDelInfo${element.id}" onchange="Umgebung.event_remove(${element.id})"></td>
-                </tr>`;
-            });
+                .catch(error => {
+                    console.error('Fehler beim Hinzufügen:', error);
+                });
+            form.reset(); // Formular zurücksetzen
         });
     }
 });
@@ -272,43 +293,8 @@ function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// Wait for DOM to be loaded
 
-function select() {
-    getCuttedList = []
 
-    // Versuche verschiedene Pfade
-    const possiblePaths = [
-        "database/selectInfotherminal.php",
-        "./database/selectInfotherminal.php",
-        "/database/selectInfotherminal.php",
-        "selectInfotherminal.php"
-    ];
-    async function tryFetch(paths, index = 0) {
-        if (index >= paths.length) {
-            console.error("Keine gültigen Pfade für selectInfotherminal.php gefunden");
-            return;
-        }
-        try {
-            console.log(`Versuche Pfad: ${paths[index]}`);
-            const response = await fetch(paths[index]);
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const responseText = await response.text();
-            console.log("Select Response:", responseText);
-            cutAndCreate(responseText);
-            Umgebung.update();
-        } catch (error) {
-            console.warn(`Pfad ${paths[index]} fehlgeschlagen:`, error.message);
-            // Versuche nächsten Pfad
-            await tryFetch(paths, index + 1);
-        }
-    }
-    tryFetch(possiblePaths);
-}
 function cutAndCreate(responseText) {
     var obj = responseText.split("],[");
     for (let i = 0; i < obj.length; i++) {
@@ -319,16 +305,77 @@ function cutAndCreate(responseText) {
 }
 
 
-function uncheckAllTableCheckboxes() {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = false;
-    });
-    
-    // Reset auch die temp_remove Liste
-    if (Umgebung.temp_remove) {
-        Umgebung.temp_remove = [];
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const select = document.getElementById('refreshSelect');
+    const infoCounterLimit = document.getElementById('infoCounterLimit');
+    const cardCounterLimit = document.getElementById('cardCounterLimit');
+    if (!select) return;  // Nur auf der Admin-Seite ausführen
+    // Config laden
+    try {
+        console.log("Config wird geladen");
+        console.log("select: ", select);
+
+        const res = await fetch('/config/config.json');
+        if (!res.ok) throw new Error(`Config nicht gefunden (Status ${res.status})`);
+        const cfg = await res.json();
+
+        // Dropdown befüllen
+        createList(cfg.intervals, select);
+        createList(cfg.maxCountForInfoPages, infoCounterLimit);
+        createList(cfg.maxCountForInfoTerminals, cardCounterLimit);
+
+        console.log(cfg);
+        
+
+        saveList(select,"default");
+        saveList(infoCounterLimit,"defaultMaxCountForInfoPages");
+        saveList(cardCounterLimit,"defaultMaxCountForInfoTerminals");
+
+    } catch (err) {
+        console.error('Fehler beim Laden der Config:', err);
+        return;
     }
-    
-    console.log(`${checkboxes.length} Tabellen-Checkboxes wurden ausgeschaltet`);
+
+});
+
+function createList(cfg, select) {
+    cfg.forEach(i => {
+        const opt = document.createElement('option');
+        opt.value = i.value;
+        opt.textContent = i.name;
+        select.append(opt);
+        console.log(`Option hinzugefügt: ${i.name} (${i.value})`);
+
+    });
+}
+
+function saveList(select, name) {
+
+    select.addEventListener('change', async () => {
+        const newDefault = parseFloat(select.value);
+        console.log(`Neuer Default-Wert: ${newDefault}`);
+        console.log(`Name: ${name}`);
+        
+        
+        try {
+            const res = await fetch('/config/config.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: name, value: newDefault })
+            });
+            if (!res.ok) throw new Error(`Speichern fehlgeschlagen (Status ${res.status})`);
+            const result = await res.json();
+            if (result.success) {
+                alert('Default-Intervall gespeichert');
+            } else {
+                alert('Fehler: ' + result.error);
+            }
+        } catch (err) {
+            console.error('Fehler beim Speichern der Config:', err);
+            alert('Speicher-Fehler');
+        }
+    });
+
+
 }
