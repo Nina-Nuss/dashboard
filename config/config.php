@@ -1,6 +1,8 @@
 <?php
 // config.php erstellen
 
+use Dom\Document;
+
 header('Content-Type: application/json; charset=utf-8');
 
 // JSON-Daten aus dem Request lesen
@@ -12,7 +14,7 @@ if (!isset($data['name']) || !isset($data['value'])) {
     exit;
 }
 
-$configFile = __DIR__ . '/../config/config.json';
+$configFile = $_SERVER['DOCUMENT_ROOT'] . '/config/config.json';
 
 // Überprüfen, ob die Konfigurationsdatei lesbar und beschreibbar ist
 if (!is_readable($configFile) || !is_writable($configFile)) {

@@ -69,7 +69,7 @@
             width: 70vw;
             height: 795px;
             /* border: 1px solid black; */
-            margin: 0;
+            margin: 1px;
             box-sizing: border-box;
             /* <- verhinder Überlauf */
         }
@@ -85,7 +85,7 @@
             width: 70vw;
             height: 1600px;
             /* border: 1px solid black; */
-            margin: 0;
+            margin: 1px;
             box-sizing: border-box;
             /* <- verhinder Überlauf */
         }

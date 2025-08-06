@@ -159,7 +159,7 @@ input[type="checkbox"] {
     background-color: #006c99;
     transform: skew(-35deg);
     width: 98%;
-    margin-left: 3vh;
+    margin-left: 2vh;
     z-index: -1;
     overflow: hidden;
     align-items: center;
