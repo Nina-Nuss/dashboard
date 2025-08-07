@@ -37,7 +37,7 @@
         justify-content: center;
         align-items: center;
         width: 70vw;
-        height: 800px;
+        height: 780px;
         /* border: 1px solid black; */
         margin: 1px;
         box-sizing: border-box;

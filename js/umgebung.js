@@ -311,6 +311,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const infoCounterLimit = document.getElementById('infoCounterLimit');
     const cardCounterLimit = document.getElementById('cardCounterLimit');
     if (!select) return;  // Nur auf der Admin-Seite ausführen
+
     // Config laden
     try {
         console.log("Config wird geladen");
@@ -321,16 +322,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         const cfg = await res.json();
 
         // Dropdown befüllen
-        createList(cfg.intervals, select);
-        createList(cfg.maxCountForInfoPages, infoCounterLimit);
-        createList(cfg.maxCountForInfoTerminals, cardCounterLimit);
+        createList(cfg.intervals, select, cfg.default + " " + "Sek/stunden"); // falls du einen Default-Wert hast
+        createList(cfg.maxCountForInfoPages, infoCounterLimit, cfg.defaultMaxCountForInfoPages + " " + "Info-Seiten");
+        createList(cfg.maxCountForInfoTerminals, cardCounterLimit, cfg.defaultMaxCountForInfoTerminals + " " + "Terminals");
 
         console.log(cfg);
-        
 
-        saveList(select,"default");
-        saveList(infoCounterLimit,"defaultMaxCountForInfoPages");
-        saveList(cardCounterLimit,"defaultMaxCountForInfoTerminals");
+
+        saveList(select, "default");
+        saveList(infoCounterLimit, "defaultMaxCountForInfoPages");
+        saveList(cardCounterLimit, "defaultMaxCountForInfoTerminals");
 
     } catch (err) {
         console.error('Fehler beim Laden der Config:', err);
@@ -339,14 +340,21 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 });
 
-function createList(cfg, select) {
+function createList(cfg, select, defaultValue) {
+    select.innerHTML = ""; // Vorher leeren
+
+    // "Bitte wählen" als erste Option
+    const bitteWaehlen = document.createElement('option');
+    bitteWaehlen.value = "bitte wählen";
+    bitteWaehlen.textContent = defaultValue;
+    select.appendChild(bitteWaehlen);
+
     cfg.forEach(i => {
         const opt = document.createElement('option');
         opt.value = i.value;
         opt.textContent = i.name;
-        select.append(opt);
+           select.appendChild(opt);
         console.log(`Option hinzugefügt: ${i.name} (${i.value})`);
-
     });
 }
 
@@ -356,8 +364,10 @@ function saveList(select, name) {
         const newDefault = parseFloat(select.value);
         console.log(`Neuer Default-Wert: ${newDefault}`);
         console.log(`Name: ${name}`);
-        
-        
+        if (!newDefault) {
+            return;
+        }
+
         try {
             const res = await fetch('/config/config.php', {
                 method: 'POST',

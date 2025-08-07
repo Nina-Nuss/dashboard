@@ -26,6 +26,12 @@
         display: block;
         object-fit: contain;
     }
+
+
+    video::-webkit-media-controls {
+    display: none !important;
+}   
+
 </style>
 
 <body>

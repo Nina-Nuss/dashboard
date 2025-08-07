@@ -3,9 +3,15 @@ drop table infotherminal_schema;
 drop table schemas;
 drop table infotherminals; 
 
+ 
+
 CREATE DATABASE dbTerminal
 ; 
 
+
+
+
+USE dbTerminal;
 CREATE TABLE infotherminals (
     id INT NOT NULL IDENTITY(1,1),
     titel VARCHAR(50),

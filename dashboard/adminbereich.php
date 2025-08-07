@@ -117,7 +117,7 @@
                                         </div>
                                         <div class="form-group mb-3">
                                             <label for="cardCounterLimit" class="form-label">
-                                                <i class="fas fa-hashtag me-2"></i> Infoseite-Zeit:
+                                                <i class="fas fa-hashtag me-2"></i> Infoterminal-Limit:
                                             </label>
                                             <select id="cardCounterLimit" class="form-select" style="padding: 5px;">
                                                 <!-- Optionen werden per JS aus config.json befüllt -->
@@ -125,7 +125,7 @@
                                         </div>
                                         <div class="form-group mb-3">
                                             <label for="infoCounterLimit" class="form-label">
-                                                <i class="fas fa-hashtag me-2"></i> Infoterminal-Limit:
+                                                <i class="fas fa-hashtag me-2"></i> Infoseiten-Limit:
                                             </label>
                                             <select id="infoCounterLimit" class="form-select" style="padding: 5px;">
                                                 <!-- Optionen werden per JS aus config.json befüllt -->

@@ -58,7 +58,7 @@ class CardObj {
         }
         else if (videoExts.includes(ext)) {
             placeHolder = `
-    <video class="w-100" autoplay muted loop>
+    <video class="w-100" autoplay muted loop  >
       <source src="${src}">
       Ihr Browser unterstützt das Video-Tag nicht.
     </video>`;
@@ -445,7 +445,7 @@ class CardObj {
         console.log("End Time:", endTime.value);
         console.log("Start Time Range:", startTimeRange.value);
         console.log("End Time Range:", endTimeRange.value);
-
+        debugger
         if (startDate.value && endDate.value && startTime.value && endTime.value) {
             const startDateTime = combineDateTime(startDate.value, startTime.value);
             const endDateTime = combineDateTime(endDate.value, endTime.value);
@@ -471,7 +471,7 @@ class CardObj {
             console.log("Enddatum:", endDateOnly
             );
 
-            if (startDateOnly >= endDateOnly) {
+            if (startDateOnly > endDateOnly) {
                 alert("Der Beginn muss vor dem letzten Tag liegen.");
                 console.error("Ungültige Eingabe: Startdatum ist größer oder gleich dem Enddatum.");
                 CardObj.deleteDateTimeRange(cardObj.id);
@@ -486,18 +486,17 @@ class CardObj {
         } else if (startTime.value && endTime.value) {
             alert("Bitte geben Sie ein Start- und Enddatum ein, wenn Sie eine Start- und Endzeit angeben.");
             console.error("Ungültige Eingabe: Start- und Endzeit ohne Datum angegeben.");
-            dateTimefelderLeeren()
+            removeTimeRange(); 
             return;
         } else if (startTime.value && endDate.value) {
             alert("Bitte geben Sie ein Start- und Enddatum ein, wenn Sie eine Start- und Endzeit angeben.");
             console.error("Ungültige Eingabe: Startzeit ohne Startdatum angegeben.");
-            dateTimefelderLeeren()
             return;
         }
         else if (endTime.value && startDate.value) {
             alert("Bitte geben Sie ein Start- und Enddatum ein, wenn Sie eine Start- und Endzeit angeben.");
             console.error("Ungültige Eingabe: Endzeit ohne Enddatum angegeben.");
-            dateTimefelderLeeren()
+           
             return;
         }
         else if (startDate.value && startTime.value) {
@@ -584,12 +583,10 @@ class CardObj {
 
     }
 
-    static deleteDateTimeRange(objID) {
-        var btnDelDateTime = document.getElementById('delDateTimeRange');
+    static removeDateRange(objID) {
+        var btnDelDateTime = document.getElementById('delDateTime');
         var startDate = document.getElementById("startDate");
         var endDate = document.getElementById("endDate");
-        var startTime = document.getElementById("startTimeDate");
-        var endTime = document.getElementById("endTimeDate");
         if (btnDelDateTime && objID !== null) {
             startDate.value = "";
             endDate.value = "";
@@ -597,7 +594,18 @@ class CardObj {
             endTime.value = "";
         }
     }
-    static deleteTimeRange(objID) {
+
+    static removeTimeRangeFromDate(objID) {
+        var btnDelDateTime = document.getElementById('delDateTime');
+        var startTime = document.getElementById("startTimeDate");
+        var endTime = document.getElementById("endTimeDate");
+        if (btnDelDateTime &&startTime && endTime && objID !== null) {
+            startTime.value = "";
+            endTime.value = "";
+        }
+    }
+
+    static removeTimeRange(objID) {
         var btnDelTime = document.getElementById('delTimeRange');
         var startTimeRange = document.getElementById("startTimeRange");
         var endTimeRange = document.getElementById("endTimeRange");
@@ -618,9 +626,12 @@ window.addEventListener("load", async function () {
     }
 });
 
+
+
 function combineDateTime(date, time) {
     return new Date(`${date}T${time}`);
 }
+
 
 
 
