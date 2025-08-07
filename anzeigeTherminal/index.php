@@ -37,7 +37,7 @@
         justify-content: center;
         align-items: center;
         width: 70vw;
-        height: 780px;
+        height: 80vh;
         /* border: 1px solid black; */
         margin: 1px;
         box-sizing: border-box;
@@ -46,8 +46,8 @@
 
 
     .iframe-container iframe {
-        width: 100%;
-        height: 100%;
+        height: 75vh;
+        width: 75vw;
         border: none;
         object-fit: cover;
         display: block;
@@ -66,8 +66,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 70vw;
-            height: 600px;
+            width: 74vw;
+            height: 74vh;
             /* border: 1px solid black; */
             margin: 1px;
             box-sizing: border-box;
@@ -82,8 +82,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 70vw;
-            height: 1600px;
+            width: 75vw;
+            height: 75vh;
             /* border: 1px solid black; */
             margin: 1px;
             box-sizing: border-box;
