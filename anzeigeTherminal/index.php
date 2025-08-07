@@ -67,7 +67,7 @@
             justify-content: center;
             align-items: center;
             width: 70vw;
-            height: 795px;
+            height: 600px;
             /* border: 1px solid black; */
             margin: 1px;
             box-sizing: border-box;
