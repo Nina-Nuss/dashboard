@@ -36,8 +36,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 70vw;
-        height: 80vh;
+        width: 74vw;
+        height: 74vh;
         /* border: 1px solid black; */
         margin: 1px;
         box-sizing: border-box;
@@ -51,6 +51,7 @@
         border: none;
         object-fit: cover;
         display: block;
+        margin: 1px;
     }
 
     /* 
@@ -82,8 +83,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 75vw;
-            height: 75vh;
+            width: 74vw;
+            height: 74vh;
             /* border: 1px solid black; */
             margin: 1px;
             box-sizing: border-box;
