@@ -133,7 +133,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-12 text-end mt-2">
-                                                        <button id="delTimeRange" class="btn btn-outline-danger btn-sm px-3" onclick="CardObj.deleteTimeRange(CardObj.selectedID)">
+                                                        <button id="delTimeRange" class="btn btn-outline-danger btn-sm px-3" onclick="CardObj.removeTimeRange(CardObj.selectedID)">
                                                             <i class="fas fa-trash-alt"></i> Uhrzeit löschen
                                                         </button>
                                                     </div>

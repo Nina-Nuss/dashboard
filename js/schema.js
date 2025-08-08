@@ -503,7 +503,7 @@ class CardObj {
             } else if (startTime.value && endTime.value) {
                 alert("Bitte geben Sie ein Start- und Enddatum ein, wenn Sie eine Start- und Endzeit angeben.");
                 console.error("Ungültige Eingabe: Start- und Endzeit ohne Datum angegeben.");
-                CardObj.removeTimeRange(cardObj.id);
+                CardObj.removeDateRange(cardObj.id);
                 return;
             } else if (startTime.value && endDate.value) {
                 cardObj.startDate = getTodayDate() + " " + startTime.value;
@@ -568,7 +568,6 @@ class CardObj {
             cardObj.startDate = "";
             cardObj.endDate = "";
             cardObj.dateAktiv = false;
-            alert("Datum wurde nicht gespeichert, da die Eingabefelder nicht alle ausgefüllt sind.");
         }
         // Zeitbereich prüfen
         if (startTimeRange || endTimeRange) {
@@ -600,7 +599,7 @@ class CardObj {
                 cardObj.startTime = "";
                 cardObj.endTime = "";
                 cardObj.timeAktiv = false;
-                alert("tägliche Uhrzeit wurde nicht gespeichert, entweder nicht asugefüllt oder ungültig.");
+              
             }
         }else{
             cardObj.startTime = "";
