@@ -462,137 +462,151 @@ class CardObj {
         console.log("Start Time Range:", startTimeRange.value);
         console.log("End Time Range:", endTimeRange.value);
         debugger
-        if (startDate.value && endDate.value && startTime.value && endTime.value) {
-            const startDateTime = combineDateTime(startDate.value, startTime.value);
-            const endDateTime = combineDateTime(endDate.value, endTime.value);
+        if (startDate.value || endDate.value  || startTime.value || endTime.value) {
+            if (startDate.value && endDate.value && startTime.value && endTime.value) {
+                const startDateTime = combineDateTime(startDate.value, startTime.value);
+                const endDateTime = combineDateTime(endDate.value, endTime.value);
 
-            if (startDateTime >= endDateTime) {
-                alert("Ungültige Eingabe: Bis-Datum/Zeit kann nicht vor Von-Datum/Zeit liegen.");
-                console.error("Ungültige Eingabe: Startzeitpunkt ist größer oder gleich dem Endzeitpunkt.");
+                if (startDateTime >= endDateTime) {
+                    alert("Ungültige Eingabe: Bis-Datum/Zeit kann nicht vor Von-Datum/Zeit liegen.");
+                    console.error("Ungültige Eingabe: Startzeitpunkt ist größer oder gleich dem Endzeitpunkt.");
+                    return;
+                } else {
+                    cardObj.startDate = startDate.value + " " + "00:00"; // Setze das heutige Datum mit der Startzeit
+                    cardObj.endDate = endDate.value + " " + "23:59"; // Setze das heutige Datum mit der Endzeit
+                    cardObj.dateAktiv = true;
+                    console.log("alles klar, Datum und Zeit wurden gesetzt");
+                }
+            } else if (startDate.value && endDate.value) {
+                console.log("Startdatum:", startDate.value);
+                console.log("Enddatum:", endDate.value);
+
+                const startDateOnly = new Date(startDate.value);
+                const endDateOnly = new Date(endDate.value);
+                console.log("Startdatum:", startDateOnly
+                );
+                console.log("Enddatum:", endDateOnly
+                );
+
+                if (startDateOnly > endDateOnly) {
+                    alert("Der Beginn muss vor dem letzten Tag liegen.");
+                    console.error("Ungültige Eingabe: Startdatum ist größer oder gleich dem Enddatum.");
+                    CardObj.deleteDateTimeRange(cardObj.id);
+                    return;
+                } else {
+                    cardObj.startDate = startDate.value + " 00:00"; // Setze das heutige Datum mit der Startzeit
+                    cardObj.endDate = endDate.value + " 23:59"; // Setze das heutige Datum mit der Endzeit
+                    cardObj.dateAktiv = true;
+                    console.log("Datum wurde gesetzt");
+                }
+
+            } else if (startTime.value && endTime.value) {
+                alert("Bitte geben Sie ein Start- und Enddatum ein, wenn Sie eine Start- und Endzeit angeben.");
+                console.error("Ungültige Eingabe: Start- und Endzeit ohne Datum angegeben.");
+                CardObj.removeTimeRange(cardObj.id);
                 return;
-            } else {
+            } else if (startTime.value && endDate.value) {
+                cardObj.startDate = getTodayDate() + " " + startTime.value;
+                cardObj.endDate = endDate.value + " 23:59"; // Setze ein Standard-Enddatum
+                cardObj.dateAktiv = true;
+                return;
+            }
+            else if (endTime.value && startDate.value) {
+                alert("ohne das Enddatum kann keine Endzeit gesetzt werden.");
+                console.error("Ungültige Eingabe: Startzeit ohne Startdatum angegeben.");
+                return;
+            }
+            else if (startDate.value && startTime.value) {
+                cardObj.startDate = startDate.value + " " + startTime.value;
+                cardObj.endDate = "9999-12-31 23:59"; // Setze ein Standard-Enddatum
+                cardObj.dateAktiv = true;
+                console.log("Startdatum und Startzeit wurden gesetzt");
+            } else if (endDate.value && endTime.value) {
+                var now = new Date();
+                var endDateTime = new Date(endDate.value + " " + endTime.value);
+                if (endDateTime < now) {
+                    alert("Das Enddatum und die Endzeit müssen in der Zukunft liegen.");
+                    console.error("Ungültige Eingabe: Enddatum ist in der Vergangenheit.");
+                    return;
+                }
+                cardObj.endDate = endDate.value + " " + endTime.value;
+                cardObj.startDate = getTodayDate() + " 00:00"; // Setze ein Standard-Startdatum
+                cardObj.dateAktiv = true;
+                console.log("Enddatum wurde gesetzt");
+            } else if (endDate.value) {
+                const now = new Date(); // Aktuelles Datum und Uhrzeit
+                const endDateOnly = new Date(endDate.value); // Eingegebenes Enddatum
+                if (endDateOnly < now) {
+                    alert("Das Enddatum darf nicht in der Vergangenheit liegen.");
+                    console.error("Ungültige Eingabe: Enddatum liegt in der Vergangenheit.");
+                    return; // Verlasse die Funktion, wenn die Validierung fehlschlägt
+                }
+                cardObj.endDate = endDate.value + " 23:59"; // Setze ein Standard-Enddatum
+                cardObj.startDate = getTodayDate() + " 00:00"; // Setze ein Standard-Startdatum
+                cardObj.dateAktiv = true;
+
+            } else if (startDate.value) {
                 cardObj.startDate = startDate.value + " " + "00:00"; // Setze das heutige Datum mit der Startzeit
-                cardObj.endDate = endDate.value + " " + "23:59"; // Setze das heutige Datum mit der Endzeit
+                cardObj.endDate = "9999-12-31 23:59";
                 cardObj.dateAktiv = true;
-                console.log("alles klar, Datum und Zeit wurden gesetzt");
-            }
-        } else if (startDate.value && endDate.value) {
-            console.log("Startdatum:", startDate.value);
-            console.log("Enddatum:", endDate.value);
-
-            const startDateOnly = new Date(startDate.value);
-            const endDateOnly = new Date(endDate.value);
-            console.log("Startdatum:", startDateOnly
-            );
-            console.log("Enddatum:", endDateOnly
-            );
-
-            if (startDateOnly > endDateOnly) {
-                alert("Der Beginn muss vor dem letzten Tag liegen.");
-                console.error("Ungültige Eingabe: Startdatum ist größer oder gleich dem Enddatum.");
-                CardObj.deleteDateTimeRange(cardObj.id);
-                return;
-            } else {
-                cardObj.startDate = startDate.value + " 00:00"; // Setze das heutige Datum mit der Startzeit
-                cardObj.endDate = endDate.value + " 23:59"; // Setze das heutige Datum mit der Endzeit
-                cardObj.dateAktiv = true;
-                console.log("Datum wurde gesetzt");
-            }
-
-        } else if (startTime.value && endTime.value) {
-            alert("Bitte geben Sie ein Start- und Enddatum ein, wenn Sie eine Start- und Endzeit angeben.");
-            console.error("Ungültige Eingabe: Start- und Endzeit ohne Datum angegeben.");
-            CardObj.removeTimeRange(cardObj.id);
-            return;
-        } else if (startTime.value && endDate.value) {
-            cardObj.startDate = getTodayDate() + " " + startTime.value;
-            cardObj.endDate = endDate.value + " 23:59"; // Setze ein Standard-Enddatum
-            cardObj.dateAktiv = true;
-            return;
-        }
-        else if (endTime.value && startDate.value) {
-            alert("ohne das Enddatum kann keine Endzeit gesetzt werden.");
-            console.error("Ungültige Eingabe: Startzeit ohne Startdatum angegeben.");
-            return;
-        }
-        else if (startDate.value && startTime.value) {
-            cardObj.startDate = startDate.value + " " + startTime.value;
-            cardObj.endDate = "9999-12-31 23:59"; // Setze ein Standard-Enddatum
-            cardObj.dateAktiv = true;
-            console.log("Startdatum und Startzeit wurden gesetzt");
-        } else if (endDate.value && endTime.value) {
-            var now = new Date();
-            var endDateTime = new Date(endDate.value + " " + endTime.value);
-            if (endDateTime < now) {
-                alert("Das Enddatum und die Endzeit müssen in der Zukunft liegen.");
-                console.error("Ungültige Eingabe: Enddatum ist in der Vergangenheit.");
-                return;
-            }
-            cardObj.endDate = endDate.value + " " + endTime.value;
-            cardObj.startDate = getTodayDate() + " 00:00"; // Setze ein Standard-Startdatum
-            cardObj.dateAktiv = true;
-            console.log("Enddatum wurde gesetzt");
-        } else if (endDate.value) {
-            const now = new Date(); // Aktuelles Datum und Uhrzeit
-            const endDateOnly = new Date(endDate.value); // Eingegebenes Enddatum
-            if (endDateOnly < now) {
-                alert("Das Enddatum darf nicht in der Vergangenheit liegen.");
+            } else if (startTime.value) {
+                alert("Bitte geben Sie ein Start- und Enddatum ein, wenn Sie eine Start- und Endzeit angeben.");
+                console.error("Ungültige Eingabe: Enddatum liegt in der Vergangenheit.");
+                return; // Verlasse die Funktion, wenn die Validierung fehlschlägt
+            } else if (endTime.value) {
+                alert("Bitte geben Sie ein Start- und Enddatum ein, wenn Sie eine Start- und Endzeit angeben.");
                 console.error("Ungültige Eingabe: Enddatum liegt in der Vergangenheit.");
                 return; // Verlasse die Funktion, wenn die Validierung fehlschlägt
             }
-            cardObj.endDate = endDate.value + " 23:59"; // Setze ein Standard-Enddatum
-            cardObj.startDate = getTodayDate() + " 00:00"; // Setze ein Standard-Startdatum
-            cardObj.dateAktiv = true;
-
-        } else if (startDate.value) {
-            cardObj.startDate = startDate.value + " " + "00:00"; // Setze das heutige Datum mit der Startzeit
-            cardObj.endDate = "9999-12-31 23:59";
-            cardObj.dateAktiv = true;
-        } else if (startTime.value) {
-            alert("Bitte geben Sie ein Start- und Enddatum ein, wenn Sie eine Start- und Endzeit angeben.");
-            console.error("Ungültige Eingabe: Enddatum liegt in der Vergangenheit.");
-            return; // Verlasse die Funktion, wenn die Validierung fehlschlägt
-        } else if (endTime.value) {
-            alert("Bitte geben Sie ein Start- und Enddatum ein, wenn Sie eine Start- und Endzeit angeben.");
-            console.error("Ungültige Eingabe: Enddatum liegt in der Vergangenheit.");
-            return; // Verlasse die Funktion, wenn die Validierung fehlschlägt
-        }
-        else {
+            else {
+                cardObj.startDate = "";
+                cardObj.endDate = "";
+                cardObj.dateAktiv = false;
+                alert("Datum wurde nicht gespeichert, da die Eingabefelder nicht alle ausgefüllt sind.");
+            }
+        }else{
             cardObj.startDate = "";
             cardObj.endDate = "";
             cardObj.dateAktiv = false;
             alert("Datum wurde nicht gespeichert, da die Eingabefelder nicht alle ausgefüllt sind.");
         }
         // Zeitbereich prüfen
-        if (startTimeRange.value && endTimeRange.value) {
-            const startTimeOnly = combineDateTime("1970-01-01", startTimeRange.value);
-            const endTimeOnly = combineDateTime("1970-01-01", endTimeRange.value);
+        if (startTimeRange || endTimeRange) {
+            if (startTimeRange.value && endTimeRange.value) {
+                const startTimeOnly = combineDateTime("1970-01-01", startTimeRange.value);
+                const endTimeOnly = combineDateTime("1970-01-01", endTimeRange.value);
 
-            if (startTimeOnly >= endTimeOnly) {
-                alert("Die Startzeit muss vor der Endzeit liegen.");
-                console.error("Ungültige Eingabe: Startzeit ist größer oder gleich der Endzeit.");
-                return;
-            } else {
+                if (startTimeOnly >= endTimeOnly) {
+                    alert("Die Startzeit muss vor der Endzeit liegen.");
+                    console.error("Ungültige Eingabe: Startzeit ist größer oder gleich der Endzeit.");
+                    return;
+                } else {
+                    cardObj.startTime = startTimeRange.value;
+                    cardObj.endTime = endTimeRange.value;
+                    cardObj.timeAktiv = true;
+                    console.log("Zeitbereich wurde gesetzt");
+                }
+            } else if (startTimeRange.value) {
                 cardObj.startTime = startTimeRange.value;
-                cardObj.endTime = endTimeRange.value;
+                cardObj.endTime = "23:59"; // Setze einen Standardwert, wenn nur Startzeit gesetzt ist
                 cardObj.timeAktiv = true;
-                console.log("Zeitbereich wurde gesetzt");
+                console.log("Startzeit wurde gesetzt");
+            } else if (endTimeRange.value) {
+                cardObj.endTime = endTimeRange.value;
+                cardObj.startTime = "00:00"; // Setze einen Standardwert, wenn nur Endzeit gesetzt ist
+                cardObj.timeAktiv = true;
+                console.log("Endzeit wurde gesetzt");
+            } else {
+                cardObj.startTime = "";
+                cardObj.endTime = "";
+                cardObj.timeAktiv = false;
+                alert("tägliche Uhrzeit wurde nicht gespeichert, entweder nicht asugefüllt oder ungültig.");
             }
-        } else if (startTimeRange.value) {
-            cardObj.startTime = startTimeRange.value;
-            cardObj.endTime = "23:59"; // Setze einen Standardwert, wenn nur Startzeit gesetzt ist
-            cardObj.timeAktiv = true;
-            console.log("Startzeit wurde gesetzt");
-        } else if (endTimeRange.value) {
-            cardObj.endTime = endTimeRange.value;
-            cardObj.startTime = "00:00"; // Setze einen Standardwert, wenn nur Endzeit gesetzt ist
-            cardObj.timeAktiv = true;
-            console.log("Endzeit wurde gesetzt");
-        } else {
+        }else{
             cardObj.startTime = "";
             cardObj.endTime = "";
             cardObj.timeAktiv = false;
-            alert("tägliche Uhrzeit wurde nicht gespeichert, entweder ein Fehler, oder ");
+           
         }
 
     }
