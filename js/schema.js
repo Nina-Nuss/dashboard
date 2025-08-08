@@ -915,6 +915,7 @@ function deakAktivCb(aktiv) {
     if (aktiv == true) {
         timerbereich.disabled = true; // Deaktiviert den Timerbereich
         titel.disabled = true; // Deaktiviert das Titel-Eingabefeld
+        titel.value = "bitte wählen sie eine Infoseite"; // Setzt den Titel auf leer
         checkA.disabled = true; // Deaktiviert die Aktiv-Checkbox
         btn_hinzufuegen.disabled = true; // Deaktiviert den Hinzufügen-
         btn_loeschen.disabled = true; // Deaktiviert den Löschen-Button
