@@ -32,51 +32,39 @@
                                     <div class="card-body w-25">
                                         <div class="mb-3">
                                             <label for="websiteName" class="form-label">Infoseite Name: </label>
-                                            <input type="text" class="form-control" id="websiteName" value="Snapbar_Warm" readonly>
+                                            <input type="text" class="form-control" id="websiteName" value="bitte Infoseite auswählen" readonly>
                                         </div>
 
                                         <div class="form-check mb-3">
+                                         
                                             <input class="form-check-input" type="checkbox" id="checkA" name="checkA" onchange="CardObj.checkAktiv()">
                                             <label class="form-check-label" for="checkA">
-                                                Aktiv
+                                                anzeigen
                                             </label>
                                         </div>
 
                                         <div class="form-group mb-3">
-                                            <label for="timerSelectRange" class="form-label">Dauer:</label>
+                                            <label for="timerSelectRange" class="form-label">Anzeige-Dauer:</label>
                                             <select class="form-select form-control" id="timerSelectRange" onchange="CardObj.setTimerRange(this.value)">
                                                 <option value="3000">3 Sekunden</option>
-                                                <option value="4000">4 Sekunden</option>
+                                              
                                                 <option value="5000">5 Sekunden</option>
-                                                <option value="6000">6 Sekunden</option>
-                                                <option value="7000">7 Sekunden</option>
-                                                <option value="8000">8 Sekunden</option>
-                                                <option value="9000">9 Sekunden</option>
+                                               
                                                 <option value="10000">10 Sekunden</option>
-                                                <option value="11000">11 Sekunden</option>
-                                                <option value="12000">12 Sekunden</option>
-                                                <option value="13000">13 Sekunden</option>
-                                                <option value="14000">14 Sekunden</option>
+                                               
                                                 <option value="15000">15 Sekunden</option>
-                                                <option value="16000">16 Sekunden</option>
-                                                <option value="17000">17 Sekunden</option>
-                                                <option value="18000">18 Sekunden</option>
-                                                <option value="19000">19 Sekunden</option>
+                                              
                                                 <option value="20000">20 Sekunden</option>
-                                                <option value="21000">21 Sekunden</option>
-                                                <option value="22000">22 Sekunden</option>
-                                                <option value="23000">23 Sekunden</option>
-                                                <option value="24000">24 Sekunden</option>
+                                                
                                                 <option value="25000">25 Sekunden</option>
-                                                <option value="26000">26 Sekunden</option>
-                                                <option value="27000">27 Sekunden</option>
-                                                <option value="28000">28 Sekunden</option>
-                                                <option value="29000">29 Sekunden</option>
+                                                
                                                 <option value="30000">30 Sekunden</option>
+                                                <option value="45000">45 Sekunden</option>
+                                                <option value="60000">1 Minute</option>
                                             </select>
                                         </div>
 
-                                        <div class="form-group mb-2">
+                                        <!-- <div class="form-group mb-2">
                                             <div class="d-flex align-items-center mt-4 p-2 justify-content-between">
                                                 <div class="d-flex align-items-center">
                                                     <label for="selectSekunden" class="me-2">Sekunden:</label>
@@ -86,16 +74,13 @@
                                                     <label for="selectMinuten" class="me-2">Minuten:</label>
                                                     <input type="text" id="selectMinuten" class="form-control" maxlength="2" style="width: 50px;">
                                                 </div>
-                                                <div class="d-flex align-items-center">
-                                                    <label for="selectStunden" class="me-2">Stunden:</label>
-                                                    <input type="text" id="selectStunden" class="form-control" maxlength="1" style="width: 50px;">
-                                                </div>
+                                            
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <div class="card-body w-25">
                                         <div class="mb-2">
-                                            <label class="form-label fw-bold mb-2">Zeit-Konfigurieren</label>
+                                            <label class="form-label fw-bold">Zeit-Konfigurieren</label>
                                             <div class="btn-group w-100" role="group">
                                                 <button class="btn btn-outline-primary" type="button" id="btnShowZeitraum" onclick="showDateTime('zeitspanne')">
                                                     <i class="bi bi-calendar-range me-1"></i> Datum & Uhrzeit
@@ -129,7 +114,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-12 text-end mt-2">
-                                                        <button id="delDateTimeRange" class="btn btn-outline-danger btn-sm px-3" onclick="CardObj.deleteDateTimeRange(CardObj.selectedID)">
+                                                        <button id="btnDelDateTime" class="btn btn-outline-danger btn-sm px-3" onclick="CardObj.deleteDateTimeRange(CardObj.selectedID)">
                                                             <i class="fas fa-trash-alt"></i> Zeitspanne löschen
                                                         </button>
                                                     </div>

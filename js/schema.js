@@ -74,14 +74,14 @@ class CardObj {
                     <small class="text-muted">Uhrzeit: ${this.startTime} - ${this.endTime}</small>
                 </div>
                 ${placeHolder}
-                <div class="card-body pt-1 pb-1">
+                <div class="card-body small-card-body">
                     <h5 class="card-title m-0">${this.titel}</h5>
                     <p class="card-text m-0">${this.beschreibung}</p>
-                    <div class="form-check">
+                    <small class="form-check">
                         <input class="form-check-input single-active-checkbox" type="checkbox" value="" id="flexCheck${this.id}">
                         <label class="form-check-label" name="label${this.id}" for="flexCheck${this.id}"></label>
-                        
-                    </div>
+
+                    </small>
                     <div class="form-check">
                         <small id="${this.selectedTimerLabel}" class="text-muted">Dauer: ${this.selectedTime / 1000} sekunde</small>
                     </div>
@@ -327,9 +327,7 @@ class CardObj {
         }
     }
 
-    static prepareObjForUpdate(obj) {
-        // Hier können Sie das Objekt in den Zustand für die Aktualisierung versetzen
-        CardObj.checkAktiv()
+    static prepareSelectedTimer() {
         var selectSekunden = parseInt(document.getElementById("selectSekunden").value) || 0; // Falls leer, wird 0 verwendet
         var selectMinuten = parseInt(document.getElementById("selectMinuten").value) || 0; // Falls leer, wird 0 verwendet
         var selectStunden = parseInt(document.getElementById("selectStunden").value) || 0; // Falls leer, wird 0 verwendet
@@ -345,6 +343,12 @@ class CardObj {
             obj.selectedTime = 0; // Setze auf 0, wenn keine Eingabe vorhanden ist
             console.log("Keine Zeit ausgewählt, setze auf 0");
         }
+
+    }
+
+    static prepareObjForUpdate(obj) {
+        // Hier können Sie das Objekt in den Zustand für die Aktualisierung versetzen
+        CardObj.checkAktiv()
 
 
         var timerSelect = document.getElementById("timerSelectRange");
@@ -390,19 +394,31 @@ class CardObj {
         timerbereich.value = cardObj.selectedTime; // Set the time range
         var selectedTime = cardObj.selectedTime / 1000; // Convert milliseconds to seconds
 
-
         var startTimeSplit = cardObj.startDate.split(" ")[1];
         var startDateSplit = cardObj.startDate.split(" ")[0];
+
 
         var endTimeSplit = cardObj.endDate.split(" ")[1];
         var endDateSplit = cardObj.endDate.split(" ")[0];
 
-        endDate.value = endDateSplit;
-        endTimeDate.value = endTimeSplit;
 
-        startDate.value = startDateSplit;
+
+        if (!startTimeSplit || !startDateSplit) {
+            console.error("Startzeit oder Startdatum ist ungültig:", cardObj.startDate);
+            return;
+        }
+
+        if (!endTimeSplit || !endDateSplit) {
+            console.error("Endzeit oder Enddatum ist ungültig:", cardObj.endDate);
+            return;
+        }
+
+        console.log("Startzeit:", startDateSplit, startTimeSplit);
+
+        startDate.value = startDateSplit
+        endDate.value = endDateSplit; // Set the end date
         startTimeDate.value = startTimeSplit;
-
+        endTimeDate.value = endTimeSplit; // Set the end time
         startTimeRange.value = cardObj.startTime;
         endTimeRange.value = cardObj.endTime;
         // startTimeRange.value = cardObj.startTime;
@@ -451,14 +467,14 @@ class CardObj {
             const endDateTime = combineDateTime(endDate.value, endTime.value);
 
             if (startDateTime >= endDateTime) {
-                alert("Das Startdatum und die Startzeit müssen vor dem Enddatum und der Endzeit liegen.");
+                alert("Ungültige Eingabe: Bis-Datum/Zeit kann nicht vor Von-Datum/Zeit liegen.");
                 console.error("Ungültige Eingabe: Startzeitpunkt ist größer oder gleich dem Endzeitpunkt.");
                 return;
             } else {
-                cardObj.startDate = startDate.value + " " + startTime.value;
-                cardObj.endDate = endDate.value + " " + endTime.value;
+                cardObj.startDate = startDate.value + " " + "00:00"; // Setze das heutige Datum mit der Startzeit
+                cardObj.endDate = endDate.value + " " + "23:59"; // Setze das heutige Datum mit der Endzeit
                 cardObj.dateAktiv = true;
-                console.log("Datum und Uhrzeit wurden gesetzt");
+                console.log("alles klar, Datum und Zeit wurden gesetzt");
             }
         } else if (startDate.value && endDate.value) {
             console.log("Startdatum:", startDate.value);
@@ -477,8 +493,8 @@ class CardObj {
                 CardObj.deleteDateTimeRange(cardObj.id);
                 return;
             } else {
-                cardObj.startDate = startDate.value;
-                cardObj.endDate = endDate.value;
+                cardObj.startDate = startDate.value + " 00:00"; // Setze das heutige Datum mit der Startzeit
+                cardObj.endDate = endDate.value + " 23:59"; // Setze das heutige Datum mit der Endzeit
                 cardObj.dateAktiv = true;
                 console.log("Datum wurde gesetzt");
             }
@@ -486,17 +502,17 @@ class CardObj {
         } else if (startTime.value && endTime.value) {
             alert("Bitte geben Sie ein Start- und Enddatum ein, wenn Sie eine Start- und Endzeit angeben.");
             console.error("Ungültige Eingabe: Start- und Endzeit ohne Datum angegeben.");
-            removeTimeRange(); 
+            CardObj.removeTimeRange(cardObj.id);
             return;
         } else if (startTime.value && endDate.value) {
-            alert("Bitte geben Sie ein Start- und Enddatum ein, wenn Sie eine Start- und Endzeit angeben.");
-            console.error("Ungültige Eingabe: Startzeit ohne Startdatum angegeben.");
+            cardObj.startDate = getTodayDate() + " " + startTime.value;
+            cardObj.endDate = endDate.value + " 23:59"; // Setze ein Standard-Enddatum
+            cardObj.dateAktiv = true;
             return;
         }
         else if (endTime.value && startDate.value) {
-            alert("Bitte geben Sie ein Start- und Enddatum ein, wenn Sie eine Start- und Endzeit angeben.");
-            console.error("Ungültige Eingabe: Endzeit ohne Enddatum angegeben.");
-           
+            alert("ohne das Enddatum kann keine Endzeit gesetzt werden.");
+            console.error("Ungültige Eingabe: Startzeit ohne Startdatum angegeben.");
             return;
         }
         else if (startDate.value && startTime.value) {
@@ -513,7 +529,7 @@ class CardObj {
                 return;
             }
             cardObj.endDate = endDate.value + " " + endTime.value;
-            cardObj.startDate = "1970-01-01 00:00"; // Setze ein Standard-Startdatum
+            cardObj.startDate = getTodayDate() + " 00:00"; // Setze ein Standard-Startdatum
             cardObj.dateAktiv = true;
             console.log("Enddatum wurde gesetzt");
         } else if (endDate.value) {
@@ -525,23 +541,21 @@ class CardObj {
                 return; // Verlasse die Funktion, wenn die Validierung fehlschlägt
             }
             cardObj.endDate = endDate.value + " 23:59"; // Setze ein Standard-Enddatum
-            cardObj.startDate = "1970-01-01 00:00"; // Setze ein Standard-Startdatum
+            cardObj.startDate = getTodayDate() + " 00:00"; // Setze ein Standard-Startdatum
             cardObj.dateAktiv = true;
 
-        } else if (startDate.value) { 
-            cardObj.startDate = getTodayDate();
-            cardObj.endDate = getTodayDate();
+        } else if (startDate.value) {
+            cardObj.startDate = startDate.value + " " + "00:00"; // Setze das heutige Datum mit der Startzeit
+            cardObj.endDate = "9999-12-31 23:59";
             cardObj.dateAktiv = true;
         } else if (startTime.value) {
-            cardObj.startDate = getTodayDate() + " " + startTime.value; // Setze das heutige Datum mit der Startzeit
-            cardObj.endDate = getTodayDate() + " 23:59"; // Setze das heutige Datum mit der Endzeit
-            cardObj.dateAktiv = true;
-            console.log("Startzeit wurde gesetzt");
+            alert("Bitte geben Sie ein Start- und Enddatum ein, wenn Sie eine Start- und Endzeit angeben.");
+            console.error("Ungültige Eingabe: Enddatum liegt in der Vergangenheit.");
+            return; // Verlasse die Funktion, wenn die Validierung fehlschlägt
         } else if (endTime.value) {
-            cardObj.startDate = getTodayDate() + " " + "00:00"; // Setze das heutige Datum mit der Startzeit
-            cardObj.endDate = getTodayDate() + " " + endTime.value; // Setze das heutige Datum mit der Endzeit
-            cardObj.dateAktiv = true;
-            console.log("Endzeit wurde gesetzt");
+            alert("Bitte geben Sie ein Start- und Enddatum ein, wenn Sie eine Start- und Endzeit angeben.");
+            console.error("Ungültige Eingabe: Enddatum liegt in der Vergangenheit.");
+            return; // Verlasse die Funktion, wenn die Validierung fehlschlägt
         }
         else {
             cardObj.startDate = "";
@@ -578,15 +592,17 @@ class CardObj {
             cardObj.startTime = "";
             cardObj.endTime = "";
             cardObj.timeAktiv = false;
-            alert("Zeitbereich wurde nicht gespeichert, da die Eingabefelder nicht alle ausgefüllt sind.");
+            alert("tägliche Uhrzeit wurde nicht gespeichert, entweder ein Fehler, oder ");
         }
 
     }
 
     static removeDateRange(objID) {
-        var btnDelDateTime = document.getElementById('delDateTime');
+        var btnDelDateTime = document.getElementById('btnDelDateTime');
         var startDate = document.getElementById("startDate");
         var endDate = document.getElementById("endDate");
+        var startTime = document.getElementById("startTimeDate");
+        var endTime = document.getElementById("endTimeDate");
         if (btnDelDateTime && objID !== null) {
             startDate.value = "";
             endDate.value = "";
@@ -596,12 +612,14 @@ class CardObj {
     }
 
     static removeTimeRangeFromDate(objID) {
-        var btnDelDateTime = document.getElementById('delDateTime');
+        debugger
+        var btnDelDateTime = document.getElementById('btnDelDateTime');
         var startTime = document.getElementById("startTimeDate");
         var endTime = document.getElementById("endTimeDate");
-        if (btnDelDateTime &&startTime && endTime && objID !== null) {
-            startTime.value = "";
-            endTime.value = "";
+
+        if (btnDelDateTime && startTime && endTime && objID !== null) {
+            startTime.innerHTML = "";
+            endTime.innerHTML = "";
         }
     }
 
@@ -612,6 +630,19 @@ class CardObj {
         if (btnDelTime && objID !== null) {
             startTimeRange.value = '';
             endTimeRange.value = '';
+        }
+    }
+
+    static deleteDateTimeRange(objID) {
+        console.log("deleteDateTimeRange aufgerufen für CardObjektID:", objID);
+
+        var btnDelDateTime = document.getElementById('btnDelDateTime');
+        if (btnDelDateTime && objID !== null) {
+            CardObj.removeDateRange(objID);
+            CardObj.removeTimeRangeFromDate(objID);
+            console.log("Datum und Zeitbereich wurden gelöscht");
+        } else {
+            console.error("Button oder Objekt-ID nicht gefunden");
         }
     }
 

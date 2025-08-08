@@ -29,6 +29,7 @@
         display: flex;
         flex-direction: column;
         padding: 0%;
+        z-index: 1;
 
     }
 
@@ -46,8 +47,8 @@
 
 
     .iframe-container iframe {
-        height: 75vh;
-        width: 75vw;
+        height: 74vh;
+        width: 74vw;
         border: none;
         object-fit: cover;
         display: block;
@@ -95,7 +96,7 @@
 </head>
 
 
-<header class="pl-3">
+<header>
     <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/header.php'; ?>
 </header>
 

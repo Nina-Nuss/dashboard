@@ -2,9 +2,9 @@
 
 
 
-// $serverName = "10.1.6.3";  // IP-Adresse direkt
+$serverName = "10.1.6.3";  // IP-Adresse direkt
 
-$serverName = "Nina\SQLEXPRESS";
+// $serverName = "Nina\SQLEXPRESS";
 
 
 // $serverName = "10.1.6.3\\SQLEXPRESS"; // IP mit Named Instance
@@ -16,8 +16,8 @@ $connectionOptions = array(
     "CharacterSet" => "UTF-8",
     "TrustServerCertificate" => true,  // Entspricht "Serverzertifikat vertrauen"
     "Encrypt" => true,                 // Entspricht "Verschlüsselung: Obligatorisch"
-    // "UID" => "sa",                     // SQL Server Authentication Benutzername
-    // "PWD" => "A%00000p&",               // SQL Server Authentication Passwort
+    "UID" => "sa",                     // SQL Server Authentication Benutzername
+    "PWD" => "A%00000p&",               // SQL Server Authentication Passwort
 
 );
 // ...existing code...
