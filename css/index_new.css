@@ -9,17 +9,18 @@ body {
     width: 100%;
 }
 
-.cardContainer{
+.cardContainer {
     height: 700px;
-    
+
 }
 
-.card-img-top{
+.card-img-top {
     width: 100%;
     height: 150px;
     object-fit: cover;
 }
-.card-deck{
+
+.card-deck {
     height: 400px;
     padding: 5px;
 }
@@ -54,7 +55,7 @@ input[type="checkbox"] {
 }
 
 
-#btnPosition button{
+#btnPosition button {
     width: 100%;
     height: 100%;
 
@@ -63,7 +64,7 @@ input[type="checkbox"] {
 #btnPosition {
     margin: 0px !important;
     padding: 0px !important;
-    
+
 }
 
 #deleteBtnForInfotherminal {
@@ -157,11 +158,14 @@ input[type="checkbox"] {
 }
 
 .parallelogram {
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 3px 5px 0 rgba(0, 0, 0, 0.19);
+   box-shadow:
+        0 2px 4px 0 rgba(0, 0, 0, 0.2),
+        0 3px 5px 0 rgba(0, 0, 0, 0.19),
+        0 0 30px 5px rgba(255, 255, 255, 0.7); /* Licht-Effekt (gelblich) */
     background-color: #006c99;
     transform: skew(-35deg);
     width: 98%;
-    margin-left: 2vh;
+    margin-left: 1vw;
     z-index: -1;
     overflow: hidden;
     align-items: center;
@@ -276,16 +280,16 @@ hr {
     width: 33.33%;
 }
 
-.materialDesigne{
+.materialDesigne {
     padding-bottom: 0px !important;
-} 
+}
 
 #IP_Adress {
     height: 100%;
     align-items: center;
 }
 
-#IP_Adresse_main{
+#IP_Adresse_main {
     width: 40vh;
     float: left;
 }
@@ -325,11 +329,9 @@ hr {
     border: none;
     display: flex;
     justify-content: center;
-   
+
 }
 
 .button_time:hover {
     background-color: grey;
 }
-
-
