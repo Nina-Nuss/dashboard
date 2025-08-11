@@ -13,7 +13,7 @@ window.onload = async function () {
     const ipAdress = await getSystemPath();
     console.log("IP-Adresse:", ipAdress);
 
-    
+
     try {
         await CardObj.update();
     } catch (error) {
@@ -105,6 +105,7 @@ function extractNumberFromString(str) {
     return match ? match[0] : null;
 }
 
+
 async function readDatabase(databaseUrl) {
     const listUmgebung = await selectObj(`../database/${databaseUrl}.php`)
     return listUmgebung;
@@ -140,7 +141,12 @@ function showDateTime(type) {
 
 
 function findObj(list, id) {
-    const number = extractNumberFromString(id);
+    if (typeof id === "string") {
+        var number = extractNumberFromString(id);
+    } else {
+        var number = id; // Falls id bereits eine Zeichenkette ist
+    }
+
     if (!Array.isArray(list)) {
         console.warn('findObj: list ist kein Array');
         return null;
@@ -263,6 +269,8 @@ async function updateDataBase(cardObj, databaseUrl) {
         console.error("Fehler in updateDataBase:", error);
     }
 }
+
+
 
 // Neue Funktion für Modal Focus-Management
 function setupModalFocusManagement() {

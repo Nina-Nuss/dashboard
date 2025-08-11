@@ -73,9 +73,11 @@ class Umgebung {
     static async update() {
         var delInfo = document.getElementById("deleteInfotherminal");
         const selector = document.getElementById('infotherminalSelect');
+        const selectorForCards = document.getElementById('selectorInfoterminalForCards');
         let delInfoRows = ""; // String für Tabellenzeilen
 
         let selectorOptions = '<option value="">-- Bitte wählen --</option>';
+        let selectorOptionsForCards = '<option value="">-- wähle Infoterminal --</option>';
         this.list = [];
         this.temp_remove = [];
         console.log("Update wird aufgerufen von Umgebung.js");
@@ -96,7 +98,9 @@ class Umgebung {
                 </tr>`;
             // Selector-Optionen sammeln
             selectorOptions += `<option value="${listInfo[1]}">${listInfo[1]}</option>`;
+            selectorOptionsForCards += `<option value="${listInfo[0]}">${listInfo[1]}</option>`;
         });
+
         if (delInfo) {
             delInfo.innerHTML = delInfoRows;
         }
@@ -104,6 +108,9 @@ class Umgebung {
         // DOM nur einmal aktualisieren (bessere Performance)
         if (selector) {
             selector.innerHTML = selectorOptions;
+        }
+        if(selectorForCards){
+            selectorForCards.innerHTML = selectorOptionsForCards;
         }
         console.log(this.list);
     }
@@ -203,19 +210,15 @@ class Umgebung {
     }
 
     static erstelleSelector() {
-
         const selector = document.getElementById('infotherminalSelect');
         const button = document.getElementById('openTerminalBtn');
-
         if (!selector || !button) {
             console.error("Selector oder Button nicht gefunden.");
             return;
         }
         // Selector nur einmal befüllen und Event-Listener nur einmal hinzufügen
-
         // Selector leeren
         selector.innerHTML = '<option value="">-- Bitte wählen --</option>';
-
         // Event-Listener nur einmal hinzufügen (außerhalb der forEach-Schleife)
         button.addEventListener('click', function () {
             console.log("Button zum Öffnen des Terminals wurde geklickt");
@@ -226,17 +229,26 @@ class Umgebung {
                 window.open(url, '_blank');
             }
         });
-
-        Umgebung.list.forEach(element => {
-            console.log(element);
-
-            // Selector Option hinzufügen
-            const option = document.createElement("option");
-            option.value = element.titel;
-            option.textContent = element.titel;
-            selector.appendChild(option);
-        });
     }
+
+    static erstelleSelectorForCardObj() {
+        var selectorInfoterminal = document.getElementById("selectorInfoterminal");
+        if (selectorInfoterminal != null) {
+            selectorInfoterminal.innerHTML = ""
+            selectorInfoterminal.innerHTML = `<option value="">Alle Infoterminals</option>`;
+            console.log(Umgebung.list.length);
+                console.log("Infoterminals vorhanden:", Umgebung.list);
+                Umgebung.list.forEach(umgebung => {
+                    selectorInfoterminal.innerHTML += `<option value="${umgebung.id}">${umgebung.name}</option>`;
+                });
+            selectorInfoterminal.addEventListener("change", function (event) {
+                console.log("ruby chaaaaaaaaany haaay");
+                console.log(event.target.value);
+            });
+        }
+
+    }
+
 
 }
 
@@ -255,6 +267,9 @@ window.addEventListener("load", async function () {
     }
 
     Umgebung.erstelleSelector();
+
+    Umgebung.erstelleSelectorForCardObj();
+
     var formID = document.getElementById('formID');
     if (formID) {
         formID.addEventListener('submit', function (event) {
@@ -292,6 +307,8 @@ window.addEventListener("load", async function () {
 function wait(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+
 
 
 
@@ -353,7 +370,7 @@ function createList(cfg, select, defaultValue) {
         const opt = document.createElement('option');
         opt.value = i.value;
         opt.textContent = i.name;
-           select.appendChild(opt);
+        select.appendChild(opt);
         console.log(`Option hinzugefügt: ${i.name} (${i.value})`);
     });
 }

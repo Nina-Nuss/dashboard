@@ -78,8 +78,8 @@ class CardObj {
                     <h5 class="card-title m-0">${this.titel}</h5>
                     <p class="card-text m-0">${this.beschreibung}</p>
                     <small class="form-check">
-                        <input class="form-check-input single-active-checkbox" type="checkbox" value="" id="flexCheck${this.id}">
-                        <label class="form-check-label" name="label${this.id}" for="flexCheck${this.id}"></label>
+                        <input class="form-check-input single-active-checkbox" type="checkbox" value="" id="flexCheck${this.id}" onclick="erstelleFunktionForCardObj(${this.id})">
+                        <label class="form-check-label" id="label${this.id}" name="label${this.id}" for="flexCheck${this.id}"></label>
 
                     </small>
                     <div class="form-check">
@@ -462,7 +462,7 @@ class CardObj {
         console.log("Start Time Range:", startTimeRange.value);
         console.log("End Time Range:", endTimeRange.value);
         debugger
-        if (startDate.value || endDate.value  || startTime.value || endTime.value) {
+        if (startDate.value || endDate.value || startTime.value || endTime.value) {
             if (startDate.value && endDate.value && startTime.value && endTime.value) {
                 const startDateTime = combineDateTime(startDate.value, startTime.value);
                 const endDateTime = combineDateTime(endDate.value, endTime.value);
@@ -564,7 +564,7 @@ class CardObj {
                 cardObj.dateAktiv = false;
                 alert("Datum wurde nicht gespeichert, da die Eingabefelder nicht alle ausgefüllt sind.");
             }
-        }else{
+        } else {
             cardObj.startDate = "";
             cardObj.endDate = "";
             cardObj.dateAktiv = false;
@@ -599,13 +599,13 @@ class CardObj {
                 cardObj.startTime = "";
                 cardObj.endTime = "";
                 cardObj.timeAktiv = false;
-              
+
             }
-        }else{
+        } else {
             cardObj.startTime = "";
             cardObj.endTime = "";
             cardObj.timeAktiv = false;
-           
+
         }
 
     }
@@ -844,57 +844,51 @@ function createBodyCardObj() {
 
     });
     console.log(CardObj.list);
-    const cbForSelectSchema = document.querySelectorAll('[id^="flexCheck"]')
-    const labels = document.querySelectorAll('label[name^="label"]');
     console.log(cbForSelectSchema.length);
     // Alle Checkboxen mit ID, die mit "flexCheck" beginnt, auswählen und loopen
-    cbForSelectSchema.forEach(checkbox => {
-        // Hier kannst du mit jeder Checkbox arbeiten
-        checkbox.addEventListener('change', function () {
-            if (this.checked) {
-                const id = extractNumberFromString(this.id);
-                CardObj.selectedID = id; // Set the selected ID
-                var obj = findObj(CardObj.list, id);
-                deakAktivCb(false);
-                CardObj.loadChanges(obj); // Load changes for the selected CardObj
-                // CardObj.DateTimeHandler(obj);
-                cbForSelectSchema.forEach(cb => {
-                    if (cb !== this) {
-                        cb.checked = false;
-                    }
-                });
-                labels.forEach(label => {
-                    const labelId = extractNumberFromString(label.getAttribute('name'));
-                    if (labelId == CardObj.selectedID) {
-                        label.innerHTML = "Ausgewählt"; // Set the label text to "checked" when checked
-                        var label = label;
-
-                    } else {
-                        label.innerHTML = ""; // Clear the label text for unchecked checkboxes
-                        console.log("Checkbox mit ID " + labelId + " wurde deaktiviert.");
-
-                    }
-                });
-            } else {
-                var checkA = document.getElementById("checkA");
-                var btn_save_changes = document.getElementById("btn_save_changes");
-                deakAktivCb(true);
-
-                CardObj.selectedID = null; // Reset the selected ID
-                labels.forEach(label => {
-                    label.innerHTML = ""; // Clear the label text for unchecked checkboxes
-                });
-                checkA.checked = false;
-
-            }
-            Beziehungen.update(CardObj.selectedID);
-
-
-        });
-    });
-
 
 };
+
+function erstelleFunktionForCardObj(objID) {
+    const checkbox = document.getElementById(`flexCheck${objID}`);
+    const label = document.getElementById(`label${objID}`);
+    const cbForSelectSchema = document.querySelectorAll('[id^="flexCheck"]');
+    const labelForSelectSchema = document.querySelectorAll('[id^="label"]');
+    if (checkbox.checked) {
+        console.log("moew uwu kabum omi");
+        const id = extractNumberFromString(checkbox.id);
+        CardObj.selectedID = id; // Set the selected ID
+        var obj = findObj(CardObj.list, id);
+        deakAktivCb(false);
+        CardObj.loadChanges(obj); // Load changes for the selected CardObj
+        // CardObj.DateTimeHandler(obj);
+    
+        cbForSelectSchema.forEach(cb => {
+            console.log(id + " " + extractNumberFromString(cb.id));
+           
+            if (id !== extractNumberFromString(cb.id)) {
+                cb.checked = false;
+            }
+        });
+        if (objID == CardObj.selectedID) {
+            label.innerHTML = "Ausgewählt"; // Set the label text to "checked" when checked
+        } else {
+            label.innerHTML = ""; // Clear the label text for unchecked checkboxes
+            console.log("Checkbox mit ID " + labelId + " wurde deaktiviert.");
+        }
+    } else {
+        var checkA = document.getElementById("checkA");
+        deakAktivCb(true);
+        CardObj.selectedID = null; // Reset the selected ID
+        labelForSelectSchema.forEach(label => {
+            label.innerHTML = ""; // Clear the label text for unchecked checkboxes
+        });
+        checkA.checked = false;
+
+    }
+    Beziehungen.update(CardObj.selectedID);
+
+}
 
 function deakAktivCb(aktiv) {
     console.log("deakAktivCb aufgerufen mit aktiv:", aktiv);

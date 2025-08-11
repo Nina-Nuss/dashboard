@@ -32,6 +32,11 @@ class Beziehungen {
             new Beziehungen(element[0], element[1], element[2]);
         });
 
+        if (Umgebung.list.length !== 0) {
+            console.log("Umgebungsliste ist nicht leer, führe createList aus");
+        }
+        console.log(Umgebung.list);
+
         this.temp_remove = [];
         this.temp_list_add = [];
         this.temp_list_remove = [];
@@ -50,7 +55,7 @@ class Beziehungen {
     static createListForAnzeige() {
 
         var anzeigebereichV = document.getElementById("anzeigebereichV");
-        var  anzeigebereicht = document.getElementById("tabelleAdd");
+        var anzeigebereicht = document.getElementById("tabelleAdd");
         var anzeigebereichD = document.getElementById("tabelleDelete");
 
         anzeigebereichV.innerHTML = "";
@@ -126,8 +131,8 @@ class Beziehungen {
         });
         console.log("Temp Remove:", Beziehungen.temp_remove);
         console.log("Temp Add:", Beziehungen.temp_add);
-        console.log("Beziehungen Temp Add:",  Umgebung.list);
-        
+        console.log("Beziehungen Temp Add:", Umgebung.list);
+
     }
 
     static event_remove(id) {
@@ -160,6 +165,31 @@ class Beziehungen {
         for (const umgebungsID of list) {
             await this.addToDatabaseViaID(id, umgebungsID, databaseUrl);
         };
+    }
+
+    static showBeziehungsList() {
+        const selectorInfoterminalForCards = document.getElementById('selectorInfoterminalForCards');
+        
+        if (selectorInfoterminalForCards != null) {
+            selectorInfoterminalForCards.addEventListener('change', async (event) => {
+                const selectedValue = event.target.value;
+                console.log("Ausgewählter Wert:", selectedValue);
+                if (selectedValue) {
+                     let cardContainer = document.getElementById("cardContainer");
+                            console.log("Kartencontainer gefunden:", cardContainer);
+                            cardContainer.innerHTML = ''
+                            Beziehungen.list.forEach(beziehung => {
+                        if (selectedValue == beziehung.umgebungsID) {
+                            let obj = findObj(CardObj.list, beziehung.cardObjektID);
+                            console.log(obj);
+                            obj.htmlBody("cardContainer");
+                        }
+                        // Hier kannst du die Logik hinzufügen, um die Beziehung anzuzeigen
+                    });
+                }
+                // Hier können Sie die Logik hinzufügen, um die Beziehungen basierend auf dem ausgewählten Wert anzuzeigen
+            });
+        }
     }
 
     static async remove_generate(id, list, databaseUrl) {
@@ -222,6 +252,7 @@ window.addEventListener("load", async () => {
     relationListe.forEach(element => {
         new Beziehungen(element[0], element[1], element[2]);
     });
+    Beziehungen.showBeziehungsList();
 
 })
 
