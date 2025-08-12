@@ -7,8 +7,13 @@ require("database/selectSchemas.php");
 // echo "<h1>------------</h1>";
 
 $clientIP = $_SERVER['REMOTE_ADDR'];
+
+
 echo "Die IP-Adresse des Clients ist: " . $clientIP;
 
+if($clientIP === "::1") {
+    $clientIP = "127.0.0.1";
+}
 
 $listePics = array();
 
@@ -34,7 +39,11 @@ foreach ($infotherminalList1 as $datensatz) {
         // echo "Titel: " . $datensatz[1] . "<br>";
         // echo "<h4>------------</h4>";
         echo json_encode($listePics);
-        header("Location: ../anzeigeTherminal/index.php?ip=" . urlencode($datensatz[1]));
+        header("Location: ../output/index.php?ip=" . urlencode($datensatz[1]));
+    }
+    else{
+        // Wenn keine Übereinstimmung gefunden wurde, kann hier eine entsprechende Aktion erfolgen
+        header("Location: ../error/index.php");
     };
 }
 ?>

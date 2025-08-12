@@ -112,21 +112,34 @@
 
 
 <script>
-    const params = new URLSearchParams(window.location.search);
-    const ort = params.get('ip');
-    console.log('IP-Adresse:', ort); // IP-Adresse aus der URL holen
-    const foo = params.get('foo'); // weitere Variable aus der URL holen (optional)
-    const container = document.getElementById('container');
-    if (ort && container != null) {
+    window.addEventListener('DOMContentLoaded', async () => {
+        const params = new URLSearchParams(window.location.search);
+        const ort = params.get('ip');
+        const container = document.getElementById('container');
+        const ip = await checkIP(ort);
+        console.log(ip);
+        if (ort && container != null && ip != false) {
+            startCarousel(ort);
+        } else {
+            container.innerHTML = `<p class="text-danger">name ${ort} ist keiner gültigen IP-Adresse zugeordnet</p>`;
+        }
+    });
+
+    function startCarousel(ort) {
         const iframe = document.createElement('iframe');
         // Variablen als Query-Parameter anhängen
-        let data = `anzeige.php?ip=${encodeURIComponent(ort)}`;
+        let data = `out.php?ip=${encodeURIComponent(ort)}`;
         // Wenn du weitere Variablen hast, einfach anhängen:
         // data += `&foo=${encodeURIComponent(foo)}`;
         iframe.src = data;
         container.appendChild(iframe);
-    } else {
-        container.innerHTML = '<p class="text-danger">No IP address provided.</p>';
+    }
+
+
+    async function checkIP(ort) {
+        const response = await fetch("../php/checkURL.php?ip=" + ort);
+        const clientIP = await response.text();
+        return clientIP; // Rückgabe der IP-Adresse für weitere Verwendung
     }
 </script>
 

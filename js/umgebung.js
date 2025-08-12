@@ -225,7 +225,7 @@ class Umgebung {
 
             const selectedTerminal = selector.value;
             if (selectedTerminal !== '') {
-                const url = `../anzeigeTherminal/index.php?ip=${encodeURIComponent(selectedTerminal)}`;
+                const url = `../output/index.php?ip=${encodeURIComponent(selectedTerminal)}`;
                 window.open(url, '_blank');
             }
         });

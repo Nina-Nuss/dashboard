@@ -169,7 +169,6 @@ class Beziehungen {
 
     static showBeziehungsList() {
         const selectorInfoterminalForCards = document.getElementById('selectorInfoterminalForCards');
-        
         if (selectorInfoterminalForCards != null) {
             selectorInfoterminalForCards.addEventListener('change', async (event) => {
                 const selectedValue = event.target.value;
