@@ -71,10 +71,13 @@ class Umgebung {
         }
     }
     static async update() {
-        var delInfo = document.getElementById("deleteInfotherminal");
+        const delInfo = document.getElementById("deleteInfotherminal");
         const selector = document.getElementById('infotherminalSelect');
         const selectorForCards = document.getElementById('selectorInfoterminalForCards');
+
+ 
         let delInfoRows = ""; // String für Tabellenzeilen
+   
 
         let selectorOptions = '<option value="">-- Bitte wählen --</option>';
         let selectorOptionsForCards = '<option value="">-- wähle Infoterminal --</option>';
@@ -100,8 +103,8 @@ class Umgebung {
             selectorOptions += `<option value="${listInfo[1]}">${listInfo[1]}</option>`;
             selectorOptionsForCards += `<option value="${listInfo[0]}">${listInfo[1]}</option>`;
         });
-
-        if (delInfo) {
+        if (delInfo != null) {
+            delInfo.innerHTML = "";
             delInfo.innerHTML = delInfoRows;
         }
 
@@ -205,7 +208,14 @@ class Umgebung {
             alert("Bitte wählen Sie mindestens ein Infotherminal aus, um es zu löschen.");
             return;
         }
+        const confirmed = confirm(`Sind Sie sicher, dass Sie ${this.temp_remove.length} Infoterminal(s) löschen möchten? Diese Aktion kann nicht rückgängig gemacht werden.`);
+        if (!confirmed) {
+            console.log("Löschvorgang vom Benutzer abgebrochen");
+            return; // Benutzer hat abgebrochen
+        }
+
         await this.removeFromListLogik();
+        await warten(100);
         await this.update();
     }
 

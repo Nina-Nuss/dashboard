@@ -244,7 +244,7 @@ class CardObj {
     static async createCardObj() {
         console.log("createCardObj wurde aufgerufen");
         var delSchema = document.getElementById("deleteSchema")
-        const response = await await readDatabase("selectSchemas");
+        const response = await readDatabase("selectSchemas");
         console.log(response);
         let objList = convertCardObjForDataBase(response)
         objList.forEach(cardObj => {
@@ -844,9 +844,7 @@ function createBodyCardObj() {
 
     });
     console.log(CardObj.list);
-    console.log(cbForSelectSchema.length);
     // Alle Checkboxen mit ID, die mit "flexCheck" beginnt, auswählen und loopen
-
 };
 
 function erstelleFunktionForCardObj(objID) {

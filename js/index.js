@@ -64,7 +64,9 @@ function erstelleNavigation() {
 }
 
 
-
+function warten(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 async function getSystemPath() {
     let path = null;
