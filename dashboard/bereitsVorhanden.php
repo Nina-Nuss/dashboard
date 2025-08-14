@@ -22,6 +22,7 @@ $name = $_POST["infotherminalName"] ?? '';
 // echo "<br>";
 // echo $name;
 // echo "<br>";
+// echod gfd
 
 if (!preg_match($patternIp, $ip) || !preg_match($patternIp, $name)) {
     echo "ungültiges Zeichen";
