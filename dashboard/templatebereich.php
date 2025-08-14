@@ -25,9 +25,9 @@
                             <div class="col-md-6">
                                 <div class="card h-100">
                                     <div class="card-header">
-                                        <h5 class="card-title mb-0">
+                                        <h6 class="card-title mb-0">
                                             <i class="fas fa-plus me-2"></i> Infoseiten NEU erstellen
-                                        </h5>
+                                        </h6>
                                     </div>
                                     <div class="card-body" style="max-height: 400px; overflow-y: auto;">
                                         <form action="../php/movePic.php" method="post" enctype="multipart/form-data">
@@ -110,9 +110,9 @@
                             <div class="col-md-6">
                                 <div class="card h-100">
                                     <div class="card-header">
-                                        <h5 class="card-title mb-0">
+                                        <h6 class="card-title mb-0">
                                             <i class="fas fa-trash me-2"></i> Infoseiten LÖSCHEN
-                                        </h5>
+                                        </h6>
                                     </div>
                                     <div class="card-body" id="cardBodyForDelSchema">
                                         <div class="form-group mb-3">

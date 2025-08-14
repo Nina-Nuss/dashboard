@@ -80,7 +80,6 @@ class CardObj {
                     <small class="form-check">
                         <input class="form-check-input single-active-checkbox" type="checkbox" value="" id="flexCheck${this.id}" onclick="erstelleFunktionForCardObj(${this.id})">
                         <label class="form-check-label" id="label${this.id}" name="label${this.id}" for="flexCheck${this.id}"></label>
-
                     </small>
                     <div class="form-check">
                         <small id="${this.selectedTimerLabel}" class="text-muted">Dauer: ${this.selectedTime / 1000} sekunde</small>
@@ -306,8 +305,8 @@ class CardObj {
             return;
         }
         CardObj.checkAktiv();
-
         const obj = findObj(CardObj.list, CardObj.selectedID);
+        CardObj.prepareSelectedTimer(obj);
 
         if (obj === null) {
             console.warn("Objekt nicht gefunden für ID:", CardObj.selectedID);
@@ -327,17 +326,15 @@ class CardObj {
         }
     }
 
-    static prepareSelectedTimer() {
+    static prepareSelectedTimer(obj) {
         var selectSekunden = parseInt(document.getElementById("selectSekunden").value) || 0; // Falls leer, wird 0 verwendet
         var selectMinuten = parseInt(document.getElementById("selectMinuten").value) || 0; // Falls leer, wird 0 verwendet
-        var selectStunden = parseInt(document.getElementById("selectStunden").value) || 0; // Falls leer, wird 0 verwendet
 
-        console.log("Selected Stunden: ", selectStunden);
         console.log("Selected Minuten: ", selectMinuten);
         console.log("Selected Sekunden: ", selectSekunden);
 
-        if (selectMinuten || selectSekunden || selectStunden) {
-            obj.selectedTime = (selectMinuten * 60 + selectSekunden + selectStunden * 3600) * 1000; // Minuten, Sekunden und Stunden in Millisekunden umrechnen
+        if (selectMinuten || selectSekunden) {
+            obj.selectedTime = (selectMinuten * 60 + selectSekunden) * 1000; // Minuten und Sekunden in Millisekunden umrechnen
             console.log("Selected Time in Millisekunden: ", obj.selectedTime);
         } else {
             obj.selectedTime = 0; // Setze auf 0, wenn keine Eingabe vorhanden ist
@@ -350,9 +347,10 @@ class CardObj {
         // Hier können Sie das Objekt in den Zustand für die Aktualisierung versetzen
         CardObj.checkAktiv()
 
+        console.log(obj.selectedTime);
 
-        var timerSelect = document.getElementById("timerSelectRange");
-        obj.selectedTime = timerSelect.value;
+        // var timerSelect = document.getElementById("timerSelectRange");
+        // obj.selectedTime = timerSelect.value;
 
         var preObj = {
             id: obj.id,
@@ -376,7 +374,7 @@ class CardObj {
     static loadChanges(cardObj) {
         console.log("loadChanges aufgerufen für CardObjektID:", cardObj.id);
         var cardtimerLabel = document.getElementById(cardObj.selectedTimerLabel);
-        var timerbereich = document.getElementById("timerSelectRange");
+        // var timerbereich = document.getElementById("timerSelectRange");
         var titel = document.getElementById("websiteName");
         var checkA = document.getElementById("checkA");
 
@@ -391,7 +389,7 @@ class CardObj {
 
         checkA.checked = cardObj.aktiv; // Set the checkbox state
         titel.value = cardObj.titel; // Set the title to the checkbox's title
-        timerbereich.value = cardObj.selectedTime; // Set the time range
+        // timerbereich.value = cardObj.selectedTime; // Set the time range
         var selectedTime = cardObj.selectedTime / 1000; // Convert milliseconds to seconds
 
         var startTimeSplit = cardObj.startDate.split(" ")[1];
@@ -461,7 +459,6 @@ class CardObj {
         console.log("End Time:", endTime.value);
         console.log("Start Time Range:", startTimeRange.value);
         console.log("End Time Range:", endTimeRange.value);
-        debugger
         if (startDate.value || endDate.value || startTime.value || endTime.value) {
             if (startDate.value && endDate.value && startTime.value && endTime.value) {
                 const startDateTime = combineDateTime(startDate.value, startTime.value);
@@ -905,7 +902,6 @@ function deakAktivCb(aktiv) {
         return;
     }
     if (aktiv == true) {
-        timerbereich.disabled = true; // Deaktiviert den Timerbereich
         titel.disabled = true; // Deaktiviert das Titel-Eingabefeld
         titel.value = "bitte wählen sie eine Infoseite"; // Setzt den Titel auf leer
         checkA.disabled = true; // Deaktiviert die Aktiv-Checkbox
@@ -916,7 +912,6 @@ function deakAktivCb(aktiv) {
         btnShowUhrzeit.disabled = true; // Deaktiviert den Löschen-Button für Zeit
         panelForDateTime.style.display = "none"; // Versteckt das Panel für Datum und Uhrzeit
     } else {
-        timerbereich.disabled = false; // Aktiviert den Timerbereich
         titel.disabled = false; // Aktiviert das Titel-Eingabefeld
         checkA.disabled = false; // Aktiviert die Aktiv-Checkbox
         btn_hinzufuegen.disabled = false; // Aktiviert den Hinzufügen-Button
