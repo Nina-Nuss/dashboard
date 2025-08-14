@@ -1,7 +1,10 @@
-
-set /p BRANCH=Bitte Branch-Namen eingeben: 
+cd ..
 
 git add .
-git commit -m "..."
+git commit -m "Initial commit"
+
+set BRANCH=master
 
 git push -u origin %BRANCH%
+
+pause

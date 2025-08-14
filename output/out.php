@@ -29,9 +29,8 @@
 
 
     video::-webkit-media-controls {
-    display: none !important;
-}   
-
+        display: none !important;
+    }
 </style>
 
 <body>
@@ -90,12 +89,13 @@
                         video.muted = true; // Meistens erforderlich für Autoplay in Browsern
                         document.body.innerHTML = ''; // Clear the body content
                         document.body.appendChild(video); // Add the new video to the body
-                        await sleep(element[2]); // 5 Sekunden warten, bevor das nächste Video angezeigt wird
+                        await sleep(element[2]); //wartet bis nächstes Bild angeziegt wird
                         continue;
                     }
                     await sleep(element[2]); // 5 Sekunden warten, bevor das nächste Bild angezeigt wird
 
                 }
+
             }
 
         } catch (error) {
@@ -103,20 +103,21 @@
         }
     }
     async function statReload() {
+
         const loadTime = await fetch("/config/config.json");
         console.log("Reload-Intervall:", loadTime);
         const config = await loadTime.json();
         console.log("Reload-Intervall:", config.default);
         timerRefresh(config.default); // Alle 15 Sekunden neu laden
-        carousel(); // Initial call to set the first image
-    }
+        carousel();
 
+    }
     statReload();
 
     function timerRefresh(time) {
         setTimeout(() => {
             location.reload();
-        }, 10000 * 60 * time);
+        }, 1000 * 60 * time); // time in Minuten
     }
 </script>
 <?php
