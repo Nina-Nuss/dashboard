@@ -6,7 +6,7 @@ include ("../connection.php");
 // gettabelle.php?tabelle=mitarbeiter&spalten=ID,Name&id=2,1,4 // Fehlerfrei zeigt die angegebenen Element => 1,2,4 mit ID und Name
 // gettabelle.php?tabelle=mitarbeiter&spalten= // ERROR keine Spalten angegeben
 // gettabelle.php?spalten=ID // ERROR keine Spalten angegeben
-// gettabelle.php?tabelle= // ERROR keine Tabelle angegeben
+// gettabelle.php?tabelle= // ERROR keine Tabelle angegebensdfsdf
 
 // SQL-Abfrage ausführen
 $sql = "";
