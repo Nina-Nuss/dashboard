@@ -97,6 +97,7 @@
 
 
 <header>
+    <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/logo.php'; ?>
     <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/header.php'; ?>
 </header>
 

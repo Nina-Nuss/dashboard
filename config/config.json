@@ -2,50 +2,50 @@
     "intervals": [
         {
             "name": "15 Sekunden",
-            "value": 0.025
+            "value": 0.25
         },
         {
             "name": "1 Minute",
-            "value": 0.1
-        },
-        {
-            "name": "5 Minuten",
-            "value": 0.5
-        },
-        {
-            "name": "10 Minuten",
             "value": 1
         },
         {
+            "name": "5 Minuten",
+            "value": 5
+        },
+        {
+            "name": "10 Minuten",
+            "value": 10
+        },
+        {
             "name": "30 Minuten",
-            "value": 3
+            "value": 30
         },
         {
             "name": "1 Stunde",
-            "value": 6
+            "value": 60
         },
         {
             "name": "2 Stunden",
-            "value": 12
+            "value": 120
         },
         {
             "name": "4 Stunden",
-            "value": 24
+            "value": 240
         },
         {
             "name": "8 Stunden",
-            "value": 48
+            "value": 480
         },
         {
             "name": "12 Stunden",
-            "value": 72
+            "value": 720
         },
         {
             "name": "24 Stunden",
-            "value": 144
+            "value": 1440
         }
     ],
-    "default": 6,
+    "default": 0.25,
     "maxCountForInfoPages": [
         {
             "name": "5 pages",
