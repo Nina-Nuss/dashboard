@@ -1,9 +1,6 @@
-
-
 <style>
     .clock {
         text-align: center;
-        padding: 5px;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -24,11 +21,10 @@
     .div {
         text-align: center;
     }
-
 </style>
 
-<div class="parallelogram col-md-12">
-    <div class="para_inhalt d-flex text justify-content-between px-5">
+<div class="parallelogram">
+    <div class="para_inhalt text d-flex justify-content-between align-items-center px-5 gap-2">
         <div class="clock"> Infoterminal CJD Offenburg</div>
         <div class="clock">
             <div id="time"></div>
@@ -39,33 +35,21 @@
     </div>
 </div>
 <script>
-    async function updateTime() {
-        try {
-            const response = await fetch('https://timeapi.io/api/timezone/zone?timeZone=Europe%2FBerlin');
-            const data = await response.json();
-            // Beispiel: "datetime": "2025-07-09T09:30:00.123456+02:00"
-         
+    function updateTime() {
+        const dateTime = new Date();
+        const timeElement = document.getElementById('time');
+        const dateElement = document.getElementById('date');
 
-            const dateTime = new Date(data.currentLocalTime);
-          
+        const hours = String(dateTime.getHours()).padStart(2, '0');
+        const minutes = String(dateTime.getMinutes()).padStart(2, '0');
+        const seconds = String(dateTime.getSeconds()).padStart(2, '0');
 
+        const day = String(dateTime.getDate()).padStart(2, '0');
+        const month = String(dateTime.getMonth() + 1).padStart(2, '0');
+        const year = dateTime.getFullYear();
 
-            const timeElement = document.getElementById('time');
-            const dateElement = document.getElementById('date');
-
-            const hours = String(dateTime.getHours()).padStart(2, '0');
-            const minutes = String(dateTime.getMinutes()).padStart(2, '0');
-            const seconds = String(dateTime.getSeconds()).padStart(2, '0');
-
-            const day = String(dateTime.getDate()).padStart(2, '0');
-            const month = String(dateTime.getMonth() + 1).padStart(2, '0');
-            const year = dateTime.getFullYear();
-
-            timeElement.textContent = `${hours}:${minutes}:${seconds}`;
-            dateElement.textContent = `${day}.${month}.${year}`;
-        } catch (error) {
-           
-        }
+        timeElement.textContent = `${hours}:${minutes}:${seconds}`;
+        dateElement.textContent = `${day}.${month}.${year}`;
     }
 
     setInterval(updateTime, 1000);
