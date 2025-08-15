@@ -1,13 +1,14 @@
 <?php
 ob_start();
-require("database/selectInfotherminal.php");
-require("database/selectSchemas.php");
+require "database/selectInfotherminal.php";
+require "database/selectSchemas.php";
 
 
 // echo "<h1>------------</h1>";
 
-$clientIP = $_SERVER['REMOTE_ADDR'];
+// $clientIP = $_SERVER['REMOTE_ADDR'];
 
+$clientIP = "10.1.1.7"; // Temporarily hardcoded for testing purposes
 
 echo "Die IP-Adresse des Clients ist: " . $clientIP;
 

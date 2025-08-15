@@ -1,10 +1,10 @@
 <?php
 include($_SERVER['DOCUMENT_ROOT'] . '/assets/links.html');
-include()
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,6 +20,7 @@ include()
 
     </div>
 </body>
+
 </html>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -30,4 +31,8 @@ include()
                 document.getElementById("error-message").innerHTML = "<p>ihre IP-Adresse: " + data + " wurde nicht gefunden. Bitte kontaktieren Sie den Administrator.</p>";
             });
     });
+
+    setInterval(() => {
+        window.location.href = "../index.php";
+    }, 10000);
 </script>
