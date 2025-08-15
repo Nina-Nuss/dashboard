@@ -3,7 +3,7 @@
 
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/modal/hinzufuegen.html'; ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/modal/loeschen.html'; ?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/database/deleteFileFolder.php'; ?>
+
 
 <div class="container-fluid py-2 " style="max-height: 90vh; overflow-y: auto;">
 

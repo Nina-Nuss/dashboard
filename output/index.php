@@ -68,8 +68,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 74vw;
-            height: 74vh;
+            width: 74.5vw;
+            height: 74.5vh;
             /* border: 1px solid black; */
 
             box-sizing: border-box;
@@ -84,8 +84,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 74vw;
-            height: 74vh;
+            width: 74.5vw;
+            height: 74.5vh;
             /* border: 1px solid black; */
 
             box-sizing: border-box;

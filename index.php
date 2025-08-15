@@ -10,9 +10,6 @@ ob_clean();
 $clientIP = trim(strval($_SERVER['REMOTE_ADDR']));
 
 // $clientIP = "10.1.1.7";
-
-
-
 echo "Die IP-Adresse des Clients ist: " . $clientIP;
 
 $listePics = array();

@@ -5,6 +5,7 @@
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/modal/loeschen.html'; ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/database/deleteFileFolder.php'; ?>
 
+
 <div id="content">
     <div class="container-fluid">
         <div class="row">

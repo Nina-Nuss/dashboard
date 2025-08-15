@@ -20,9 +20,6 @@ if ($stmt) {
         while ($row = sqlsrv_fetch_array($stmt, SQLSRV_FETCH_ASSOC)) {
             $id = $row['id'];
             $imagePath = $row['imagePath'];
-          
-
-       
             // Füge den Bildpfad und die ID zur Liste hinzu
             if (strpos($imagePath, 'img_') !== false) {
                 $fullPath = $uploadFolder . $imagePath;
