@@ -45,7 +45,7 @@
             "value": 1440
         }
     ],
-    "default": 0.25,
+    "default": 10,
     "maxCountForInfoPages": [
         {
             "name": "5 pages",
@@ -91,5 +91,5 @@
             "value": 30
         }
     ],
-    "defaultMaxCountForInfoTerminals": 10
+    "defaultMaxCountForInfoTerminals": 20
 }

@@ -24,7 +24,7 @@
 
         #ticker span {
             display: inline-block;
-            animation: ticker 500s linear infinite;
+            animation: ticker 700s linear infinite;
             font-weight: 700;
         }
 

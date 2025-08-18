@@ -142,6 +142,7 @@
         const clientIP = await response.text();
         return clientIP; // Rückgabe der IP-Adresse für weitere Verwendung
     }
+
 </script>
 
 </html>
