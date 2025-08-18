@@ -43,40 +43,22 @@
                                             </label>
                                         </div>
 
-                                        <div class="form-group mb-3">
-                                            <label for="timerSelectRange" class="form-label">Anzeige-Dauer:</label>
-                                            <select class="form-select form-control" id="timerSelectRange" onchange="CardObj.setTimerRange(this.value)">
-                                                <option value="3000">3 Sekunden</option>
-                                              
-                                                <option value="5000">5 Sekunden</option>
+                            
+                                        <div class="form-group mb-2">
+                                            <p class="text-md-left">Anzeige Dauer:</p>
+                                            <div class="mt-4 p-2 justify-content-space-between">
                                                
-                                                <option value="10000">10 Sekunden</option>
-                                               
-                                                <option value="15000">15 Sekunden</option>
-                                              
-                                                <option value="20000">20 Sekunden</option>
-                                                
-                                                <option value="25000">25 Sekunden</option>
-                                                
-                                                <option value="30000">30 Sekunden</option>
-                                                <option value="45000">45 Sekunden</option>
-                                                <option value="60000">1 Minute</option>
-                                            </select>
-                                        </div>
-
-                                        <!-- <div class="form-group mb-2">
-                                            <div class="d-flex align-items-center mt-4 p-2 justify-content-between">
                                                 <div class="d-flex align-items-center">
                                                     <label for="selectSekunden" class="me-2">Sekunden:</label>
                                                     <input type="text" id="selectSekunden" class="form-control" maxlength="2" style="width: 50px;">
                                                 </div>
                                                 <div class="d-flex align-items-center">
-                                                    <label for="selectMinuten" class="me-2">Minuten:</label>
+                                                    <label for="selectMinuten" class="me-2">Minuten:  </label>
                                                     <input type="text" id="selectMinuten" class="form-control" maxlength="2" style="width: 50px;">
                                                 </div>
                                             
                                             </div>
-                                        </div> -->
+                                        </div>
                                     </div>
                                     <div class="card-body w-25">
                                         <div class="mb-2">
@@ -149,12 +131,9 @@
                                         </button>
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
                         <div class="col-md-3">
-
                             <div class="card h-35">
                                 <div class="card-header">
                                     <h6 class="mb-0"><i class="fas fa-desktop me-2"></i> Infoseite öffnen(Testanzeige)</h6>
@@ -171,14 +150,12 @@
                                     </button>
                                 </div>
                             </div>
-
-
                         </div>
 
                         <div class="col-md-3">
                             <div class="card h-100">
                                 <div class="card-header">
-                                    <h6 class="mb-0"><i class="fas fa-network-wired me-2"></i> IP-Adressen Verwaltung</h6>
+                                    <h6 class="mb-0"><i class="fas fa-tv me-2"></i> Bildschirm Verwaltung</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="d-flex mb-3">
