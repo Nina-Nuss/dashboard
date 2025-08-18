@@ -14,14 +14,19 @@ class Beziehungen {
         Beziehungen.list.push(this);
     }
     static async getRelation() {
-        const response = await fetch('../database/selectRelation.php', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-        })
-        var relationlistee = await response.json();
-        return relationlistee;
+        try {
+            const response = await fetch('../database/selectRelation.php', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            });
+            var relationlistee = await response.json();
+            return relationlistee;
+        } catch (error) {
+            console.error("Fehler beim Abrufen der Beziehungen:", error);
+            return [];
+        }
     }
     static async update(cardObjID) {
         Beziehungen.list = [];
@@ -174,10 +179,10 @@ class Beziehungen {
                 const selectedValue = event.target.value;
                 console.log("Ausgewählter Wert:", selectedValue);
                 if (selectedValue) {
-                     let cardContainer = document.getElementById("cardContainer");
-                            console.log("Kartencontainer gefunden:", cardContainer);
-                            cardContainer.innerHTML = ''
-                            Beziehungen.list.forEach(beziehung => {
+                    let cardContainer = document.getElementById("cardContainer");
+                    console.log("Kartencontainer gefunden:", cardContainer);
+                    cardContainer.innerHTML = ''
+                    Beziehungen.list.forEach(beziehung => {
                         if (selectedValue == beziehung.umgebungsID) {
                             let obj = findObj(CardObj.list, beziehung.cardObjektID);
                             console.log(obj);

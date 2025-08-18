@@ -1,5 +1,5 @@
 <?php
-include($_SERVER['DOCUMENT_ROOT'] . '/assets/links.html');
+include '../assets/links.html';
 ?>
 
 <!DOCTYPE html>
@@ -13,7 +13,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/assets/links.html');
 
 <body class="justify-content-center align-items-center d-flex vh-100">
     <div class="text-center w-100">
-        <img class="img-fluid" style="max-width: 300px;" src="../images/logo.png" alt="">
+        <img class="img-fluid" style="max-width: 300px;" src="/src/images/logo.png" alt="">
     </div>
     <br>
     <div id="error-message">
@@ -24,7 +24,7 @@ include($_SERVER['DOCUMENT_ROOT'] . '/assets/links.html');
 </html>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        fetch("../php/getClientIP.php")
+        fetch("/src/php/getClientIP.php")
             .then(response => response.text())
             .then(data => {
                 console.log('IP-Adresse:', data);
@@ -33,6 +33,6 @@ include($_SERVER['DOCUMENT_ROOT'] . '/assets/links.html');
     });
 
     setInterval(() => {
-        window.location.href = "../index.php";
+        window.location.href = "/index.php";
     }, 10000);
 </script>

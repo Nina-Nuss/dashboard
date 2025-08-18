@@ -58,9 +58,11 @@ function deakNavbarbtns() {
 }
 function erstelleNavigation() {
     const infoterminalBereich = document.getElementById("infotherminalBereich");
-    infoterminalBereich.addEventListener("click", async function (event) {
-        window.location.href = 'startSeite.php';
-    });
+    if (infoterminalBereich) {
+        infoterminalBereich.addEventListener("click", async function (event) {
+            window.location.href = 'startSeite.php';
+        });
+    }
 }
 
 
@@ -205,41 +207,7 @@ async function selectObj(select) {
         return null;
     }
 }
-async function getImagePath(formID, ob) {
-    const form = document.getElementById(formID);
-    const formData = new FormData(form);
-    const response = await fetch('/test.php', {
-        method: 'POST',
-        body: formData,
-    })
-    var path = await response.text()
-    ob.imagePath = path
-    return path
-}
 
-async function createJsonFile(jsonData) {
-    if (jsonData.length === 0) {
-        console.error("jsonData ist leer!");
-        return;
-    } else {
-        const json = JSON.stringify(jsonData, null, 2);
-        console.log(json);
-
-    }
-    try {
-        const response = await fetch("/json/sendToJson.php", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: json
-        });
-        const responseData = await response.json();
-        console.log("JSON-Daten gespeichert:", responseData);
-    } catch (error) {
-        console.error("Fehler beim Speichern der JSON-Daten:", error);
-    }
-}
 function saveTempAddDatabase() {
     Umgebung.tempListForSaveCards.forEach(cardObj => {
         insertDatabase(cardObj)
@@ -261,7 +229,7 @@ async function updateDataBase(cardObj, databaseUrl) {
     try {
         console.log("updateDataBase wurde aufgerufen");
         const createJsObj = JSON.stringify(cardObj)
-        var result = await fetch(`/database/${databaseUrl}.php`, {
+        var result = await fetch(`../database/${databaseUrl}.php`, {
             method: "POST",
             body: createJsObj
         });

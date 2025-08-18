@@ -1,6 +1,6 @@
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/assets/links.html'; ?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/header.php'; ?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/assets/scripts.html'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/src/assets/links.html'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/src/layout/header.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/src/assets/scripts.html'; ?>
 
 
 
@@ -9,9 +9,9 @@
 <body class="bg-light">
     <div class="container-fluid py-2">
         <div class="row ">
-            <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/sidebar.php'; ?>
+            <?php include $_SERVER['DOCUMENT_ROOT'] . '/src/layout/sidebar.php'; ?>
             <div class="col-10 ">
-                <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/selectPanel.php'; ?>
+                <?php include $_SERVER['DOCUMENT_ROOT'] . '/src/layout/selectPanel.php'; ?>
                 <div class="pt-3"></div>
                 <div class="card  shadow-sm text-center ">
                     <div class="card-header bg-light text-dark border-bottom">

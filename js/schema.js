@@ -773,7 +773,7 @@ async function meow(event) {
 }
 async function sendPicture(formData) {
     try {
-        const response = await fetch("/php/movePic.php", {
+        const response = await fetch("../php/movePic.php", {
             method: 'POST',
             body: formData
         });

@@ -1,13 +1,13 @@
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/assets/links.html'; ?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/header.php'; ?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/assets/scripts.html'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/src/assets/links.html'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/src/layout/header.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/src/assets/scripts.html'; ?>
 <html>
 
 <body class="bg-light">
 
     <div class="container-fluid py-2">
         <div class="col-md-12 text-center pt-2">
-            <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/selectPanel.php'; ?>
+            <?php include $_SERVER['DOCUMENT_ROOT'] . '/src/layout/selectPanel.php'; ?>
         </div>
         <div class="row">
             <div class="col-12">

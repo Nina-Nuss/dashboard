@@ -344,7 +344,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log("Config wird geladen");
         console.log("select: ", select);
 
-        const res = await fetch('/config/config.json');
+        const res = await fetch('/config/config.php');
         if (!res.ok) throw new Error(`Config nicht gefunden (Status ${res.status})`);
         const cfg = await res.json();
 

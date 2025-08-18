@@ -1,5 +1,6 @@
   
   
+  
   <div id="selectPanel">
       <div class="col-md-12 mx-auto pl-auto bg-gray-100">
           <div class="d-flex justify-content-center gap-2" id="startBtns">

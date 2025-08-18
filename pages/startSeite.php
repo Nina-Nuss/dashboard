@@ -1,17 +1,17 @@
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/assets/links.html'; ?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/header.php'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/src/assets/links.html'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/src/layout/header.php'; ?>
 
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/modal/hinzufuegen.html'; ?>
-<?php include $_SERVER['DOCUMENT_ROOT'] . '/modal/loeschen.html'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/src/layout/modal/hinzufuegen.html'; ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . '/src/layout/modal/loeschen.html'; ?>
 
 
 <div class="container-fluid py-2 " style="max-height: 90vh; overflow-y: auto;">
 
     <div class="row">
 
-        <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/sidebar.php'; ?>
+        <?php include $_SERVER['DOCUMENT_ROOT'] . '/src/layout/sidebar.php'; ?>
         <div class="col-md-10 text-center">
-            <?php include $_SERVER['DOCUMENT_ROOT'] . '/layout/selectPanel.php'; ?>
+            <?php include $_SERVER['DOCUMENT_ROOT'] . '/src/layout/selectPanel.php'; ?>
 
             <div class="pt-3"></div>
             <div class="card">

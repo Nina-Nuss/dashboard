@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="../css/index_new.css">
 <style>
     .clock {
         text-align: center;
