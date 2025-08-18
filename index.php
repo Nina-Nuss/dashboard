@@ -46,7 +46,7 @@ foreach ($infotherminalList1 as $datensatz) {
     }
 } 
 if($ipAdressFound != true){
-    header("Location: ../error/index.php?ip=" . urlencode($clientIP));
+    header("Location: ../error/index.php?error=ipNotFound");
 }
 
 
